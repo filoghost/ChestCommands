@@ -28,6 +28,8 @@ import com.gmail.filoghost.chestcommands.listener.CommandListener;
 import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
 import com.gmail.filoghost.chestcommands.listener.SignListener;
+import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
+import com.gmail.filoghost.chestcommands.nms.Fallback;
 import com.gmail.filoghost.chestcommands.serializer.CommandSerializer;
 import com.gmail.filoghost.chestcommands.serializer.MenuSerializer;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
@@ -52,6 +54,8 @@ public class ChestCommands extends JavaPlugin {
 	private static int lastReloadErrors;
 	private static String newVersion;
 	
+	private static AttributeRemover attributeRemover;
+	
 	@Override
 	public void onEnable() {
 		if (instance != null) {
@@ -69,6 +73,15 @@ public class ChestCommands extends JavaPlugin {
 		
 		if (!EconomyBridge.setupEconomy()) {
 			getLogger().info("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
+		}
+		
+		String version = Utils.getBukkitVersion();
+		try {
+			Class<?> clazz = Class.forName("com.gmail.filoghost.chestcommands.nms." + version);
+			attributeRemover = (AttributeRemover) clazz.newInstance();
+		} catch (Exception e) {
+			attributeRemover = new Fallback();
+			getLogger().info("Could not find a compatible Attribute Remover for this server version. Attributes will show up on items.");
 		}
 		
 		if (settings.update_notifications) {
@@ -265,6 +278,10 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void setLastReloadErrors(int lastReloadErrors) {
 		ChestCommands.lastReloadErrors = lastReloadErrors;
+	}
+
+	public static AttributeRemover getAttributeRemover() {
+		return attributeRemover;
 	}
 	
 }

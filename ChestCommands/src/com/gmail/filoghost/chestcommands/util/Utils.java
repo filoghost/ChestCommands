@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -86,6 +87,11 @@ public class Utils {
 		for (Entry<String, Material> tempEntry : tempMap.entrySet()) {
 			materialMap.put(StringUtils.stripChars(tempEntry.getKey(), " _-").toLowerCase(), tempEntry.getValue());
 		}
+	}
+	
+	public static String getBukkitVersion() {
+		String packageName = Bukkit.getServer().getClass().getPackage().getName();
+		return packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 
 	public static String colorizeName(String input) {
