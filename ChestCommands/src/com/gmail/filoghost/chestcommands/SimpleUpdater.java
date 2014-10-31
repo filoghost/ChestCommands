@@ -55,9 +55,8 @@ public final class SimpleUpdater {
 
 					if (filesArray.size() == 0) {
 						// The array cannot be empty, there must be at least one file. The project ID is not valid.
-						plugin.getLogger().warning("The author of this plugin has misconfigured the Updater system.");
-						plugin.getLogger().warning("The project ID (" + projectId + ") provided for updating is invalid.");
-						plugin.getLogger().warning("Please notify the author of this error.");
+						plugin.getLogger().warning("The project ID (" + projectId + ") provided for updating is invalid or curse had a problem.");
+						plugin.getLogger().warning("If the error persists, please inform the author.");
 						return;
 					}
 					
@@ -83,7 +82,6 @@ public final class SimpleUpdater {
 					plugin.getLogger().warning("The author of this plugin has misconfigured the Updater system.");
 					plugin.getLogger().warning("File versions should follow the format 'PluginName vVERSION'");
 		            plugin.getLogger().warning("Please notify the author of this error.");
-		            e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
 					plugin.getLogger().warning("Unable to check for updates: unhandled exception.");
