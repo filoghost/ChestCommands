@@ -7,14 +7,14 @@ import org.bukkit.entity.Player;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
-public class SoundCommand extends IconCommand {
+public class SoundIconCommand extends IconCommand {
 	
 	Sound sound;
 	float pitch;
 	float volume;
 	String errorMessage;
 	
-	public SoundCommand(String command) {
+	public SoundIconCommand(String command) {
 		super(command);
 		
 		pitch = 1.0f;

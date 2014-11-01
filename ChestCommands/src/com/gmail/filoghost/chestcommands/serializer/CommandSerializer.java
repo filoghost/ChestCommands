@@ -9,16 +9,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.BroadcastCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.ConsoleCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.GiveCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.GiveMoneyCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.OpCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.OpenCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.PlayerCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.ServerCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.SoundCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.command.TellCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.BroadcastIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.ConsoleIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.GiveIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.GiveMoneyIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.OpIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.OpenIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.PlayerIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.ServerIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.SoundIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.TellIconCommand;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.google.common.collect.Lists;
 
@@ -26,15 +26,15 @@ public class CommandSerializer {
 
 	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = new HashMap<Pattern, Class<? extends IconCommand>>();
 	static {
-		commandTypesMap.put(commandPattern("console:"), ConsoleCommand.class);
-		commandTypesMap.put(commandPattern("op:"), OpCommand.class);
-		commandTypesMap.put(commandPattern("open:"), OpenCommand.class);
-		commandTypesMap.put(commandPattern("server:?"), ServerCommand.class); // The colon is optional.
-		commandTypesMap.put(commandPattern("tell:"), TellCommand.class);
-		commandTypesMap.put(commandPattern("broadcast:"), BroadcastCommand.class);
-		commandTypesMap.put(commandPattern("give:"), GiveCommand.class);
-		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyCommand.class);
-		commandTypesMap.put(commandPattern("sound:"), SoundCommand.class);
+		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
+		commandTypesMap.put(commandPattern("op:"), OpIconCommand.class);
+		commandTypesMap.put(commandPattern("open:"), OpenIconCommand.class);
+		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand.class); // The colon is optional.
+		commandTypesMap.put(commandPattern("tell:"), TellIconCommand.class);
+		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand.class);
+		commandTypesMap.put(commandPattern("give:"), GiveIconCommand.class);
+		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand.class);
+		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand.class);
 	}
 	
 	private static Pattern commandPattern(String regex) {
@@ -92,7 +92,7 @@ public class CommandSerializer {
 			}
 		}
 		
-		return new PlayerCommand(input); // Normal command, no match found.
+		return new PlayerIconCommand(input); // Normal command, no match found.
 	}
 	
 }

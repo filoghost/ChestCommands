@@ -98,13 +98,15 @@ public class IconSerializer {
 			}
 		}
 		
-		icon.setCloseOnClick(!section.getBoolean(Nodes.KEEP_OPEN)); // Inverted
 		icon.setPermission(section.getString(Nodes.PERMISSION));
 		icon.setPermissionMessage(Utils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
 		
+		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
+		icon.setCloseOnClick(closeOnClick);
+		
 		if (section.isSet(Nodes.COMMAND)) {
-			List<IconCommand> commands = CommandSerializer.readCommands(section.getString(Nodes.COMMAND));
-			icon.setClickHandler(new CommandsClickHandler(commands));
+			List<IconCommand> commands = CommandSerializer.readCommands(section.getString(Nodes.COMMAND));			
+			icon.setClickHandler(new CommandsClickHandler(commands, closeOnClick));
 		}
 		
 		double price = section.getDouble(Nodes.PRICE);

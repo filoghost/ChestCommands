@@ -7,9 +7,9 @@ import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
-public class OpenCommand extends IconCommand {
+public class OpenIconCommand extends IconCommand {
 
-	public OpenCommand(String command) {
+	public OpenIconCommand(String command) {
 		super(command);
 	}
 

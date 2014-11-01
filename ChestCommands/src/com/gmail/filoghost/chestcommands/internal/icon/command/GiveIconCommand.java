@@ -8,12 +8,12 @@ import com.gmail.filoghost.chestcommands.exception.FormatException;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.util.ItemStackReader;
 
-public class GiveCommand extends IconCommand {
+public class GiveIconCommand extends IconCommand {
 	
 	ItemStack itemToGive;
 	String errorMessage;
 	
-	public GiveCommand(String command) {
+	public GiveIconCommand(String command) {
 		super(command);
 		
 		try {

@@ -2,17 +2,18 @@ package com.gmail.filoghost.chestcommands.internal.icon.command;
 
 import org.bukkit.entity.Player;
 
+import com.gmail.filoghost.chestcommands.bridge.bungee.BungeeCordUtils;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
-public class PlayerCommand extends IconCommand {
+public class ServerIconCommand extends IconCommand {
 
-	public PlayerCommand(String command) {
+	public ServerIconCommand(String command) {
 		super(command);
 	}
 
 	@Override
 	public void execute(Player player) {
-		player.chat('/' + getParsedCommand(player));
+		BungeeCordUtils.connect(player, command);
 	}
 
 }

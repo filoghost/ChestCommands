@@ -7,12 +7,12 @@ import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
-public class GiveMoneyCommand extends IconCommand {
+public class GiveMoneyIconCommand extends IconCommand {
 	
 	double moneyToGive;
 	String errorMessage;
 	
-	public GiveMoneyCommand(String command) {
+	public GiveMoneyIconCommand(String command) {
 		super(command);
 		
 		if (!Utils.isValidPositiveDouble(command)) {

@@ -55,7 +55,7 @@ public class ExtendedIcon extends Icon {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onClick(Player player) {
+	public boolean onClick(Player player) {
 		
 		// Check all the requirements.
 		
@@ -65,18 +65,18 @@ public class ExtendedIcon extends Icon {
 			} else {
 				player.sendMessage(ChatColor.RED + "You don't have permission.");
 			}
-			return;
+			return isCloseOnClick();
 		}
 		
 		if (price > 0) {
 			if (!EconomyBridge.hasValidEconomy()) {
 				player.sendMessage(ChatColor.RED + "This command has a price, but Vault with a compatible economy plugin was not found. For security, the command has been blocked. Please inform the staff.");
-				return;
+				return isCloseOnClick();
 			}
 			
 			if (!player.hasPermission(Permissions.BYPASS_ECONOMY) && !EconomyBridge.hasMoney(player, price)) {
 				player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", EconomyBridge.formatMoney(price)));
-				return;
+				return isCloseOnClick();
 			}
 		}
 		
@@ -89,7 +89,7 @@ public class ExtendedIcon extends Icon {
 						.replace("{amount}", Integer.toString(requiredItem.getAmount()))
 						.replace("{datavalue}", requiredItem.hasRestrictiveDataValue() ? Short.toString(requiredItem.getDataValue()) : ChestCommands.getLang().any)
 				);
-				return;
+				return isCloseOnClick();
 			}
 		}
 		
@@ -98,7 +98,7 @@ public class ExtendedIcon extends Icon {
 		if (price > 0) {
 			if (!player.hasPermission(Permissions.BYPASS_ECONOMY) && !EconomyBridge.takeMoney(player, price)) {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
-				return;
+				return isCloseOnClick();
 			}
 		}
 		
@@ -106,7 +106,7 @@ public class ExtendedIcon extends Icon {
 			requiredItem.takeItem(player);
 		}
 		
-		super.onClick(player);
+		return super.onClick(player);
 	}
 	
 	

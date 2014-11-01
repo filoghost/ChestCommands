@@ -32,8 +32,8 @@ public class Icon {
 	private ClickHandler clickHandler;
 	
 	public Icon() {
-		closeOnClick = true;
 		enchantments = new HashMap<Enchantment, Integer>();
+		closeOnClick = true;
 	}
 	
 	public void setMaterial(Material material) {
@@ -204,10 +204,11 @@ public class Icon {
 		return itemStack;
 	}
 
-	public void onClick(Player whoClicked) {
+	public boolean onClick(Player whoClicked) {
 		if (clickHandler != null) {
-			clickHandler.onClick(whoClicked);
+			return clickHandler.onClick(whoClicked);
 		}
 		
+		return closeOnClick;
 	}
 }

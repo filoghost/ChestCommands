@@ -4,9 +4,9 @@ import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
-public class OpCommand extends IconCommand {
+public class OpIconCommand extends IconCommand {
 
-	public OpCommand(String command) {
+	public OpIconCommand(String command) {
 		super(command);
 	}
 
