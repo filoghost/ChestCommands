@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.BroadcastIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.ConsoleIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.DragonBarIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.GiveIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.GiveMoneyIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.OpIconCommand;
@@ -35,6 +36,7 @@ public class CommandSerializer {
 		commandTypesMap.put(commandPattern("give:"), GiveIconCommand.class);
 		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand.class);
 		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand.class);
+		commandTypesMap.put(commandPattern("dragon-?bar:"), DragonBarIconCommand.class);
 	}
 	
 	private static Pattern commandPattern(String regex) {
@@ -81,7 +83,7 @@ public class CommandSerializer {
 		for (Entry<Pattern, Class<? extends IconCommand>> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
-				
+				// Remove the command prefix.
 				String cleanedCommand = matcher.replaceFirst("");
 				
 				try {

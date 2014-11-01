@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
 import com.gmail.filoghost.chestcommands.SimpleUpdater.ResponseHandler;
+import com.gmail.filoghost.chestcommands.bridge.BarAPIBridge;
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.command.CommandFramework;
 import com.gmail.filoghost.chestcommands.command.CommandHandler;
@@ -73,6 +74,10 @@ public class ChestCommands extends JavaPlugin {
 		
 		if (!EconomyBridge.setupEconomy()) {
 			getLogger().info("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
+		}
+		
+		if (BarAPIBridge.setupPlugin()) {
+			getLogger().info("Hooked BarAPI");
 		}
 		
 		String version = Utils.getBukkitVersion();

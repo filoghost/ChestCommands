@@ -187,6 +187,14 @@ public class Utils {
 		}
 	}
 	
+	public static boolean isValidPositiveInteger(String input) {
+		try {
+			return Integer.parseInt(input) > 0;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+	
 	public static boolean isValidShort(String input) {
 		try {
 			Short.parseShort(input);
