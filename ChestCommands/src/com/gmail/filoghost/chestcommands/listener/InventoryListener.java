@@ -44,10 +44,9 @@ public class InventoryListener implements Listener {
 				Icon icon = menu.getIconRaw(slot);
 				
 				if (icon != null) {
+					boolean close = icon.onClick((Player) event.getWhoClicked());
 					
-					icon.onClick((Player) event.getWhoClicked());
-					
-					if (icon.isCloseOnClick()) {
+					if (close) {
 						event.getWhoClicked().closeInventory();
 					}
 				}

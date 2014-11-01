@@ -1,5 +1,6 @@
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -14,10 +15,18 @@ public class OpenIconCommand extends IconCommand {
 	}
 
 	@Override
-	public void execute(Player player) {
-		IconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
+	public void execute(final Player player) {
+		final IconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
 		if (menu != null) {
-			menu.open(player);
+			
+			// Delay the task, since this command is executed in ClickInventoryEvent
+			// and opening another inventory in the same moment is not a good idea.
+			Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new Runnable() {
+				public void run() {
+					menu.open(player);
+				}
+			});
+			
 		} else {
 			player.sendMessage(ChatColor.RED + "Menu not found! Please inform the staff.");
 		}

@@ -28,7 +28,7 @@ public class Icon {
 	private Map<Enchantment, Integer> enchantments;
 	private Color color;
 	
-	private boolean closeOnClick;
+	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
 	
 	public Icon() {
@@ -130,10 +130,6 @@ public class Icon {
 
 	public void setCloseOnClick(boolean closeOnClick) {
 		this.closeOnClick = closeOnClick;
-	}
-	
-	public boolean isCloseOnClick() {
-		return closeOnClick;
 	}
 	
 	public void setClickHandler(ClickHandler clickHandler) {
