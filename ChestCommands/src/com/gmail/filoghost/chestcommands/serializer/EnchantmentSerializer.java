@@ -71,10 +71,7 @@ public class EnchantmentSerializer {
 				singleEnchant = levelSplit[0];
 			}
 			
-			Enchantment ench = Enchantment.getByName(singleEnchant.trim().toUpperCase().replace(" ", "_"));
-			if (ench == null) {
-				ench = matchEnchantment(input);
-			}
+			Enchantment ench = matchEnchantment(input);
 			
 			if (ench == null) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + singleEnchant);
