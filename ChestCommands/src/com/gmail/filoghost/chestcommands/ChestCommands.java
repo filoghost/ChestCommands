@@ -201,6 +201,9 @@ public class ChestCommands extends JavaPlugin {
 			if (data.hasCommands()) {
 				for (String command : data.getCommands()) {
 					if (!command.isEmpty()) {
+						if (commandsToMenuMap.containsKey(command)) {
+							errorLogger.addError("The menus \"" + commandsToMenuMap.get(command).getFileName() + "\" and \"" + menuConfig.getFileName() + "\" have the same command \"" + command + "\". Only one will be opened.");
+						}
 						commandsToMenuMap.put(command, iconMenu);
 					}
 				}

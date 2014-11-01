@@ -11,11 +11,13 @@ import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
 public class ExtendedIconMenu extends IconMenu {
 	
+	private String fileName;
 	private String permission;
 	private List<IconCommand> openActions;
 	
 	public ExtendedIconMenu(String title, int rows, String fileName) {
 		super(title, rows);
+		this.fileName = fileName;
 		this.permission = Permissions.OPEN_MENU_BASE + fileName;
 	}
 
@@ -29,6 +31,10 @@ public class ExtendedIconMenu extends IconMenu {
 	
 	public String getPermission() {
 		return permission;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 
 	@Override
