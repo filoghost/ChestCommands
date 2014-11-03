@@ -14,7 +14,7 @@ public class JoinListener implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		
 		if (ChestCommands.getLastReloadErrors() > 0 && event.getPlayer().hasPermission(Permissions.SEE_ERRORS)) {
-			event.getPlayer().sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The plugin encountered " + ChestCommands.getLastReloadErrors() + " error(s) last time it was loaded. You can see them by doing \"/cc reload\" in the console.");
+			event.getPlayer().sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The plugin found " + ChestCommands.getLastReloadErrors() + " error(s) last time it was loaded. You can see them by doing \"/cc reload\" in the console.");
 		}
 		
 		if (ChestCommands.hasNewVersion() && ChestCommands.getSettings().update_notifications && event.getPlayer().hasPermission(Permissions.UPDATE_NOTIFICATIONS)) {
