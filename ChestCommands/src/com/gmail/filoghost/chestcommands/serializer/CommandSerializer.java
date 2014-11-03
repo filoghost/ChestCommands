@@ -29,7 +29,7 @@ public class CommandSerializer {
 	static {
 		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
 		commandTypesMap.put(commandPattern("op:"), OpIconCommand.class);
-		commandTypesMap.put(commandPattern("open:"), OpenIconCommand.class);
+		commandTypesMap.put(commandPattern("(open|menu):"), OpenIconCommand.class);
 		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand.class); // The colon is optional.
 		commandTypesMap.put(commandPattern("tell:"), TellIconCommand.class);
 		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand.class);
