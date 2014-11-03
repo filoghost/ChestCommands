@@ -11,27 +11,27 @@ import com.gmail.filoghost.chestcommands.internal.Variable;
 public abstract class IconCommand {
 	
 	protected String command;
-	private List<Variable> containedPlaceholders;
+	private List<Variable> containedVariables;
 	
 	public IconCommand(String command) {
 		this.command = AsciiPlaceholders.placeholdersToSymbols(command).trim();
-		this.containedPlaceholders = new ArrayList<Variable>();
+		this.containedVariables = new ArrayList<Variable>();
 		
-		for (Variable placeholder : Variable.values()) {
-			if (command.contains(placeholder.getText())) {
-				containedPlaceholders.add(placeholder);
+		for (Variable variable : Variable.values()) {
+			if (command.contains(variable.getText())) {
+				containedVariables.add(variable);
 			}
 		}
 	}
 	
 	public String getParsedCommand(Player executor) {
-		if (containedPlaceholders.isEmpty()) {
+		if (containedVariables.isEmpty()) {
 			return command;
 		}
 		
 		String commandCopy = command;
-		for (Variable placeholder : containedPlaceholders) {
-			commandCopy = commandCopy.replace(placeholder.getText(), placeholder.getReplacement(executor));
+		for (Variable variable : containedVariables) {
+			commandCopy = commandCopy.replace(variable.getText(), variable.getReplacement(executor));
 		}
 		return commandCopy;
 	}
