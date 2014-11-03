@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
-import com.gmail.filoghost.chestcommands.api.IconMenu;
+import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
 public class OpenIconCommand extends IconCommand {
@@ -16,14 +16,18 @@ public class OpenIconCommand extends IconCommand {
 
 	@Override
 	public void execute(final Player player) {
-		final IconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
+		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
 		if (menu != null) {
 			
 			// Delay the task, since this command is executed in ClickInventoryEvent
 			// and opening another inventory in the same moment is not a good idea.
 			Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new Runnable() {
 				public void run() {
-					menu.open(player);
+					if (player.hasPermission(menu.getPermission())) {
+						menu.open(player);
+					} else {
+						menu.sendNoPermissionMessage(player);
+					}
 				}
 			});
 			
