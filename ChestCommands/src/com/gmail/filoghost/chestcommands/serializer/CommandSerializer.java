@@ -85,11 +85,11 @@ public class CommandSerializer {
 		for (Entry<Pattern, Class<? extends IconCommand>> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
-				// Remove the command prefix.
-				String cleanedCommand = matcher.replaceFirst("");
+				// Remove the command prefix and trim the spaces.
+				String cleanCommand = matcher.replaceFirst("").trim();
 				
 				try {
-					return entry.getValue().getDeclaredConstructor(String.class).newInstance(cleanedCommand);
+					return entry.getValue().getDeclaredConstructor(String.class).newInstance(cleanCommand);
 				} catch (Exception e) {
 					// Checked at startup.
 				}
