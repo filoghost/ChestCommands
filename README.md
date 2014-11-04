@@ -1,4 +1,4 @@
 Chest Commands
 ===================
 
-The upcoming v3 version.
+Bukkit Page: http://dev.bukkit.org/bukkit-plugins/chest-commands
