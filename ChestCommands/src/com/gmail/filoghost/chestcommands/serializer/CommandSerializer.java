@@ -14,6 +14,7 @@ import com.gmail.filoghost.chestcommands.internal.icon.command.ConsoleIconComman
 import com.gmail.filoghost.chestcommands.internal.icon.command.DragonBarIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.GiveIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.GiveMoneyIconCommand;
+import com.gmail.filoghost.chestcommands.internal.icon.command.GivePointsIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.OpIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.OpenIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.PlayerIconCommand;
@@ -35,6 +36,7 @@ public class CommandSerializer {
 		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand.class);
 		commandTypesMap.put(commandPattern("give:"), GiveIconCommand.class);
 		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand.class);
+		commandTypesMap.put(commandPattern("give-?points:"), GivePointsIconCommand.class);
 		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand.class);
 		commandTypesMap.put(commandPattern("dragon-?bar:"), DragonBarIconCommand.class);
 	}
