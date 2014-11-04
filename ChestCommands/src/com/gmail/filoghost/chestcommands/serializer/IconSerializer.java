@@ -30,6 +30,7 @@ public class IconSerializer {
 				COLOR = "COLOR",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
+				POINTS = "POINTS",
 				REQUIRED_ITEM = "REQUIRED-ITEM",
 				PERMISSION = "PERMISSION",
 				PERMISSION_MESSAGE = "PERMISSION-MESSAGE",
@@ -111,9 +112,16 @@ public class IconSerializer {
 		
 		double price = section.getDouble(Nodes.PRICE);
 		if (price > 0.0) {
-			icon.setPrice(price);
+			icon.setMoneyPrice(price);
 		} else if (price < 0.0) {
 			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
+		}
+		
+		int points = section.getInt(Nodes.POINTS);
+		if (points > 0) {
+			icon.setPlayerPointsPrice(points);
+		} else if (points < 0) {
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative POINTS: " + price);
 		}
 		
 		if (section.isSet(Nodes.REQUIRED_ITEM)) {

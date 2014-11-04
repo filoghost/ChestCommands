@@ -9,6 +9,7 @@ public class Lang extends SpecialConfig {
 	public String default_no_icon_permission = "&cYou need {money}$ for this.";
 	public String no_required_item = "&cYou must have &e{amount}x {material} &c(ID: {id}, data value: {datavalue}) for this.";
 	public String no_money = "&cYou need {money}$ for this.";
+	public String no_points = "&cYou need {points} player points for this.";
 	public String menu_not_found = "&cMenu not found! Please inform the staff.";
 	public String any = "any"; // Used in no_required_item when data value is not restrictive.
 
