@@ -10,8 +10,8 @@ import com.gmail.filoghost.chestcommands.util.ItemStackReader;
 
 public class GiveIconCommand extends IconCommand {
 	
-	ItemStack itemToGive;
-	String errorMessage;
+	private ItemStack itemToGive;
+	private String errorMessage;
 	
 	public GiveIconCommand(String command) {
 		super(command);

@@ -8,8 +8,8 @@ import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class DragonBarIconCommand extends IconCommand {
 
-	String message;
-	int seconds;
+	private String message;
+	private int seconds;
 	
 	public DragonBarIconCommand(String command) {
 		super(command);

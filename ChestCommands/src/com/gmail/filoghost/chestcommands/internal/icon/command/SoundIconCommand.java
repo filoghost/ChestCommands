@@ -9,10 +9,10 @@ import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class SoundIconCommand extends IconCommand {
 	
-	Sound sound;
-	float pitch;
-	float volume;
-	String errorMessage;
+	private Sound sound;
+	private float pitch;
+	private float volume;
+	private String errorMessage;
 	
 	public SoundIconCommand(String command) {
 		super(command);

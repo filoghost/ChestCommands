@@ -9,8 +9,8 @@ import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class GiveMoneyIconCommand extends IconCommand {
 	
-	double moneyToGive;
-	String errorMessage;
+	private double moneyToGive;
+	private String errorMessage;
 	
 	public GiveMoneyIconCommand(String command) {
 		super(command);
