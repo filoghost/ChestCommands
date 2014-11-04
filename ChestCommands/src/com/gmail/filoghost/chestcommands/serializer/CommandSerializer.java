@@ -1,6 +1,5 @@
 package com.gmail.filoghost.chestcommands.serializer;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,25 +58,18 @@ public class CommandSerializer {
 	
 	public static List<IconCommand> readCommands(String input) {
 		
-		if (input.contains(";")) {
+		String[] split = input.split(";");
+		List<IconCommand> iconCommands = Lists.newArrayList();
 			
-			String[] split = input.split(";");
-			List<IconCommand> iconCommands = Lists.newArrayList();
-			
-			for (String command : split) {
-				String trim = command.trim();
+		for (String command : split) {
+			String trim = command.trim();
 				
-				if (trim.length() > 0) {
-					iconCommands.add(matchCommand(trim));
-				}
+			if (trim.length() > 0) {
+				iconCommands.add(matchCommand(trim));
 			}
-			
-			return iconCommands;
-			
-		} else {
-			
-			return Arrays.asList(matchCommand(input));
 		}
+			
+		return iconCommands;
 	}
 	
 	public static IconCommand matchCommand(String input) {
