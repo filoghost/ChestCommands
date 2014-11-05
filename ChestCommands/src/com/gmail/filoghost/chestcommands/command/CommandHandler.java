@@ -84,7 +84,7 @@ public class CommandHandler extends CommandFramework {
 				target = Bukkit.getPlayerExact(args[2]);
 			} else {
 				if (args.length > 2) {
-					CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open.others"), "You don't have permission.");
+					CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open.others"), "You don't have permission to open menus for others.");
 					target = Bukkit.getPlayerExact(args[2]);
 				} else {
 					target = (Player) sender;
