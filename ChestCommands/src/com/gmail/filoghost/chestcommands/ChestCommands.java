@@ -38,6 +38,7 @@ import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class ChestCommands extends JavaPlugin {
@@ -180,7 +181,6 @@ public class ChestCommands extends JavaPlugin {
 		}
 		
 		// Load the menus.
-		List<PluginConfig> menusList = new ArrayList<PluginConfig>();
 		File menusFolder = new File(getDataFolder(), "menu");
 		
 		if (!menusFolder.isDirectory()) {
@@ -189,7 +189,7 @@ public class ChestCommands extends JavaPlugin {
 			Utils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 				
-		loadMenus(menusList, menusFolder);
+		List<PluginConfig> menusList = loadMenus(menusFolder);
 		for (PluginConfig menuConfig : menusList) {
 			try {
 				menuConfig.load();
@@ -241,16 +241,18 @@ public class ChestCommands extends JavaPlugin {
 	/**
 	 * Loads all the configuration files recursively into a list.
 	 */
-	private void loadMenus(List<PluginConfig> list, File file) {
+	private List<PluginConfig> loadMenus(File file) {
+		List<PluginConfig> list = Lists.newArrayList();
 		if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
-				loadMenus(list, subFile);
+				list.addAll(loadMenus(subFile));
 			}
 		} else if (file.isFile()) {
 			if (file.getName().endsWith(".yml")) {
 				list.add(new PluginConfig(this, file));
 			}
 		}
+		return list;
 	}
 	
 	public static ChestCommands getInstance() {
