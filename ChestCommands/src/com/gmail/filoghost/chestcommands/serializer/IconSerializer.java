@@ -82,7 +82,9 @@ public class IconSerializer {
 			}
 		}
 		
-		icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
+		if (section.isSet(Nodes.DATA_VALUE)) {
+			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
+		}
 		
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeName(section.getString(Nodes.NAME))));
 		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeLore(section.getStringList(Nodes.LORE))));
