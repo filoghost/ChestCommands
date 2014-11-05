@@ -94,7 +94,7 @@ public class CommandHandler extends CommandFramework {
 			
 			CommandValidate.notNull(target, "That player is not online.");
 			
-			IconMenu menu = ChestCommands.getFileNameToMenuMap().get(args[1]);
+			IconMenu menu = ChestCommands.getFileNameToMenuMap().get(args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml");
 			CommandValidate.notNull(target, "That menu was not found.");
 
 			if (sender.getName().equalsIgnoreCase(target.getName())) {
