@@ -94,8 +94,9 @@ public class CommandHandler extends CommandFramework {
 			
 			CommandValidate.notNull(target, "That player is not online.");
 			
-			ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml");
-			CommandValidate.notNull(target, "That menu was not found.");
+			String menuName = args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml";
+			ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(menuName);
+			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 			
 			if (!sender.hasPermission(menu.getPermission())) {
 				menu.sendNoPermissionMessage(sender);
@@ -103,9 +104,9 @@ public class CommandHandler extends CommandFramework {
 			}
 
 			if (sender.getName().equalsIgnoreCase(target.getName())) {
-				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + args[1] + "\".");
+				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + menuName + "\".");
 			} else {
-				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + args[1] + "\" to " + target.getName() + ".");
+				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + menuName + "\" to " + target.getName() + ".");
 			}
 			
 			menu.open(target);
