@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
-import com.gmail.filoghost.chestcommands.api.IconMenu;
+import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
@@ -94,8 +94,13 @@ public class CommandHandler extends CommandFramework {
 			
 			CommandValidate.notNull(target, "That player is not online.");
 			
-			IconMenu menu = ChestCommands.getFileNameToMenuMap().get(args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml");
+			ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml");
 			CommandValidate.notNull(target, "That menu was not found.");
+			
+			if (!sender.hasPermission(menu.getPermission())) {
+				menu.sendNoPermissionMessage(sender);
+				return;
+			}
 
 			if (sender.getName().equalsIgnoreCase(target.getName())) {
 				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + args[1] + "\".");

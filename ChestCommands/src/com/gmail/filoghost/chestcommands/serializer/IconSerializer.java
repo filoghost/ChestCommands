@@ -24,6 +24,7 @@ public class IconSerializer {
 		public static final 
 				String ID = "ID",
 				DATA_VALUE = "DATA-VALUE",
+				AMOUNT = "AMOUNT",
 				NAME = "NAME",
 				LORE = "LORE",
 				ENCHANT = "ENCHANTMENT",
@@ -84,6 +85,10 @@ public class IconSerializer {
 		
 		if (section.isSet(Nodes.DATA_VALUE)) {
 			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
+		}
+		
+		if (section.isSet(Nodes.AMOUNT)) {
+			icon.setAmount(section.getInt(Nodes.AMOUNT));
 		}
 		
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeName(section.getString(Nodes.NAME))));

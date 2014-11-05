@@ -2,6 +2,7 @@ package com.gmail.filoghost.chestcommands.internal;
 
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
@@ -48,10 +49,10 @@ public class ExtendedIconMenu extends IconMenu {
 		super.open(player);
 	}
 	
-	public void sendNoPermissionMessage(Player player) {
+	public void sendNoPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
 		if (noPermMessage != null && !noPermMessage.isEmpty()) {
-			player.sendMessage(noPermMessage.replace("{permission}", this.permission));
+			sender.sendMessage(noPermMessage.replace("{permission}", this.permission));
 		}
 	}
 	
