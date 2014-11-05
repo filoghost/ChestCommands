@@ -1,6 +1,6 @@
 name: ChestCommands
 main: com.gmail.filoghost.chestcommands.ChestCommands
-version: 3.0.2
+version: 3.0.3
 softdepend: [Vault, BarAPI, PlayerPoints]
 
 commands:
