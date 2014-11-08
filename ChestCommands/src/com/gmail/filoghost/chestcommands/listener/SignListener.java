@@ -46,7 +46,6 @@ public class SignListener implements Listener {
 	
 	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
-
 		if (event.getLine(0).equalsIgnoreCase("[menu]") && event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
 				
 			if (event.getLine(1).isEmpty()) {
@@ -64,6 +63,14 @@ public class SignListener implements Listener {
 				
 			event.setLine(0, ChatColor.BLUE + event.getLine(0));
 			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + Utils.addYamlExtension(event.getLine(1)) + ".");
+		}
+	}
+	
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSignChangeMonitor(SignChangeEvent event) {
+		// Prevent players with permissions for creating colored signs from creating menu signs.
+		if (event.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[menu]") && !event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
+			event.setLine(0, ChatColor.stripColor(event.getLine(0)));
 		}
 	}
 	
