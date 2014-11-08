@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.BroadcastIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.ConsoleIconCommand;
@@ -57,8 +58,12 @@ public class CommandSerializer {
 	}
 	
 	public static List<IconCommand> readCommands(String input) {
+		String separator = ChestCommands.getSettings().multiple_commands_separator;
+		if (separator == null || separator.length() == 0) {
+			separator = ";";
+		}
 		
-		String[] split = input.split(";");
+		String[] split = input.split(Pattern.quote(separator));
 		List<IconCommand> iconCommands = Lists.newArrayList();
 			
 		for (String command : split) {
