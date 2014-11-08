@@ -150,7 +150,7 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().warning("I/O error while using the configuration. Default values will be used.");
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
-			getLogger().warning("The config.yml was not valid, please look at the error above. Default values will be used.");
+			getLogger().warning("The config.yml was not a valid YAML, please look at the error above. Default values will be used.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");
@@ -163,7 +163,7 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().warning("I/O error while using the language file. Default values will be used.");
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
-			getLogger().warning("The lang.yml was not valid, please look at the error above. Default values will be used.");
+			getLogger().warning("The lang.yml was not a valid YAML, please look at the error above. Default values will be used.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");

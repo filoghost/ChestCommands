@@ -95,10 +95,8 @@ public class Utils {
 	}
 
 	public static String colorizeName(String input) {
-		if (input == null) return null;
-		
-		if (input.isEmpty()) return input;
-		
+		if (input == null || input.isEmpty()) return input;
+
 		if (input.charAt(0) != ChatColor.COLOR_CHAR) {
 			return ChestCommands.getSettings().default_color__name + addColors(input);
 		} else {
@@ -107,7 +105,8 @@ public class Utils {
 	}
 
 	public static List<String> colorizeLore(List<String> input) {
-		if (input == null) return null;
+		if (input == null || input.isEmpty()) return input;
+		
 		for (int i = 0; i < input.size(); i++) {
 			
 			String line = input.get(i);
@@ -124,12 +123,12 @@ public class Utils {
 	}
 	
 	public static String addColors(String input) {
-		if (input == null) return null;
+		if (input == null || input.isEmpty()) return input;
 		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 	
 	public static List<String> addColors(List<String> input) {
-		if (input == null) return null;
+		if (input == null || input.isEmpty()) return input;
 		for (int i = 0; i < input.size(); i++) {
 			input.set(i, addColors(input.get(i)));
 		}

@@ -18,10 +18,15 @@ import com.gmail.filoghost.chestcommands.util.Utils;
 public class SpecialConfig {
 	
 	private transient PluginConfig config;
+	private transient String header;
 	private transient Map<String, Object> defaultValuesMap;
 
 	public SpecialConfig(PluginConfig config) {
 		this.config = config;
+	}
+	
+	public void setHeader(String header) {
+		this.header = header;
 	}
 	
 	public void load() throws IOException, InvalidConfigurationException, Exception {
@@ -57,7 +62,6 @@ public class SpecialConfig {
 		// Save default values not set.
 		boolean needsSave = false;
 		for (Entry<String, Object> entry : defaultValuesMap.entrySet()) {
-			
 			if (!config.isSet(entry.getKey())) {
 				needsSave = true;
 				config.set(entry.getKey(), entry.getValue());
@@ -65,6 +69,7 @@ public class SpecialConfig {
 		}
 		
 		if (needsSave) {
+			config.options().header(header);
 			config.save();
 		}
 		

@@ -13,6 +13,7 @@ import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import com.google.common.collect.Maps;
 
+// This is not a real YAML file ;)
 public class AsciiPlaceholders {
 
 	private static Map<String, String> placeholders = Maps.newHashMap();
