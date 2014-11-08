@@ -11,6 +11,8 @@ public class Lang extends SpecialConfig {
 	public String no_money = "&cYou need {money}$ for this.";
 	public String no_points = "&cYou need {points} player points for this.";
 	public String menu_not_found = "&cMenu not found! Please inform the staff.";
+	public String open_menu = "&aOpening the menu \"{menu}\".";
+	public String open_menu_others = "&aOpening the menu \"{menu}\" to {player}.";
 	public String any = "any"; // Used in no_required_item when data value is not restrictive.
 
 	public Lang(PluginConfig config) {

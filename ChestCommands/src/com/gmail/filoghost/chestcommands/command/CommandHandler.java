@@ -104,9 +104,13 @@ public class CommandHandler extends CommandFramework {
 			}
 
 			if (sender.getName().equalsIgnoreCase(target.getName())) {
-				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + menuName + "\".");
+				if (!ChestCommands.getLang().open_menu.isEmpty()) {
+					sender.sendMessage(ChestCommands.getLang().open_menu.replace("{menu}", menuName));
+				}
 			} else {
-				sender.sendMessage(ChatColor.GREEN + "Opening the menu \"" + menuName + "\" to " + target.getName() + ".");
+				if (!ChestCommands.getLang().open_menu_others.isEmpty()) {
+					sender.sendMessage(ChestCommands.getLang().open_menu_others.replace("{menu}", menuName).replace("{player}", target.getName()));
+				}
 			}
 			
 			menu.open(target);
