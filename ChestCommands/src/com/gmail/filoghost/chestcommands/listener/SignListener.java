@@ -24,7 +24,7 @@ public class SignListener implements Listener {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && isSign(event.getClickedBlock().getType())) {
 			
 			Sign sign = (Sign) event.getClickedBlock().getState();
-			if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[menu]")) {
+			if (sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]")) {
 				
 				sign.getLine(1);
 				ExtendedIconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(Utils.addYamlExtension(sign.getLine(1)));
@@ -61,7 +61,7 @@ public class SignListener implements Listener {
 				return;
 			}
 				
-			event.setLine(0, ChatColor.BLUE + event.getLine(0));
+			event.setLine(0, ChatColor.DARK_BLUE + event.getLine(0));
 			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + Utils.addYamlExtension(event.getLine(1)) + ".");
 		}
 	}
@@ -69,7 +69,7 @@ public class SignListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSignChangeMonitor(SignChangeEvent event) {
 		// Prevent players with permissions for creating colored signs from creating menu signs.
-		if (event.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[menu]") && !event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
+		if (event.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]") && !event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
 			event.setLine(0, ChatColor.stripColor(event.getLine(0)));
 		}
 	}
