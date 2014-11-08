@@ -143,7 +143,12 @@ public class Icon {
 	protected String calculateName() {
 		if (hasName()) {
 			// TODO some magic
-			return name;
+			if (name.isEmpty()) {
+				// Add a color to display the name empty.
+				return ChatColor.WHITE.toString();
+			} else {
+				return name;
+			}
 		}
 		
 		return null;
