@@ -51,8 +51,8 @@ public class Utils {
 		tempMap.put("carrot on stick",		Material.CARROT_STICK);
 		tempMap.put("carrot on a stick",	Material.CARROT_STICK);
 		tempMap.put("cobblestone wall",		Material.COBBLE_WALL);
-		tempMap.put("acacia wood stairs",	Material.ACACIA_STAIRS);
-		tempMap.put("dark oak wood stairs",	Material.DARK_OAK_STAIRS);
+//		tempMap.put("acacia wood stairs",	Material.ACACIA_STAIRS);
+//		tempMap.put("dark oak wood stairs",	Material.DARK_OAK_STAIRS);
 		tempMap.put("wood slab",			Material.WOOD_STEP);
 		tempMap.put("double wood slab",		Material.WOOD_DOUBLE_STEP);
 		tempMap.put("repeater",				Material.DIODE);
