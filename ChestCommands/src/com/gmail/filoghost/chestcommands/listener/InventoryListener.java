@@ -1,5 +1,7 @@
 package com.gmail.filoghost.chestcommands.listener;
 
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -7,14 +9,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.BoundItem;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
+import com.google.common.collect.Maps;
 
 public class InventoryListener implements Listener {
+	
+	private static Map<Player, Long> antiClickSpam = Maps.newHashMap();
 	
 	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent event) {
@@ -45,7 +51,21 @@ public class InventoryListener implements Listener {
 				Icon icon = menu.getIconRaw(slot);
 				
 				if (icon != null && event.getInventory().getItem(slot) != null) {
-					boolean close = icon.onClick((Player) event.getWhoClicked());
+					Player clicker = (Player) event.getWhoClicked();
+					
+					Long cooldownUntil = antiClickSpam.get(clicker);
+					long now = System.currentTimeMillis();
+					int minDelay = ChestCommands.getSettings().anti_click_spam_delay;
+					
+					if (minDelay > 0) {
+						if (cooldownUntil != null && cooldownUntil - now > minDelay) {
+							return;
+						} else {
+							antiClickSpam.put(clicker, now + minDelay);
+						}
+					}
+					
+					boolean close = icon.onClick(clicker);
 					
 					if (close) {
 						event.getWhoClicked().closeInventory();
@@ -53,6 +73,11 @@ public class InventoryListener implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event) {
+		antiClickSpam.remove(event.getPlayer());
 	}
 	
 }
