@@ -16,6 +16,10 @@ public class ExtendedIcon extends Icon {
 	private String permission;
 	private String permissionMessage;
 	private String viewPermission;
+	
+	private boolean permissionNegated;
+	private boolean viewPermissionNegated;
+	
 	private double moneyPrice;
 	private int playerPointsPrice;
 	private RequiredItem requiredItem;
@@ -24,11 +28,29 @@ public class ExtendedIcon extends Icon {
 		super();
 	}
 
-	public String getPermission() {
-		return permission;
+	public boolean canClickIcon(Player player) {
+		if (permission == null) {
+			return true;
+		}
+		
+		if (permissionNegated) {
+			return !player.hasPermission(permission);
+		} else {
+			return player.hasPermission(permission);
+		}
 	}
 
 	public void setPermission(String permission) {
+		if (permission.isEmpty()) {
+			permission = null;
+		}
+		
+		if (permission != null) {
+			if (permission.startsWith("!")) {
+				permissionNegated = true;
+				permission = permission.substring(1, viewPermission.length()).trim();
+			}
+		}
 		this.permission = permission;
 	}
 
@@ -40,11 +62,29 @@ public class ExtendedIcon extends Icon {
 		this.permissionMessage = permissionMessage;
 	}
 	
-	public String getViewPermission() {
-		return viewPermission;
+	public boolean canViewIcon(Player player) {
+		if (viewPermission == null) {
+			return true;
+		}
+		
+		if (viewPermissionNegated) {
+			return !player.hasPermission(viewPermission);
+		} else {
+			return player.hasPermission(viewPermission);
+		}
 	}
 
 	public void setViewPermission(String viewPermission) {
+		if (viewPermission.isEmpty()) {
+			viewPermission = null;
+		}
+		
+		if (viewPermission != null) {
+			if (viewPermission.startsWith("!")) {
+				viewPermissionNegated = true;
+				viewPermission = viewPermission.substring(1, viewPermission.length()).trim();
+			}
+		}
 		this.viewPermission = viewPermission;
 	}
 
@@ -78,11 +118,11 @@ public class ExtendedIcon extends Icon {
 		
 		// Check all the requirements.
 		
-		if (permission != null && !permission.isEmpty() && !player.hasPermission(permission)) {
+		if (!canClickIcon(player)) {
 			if (permissionMessage != null) {
 				player.sendMessage(permissionMessage);
 			} else {
-				player.sendMessage(ChatColor.RED + "You don't have permission.");
+				player.sendMessage(ChestCommands.getLang().default_no_icon_permission);
 			}
 			return closeOnClick;
 		}

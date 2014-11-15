@@ -58,7 +58,7 @@ public class ExtendedIconMenu extends IconMenu {
 					if (icons[i] instanceof ExtendedIcon) {
 						ExtendedIcon extIcon = (ExtendedIcon) icons[i];
 						
-						if (extIcon.getViewPermission() != null && !player.hasPermission(extIcon.getViewPermission())) {
+						if (!extIcon.canViewIcon(player)) {
 							continue;
 						}
 					}
