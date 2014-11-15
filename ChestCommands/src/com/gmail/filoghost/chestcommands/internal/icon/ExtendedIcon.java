@@ -47,7 +47,7 @@ public class ExtendedIcon extends Icon {
 		}
 		
 		if (permission != null) {
-			if (permission.startsWith("!")) {
+			if (permission.startsWith("-")) {
 				permissionNegated = true;
 				permission = permission.substring(1, viewPermission.length()).trim();
 			}
@@ -81,7 +81,7 @@ public class ExtendedIcon extends Icon {
 		}
 		
 		if (viewPermission != null) {
-			if (viewPermission.startsWith("!")) {
+			if (viewPermission.startsWith("-")) {
 				viewPermissionNegated = true;
 				viewPermission = viewPermission.substring(1, viewPermission.length()).trim();
 			}
