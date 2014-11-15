@@ -53,7 +53,7 @@ public class ItemStackReader {
 			}
 			
 			short dataValue = Short.parseShort(splitByColons[1]);
-			if (dataValue < 0 || dataValue > 15) {
+			if (dataValue < 0) {
 				throw new FormatException("invalid data value \"" + splitByColons[1] + "\"");
 			}
 			
