@@ -9,6 +9,7 @@ import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
+import com.gmail.filoghost.chestcommands.util.StringUtils;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class ExtendedIcon extends Icon {
@@ -41,7 +42,7 @@ public class ExtendedIcon extends Icon {
 	}
 
 	public void setPermission(String permission) {
-		if (permission.isEmpty()) {
+		if (StringUtils.isNullOrEmpty(permission)) {
 			permission = null;
 		}
 		
@@ -75,7 +76,7 @@ public class ExtendedIcon extends Icon {
 	}
 
 	public void setViewPermission(String viewPermission) {
-		if (viewPermission.isEmpty()) {
+		if (StringUtils.isNullOrEmpty(viewPermission)) {
 			viewPermission = null;
 		}
 		
