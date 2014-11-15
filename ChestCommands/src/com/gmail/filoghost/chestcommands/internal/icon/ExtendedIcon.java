@@ -49,7 +49,7 @@ public class ExtendedIcon extends Icon {
 		if (permission != null) {
 			if (permission.startsWith("-")) {
 				permissionNegated = true;
-				permission = permission.substring(1, viewPermission.length()).trim();
+				permission = permission.substring(1, permission.length()).trim();
 			}
 		}
 		this.permission = permission;
