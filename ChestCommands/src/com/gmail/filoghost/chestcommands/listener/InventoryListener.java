@@ -58,7 +58,7 @@ public class InventoryListener implements Listener {
 					int minDelay = ChestCommands.getSettings().anti_click_spam_delay;
 					
 					if (minDelay > 0) {
-						if (cooldownUntil != null && cooldownUntil - now > minDelay) {
+						if (cooldownUntil != null && cooldownUntil > now) {
 							return;
 						} else {
 							antiClickSpam.put(clicker, now + minDelay);
