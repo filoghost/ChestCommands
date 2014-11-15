@@ -41,9 +41,10 @@ public class InventoryListener implements Listener {
 			int slot = event.getRawSlot();
 			
 			if (slot >= 0 && slot < menu.getSize()) {
+				
 				Icon icon = menu.getIconRaw(slot);
 				
-				if (icon != null) {
+				if (icon != null && event.getInventory().getItem(slot) != null) {
 					boolean close = icon.onClick((Player) event.getWhoClicked());
 					
 					if (close) {

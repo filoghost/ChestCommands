@@ -35,6 +35,7 @@ public class IconSerializer {
 				REQUIRED_ITEM = "REQUIRED-ITEM",
 				PERMISSION = "PERMISSION",
 				PERMISSION_MESSAGE = "PERMISSION-MESSAGE",
+				VIEW_PERMISSION = "VIEW-PERMISSION",
 				KEEP_OPEN = "KEEP-OPEN",
 				POSITION_X = "POSITION-X",
 				POSITION_Y = "POSITION-Y";
@@ -108,6 +109,7 @@ public class IconSerializer {
 		
 		icon.setPermission(section.getString(Nodes.PERMISSION));
 		icon.setPermissionMessage(Utils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
+		icon.setViewPermission(section.getString(Nodes.VIEW_PERMISSION));
 		
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
 		icon.setCloseOnClick(closeOnClick);

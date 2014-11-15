@@ -21,8 +21,8 @@ import com.gmail.filoghost.chestcommands.util.Validate;
  */
 public class IconMenu {
 	
-	private String title;
-	private Icon[] icons;
+	protected final String title;
+	protected final Icon[] icons;
 	
 	
 	public IconMenu(String title, int rows) {

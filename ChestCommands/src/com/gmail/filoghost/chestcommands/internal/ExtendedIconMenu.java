@@ -2,12 +2,15 @@ package com.gmail.filoghost.chestcommands.internal;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
+import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 
 public class ExtendedIconMenu extends IconMenu {
@@ -46,7 +49,25 @@ public class ExtendedIconMenu extends IconMenu {
 			}
 		}
 		
-		super.open(player);
+			
+		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
+			
+		for (int i = 0; i < icons.length; i++) {
+				if (icons[i] != null) {
+					
+					if (icons[i] instanceof ExtendedIcon) {
+						ExtendedIcon extIcon = (ExtendedIcon) icons[i];
+						
+						if (extIcon.getViewPermission() != null && !player.hasPermission(extIcon.getViewPermission())) {
+							continue;
+						}
+					}
+					
+					inventory.setItem(i, ChestCommands.getAttributeRemover().removeAttributes(icons[i].createItemstack()));
+				}
+			}
+			
+		player.openInventory(inventory);
 	}
 	
 	public void sendNoPermissionMessage(CommandSender sender) {

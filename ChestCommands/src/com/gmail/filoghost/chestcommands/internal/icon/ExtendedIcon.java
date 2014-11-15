@@ -15,6 +15,7 @@ public class ExtendedIcon extends Icon {
 
 	private String permission;
 	private String permissionMessage;
+	private String viewPermission;
 	private double moneyPrice;
 	private int playerPointsPrice;
 	private RequiredItem requiredItem;
@@ -39,6 +40,14 @@ public class ExtendedIcon extends Icon {
 		this.permissionMessage = permissionMessage;
 	}
 	
+	public String getViewPermission() {
+		return viewPermission;
+	}
+
+	public void setViewPermission(String viewPermission) {
+		this.viewPermission = viewPermission;
+	}
+
 	public double getMoneyPrice() {
 		return moneyPrice;
 	}
