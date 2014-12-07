@@ -32,6 +32,7 @@ public class IconSerializer {
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
 				POINTS = "POINTS",
+				EXP_LEVELS = "LEVELS",
 				REQUIRED_ITEM = "REQUIRED-ITEM",
 				PERMISSION = "PERMISSION",
 				PERMISSION_MESSAGE = "PERMISSION-MESSAGE",
@@ -131,6 +132,13 @@ public class IconSerializer {
 			icon.setPlayerPointsPrice(points);
 		} else if (points < 0) {
 			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative POINTS: " + price);
+		}
+		
+		int levels = section.getInt(Nodes.EXP_LEVELS);
+		if (levels > 0) {
+			icon.setExpLevelsPrice(points);
+		} else if (levels < 0) {
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + price);
 		}
 		
 		if (section.isSet(Nodes.REQUIRED_ITEM)) {

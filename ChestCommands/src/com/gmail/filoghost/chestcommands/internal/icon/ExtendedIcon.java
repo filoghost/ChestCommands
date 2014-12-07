@@ -23,6 +23,7 @@ public class ExtendedIcon extends Icon {
 	
 	private double moneyPrice;
 	private int playerPointsPrice;
+	private int expLevelsPrice;
 	private RequiredItem requiredItem;
 	
 	public ExtendedIcon() {
@@ -105,6 +106,14 @@ public class ExtendedIcon extends Icon {
 		this.playerPointsPrice = playerPointsPrice;
 	}
 
+	public int getExpLevelsPrice() {
+		return expLevelsPrice;
+	}
+
+	public void setExpLevelsPrice(int expLevelsPrice) {
+		this.expLevelsPrice = expLevelsPrice;
+	}
+
 	public RequiredItem getRequiredItem() {
 		return requiredItem;
 	}
@@ -152,6 +161,13 @@ public class ExtendedIcon extends Icon {
 			}
 		}
 		
+		if (expLevelsPrice > 0) {
+			if (player.getLevel() < expLevelsPrice) {
+				player.sendMessage(ChestCommands.getLang().no_exp.replace("{levels}", Integer.toString(expLevelsPrice)));
+				return closeOnClick;
+			}
+		}
+		
 		if (requiredItem != null) {
 			
 			if (!requiredItem.hasItem(player)) {
@@ -179,6 +195,10 @@ public class ExtendedIcon extends Icon {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
 				return closeOnClick;
 			}
+		}
+		
+		if (expLevelsPrice > 0) {
+			player.setLevel(player.getLevel() - expLevelsPrice);
 		}
 		
 		if (requiredItem != null) {
