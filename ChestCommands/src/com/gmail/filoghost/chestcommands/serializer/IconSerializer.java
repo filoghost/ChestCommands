@@ -29,7 +29,7 @@ public class IconSerializer {
 				LORE = "LORE",
 				ENCHANT = "ENCHANTMENT",
 				COLOR = "COLOR",
-				SKULL_OWNER = "SKULL_OWNER",
+				SKULL_OWNER = "SKULL-OWNER",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
 				POINTS = "POINTS",
