@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import com.google.common.collect.Lists;
 
@@ -27,6 +28,7 @@ public class Icon {
 	private List<String> lore;
 	private Map<Enchantment, Integer> enchantments;
 	private Color color;
+	private String skullOwner;
 	
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
@@ -128,6 +130,14 @@ public class Icon {
 		this.color = color;
 	}
 
+	public String getSkullOwner() {
+		return skullOwner;
+	}
+
+	public void setSkullOwner(String skullOwner) {
+		this.skullOwner = skullOwner;
+	}
+
 	public void setCloseOnClick(boolean closeOnClick) {
 		this.closeOnClick = closeOnClick;
 	}
@@ -191,6 +201,10 @@ public class Icon {
 		
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(color);
+		}
+		
+		if (skullOwner != null && itemMeta instanceof SkullMeta) {
+			((SkullMeta) itemMeta).setOwner(skullOwner);
 		}
 		
 		itemStack.setItemMeta(itemMeta);

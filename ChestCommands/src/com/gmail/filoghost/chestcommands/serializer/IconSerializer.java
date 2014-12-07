@@ -29,6 +29,7 @@ public class IconSerializer {
 				LORE = "LORE",
 				ENCHANT = "ENCHANTMENT",
 				COLOR = "COLOR",
+				SKULL_OWNER = "SKULL_OWNER",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
 				POINTS = "POINTS",
@@ -107,6 +108,8 @@ public class IconSerializer {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}
 		}
+		
+		icon.setSkullOwner(section.getString(Nodes.SKULL_OWNER));
 		
 		icon.setPermission(section.getString(Nodes.PERMISSION));
 		icon.setPermissionMessage(Utils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
