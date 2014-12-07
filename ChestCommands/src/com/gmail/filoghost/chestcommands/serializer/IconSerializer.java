@@ -131,14 +131,14 @@ public class IconSerializer {
 		if (points > 0) {
 			icon.setPlayerPointsPrice(points);
 		} else if (points < 0) {
-			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative POINTS: " + price);
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative POINTS: " + points);
 		}
 		
 		int levels = section.getInt(Nodes.EXP_LEVELS);
 		if (levels > 0) {
-			icon.setExpLevelsPrice(points);
+			icon.setExpLevelsPrice(levels);
 		} else if (levels < 0) {
-			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + price);
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
 		}
 		
 		if (section.isSet(Nodes.REQUIRED_ITEM)) {
