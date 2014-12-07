@@ -2,6 +2,7 @@ package com.gmail.filoghost.chestcommands.listener;
 
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +17,7 @@ import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.BoundItem;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
+import com.gmail.filoghost.chestcommands.task.ExecuteCommandsTask;
 import com.google.common.collect.Maps;
 
 public class InventoryListener implements Listener {
@@ -65,11 +67,8 @@ public class InventoryListener implements Listener {
 						}
 					}
 					
-					boolean close = icon.onClick(clicker);
-					
-					if (close) {
-						event.getWhoClicked().closeInventory();
-					}
+					// Closes the inventory and executes commands AFTER the event.
+					Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new ExecuteCommandsTask(clicker, icon));
 				}
 			}
 		}

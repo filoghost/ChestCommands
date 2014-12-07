@@ -74,7 +74,7 @@ public class ChestCommands extends JavaPlugin {
 		lang = new Lang(new PluginConfig(this, "lang.yml"));
 		
 		if (!EconomyBridge.setupEconomy()) {
-			getLogger().info("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
+			getLogger().warning("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
 		}
 		
 		if (BarAPIBridge.setupPlugin()) {
