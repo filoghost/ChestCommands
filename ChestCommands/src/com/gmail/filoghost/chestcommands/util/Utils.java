@@ -6,9 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,19 +24,17 @@ import org.bukkit.plugin.Plugin;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.exception.FormatException;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class Utils {
 	
 	// Default material names are ugly.
-	private static Map<String, Material> materialMap = Maps.newHashMap();
+	private static Map<String, Material> materialMap = newHashMap();
 	static {
 		for (Material mat : Material.values()) {
 			materialMap.put(StringUtils.stripChars(mat.toString(), "_").toLowerCase(), mat);
 		}
 		
-		Map<String, Material> tempMap = Maps.newHashMap();
+		Map<String, Material> tempMap = newHashMap();
 		
 		tempMap.put("iron bar",				Material.IRON_FENCE);
 		tempMap.put("iron bars",			Material.IRON_FENCE);
@@ -215,7 +218,7 @@ public class Utils {
 		BufferedReader br = null;
 
 		try {
-			List<String> lines = Lists.newArrayList();
+			List<String> lines = newArrayList();
 
 			if (!file.exists()) {
 				throw new FileNotFoundException();
@@ -264,11 +267,43 @@ public class Utils {
 		return Color.fromRGB(red, green, blue);
 	}
 	
+	
 	public static void saveResourceSafe(Plugin plugin, String name) {
 		try {
 			plugin.saveResource(name, false);
 		} catch (Exception ex) {
 			// Shhh...
 		}
+	}
+	
+	public static <T> Set<T> newHashSet() {
+		return new HashSet<T>();
+	}
+	
+	public static <T, V> Map<T, V> newHashMap() {
+		return new HashMap<T, V>();
+	}
+	
+	public static <T> List<T> newArrayList() {
+		return new ArrayList<T>();
+	}
+	
+	public static String join(Iterable<?> iterable, String separator) {
+		StringBuilder builder = new StringBuilder();
+		Iterator<?> iter = iterable.iterator();
+		
+		boolean first = true;
+		
+		while (iter.hasNext()) {
+			if (first) {
+				first = false;
+			} else {
+				builder.append(separator);
+			}
+			
+			builder.append(iter.next());
+		}
+		
+		return builder.toString();		
 	}
 }

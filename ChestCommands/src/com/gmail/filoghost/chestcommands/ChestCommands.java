@@ -37,8 +37,6 @@ import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class ChestCommands extends JavaPlugin {
 	
@@ -68,7 +66,7 @@ public class ChestCommands extends JavaPlugin {
 		instance = this;
 		fileNameToMenuMap = CaseInsensitiveMap.create();
 		commandsToMenuMap = CaseInsensitiveMap.create();
-		boundItems = Sets.newHashSet();
+		boundItems = Utils.newHashSet();
 		
 		settings = new Settings(new PluginConfig(this, "config.yml"));
 		lang = new Lang(new PluginConfig(this, "lang.yml"));
@@ -244,7 +242,7 @@ public class ChestCommands extends JavaPlugin {
 	 * Loads all the configuration files recursively into a list.
 	 */
 	private List<PluginConfig> loadMenus(File file) {
-		List<PluginConfig> list = Lists.newArrayList();
+		List<PluginConfig> list = Utils.newArrayList();
 		if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
 				list.addAll(loadMenus(subFile));

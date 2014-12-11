@@ -18,11 +18,11 @@ import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.BoundItem;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.task.ExecuteCommandsTask;
-import com.google.common.collect.Maps;
+import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class InventoryListener implements Listener {
 	
-	private static Map<Player, Long> antiClickSpam = Maps.newHashMap();
+	private static Map<Player, Long> antiClickSpam = Utils.newHashMap();
 	
 	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent event) {

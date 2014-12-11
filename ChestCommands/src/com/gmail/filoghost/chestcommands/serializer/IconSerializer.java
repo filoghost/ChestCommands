@@ -119,7 +119,23 @@ public class IconSerializer {
 		icon.setCloseOnClick(closeOnClick);
 		
 		if (section.isSet(Nodes.COMMAND)) {
-			List<IconCommand> commands = CommandSerializer.readCommands(section.getString(Nodes.COMMAND));			
+			
+			List<IconCommand> commands;
+			
+			if (section.isList(Nodes.COMMAND)) {
+				commands = Utils.newArrayList();
+				
+				for (String commandString : section.getStringList(Nodes.COMMAND)) {
+					if (commandString.isEmpty()) {
+						continue;
+					}
+					commands.add(CommandSerializer.matchCommand(commandString));
+				}
+				
+			} else {
+				commands = CommandSerializer.readCommands(section.getString(Nodes.COMMAND));
+			}
+			
 			icon.setClickHandler(new CommandsClickHandler(commands, closeOnClick));
 		}
 		

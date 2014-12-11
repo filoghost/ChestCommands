@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.google.common.collect.Lists;
+import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class Icon {
 
@@ -170,7 +170,7 @@ public class Icon {
 		
 		if (hasLore()) {
 			
-			output = Lists.newArrayList();
+			output = Utils.newArrayList();
 			// TODO some magic
 			for (String line : lore) {
 				output.add(line);
@@ -179,7 +179,7 @@ public class Icon {
 		
 		if (material == null) {
 
-			if (output == null) output = Lists.newArrayList();
+			if (output == null) output = Utils.newArrayList();
 			
 			// Add an error message.
 			output.add(ChatColor.RED + "(Invalid material)");

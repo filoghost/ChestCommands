@@ -1,6 +1,5 @@
 package com.gmail.filoghost.chestcommands.serializer;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,11 +21,11 @@ import com.gmail.filoghost.chestcommands.internal.icon.command.ServerIconCommand
 import com.gmail.filoghost.chestcommands.internal.icon.command.SoundIconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.TellIconCommand;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.google.common.collect.Lists;
+import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class CommandSerializer {
 
-	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = new HashMap<Pattern, Class<? extends IconCommand>>();
+	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = Utils.newHashMap();
 	static {
 		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
 		commandTypesMap.put(commandPattern("op:"), OpIconCommand.class);
@@ -64,7 +63,7 @@ public class CommandSerializer {
 		}
 		
 		String[] split = input.split(Pattern.quote(separator));
-		List<IconCommand> iconCommands = Lists.newArrayList();
+		List<IconCommand> iconCommands = Utils.newArrayList();
 			
 		for (String command : split) {
 			String trim = command.trim();

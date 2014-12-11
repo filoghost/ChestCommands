@@ -7,8 +7,7 @@ import org.bukkit.ChatColor;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class ErrorLoggerTask implements Runnable {
 
@@ -21,7 +20,7 @@ public class ErrorLoggerTask implements Runnable {
 	@Override
 	public void run() {
 		
-		List<String> lines = Lists.newArrayList();
+		List<String> lines = Utils.newArrayList();
 		
 		lines.add(" ");
 		lines.add(ChatColor.RED + "#------------------- Chest Commands Errors -------------------#");
@@ -31,7 +30,7 @@ public class ErrorLoggerTask implements Runnable {
 		}
 		lines.add(ChatColor.RED + "#-------------------------------------------------------------#");
 		
-		String output = Joiner.on('\n').join(lines);
+		String output = Utils.join(lines, "\n");
 		
 		if (ChestCommands.getSettings().use_console_colors) {
 			Bukkit.getConsoleSender().sendMessage(output);

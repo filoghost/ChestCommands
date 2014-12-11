@@ -11,12 +11,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
-import com.google.common.collect.Maps;
 
 // This is not a real YAML file ;)
 public class AsciiPlaceholders {
 
-	private static Map<String, String> placeholders = Maps.newHashMap();
+	private static Map<String, String> placeholders = Utils.newHashMap();
+	
 	
 	public static void load(ErrorLogger errorLogger) throws IOException, Exception {
 		

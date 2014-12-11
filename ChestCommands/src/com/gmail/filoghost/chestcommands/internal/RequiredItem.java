@@ -1,9 +1,10 @@
 package com.gmail.filoghost.chestcommands.internal;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.gmail.filoghost.chestcommands.util.Validate;
 
 public class RequiredItem {
 
