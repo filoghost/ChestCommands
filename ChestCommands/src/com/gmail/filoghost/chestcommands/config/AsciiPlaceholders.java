@@ -12,7 +12,9 @@ import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
-// This is not a real YAML file ;)
+/**
+ *  This is not a real YAML file ;)
+ */
 public class AsciiPlaceholders {
 
 	private static Map<String, String> placeholders = Utils.newHashMap();

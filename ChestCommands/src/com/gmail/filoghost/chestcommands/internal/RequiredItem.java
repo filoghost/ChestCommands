@@ -38,7 +38,7 @@ public class RequiredItem {
 	}
 
 	public void setRestrictiveDataValue(short data) {
-		Validate.isTrue(data >= 0, "Data value cannot be lower than 0");
+		Validate.isTrue(data >= 0, "Data value cannot be negative");
 
 		this.dataValue = data;
 		isDurabilityRestrictive = true;
