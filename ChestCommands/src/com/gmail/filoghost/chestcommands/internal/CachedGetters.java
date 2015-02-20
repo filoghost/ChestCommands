@@ -11,6 +11,7 @@ public class CachedGetters {
 		long now = System.currentTimeMillis();
 		if (lastOnlinePlayersRefresh == 0 || now - lastOnlinePlayersRefresh > 1000) {
 			// getOnlinePlayers() could be expensive if called frequently
+			lastOnlinePlayersRefresh = now;
 			onlinePlayers = Bukkit.getOnlinePlayers().length;
 		}
 		
