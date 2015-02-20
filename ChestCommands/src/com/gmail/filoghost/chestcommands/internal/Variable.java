@@ -7,7 +7,7 @@ import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
 
 public enum Variable {
-
+	
 	PLAYER("{player}") {
 		public String getReplacement(Player executor) {
 			return executor.getName();
@@ -16,7 +16,7 @@ public enum Variable {
 	
 	ONLINE("{online}") {
 		public String getReplacement(Player executor) {
-			return String.valueOf(Bukkit.getOnlinePlayers().length);
+			return String.valueOf(CachedGetters.getOnlinePlayers());
 		}
 	},
 	

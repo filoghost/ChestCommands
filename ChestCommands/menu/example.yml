@@ -16,6 +16,11 @@ menu-settings:
   # Bind multiple commands using ; (command: 'menu; m; me')
   command: 'menu'
 
+  # auto-refresh - OPTIONAL
+  # How frequently the menu will be refreshed, in seconds.
+  # Useful if you have variables in items' descriptions.
+  auto-refresh: 5
+
   # This command command will be execute when the menu is opened.
   # Supports all the icon command types.
   open-action: 'sound: note pling; tell: &eYou opened the example menu.'
@@ -140,6 +145,17 @@ will-not-close:
   KEEP-OPEN: true
   POSITION-X: 9
   POSITION-Y: 1
+
+
+a-talking-head:
+  COMMAND: 'tell: This is a simple message, without using commands!'
+  NAME: '&3Tells you something.'
+  LORE:
+    - '&7It tells you something without commands.'
+  ID: head
+  DATA-VALUE: 3
+  POSITION-X: 1
+  POSITION-Y: 2
 
 
 a-talking-head:
