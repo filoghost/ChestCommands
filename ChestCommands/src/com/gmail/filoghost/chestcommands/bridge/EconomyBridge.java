@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import com.gmail.filoghost.chestcommands.util.Utils;
+
 public class EconomyBridge {
 	
 	private static Economy economy;
@@ -58,16 +60,23 @@ public class EconomyBridge {
 		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
 		
 		EconomyResponse response = economy.withdrawPlayer(player.getName(), player.getWorld().getName(), amount);
-		return response.transactionSuccess();
+		boolean result = response.transactionSuccess();
+		
+		Utils.refreshMenu(player);
+		
+		return result;
 	}
-	
 	
 	public static boolean giveMoney(Player player, double amount) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
 		
 		EconomyResponse response = economy.depositPlayer(player.getName(), player.getWorld().getName(), amount);
-		return response.transactionSuccess();
+		boolean result = response.transactionSuccess();
+		
+		Utils.refreshMenu(player);
+		
+		return result;
 	}
 	
 	public static String formatMoney(double amount) {

@@ -20,10 +20,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.exception.FormatException;
+import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
+import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 
 public class Utils {
 	
@@ -124,6 +129,20 @@ public class Utils {
 			}
 		}
 		return input;
+	}
+	
+	public static void refreshMenu(Player player) {
+		InventoryView view = player.getOpenInventory();
+		if (view != null) {
+			Inventory topInventory = view.getTopInventory();
+			if (topInventory.getHolder() instanceof MenuInventoryHolder) {
+				MenuInventoryHolder menuHolder = (MenuInventoryHolder) topInventory.getHolder();
+				
+				if (menuHolder.getIconMenu() instanceof ExtendedIconMenu) {
+					((ExtendedIconMenu) menuHolder.getIconMenu()).refresh(player, topInventory);
+				}
+			}
+		}
 	}
 	
 	public static String addColors(String input) {

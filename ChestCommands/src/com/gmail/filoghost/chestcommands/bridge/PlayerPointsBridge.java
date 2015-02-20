@@ -1,10 +1,11 @@
 package com.gmail.filoghost.chestcommands.bridge;
 
 import org.black_ixx.playerpoints.PlayerPoints;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import com.gmail.filoghost.chestcommands.util.Utils;
 
 // PlayerPoints minimum version: 2.0
 public class PlayerPointsBridge {
@@ -45,7 +46,11 @@ public class PlayerPointsBridge {
 		if (!hasValidPlugin()) throw new IllegalStateException("PlayerPoints plugin was not found!");
 		if (points < 0) throw new IllegalArgumentException("Invalid amount of points: " + points);
 		
-		return playerPoints.getAPI().take(player.getUniqueId(), points);
+		boolean result = playerPoints.getAPI().take(player.getUniqueId(), points);
+		
+		Utils.refreshMenu(player);
+		
+		return result;
 	}
 	
 	
@@ -53,7 +58,11 @@ public class PlayerPointsBridge {
 		if (!hasValidPlugin()) throw new IllegalStateException("PlayerPoints plugin was not found!");
 		if (points < 0) throw new IllegalArgumentException("Invalid amount of points: " + points);
 		
-		return playerPoints.getAPI().give(player.getUniqueId(), points);
+		boolean result = playerPoints.getAPI().give(player.getUniqueId(), points);
+		
+		Utils.refreshMenu(player);
+		
+		return result;
 	}
 	
 }

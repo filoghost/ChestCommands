@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
+import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
+import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
 import com.gmail.filoghost.chestcommands.util.StringUtils;
 import com.gmail.filoghost.chestcommands.util.Utils;
@@ -197,11 +201,14 @@ public class ExtendedIcon extends Icon {
 		
 		// Take the money, the points and the required item.
 		
+		boolean changedVariables = false; // To update the placeholders.
+		
 		if (moneyPrice > 0) {
 			if (!player.hasPermission(Permissions.BYPASS_ECONOMY) && !EconomyBridge.takeMoney(player, moneyPrice)) {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
 				return closeOnClick;
 			}
+			changedVariables = true;
 		}
 		
 		if (playerPointsPrice > 0) {
@@ -209,6 +216,7 @@ public class ExtendedIcon extends Icon {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
 				return closeOnClick;
 			}
+			changedVariables = true;
 		}
 		
 		if (expLevelsPrice > 0) {
@@ -217,6 +225,20 @@ public class ExtendedIcon extends Icon {
 		
 		if (requiredItem != null) {
 			requiredItem.takeItem(player);
+		}
+		
+		if (changedVariables) {
+			InventoryView view = player.getOpenInventory();
+			if (view != null) {
+				Inventory topInventory = view.getTopInventory();
+				if (topInventory.getHolder() instanceof MenuInventoryHolder) {
+					MenuInventoryHolder menuHolder = (MenuInventoryHolder) topInventory.getHolder();
+					
+					if (menuHolder.getIconMenu() instanceof ExtendedIconMenu) {
+						((ExtendedIconMenu) menuHolder.getIconMenu()).refresh(player, topInventory);
+					}
+				}
+			}
 		}
 		
 		return super.onClick(player);
