@@ -3,9 +3,12 @@ package com.gmail.filoghost.chestcommands.internal;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
@@ -18,6 +21,8 @@ public class ExtendedIconMenu extends IconMenu {
 	private String fileName;
 	private String permission;
 	private List<IconCommand> openActions;
+	
+	private int refreshTicks;
 	
 	public ExtendedIconMenu(String title, int rows, String fileName) {
 		super(title, rows);
@@ -41,34 +46,79 @@ public class ExtendedIconMenu extends IconMenu {
 		return fileName;
 	}
 
+	public int getRefreshTicks() {
+		return refreshTicks;
+	}
+
+	public void setRefreshTicks(int refreshTicks) {
+		this.refreshTicks = refreshTicks;
+	}
+
 	@Override
 	public void open(Player player) {
-		if (openActions != null) {
-			for (IconCommand openAction : openActions) {
-				openAction.execute(player);
-			}
-		}
-		
-			
-		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
-			
-		for (int i = 0; i < icons.length; i++) {
-				if (icons[i] != null) {
-					
-					if (icons[i] instanceof ExtendedIcon) {
-						ExtendedIcon extIcon = (ExtendedIcon) icons[i];
-						
-						if (!extIcon.canViewIcon(player)) {
-							continue;
-						}
-					}
-					
-					inventory.setItem(i, ChestCommands.getAttributeRemover().removeAttributes(icons[i].createItemstack()));
+		try {
+			if (openActions != null) {
+				for (IconCommand openAction : openActions) {
+					openAction.execute(player);
 				}
 			}
 			
-		player.openInventory(inventory);
+			Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
+	
+			for (int i = 0; i < icons.length; i++) {
+				if (icons[i] != null) {
+						
+					if (icons[i] instanceof ExtendedIcon && !((ExtendedIcon) icons[i]).canViewIcon(player)) {
+						continue;
+					}
+						
+					inventory.setItem(i, ChestCommands.getAttributeRemover().removeAttributes(icons[i].createItemstack(player)));
+				}
+			}
+		
+			player.openInventory(inventory);
+		} catch (Exception e) {
+			e.printStackTrace();
+			player.sendMessage(ChatColor.RED + "An internal error occurred while opening the menu. The staff should check the console for errors.");
+		}
 	}
+	
+	public void refresh(Player player, Inventory inventory) {
+		
+		try {
+			for (int i = 0; i < icons.length; i++) {
+				if (icons[i] != null && icons[i] instanceof ExtendedIcon) {
+					
+					ExtendedIcon extIcon = (ExtendedIcon) icons[i];
+						
+					if (extIcon.hasViewPermission() || extIcon.hasVariables()) {
+						// Then we have to refresh it
+						if (extIcon.canViewIcon(player)) {
+								
+							if (inventory.getItem(i) == null) {
+								ItemStack updatedIcon = ChestCommands.getAttributeRemover().removeAttributes(extIcon.createItemstack(player));
+								inventory.setItem(i, updatedIcon);
+							}
+								
+							// Performance, only update name and lore.
+							ItemStack inventoryItem = inventory.getItem(i);
+							ItemMeta meta = inventoryItem.getItemMeta();
+							meta.setDisplayName(extIcon.calculateName(player));
+							meta.setLore(extIcon.calculateLore(player));
+							inventoryItem.setItemMeta(meta);
+								
+						} else {
+							inventory.setItem(i, null);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			player.sendMessage(ChatColor.RED + "An internal error occurred while refreshing the menu. The staff should check the console for errors.");
+		}
+	}
+	
 	
 	public void sendNoPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
@@ -76,7 +126,5 @@ public class ExtendedIconMenu extends IconMenu {
 			sender.sendMessage(noPermMessage.replace("{permission}", this.permission));
 		}
 	}
-	
-	
 
 }

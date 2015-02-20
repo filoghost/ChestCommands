@@ -28,6 +28,8 @@ public class MenuSerializer {
 		public static final String OPEN_ITEM_LEFT_CLICK = "menu-settings.open-with-item.left-click";
 		public static final String OPEN_ITEM_RIGHT_CLICK = "menu-settings.open-with-item.right-click";
 		
+		public static final String AUTO_REFRESH = "menu-settings.auto-refresh";
+		
 	}
 	
 	public static ExtendedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorLogger errorLogger) {
@@ -115,6 +117,14 @@ public class MenuSerializer {
 			if (leftClick || rightClick) {
 				menuData.setClickType(ClickType.fromOptions(leftClick, rightClick));
 			}
+		}
+		
+		if (config.isSet(Nodes.AUTO_REFRESH)) {
+			
+			double autoRefresh = config.getDouble(Nodes.AUTO_REFRESH);
+			int tenthsToRefresh = autoRefresh <= 0.1 ? 1 : (int) (autoRefresh * 10.0);
+			menuData.setRefreshTenths(tenthsToRefresh);
+			
 		}
 		
 		return menuData;

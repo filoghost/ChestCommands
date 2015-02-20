@@ -34,6 +34,7 @@ import com.gmail.filoghost.chestcommands.nms.Fallback;
 import com.gmail.filoghost.chestcommands.serializer.CommandSerializer;
 import com.gmail.filoghost.chestcommands.serializer.MenuSerializer;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
+import com.gmail.filoghost.chestcommands.task.RefreshMenusTask;
 import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
@@ -102,11 +103,11 @@ public class ChestCommands extends JavaPlugin {
 					if (settings.use_console_colors) {
 						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + "Found a new version: " + newVersion + ChatColor.WHITE + " (yours: v" + getDescription().getVersion() + ")");
 						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "Download it on Bukkit Dev:");
-						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "dev.bukkit.org/bukkit-plugins/chest-commands");		
+						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "dev.bukkit.org/bukkit-plugins/chest-commands");
 					} else {
 						getLogger().info("Found a new version available: " + newVersion);
 						getLogger().info("Download it on Bukkit Dev:");
-						getLogger().info("dev.bukkit.org/bukkit-plugins/chest-commands");		
+						getLogger().info("dev.bukkit.org/bukkit-plugins/chest-commands");
 					}
 				}
 			});
@@ -132,6 +133,8 @@ public class ChestCommands extends JavaPlugin {
 		if (errorLogger.hasErrors()) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ErrorLoggerTask(errorLogger), 10L);
 		}
+		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
 	}
 	
 	public void load(ErrorLogger errorLogger) {
@@ -218,6 +221,8 @@ public class ChestCommands extends JavaPlugin {
 					}
 				}
 			}
+			
+			iconMenu.setRefreshTicks(data.getRefreshTenths());
 			
 			if (data.getOpenActions() != null) {
 				iconMenu.setOpenActions(data.getOpenActions());

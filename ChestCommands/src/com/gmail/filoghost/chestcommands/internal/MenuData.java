@@ -19,6 +19,7 @@ public class MenuData {
 	private short boundDataValue;
 	private ClickType clickType;
 	private List<IconCommand> openActions;
+	private int refreshTenths;
 	
 	public MenuData(String title, int rows) {
 		this.title = title;
@@ -84,5 +85,13 @@ public class MenuData {
 
 	public void setOpenActions(List<IconCommand> openAction) {
 		this.openActions = openAction;
+	}
+
+	public int getRefreshTenths() {
+		return refreshTenths;
+	}
+
+	public void setRefreshTenths(int refreshTenths) {
+		this.refreshTenths = refreshTenths;
 	}
 }

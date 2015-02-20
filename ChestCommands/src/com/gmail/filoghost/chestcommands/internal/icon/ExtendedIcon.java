@@ -1,5 +1,7 @@
 package com.gmail.filoghost.chestcommands.internal.icon;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -64,6 +66,10 @@ public class ExtendedIcon extends Icon {
 		this.permissionMessage = permissionMessage;
 	}
 	
+	public boolean hasViewPermission() {
+		return viewPermission != null;
+	}
+	
 	public boolean canViewIcon(Player player) {
 		if (viewPermission == null) {
 			return true;
@@ -120,6 +126,14 @@ public class ExtendedIcon extends Icon {
 
 	public void setRequiredItem(RequiredItem requiredItem) {
 		this.requiredItem = requiredItem;
+	}
+	
+	public String calculateName(Player pov) {
+		return super.calculateName(pov);
+	}
+	
+	public List<String> calculateLore(Player pov) {
+		return super.calculateLore(pov);
 	}
 
 	@SuppressWarnings("deprecation")

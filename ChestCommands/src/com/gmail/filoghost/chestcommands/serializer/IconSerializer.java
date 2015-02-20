@@ -11,7 +11,6 @@ import com.gmail.filoghost.chestcommands.internal.CommandsClickHandler;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.internal.icon.StaticExtendedIcon;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.ItemStackReader;
 import com.gmail.filoghost.chestcommands.util.Utils;
@@ -21,7 +20,7 @@ public class IconSerializer {
 	
 	private static class Nodes {
 		
-		public static final 
+		public static final
 				String ID = "ID",
 				DATA_VALUE = "DATA-VALUE",
 				AMOUNT = "AMOUNT",
@@ -66,14 +65,14 @@ public class IconSerializer {
 
 		public Integer getY() {
 			return y;
-		}	
+		}
 	}
 
 	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorLogger errorLogger) {
 		Validate.notNull(section, "ConfigurationSection cannot be null");
 		
 		// The icon is valid even without a Material.
-		ExtendedIcon icon = new StaticExtendedIcon();
+		ExtendedIcon icon = new ExtendedIcon();
 		
 		if (section.isSet(Nodes.ID)) {
 			try {

@@ -2,9 +2,11 @@ package com.gmail.filoghost.chestcommands.api;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -16,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.gmail.filoghost.chestcommands.internal.Variable;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class Icon {
@@ -33,9 +36,16 @@ public class Icon {
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
 	
+	private Map<Integer, Set<Variable>> variables;
+	private ItemStack cachedItem; // When there are no variables, we don't recreate the item.
+	
 	public Icon() {
 		enchantments = new HashMap<Enchantment, Integer>();
 		closeOnClick = true;
+	}
+	
+	public boolean hasVariables() {
+		return variables != null;
 	}
 	
 	public void setMaterial(Material material) {
@@ -70,6 +80,28 @@ public class Icon {
 	
 	public void setName(String name) {
 		this.name = name;
+		
+		if (name == null) {
+			return;
+		}
+		
+		for (Variable variable : Variable.values()) {
+			if (name.contains(variable.getText())) {
+				
+				if (variables == null) {
+					variables = new HashMap<Integer, Set<Variable>>();
+				}
+				
+				Set<Variable> nameVariables = variables.get(-1);
+				
+				if (nameVariables == null) {
+					nameVariables = new HashSet<Variable>();
+					variables.put(-1, nameVariables);
+				}
+				
+				nameVariables.add(variable);
+			}
+		}
 	}
 	
 	public boolean hasName() {
@@ -78,12 +110,36 @@ public class Icon {
 	
 	public void setLore(String... lore) {
 		if (lore != null) {
-			this.lore = Arrays.asList(lore);
+			setLore(Arrays.asList(lore));
 		}
 	}
 	
 	public void setLore(List<String> lore) {
 		this.lore = lore;
+		
+		if (lore == null) {
+			return;
+		}
+		
+		for (int i = 0; i < lore.size(); i++) {
+			for (Variable variable : Variable.values()) {
+				if (lore.get(i).contains(variable.getText())) {
+					
+					if (variables == null) {
+						variables = new HashMap<Integer, Set<Variable>>();
+					}
+					
+					Set<Variable> lineVariables = variables.get(i);
+					
+					if (lineVariables == null) {
+						lineVariables = new HashSet<Variable>();
+						variables.put(i, lineVariables);
+					}
+					
+					lineVariables.add(variable);
+				}
+			}
+		}
 	}
 	
 	public boolean hasLore() {
@@ -150,9 +206,21 @@ public class Icon {
 		return clickHandler;
 	}
 	
-	protected String calculateName() {
+	protected String calculateName(Player pov) {
 		if (hasName()) {
-			// TODO some magic
+			
+			String name = this.name;
+			
+			if (pov != null && variables != null) {
+				
+				Set<Variable> nameVariables = variables.get(-1); // Name variables have index -1.
+				if (nameVariables != null) {
+					for (Variable nameVariable : nameVariables) {
+						name = name.replace(nameVariable.getText(), nameVariable.getReplacement(pov));
+					}
+				}
+			}
+
 			if (name.isEmpty()) {
 				// Add a color to display the name empty.
 				return ChatColor.WHITE.toString();
@@ -164,22 +232,39 @@ public class Icon {
 		return null;
 	}
 
-	protected List<String> calculateLore() {
+	protected List<String> calculateLore(Player pov) {
 
 		List<String> output = null;
 		
 		if (hasLore()) {
 			
 			output = Utils.newArrayList();
-			// TODO some magic
-			for (String line : lore) {
-				output.add(line);
+
+			if (pov != null && variables != null) {
+				for (int i = 0; i < lore.size(); i++) {
+					
+					String line = lore.get(i);
+					
+					Set<Variable> lineVariables = variables.get(i);
+					if (lineVariables != null) {
+						for (Variable lineVariable : lineVariables) {
+							line = line.replace(lineVariable.getText(), lineVariable.getReplacement(pov));
+						}
+					}
+					
+					output.add(line);
+				}
+			} else {
+				// Otherwise just copy the lines.
+				output.addAll(lore);
 			}
 		}
 		
 		if (material == null) {
 
-			if (output == null) output = Utils.newArrayList();
+			if (output == null) {
+				output = Utils.newArrayList();
+			}
 			
 			// Add an error message.
 			output.add(ChatColor.RED + "(Invalid material)");
@@ -188,7 +273,12 @@ public class Icon {
 		return output;
 	}
 	
-	public ItemStack createItemstack() {
+	public ItemStack createItemstack(Player pov) {
+		
+		if (variables == null && cachedItem != null) {
+			// Performance.
+			return cachedItem;
+		}
 		
 		// If the material is not set, display BEDROCK.
 		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, dataValue) : new ItemStack(Material.BEDROCK, amount);
@@ -196,8 +286,8 @@ public class Icon {
 		// Apply name, lore and color.
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		
-		itemMeta.setDisplayName(calculateName());
-		itemMeta.setLore(calculateLore());
+		itemMeta.setDisplayName(calculateName(pov));
+		itemMeta.setLore(calculateLore(pov));
 		
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(color);
@@ -214,6 +304,11 @@ public class Icon {
 			for (Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());
 			}
+		}
+		
+		if (variables == null) {
+			// If there are no variables, cache the item.
+			cachedItem = itemStack;
 		}
 		
 		return itemStack;

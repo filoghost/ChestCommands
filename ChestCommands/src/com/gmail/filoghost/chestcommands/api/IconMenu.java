@@ -13,11 +13,11 @@ import com.gmail.filoghost.chestcommands.util.Validate;
 
 /*
  *    MEMO: Raw slot numbers
- *    
+ * 
  *    | 0| 1| 2| 3| 4| 5| 6| 7| 8|
  *    | 9|10|11|12|13|14|15|16|17|
  *    ...
- *    
+ * 
  */
 public class IconMenu {
 	
@@ -79,7 +79,7 @@ public class IconMenu {
 		
 		for (int i = 0; i < icons.length; i++) {
 			if (icons[i] != null) {
-				inventory.setItem(i, ChestCommands.getAttributeRemover().removeAttributes(icons[i].createItemstack()));
+				inventory.setItem(i, ChestCommands.getAttributeRemover().removeAttributes(icons[i].createItemstack(player)));
 			}
 		}
 		
@@ -89,5 +89,5 @@ public class IconMenu {
 	@Override
 	public String toString() {
 		return "IconMenu [title=" + title + ", icons=" + Arrays.toString(icons) + "]";
-	}	
+	}
 }
