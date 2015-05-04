@@ -84,7 +84,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 		
 		AttributeRemover.setup();
-
+		
 		if (settings.update_notifications) {
 			new SimpleUpdater(this, 56919).checkForUpdates(new ResponseHandler() {
 				

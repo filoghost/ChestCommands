@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class AttributeRemover {
@@ -52,9 +53,7 @@ public class AttributeRemover {
 				useReflection = true;
 				
 			} catch (Exception e) {
-				
-				e.printStackTrace();
-				
+				ChestCommands.getInstance().getLogger().info("Could not enable the attribute remover for this version (" + e + "). Attributes will show up on items.");
 			}
 		}
 		
