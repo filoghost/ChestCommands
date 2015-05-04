@@ -30,7 +30,6 @@ import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
 import com.gmail.filoghost.chestcommands.listener.SignListener;
 import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
-import com.gmail.filoghost.chestcommands.nms.Fallback;
 import com.gmail.filoghost.chestcommands.serializer.CommandSerializer;
 import com.gmail.filoghost.chestcommands.serializer.MenuSerializer;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
@@ -84,15 +83,8 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().info("Hooked PlayerPoints");
 		}
 		
-		String version = Utils.getBukkitVersion();
-		try {
-			Class<?> clazz = Class.forName("com.gmail.filoghost.chestcommands.nms." + version);
-			attributeRemover = (AttributeRemover) clazz.newInstance();
-		} catch (Exception e) {
-			attributeRemover = new Fallback();
-			getLogger().info("Could not find a compatible Attribute Remover for this server version. Attributes will show up on items.");
-		}
-		
+		AttributeRemover.setup();
+
 		if (settings.update_notifications) {
 			new SimpleUpdater(this, 56919).checkForUpdates(new ResponseHandler() {
 				

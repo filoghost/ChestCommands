@@ -34,6 +34,7 @@ public class Utils {
 	
 	// Default material names are ugly.
 	private static Map<String, Material> materialMap = newHashMap();
+	
 	static {
 		for (Material mat : Material.values()) {
 			materialMap.put(StringUtils.stripChars(mat.toString(), "_").toLowerCase(), mat);
@@ -98,9 +99,15 @@ public class Utils {
 		}
 	}
 	
+	private static String bukkitVersion;
+	
 	public static String getBukkitVersion() {
-		String packageName = Bukkit.getServer().getClass().getPackage().getName();
-		return packageName.substring(packageName.lastIndexOf('.') + 1);
+		if (bukkitVersion == null) {
+			String packageName = Bukkit.getServer().getClass().getPackage().getName();
+			bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
+		}
+		
+		return bukkitVersion;
 	}
 
 	public static String colorizeName(String input) {
@@ -325,5 +332,14 @@ public class Utils {
 		}
 		
 		return builder.toString();
+	}
+	
+	public static boolean isClassLoaded(String name) {
+		try {
+			Class.forName(name);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
