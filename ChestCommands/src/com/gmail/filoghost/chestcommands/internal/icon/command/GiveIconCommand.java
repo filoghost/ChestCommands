@@ -18,7 +18,7 @@ public class GiveIconCommand extends IconCommand {
 		
 		try {
 			ItemStackReader reader = new ItemStackReader(command, true);
-			itemToGive = reader.createStack();	
+			itemToGive = reader.createStack();
 			
 		} catch (FormatException e) {
 			errorMessage = ChatColor.RED + "Invalid item to give: " + e.getMessage();
@@ -32,7 +32,7 @@ public class GiveIconCommand extends IconCommand {
 			return;
 		}
 		
-		player.getInventory().addItem(itemToGive);
+		player.getInventory().addItem(itemToGive.clone());
 	}
 
 }
