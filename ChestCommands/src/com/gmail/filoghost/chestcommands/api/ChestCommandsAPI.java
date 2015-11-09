@@ -7,7 +7,7 @@ import com.gmail.filoghost.chestcommands.ChestCommands;
 public class ChestCommandsAPI {
 	
 	/**
-	 * Checks if a name with a given file name was loaded by the plugin.
+	 * Checks if a menu with a given file name was loaded by the plugin.
 	 * 
 	 * @return true - if the menu was found.
 	 */
