@@ -8,7 +8,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
-import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
@@ -161,7 +160,7 @@ public class ExtendedIcon extends Icon {
 				return closeOnClick;
 			}
 			
-			if (!player.hasPermission(Permissions.BYPASS_ECONOMY) && !EconomyBridge.hasMoney(player, moneyPrice)) {
+			if (!EconomyBridge.hasMoney(player, moneyPrice)) {
 				player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", EconomyBridge.formatMoney(moneyPrice)));
 				return closeOnClick;
 			}
@@ -204,7 +203,7 @@ public class ExtendedIcon extends Icon {
 		boolean changedVariables = false; // To update the placeholders.
 		
 		if (moneyPrice > 0) {
-			if (!player.hasPermission(Permissions.BYPASS_ECONOMY) && !EconomyBridge.takeMoney(player, moneyPrice)) {
+			if (!EconomyBridge.takeMoney(player, moneyPrice)) {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
 				return closeOnClick;
 			}
