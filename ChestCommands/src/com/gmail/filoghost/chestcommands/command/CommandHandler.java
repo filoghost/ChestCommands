@@ -9,10 +9,8 @@ import org.bukkit.entity.Player;
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
-import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.gmail.filoghost.chestcommands.util.VersionUtils;
 
 public class CommandHandler extends CommandFramework {
 
@@ -46,14 +44,9 @@ public class CommandHandler extends CommandFramework {
 		
 		if (args[0].equalsIgnoreCase("reload")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "reload"), "You don't have permission.");
-			
-			for (Player player : VersionUtils.getOnlinePlayers()) {
-				if (player.getOpenInventory() != null) {
-					if (player.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || player.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
-						player.closeInventory();
-					}
-				}
-			}
+
+			// Closes all open ChestCommands menus.
+			ChestCommands.closeCommandChestMenus();
 			
 			ErrorLogger errorLogger = new ErrorLogger();
 			ChestCommands.getInstance().load(errorLogger);

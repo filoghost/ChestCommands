@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
+import com.gmail.filoghost.chestcommands.util.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
@@ -128,7 +131,13 @@ public class ChestCommands extends JavaPlugin {
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
 	}
-	
+
+	@Override
+	public void onDisable() {
+		// Close CommandChest Menus to prevent player taking items while reloading
+		closeCommandChestMenus();
+	}
+
 	public void load(ErrorLogger errorLogger) {
 		fileNameToMenuMap.clear();
 		commandsToMenuMap.clear();
@@ -251,7 +260,17 @@ public class ChestCommands extends JavaPlugin {
 		}
 		return list;
 	}
-	
+
+	public static void closeCommandChestMenus() {
+		for (Player p : VersionUtils.getOnlinePlayers()) {
+			if (p.getOpenInventory() != null) {
+				if (p.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || p.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
+					p.closeInventory();
+				}
+			}
+		}
+	}
+
 	public static ChestCommands getInstance() {
 		return instance;
 	}
