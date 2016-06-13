@@ -85,29 +85,27 @@ public class ExtendedIconMenu extends IconMenu {
 	}
 	
 	public void refresh(Player player, Inventory inventory) {
-		
 		try {
 			for (int i = 0; i < icons.length; i++) {
 				if (icons[i] != null && icons[i] instanceof ExtendedIcon) {
-					
 					ExtendedIcon extIcon = (ExtendedIcon) icons[i];
 						
 					if (extIcon.hasViewPermission() || extIcon.hasVariables()) {
 						// Then we have to refresh it
 						if (extIcon.canViewIcon(player)) {
-								
+							
 							if (inventory.getItem(i) == null) {
-								ItemStack updatedIcon = extIcon.createItemstack(player);
-								inventory.setItem(i, updatedIcon);
+								ItemStack newItem = AttributeRemover.hideAttributes(extIcon.createItemstack(player));
+								inventory.setItem(i, newItem);
+							} else {
+								// Performance, only update name and lore.
+								ItemStack oldItem = AttributeRemover.hideAttributes(inventory.getItem(i));
+								ItemMeta meta = oldItem.getItemMeta();
+								meta.setDisplayName(extIcon.calculateName(player));
+								meta.setLore(extIcon.calculateLore(player));
+								oldItem.setItemMeta(meta);
 							}
-								
-							// Performance, only update name and lore.
-							ItemStack inventoryItem = AttributeRemover.hideAttributes(inventory.getItem(i));
-							ItemMeta meta = inventoryItem.getItemMeta();
-							meta.setDisplayName(extIcon.calculateName(player));
-							meta.setLore(extIcon.calculateLore(player));
-							inventoryItem.setItemMeta(meta);
-								
+							
 						} else {
 							inventory.setItem(i, null);
 						}

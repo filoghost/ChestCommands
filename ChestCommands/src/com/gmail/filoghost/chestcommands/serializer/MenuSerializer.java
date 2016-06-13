@@ -120,11 +120,11 @@ public class MenuSerializer {
 		}
 		
 		if (config.isSet(Nodes.AUTO_REFRESH)) {
-			
-			double autoRefresh = config.getDouble(Nodes.AUTO_REFRESH);
-			int tenthsToRefresh = autoRefresh <= 0.1 ? 1 : (int) (autoRefresh * 10.0);
+			int tenthsToRefresh = (int) (config.getDouble(Nodes.AUTO_REFRESH) * 10.0);
+			if (tenthsToRefresh < 1) {
+				tenthsToRefresh = 1;
+			}
 			menuData.setRefreshTenths(tenthsToRefresh);
-			
 		}
 		
 		return menuData;

@@ -36,7 +36,8 @@ public class Icon {
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
 	
-	private Map<Integer, Set<Variable>> variables;
+	private Set<Variable> nameVariables;
+	private Map<Integer, Set<Variable>> loreVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item.
 	
 	public Icon() {
@@ -45,7 +46,7 @@ public class Icon {
 	}
 	
 	public boolean hasVariables() {
-		return variables != null;
+		return nameVariables != null || loreVariables != null;
 	}
 	
 	public void setMaterial(Material material) {
@@ -80,26 +81,18 @@ public class Icon {
 	
 	public void setName(String name) {
 		this.name = name;
+		this.nameVariables = null; // Reset the variables
 		
-		if (name == null) {
-			return;
-		}
+		if (name != null) {
+			for (Variable variable : Variable.values()) {
+				if (name.contains(variable.getText())) {
+					
+					if (nameVariables == null) {
+						nameVariables = new HashSet<Variable>();
+					}
 		
-		for (Variable variable : Variable.values()) {
-			if (name.contains(variable.getText())) {
-				
-				if (variables == null) {
-					variables = new HashMap<Integer, Set<Variable>>();
+					nameVariables.add(variable);
 				}
-				
-				Set<Variable> nameVariables = variables.get(-1);
-				
-				if (nameVariables == null) {
-					nameVariables = new HashSet<Variable>();
-					variables.put(-1, nameVariables);
-				}
-				
-				nameVariables.add(variable);
 			}
 		}
 	}
@@ -116,27 +109,26 @@ public class Icon {
 	
 	public void setLore(List<String> lore) {
 		this.lore = lore;
+		this.loreVariables = null; // Reset the variables
 		
-		if (lore == null) {
-			return;
-		}
-		
-		for (int i = 0; i < lore.size(); i++) {
-			for (Variable variable : Variable.values()) {
-				if (lore.get(i).contains(variable.getText())) {
-					
-					if (variables == null) {
-						variables = new HashMap<Integer, Set<Variable>>();
+		if (lore != null) {
+			for (int i = 0; i < lore.size(); i++) {
+				for (Variable variable : Variable.values()) {
+					if (lore.get(i).contains(variable.getText())) {
+						
+						if (loreVariables == null) {
+							loreVariables = new HashMap<Integer, Set<Variable>>();
+						}
+						
+						Set<Variable> lineVariables = loreVariables.get(i);
+						
+						if (lineVariables == null) {
+							lineVariables = new HashSet<Variable>();
+							loreVariables.put(i, lineVariables);
+						}
+						
+						lineVariables.add(variable);
 					}
-					
-					Set<Variable> lineVariables = variables.get(i);
-					
-					if (lineVariables == null) {
-						lineVariables = new HashSet<Variable>();
-						variables.put(i, lineVariables);
-					}
-					
-					lineVariables.add(variable);
 				}
 			}
 		}
@@ -152,7 +144,7 @@ public class Icon {
 	
 	public void setEnchantments(Map<Enchantment, Integer> enchantments) {
 		if (enchantments == null) {
-			clearEnchantments();
+			this.enchantments.clear();
 			return;
 		}
 		this.enchantments = enchantments;
@@ -211,13 +203,9 @@ public class Icon {
 			
 			String name = this.name;
 			
-			if (pov != null && variables != null) {
-				
-				Set<Variable> nameVariables = variables.get(-1); // Name variables have index -1.
-				if (nameVariables != null) {
-					for (Variable nameVariable : nameVariables) {
-						name = name.replace(nameVariable.getText(), nameVariable.getReplacement(pov));
-					}
+			if (pov != null && nameVariables != null) {
+				for (Variable nameVariable : nameVariables) {
+					name = name.replace(nameVariable.getText(), nameVariable.getReplacement(pov));
 				}
 			}
 
@@ -240,12 +228,12 @@ public class Icon {
 			
 			output = Utils.newArrayList();
 
-			if (pov != null && variables != null) {
+			if (pov != null && loreVariables != null) {
 				for (int i = 0; i < lore.size(); i++) {
 					
 					String line = lore.get(i);
 					
-					Set<Variable> lineVariables = variables.get(i);
+					Set<Variable> lineVariables = loreVariables.get(i);
 					if (lineVariables != null) {
 						for (Variable lineVariable : lineVariables) {
 							line = line.replace(lineVariable.getText(), lineVariable.getReplacement(pov));
@@ -275,7 +263,7 @@ public class Icon {
 	
 	public ItemStack createItemstack(Player pov) {
 		
-		if (variables == null && cachedItem != null) {
+		if (!this.hasVariables() && cachedItem != null) {
 			// Performance.
 			return cachedItem;
 		}
@@ -306,7 +294,7 @@ public class Icon {
 			}
 		}
 		
-		if (variables == null) {
+		if (!this.hasVariables()) {
 			// If there are no variables, cache the item.
 			cachedItem = itemStack;
 		}
