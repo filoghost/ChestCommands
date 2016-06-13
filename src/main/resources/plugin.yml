@@ -1,0 +1,18 @@
+# Maven variables
+name: ${project.name}
+versions: ${project.description}
+authors: [${project.authors}]
+version: ${project.version}
+main: ${project.mainClass}
+softdepend: [${project.softDepend}]
+
+commands:
+   chestcommands:
+      description: Main command for ChestCommands.
+      usage: /<command> (Startup error)
+      aliases: [cc]
+
+permissions:
+   chestcommands.economy.bypass:
+      description: Bypass command costs.
+      default: false
