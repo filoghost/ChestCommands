@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.filoghost.chestcommands.SimpleUpdater.ResponseHandler;
@@ -24,6 +25,7 @@ import com.gmail.filoghost.chestcommands.config.yaml.PluginConfig;
 import com.gmail.filoghost.chestcommands.internal.BoundItem;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuData;
+import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.listener.CommandListener;
 import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
@@ -36,6 +38,7 @@ import com.gmail.filoghost.chestcommands.task.RefreshMenusTask;
 import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
+import com.gmail.filoghost.chestcommands.util.VersionUtils;
 
 public class ChestCommands extends JavaPlugin {
 	
@@ -127,6 +130,15 @@ public class ChestCommands extends JavaPlugin {
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
 	}
+	
+	
+	
+	@Override
+	public void onDisable() {
+		closeAllMenus();
+	}
+	
+	
 	
 	public void load(ErrorLogger errorLogger) {
 		fileNameToMenuMap.clear();
@@ -234,6 +246,8 @@ public class ChestCommands extends JavaPlugin {
 		}
 	}
 	
+	
+	
 	/**
 	 * Loads all the configuration files recursively into a list.
 	 */
@@ -250,6 +264,20 @@ public class ChestCommands extends JavaPlugin {
 		}
 		return list;
 	}
+	
+	
+	
+	public static void closeAllMenus() {
+		for (Player player : VersionUtils.getOnlinePlayers()) {
+			if (player.getOpenInventory() != null) {
+				if (player.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || player.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
+					player.closeInventory();
+				}
+			}
+		}
+	}
+	
+	
 	
 	public static ChestCommands getInstance() {
 		return instance;
