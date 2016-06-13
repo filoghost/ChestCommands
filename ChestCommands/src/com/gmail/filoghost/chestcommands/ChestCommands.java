@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
 
 import com.gmail.filoghost.chestcommands.SimpleUpdater.ResponseHandler;
 import com.gmail.filoghost.chestcommands.bridge.BarAPIBridge;
