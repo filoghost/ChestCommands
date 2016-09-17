@@ -29,6 +29,8 @@ public class IconSerializer {
 				ENCHANT = "ENCHANTMENT",
 				COLOR = "COLOR",
 				SKULL_OWNER = "SKULL-OWNER",
+				BASE_COLOUR = "BANNER-COLOUR",
+				PATTERNS = "PATTERN-LIST",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
 				POINTS = "POINTS",
@@ -105,6 +107,22 @@ public class IconSerializer {
 				icon.setColor(Utils.parseColor(section.getString(Nodes.COLOR)));
 			} catch (FormatException e) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
+			}
+		}
+		
+		if (section.isSet(Nodes.BASE_COLOUR)) {
+			try {
+				icon.setBaseColour(Utils.parseDyeColor(section.getString(Nodes.BASE_COLOUR)));
+			} catch (FormatException e) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BASE-COLOUR: " + e.getMessage());
+			}
+		}
+		
+		if (section.isSet(Nodes.PATTERNS)) {
+			try {
+				icon.setPatterns(Utils.parsePatternList(section.getStringList(Nodes.PATTERNS)));
+			} catch (FormatException e) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid PATTERN-LIST: " + e.getMessage());
 			}
 		}
 		

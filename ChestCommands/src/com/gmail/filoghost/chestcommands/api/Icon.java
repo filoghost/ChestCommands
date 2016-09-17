@@ -10,10 +10,13 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,6 +35,8 @@ public class Icon {
 	private Map<Enchantment, Integer> enchantments;
 	private Color color;
 	private String skullOwner;
+	private DyeColor baseColour;
+	private List<Pattern> patterns;
 	
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
@@ -185,6 +190,22 @@ public class Icon {
 	public void setSkullOwner(String skullOwner) {
 		this.skullOwner = skullOwner;
 	}
+	
+	public List<Pattern> getPatters() {
+		return patterns;
+	}
+
+	public void setPatterns(List<Pattern> patterns) {
+		this.patterns = patterns;
+	}
+	
+	public DyeColor getBaseColour() {
+		return baseColour;
+	}
+
+	public void setBaseColour(DyeColor baseColour) {
+		this.baseColour = baseColour;
+	}
 
 	public void setCloseOnClick(boolean closeOnClick) {
 		this.closeOnClick = closeOnClick;
@@ -283,6 +304,13 @@ public class Icon {
 		
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
 			((SkullMeta) itemMeta).setOwner(skullOwner);
+		}
+		
+		if (baseColour != null && itemMeta instanceof BannerMeta) {
+			((BannerMeta) itemMeta).setBaseColor(baseColour);
+			if (patterns != null) {
+				((BannerMeta) itemMeta).setPatterns(patterns);
+			}
 		}
 		
 		itemStack.setItemMeta(itemMeta);
