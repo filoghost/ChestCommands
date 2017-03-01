@@ -13,6 +13,10 @@ public class PlaceholderAPIBridge {
 	public static List<String> replace(Player p, List<String> content) {
 		return PlaceholderAPI.setPlaceholders(p, content);
 	}
+	
+	public static String replace(Player p, String content) {
+		return PlaceholderAPI.setPlaceholders(p, content);
+	}
 
 	public static ItemStack replace(Player p, ItemStack item) {
 		if (item == null) {
