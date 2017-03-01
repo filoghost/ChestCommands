@@ -43,7 +43,7 @@ import com.gmail.filoghost.chestcommands.util.VersionUtils;
 public class ChestCommands extends JavaPlugin {
 	
 	public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
-
+	public static Boolean hasPlaceholderAPI = false;
 	private static ChestCommands instance;
 	private static Settings settings;
 	private static Lang lang;
@@ -83,6 +83,10 @@ public class ChestCommands extends JavaPlugin {
 		
 		if (PlayerPointsBridge.setupPlugin()) {
 			getLogger().info("Hooked PlayerPoints");
+		}
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+			hasPlaceholderAPI = true;
 		}
 		
 		AttributeRemover.setup();
