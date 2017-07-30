@@ -9,6 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.gmail.filoghost.chestcommands.util.Utils;
 
+@SuppressWarnings("deprecation")
 public class EconomyBridge {
 	
 	private static Economy economy;
@@ -58,13 +59,15 @@ public class EconomyBridge {
 	public static boolean takeMoney(Player player, double amount) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
-		
-		EconomyResponse response = economy.withdrawPlayer(player.getName(), player.getWorld().getName(), amount);
-		boolean result = response.transactionSuccess();
-		
-		Utils.refreshMenu(player);
-		
-		return result;
+		if(player.hasPermission("chestcommands.economy.bypass")) return true;
+		else {
+	        EconomyResponse response = economy.withdrawPlayer(player.getName(), player.getWorld().getName(), amount);
+	        boolean result = response.transactionSuccess();
+	        
+	        Utils.refreshMenu(player);
+	        
+	        return result;
+		}
 	}
 	
 	public static boolean giveMoney(Player player, double amount) {

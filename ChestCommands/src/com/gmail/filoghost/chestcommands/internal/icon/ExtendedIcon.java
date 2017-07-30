@@ -139,7 +139,6 @@ public class ExtendedIcon extends Icon {
 		return super.calculateLore(pov);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onClick(Player player) {
 		
@@ -190,9 +189,11 @@ public class ExtendedIcon extends Icon {
 			if (!requiredItem.hasItem(player)) {
 				player.sendMessage(ChestCommands.getLang().no_required_item
 						.replace("{material}", Utils.formatMaterial(requiredItem.getMaterial()))
-						.replace("{id}", Integer.toString(requiredItem.getMaterial().getId()))
+						.replace("{id}", requiredItem.getID())
 						.replace("{amount}", Integer.toString(requiredItem.getAmount()))
 						.replace("{datavalue}", requiredItem.hasRestrictiveDataValue() ? Short.toString(requiredItem.getDataValue()) : ChestCommands.getLang().any)
+						.replace("{name}", requiredItem.getDisplayName() + "\u00a7r")
+						.replace("{lore}", requiredItem.getDisplayLore())
 				);
 				return closeOnClick;
 			}

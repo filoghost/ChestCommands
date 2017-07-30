@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+@SuppressWarnings("deprecation")
 public class BarAPIBridge {
 
 	private static BarAPI barAPI;

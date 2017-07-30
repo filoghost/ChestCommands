@@ -200,7 +200,8 @@ public class Utils {
 	}
 	
 	public static String formatMaterial(Material material) {
-		return StringUtils.capitalizeFully(material.toString().replace("_", " "));
+	    if(material == null) return ChestCommands.getLang().any;
+	    else return StringUtils.capitalizeFully(material.toString().replace("_", " "));
 	}
 	
 	public static int makePositive(int i) {

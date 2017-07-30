@@ -125,7 +125,15 @@ economy-give:
 
 
 economy-take:
-  REQUIRED-ITEM: 'gold_ingot'
+  REQUIRED-ITEM: 
+    ==: com.gmail.filoghost.chestcommands.internal.RequiredItem
+    material: GOLD_INGOT
+    amount: 1
+    durability: 0
+    restrictive durability: false
+    name: ''
+    lore: []
+    exact lore: false
   COMMAND: 'tell: &aYou have been paid 50$; givemoney: 50'
   NAME: '&eEconomy & Required item'
   LORE:

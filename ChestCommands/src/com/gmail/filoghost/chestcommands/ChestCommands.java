@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,10 +23,7 @@ import com.gmail.filoghost.chestcommands.config.AsciiPlaceholders;
 import com.gmail.filoghost.chestcommands.config.Lang;
 import com.gmail.filoghost.chestcommands.config.Settings;
 import com.gmail.filoghost.chestcommands.config.yaml.PluginConfig;
-import com.gmail.filoghost.chestcommands.internal.BoundItem;
-import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
-import com.gmail.filoghost.chestcommands.internal.MenuData;
-import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
+import com.gmail.filoghost.chestcommands.internal.*;
 import com.gmail.filoghost.chestcommands.listener.CommandListener;
 import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
@@ -85,6 +83,7 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().info("Hooked PlayerPoints");
 		}
 		
+		ConfigurationSerialization.registerClass(RequiredItem.class);
 		AttributeRemover.setup();
 		
 		if (settings.update_notifications) {
