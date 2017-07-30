@@ -61,13 +61,13 @@ public class RequiredItem implements ConfigurationSerializable {
         this.dataValue = (short) ((int) map.get("durability"));
         this.isDurabilityRestrictive = (boolean) map.get("restrictive durability");
         this.isLoreExact = (boolean) map.get("exact lore");
-        
+
         String disp = (String) map.get("name");
         if(disp == null || disp.isEmpty()) this.displayName = null;
         else {
             this.displayName = ChatColor.translateAlternateColorCodes('&', disp);
         }
-        
+
         List<String> lore = (List<String>) map.get("lore");
         if(lore == null || lore.isEmpty()) this.lore = null;
         else {
@@ -104,12 +104,12 @@ public class RequiredItem implements ConfigurationSerializable {
     public short getDataValue() {
         return dataValue;
     }
-    
+
     public String getDisplayName() {
         if(displayName == null) return ChestCommands.getLang().any;
         else return displayName;
     }
-    
+
     public String getDisplayLore() {
         if(lore == null) return ChestCommands.getLang().any;
         else {
@@ -145,37 +145,7 @@ public class RequiredItem implements ConfigurationSerializable {
 
         for (ItemStack item : player.getInventory().getContents()) {
             boolean found = false;
-            if (item != null && isValidDataValue(item.getDurability())) {
-                if(material != null) {
-                    Material mat = item.getType();
-                    found = (mat == material);
-                } else found = (material == null);
-
-                ItemMeta meta = item.getItemMeta();
-                if(found) {
-                    if(meta.hasDisplayName()) {
-                        if(displayName == null) found = true;
-                        else {
-                            String disp = meta.getDisplayName();
-                            found = disp.equals(displayName);
-                        }
-                    } else found = (displayName == null);
-                }
-
-                if(found) {
-                    if(meta.hasLore()) {
-                        List<String> mlore = meta.getLore();
-                        if(isLoreExact) found = (lore.equals(mlore));
-                        else {
-                            for(String s : lore) {
-                                if(!found) break;
-                                found = mlore.contains(s);
-                            }
-                        }
-                    } else found = (lore == null);
-                }
-            }
-
+            if (item != null && isValidDataValue(item.getDurability())) {found = matches(item);}
             if(found) amountFound += item.getAmount();
         }
 
@@ -196,26 +166,8 @@ public class RequiredItem implements ConfigurationSerializable {
         for (int i = 0; i < contents.length; i++) {
 
             current = contents[i];
-            if (current != null && current.getType() == material && isValidDataValue(current.getDurability())) {
-                boolean found = false;
-                if(displayName != null) {
-                    ItemMeta meta = current.getItemMeta();
-                    if(meta.hasDisplayName()) {
-                        String disp = meta.getDisplayName();
-                        found = disp.equals(displayName);
-                    } else found = false;
-                } else found = true;
-
-                if(found) {
-                    if(lore != null) {
-                        ItemMeta meta = current.getItemMeta();
-                        if(meta.hasLore()) {
-                            List<String> ilore = meta.getLore();
-                            found = lore.equals(ilore);
-                        } else found = false;
-                    } else found = true;
-                }
-                
+            if (current != null && isValidDataValue(current.getDurability())) {
+                boolean found = matches(current);
                 if(found) {
                     if (current.getAmount() > itemsToTake) {
                         current.setAmount(current.getAmount() - itemsToTake);
@@ -254,5 +206,38 @@ public class RequiredItem implements ConfigurationSerializable {
             String s = Integer.toString(id);
             return s;
         }
+    }
+    
+    private boolean matches(ItemStack is) {
+        boolean found = false;
+        if(material != null) {
+            Material mat = is.getType();
+            found = (mat == material);
+        } else found = (material == null);
+
+        ItemMeta meta = is.getItemMeta();
+        if(found) {
+            if(meta.hasDisplayName()) {
+                if(displayName == null) found = true;
+                else {
+                    String disp = meta.getDisplayName();
+                    found = disp.equals(displayName);
+                }
+            } else found = (displayName == null);
+        }
+
+        if(found) {
+            if(meta.hasLore()) {
+                List<String> mlore = meta.getLore();
+                if(isLoreExact) found = (lore.equals(mlore));
+                else {
+                    for(String s : lore) {
+                        if(!found) break;
+                        found = mlore.contains(s);
+                    }
+                }
+            } else found = (lore == null);
+        }
+        return found;
     }
 }
