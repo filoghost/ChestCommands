@@ -43,13 +43,15 @@ public class EconomyBridge {
 	public static boolean hasMoney(Player player, double minimum) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (minimum < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + minimum);
-		
-		double balance = economy.getBalance(player.getName(), player.getWorld().getName());
-		
-		if (balance < minimum) {
-			return false;
-		} else {
-			return true;
+		if(player.hasPermission("chestcommands.economy.bypass")) return true;
+		else {
+	        double balance = economy.getBalance(player.getName(), player.getWorld().getName());
+	        
+	        if (balance < minimum) {
+	            return false;
+	        } else {
+	            return true;
+	        }
 		}
 	}
 	
