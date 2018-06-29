@@ -1,17 +1,21 @@
 package com.gmail.filoghost.chestcommands.internal;
 
-import com.gmail.filoghost.chestcommands.ChestCommands;
-import com.gmail.filoghost.chestcommands.util.*;
+import java.util.List;
+import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.*;
 
-import java.util.*;
+import com.gmail.filoghost.chestcommands.ChestCommands;
+import com.gmail.filoghost.chestcommands.util.Utils;
+import com.gmail.filoghost.chestcommands.util.Validate;
 
+@SerializableAs("RequiredItem")
 public class RequiredItem implements ConfigurationSerializable {
     private Material material;
     private int amount;
@@ -20,6 +24,7 @@ public class RequiredItem implements ConfigurationSerializable {
     private List<String> lore;
     private boolean isDurabilityRestrictive = false;
     private boolean isLoreExact = true;
+    private boolean unbreakable = false;
 
     private RequiredItem(Material mat, int amount) {
         this.material = mat;
@@ -60,6 +65,7 @@ public class RequiredItem implements ConfigurationSerializable {
         this.amount = (int) map.get("amount");
         this.dataValue = (short) ((int) map.get("durability"));
         this.isDurabilityRestrictive = (boolean) map.get("restrictive durability");
+        this.unbreakable = (boolean) map.get("unbreakable");
         this.isLoreExact = (boolean) map.get("exact lore");
 
         String disp = (String) map.get("name");
@@ -85,12 +91,14 @@ public class RequiredItem implements ConfigurationSerializable {
 
     public ItemStack createItemStack() {
         ItemStack is = new ItemStack(material, amount, dataValue);
-        if(is != null) {
+        if(material != null && material != Material.AIR) {
             ItemMeta meta = is.getItemMeta();
             if(displayName != null) meta.setDisplayName(displayName);
             if(lore != null) meta.setLore(lore);
+            meta.setUnbreakable(unbreakable);
             is.setItemMeta(meta);
-        } return is;
+        }
+        return is;
     }
 
     public Material getMaterial() {
@@ -146,7 +154,7 @@ public class RequiredItem implements ConfigurationSerializable {
         for (ItemStack item : player.getInventory().getContents()) {
             boolean found = false;
             if (item != null && isValidDataValue(item.getDurability())) {found = matches(item);}
-            if(found) amountFound += item.getAmount();
+            if(found && item != null) amountFound += item.getAmount();
         }
 
         return amountFound >= amount;
@@ -195,6 +203,7 @@ public class RequiredItem implements ConfigurationSerializable {
         map.put("restrictive durability", isDurabilityRestrictive);
         map.put("name", displayName);
         map.put("lore", lore);
+        map.put("unbreakable", unbreakable);
         return map;
     }
 
@@ -207,7 +216,7 @@ public class RequiredItem implements ConfigurationSerializable {
             return s;
         }
     }
-    
+
     private boolean matches(ItemStack is) {
         boolean found = false;
         if(material != null) {

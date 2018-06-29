@@ -26,6 +26,7 @@ public class Icon {
 	private Material material;
 	private int amount;
 	private short dataValue;
+	private boolean unbreakable;
 	
 	private String name;
 	private List<String> lore;
@@ -78,6 +79,9 @@ public class Icon {
 	public short getDataValue() {
 		return dataValue;
 	}
+	
+	public void setUnbreakable(boolean bool) {this.unbreakable = bool;}
+	public boolean isUnbreakable() {return this.unbreakable;}
 	
 	public void setName(String name) {
 		this.name = name;
@@ -276,6 +280,7 @@ public class Icon {
 		
 		itemMeta.setDisplayName(calculateName(pov));
 		itemMeta.setLore(calculateLore(pov));
+		itemMeta.setUnbreakable(unbreakable);
 		
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(color);

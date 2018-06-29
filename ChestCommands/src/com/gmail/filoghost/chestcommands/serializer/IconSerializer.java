@@ -93,6 +93,10 @@ public class IconSerializer {
 			icon.setAmount(section.getInt(Nodes.AMOUNT));
 		}
 		
+		if(section.isSet("UNBREAKABLE")) {
+		    icon.setUnbreakable(section.getBoolean("UNBREAKABLE"));
+		} else icon.setUnbreakable(false);
+		
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeName(section.getString(Nodes.NAME))));
 		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeLore(section.getStringList(Nodes.LORE))));
 		
@@ -210,8 +214,6 @@ public class IconSerializer {
 		if (icon.getEnchantments().size() > 0) {
 			section.set(Nodes.ENCHANT, 1);
 		}
-		
-		//TODO not finished
 	}
 	
 	public static String serializeIconID(Icon icon) {
