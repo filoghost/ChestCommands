@@ -9,10 +9,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.gmail.filoghost.chestcommands.util.Utils;
 
+@SuppressWarnings("deprecation")
 public class EconomyBridge {
 	
 	private static Economy economy;
-
+	
 	public static boolean setupEconomy() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             return false;

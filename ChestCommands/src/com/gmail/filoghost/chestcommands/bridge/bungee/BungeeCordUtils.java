@@ -14,7 +14,7 @@ public class BungeeCordUtils {
 		try {
 			
 			if (server.length() == 0) {
-				player.sendMessage("§cTarget server was \"\" (empty string) cannot connect to it.");
+				player.sendMessage("Â§cTarget server was \"\" (empty string) cannot connect to it.");
 				return false;
 			}
 		

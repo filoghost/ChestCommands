@@ -36,7 +36,7 @@ public class Icon {
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
 	
-	private Set<Variable> nameVariables;
+	private Set<Variable> nameVariables, amountVariables;
 	private Map<Integer, Set<Variable>> loreVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item.
 	
@@ -46,7 +46,7 @@ public class Icon {
 	}
 	
 	public boolean hasVariables() {
-		return nameVariables != null || loreVariables != null;
+		return nameVariables != null || loreVariables != null || amountVariables != null;
 	}
 	
 	public void setMaterial(Material material) {
@@ -261,6 +261,7 @@ public class Icon {
 		return output;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public ItemStack createItemstack(Player pov) {
 		
 		if (!this.hasVariables() && cachedItem != null) {

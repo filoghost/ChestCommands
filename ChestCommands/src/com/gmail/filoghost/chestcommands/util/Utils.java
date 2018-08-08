@@ -41,7 +41,7 @@ public class Utils {
 		}
 		
 		Map<String, Material> tempMap = newHashMap();
-		
+		if(ChestCommands.mcVersion < 13) {
 		tempMap.put("iron bar",				Material.IRON_FENCE);
 		tempMap.put("iron bars",			Material.IRON_FENCE);
 		tempMap.put("glass pane",			Material.THIN_GLASS);
@@ -60,8 +60,6 @@ public class Utils {
 		tempMap.put("carrot on stick",		Material.CARROT_STICK);
 		tempMap.put("carrot on a stick",	Material.CARROT_STICK);
 		tempMap.put("cobblestone wall",		Material.COBBLE_WALL);
-//		tempMap.put("acacia wood stairs",	Material.ACACIA_STAIRS);
-//		tempMap.put("dark oak wood stairs",	Material.DARK_OAK_STAIRS);
 		tempMap.put("wood slab",			Material.WOOD_STEP);
 		tempMap.put("double wood slab",		Material.WOOD_DOUBLE_STEP);
 		tempMap.put("repeater",				Material.DIODE);
@@ -87,13 +85,71 @@ public class Utils {
 		tempMap.put("redstone torch",		Material.REDSTONE_TORCH_ON);
 		tempMap.put("redstone lamp",		Material.REDSTONE_LAMP_OFF);
 		tempMap.put("glistering melon",		Material.SPECKLED_MELON);
-//		tempMap.put("acacia leaves", 		Material.LEAVES_2); It wouldn't work with 1.6 :/
-//		tempMap.put("acacia log", 			Material.LOG_2);
 		tempMap.put("gunpowder",			Material.SULPHUR);
 		tempMap.put("lilypad",				Material.WATER_LILY);
 		tempMap.put("command block",		Material.COMMAND);
 		tempMap.put("dye",					Material.INK_SACK);
-		
+		if(ChestCommands.mcVersion > 6) {
+		tempMap.put("acacia wood stairs",	Material.ACACIA_STAIRS);
+		tempMap.put("dark oak wood stairs",	Material.DARK_OAK_STAIRS);
+		tempMap.put("acacia leaves", 		Material.LEAVES_2);// It wouldn't work with 1.6 :/ <- now we made sure its above 1.6
+		tempMap.put("acacia log", 			Material.LOG_2);
+		}
+		} /*else {     i feel like the names are pretty friendly now in 1.13
+			tempMap.put("iron bar",				Material.IRON_BARS);
+			tempMap.put("iron bars",			Material.IRON_BARS);
+			tempMap.put("glass pane",			Material.GLASS_PANE);
+			tempMap.put("nether wart",			Material.NETHER_WART);
+			tempMap.put("nether warts",			Material.NETHER_WART);
+			tempMap.put("slab",					Material.STONE_SLAB);
+			tempMap.put("double slab",			Material.STONE_BRICK_SLAB);
+			tempMap.put("stone brick",			Material.STONE_BRICKS);
+			tempMap.put("stone bricks",			Material.STONE_BRICKS);
+			tempMap.put("stone stair",			Material.STONE_BRICK_STAIRS);
+			tempMap.put("stone stairs",			Material.STONE_BRICK_STAIRS);
+			tempMap.put("potato",				Material.POTATO);
+			tempMap.put("carrot",				Material.CARROT);
+			tempMap.put("brewing stand",		Material.BREWING_STAND);
+			tempMap.put("cauldron",				Material.CAULDRON);
+			tempMap.put("carrot on stick",		Material.CARROT_ON_A_STICK);
+			tempMap.put("carrot on a stick",	Material.CARROT_ON_A_STICK);
+			tempMap.put("cobblestone wall",		Material.COBBLESTONE_WALL);
+			tempMap.put("wood slab",			Material.OAK_SLAB);
+			tempMap.put("double wood slab",		Material.OAK_PLANKS);
+			tempMap.put("repeater",				Material.REPEATER);
+			tempMap.put("piston",				Material.PISTON);
+			tempMap.put("sticky piston",		Material.STICKY_PISTON);
+			tempMap.put("flower pot",			Material.FLOWER_POT);
+			tempMap.put("wood showel",			Material.WOODEN_SHOVEL);
+			tempMap.put("stone showel",			Material.STONE_SHOVEL);
+			tempMap.put("gold showel",			Material.GOLDEN_SHOVEL);
+			tempMap.put("iron showel",			Material.IRON_SHOVEL);
+			tempMap.put("diamond showel",		Material.DIAMOND_SHOVEL);
+			tempMap.put("steak",				Material.COOKED_BEEF);
+			tempMap.put("cooked porkchop",		Material.COOKED_PORKCHOP);
+			tempMap.put("raw porkchop",			Material.PORKCHOP);
+			tempMap.put("hardened clay",		Material.TERRACOTTA);
+			tempMap.put("huge brown mushroom",	Material.BROWN_MUSHROOM_BLOCK);
+			tempMap.put("huge red mushroom",	Material.RED_MUSHROOM_BLOCK);
+			tempMap.put("mycelium",				Material.MYCELIUM);
+			tempMap.put("poppy",				Material.POPPY);
+			tempMap.put("comparator",			Material.COMPARATOR);
+			tempMap.put("skull",				Material.PLAYER_HEAD);
+			tempMap.put("head",					Material.PLAYER_HEAD);
+			tempMap.put("redstone torch",		Material.REDSTONE_TORCH);
+			tempMap.put("redstone lamp",		Material.REDSTONE_LAMP);
+			tempMap.put("glistering melon",		Material.GLISTERING_MELON_SLICE);
+			tempMap.put("gunpowder",			Material.GUNPOWDER);
+			tempMap.put("lilypad",				Material.LILY_PAD);
+			tempMap.put("command block",		Material.COMMAND_BLOCK);
+			tempMap.put("dye",					Material.INK_SAC);
+			//if ur ver13 ur at least ver6 so
+			tempMap.put("acacia wood stairs",	Material.ACACIA_STAIRS);
+			tempMap.put("dark oak wood stairs",	Material.DARK_OAK_STAIRS);
+			tempMap.put("acacia leaves", 		Material.ACACIA_LEAVES);
+			tempMap.put("acacia log", 			Material.ACACIA_LOG);
+		}*/
+		if(tempMap.keySet().size() != 1)
 		for (Entry<String, Material> tempEntry : tempMap.entrySet()) {
 			materialMap.put(StringUtils.stripChars(tempEntry.getKey(), " _-").toLowerCase(), tempEntry.getValue());
 		}
@@ -103,8 +159,10 @@ public class Utils {
 	
 	public static String getBukkitVersion() {
 		if (bukkitVersion == null) {
-			String packageName = Bukkit.getServer().getClass().getPackage().getName();
-			bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
+			//String packageName = Bukkit.getServer().getClass().getPackage().getName();
+			//bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);       this won't work in 1.10+
+
+			bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 		}
 		
 		return bukkitVersion;
@@ -182,7 +240,10 @@ public class Utils {
 		input = StringUtils.stripChars(input.toLowerCase(), " _-");
 		
 		if (isValidInteger(input)) {
-			return Material.getMaterial(Integer.parseInt(input));
+			if(ChestCommands.mcVersion < 13)
+				return Material.getMaterial(Integer.parseInt(input));
+			else 
+				throw new NumberFormatException("Material ID's are not supported anymore in MC 1.13+, you must use names instead");
 		}
 		
 		return materialMap.get(input);

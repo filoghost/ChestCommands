@@ -75,7 +75,12 @@ public class SignListener implements Listener {
 	}
 	
 	private boolean isSign(Material material) {
-		return material == Material.WALL_SIGN || material == Material.SIGN_POST;
+		if(ChestCommands.mcVersion < 13)
+			return material == Material.WALL_SIGN || material == Material.SIGN_POST;
+		else if (ChestCommands.mcVersion == 13)
+			return material == Material.WALL_SIGN || material == Material.SIGN || material.name().equalsIgnoreCase("LEGACY_SIGN_POST") || material.name().equalsIgnoreCase("LEGACY_WALL_SIGN");
+		else
+			return material == Material.SIGN || material == Material.WALL_SIGN;
 	}
 	
 }

@@ -9,25 +9,25 @@ import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
 public enum Variable {
 	
 	PLAYER("{player}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			return executor.getName();
 		}
 	},
 	
 	ONLINE("{online}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			return String.valueOf(CachedGetters.getOnlinePlayers());
 		}
 	},
 	
 	MAX_PLAYERS("{max_players}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			return String.valueOf(Bukkit.getMaxPlayers());
 		}
 	},
 	
 	MONEY("{money}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			if (EconomyBridge.hasValidEconomy()) {
 				return EconomyBridge.formatMoney(EconomyBridge.getMoney(executor));
 			} else {
@@ -37,7 +37,7 @@ public enum Variable {
 	},
 	
 	POINTS("{points}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			if (PlayerPointsBridge.hasValidPlugin()) {
 				return String.valueOf(PlayerPointsBridge.getPoints(executor));
 			} else {
@@ -47,7 +47,7 @@ public enum Variable {
 	},
 	
 	WORLD("{world}") {
-		public String getReplacement(Player executor) {
+		public String getReplacement(Player executor, String val) {
 			return executor.getWorld().getName();
 		}
 	};
@@ -62,5 +62,8 @@ public enum Variable {
 		return text;
 	}
 	
-	public abstract String getReplacement(Player executor);
+	public String getReplacement(Player executor) {
+		return getReplacement(executor, null);
+	}
+	public abstract String getReplacement(Player executor, String val);
 }

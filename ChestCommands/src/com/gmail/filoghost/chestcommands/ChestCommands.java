@@ -58,8 +58,11 @@ public class ChestCommands extends JavaPlugin {
 	
 	private static AttributeRemover attributeRemover;
 	
+	public static int mcVersion = 7;
+	
 	@Override
 	public void onEnable() {
+		loadMCVer();
 		if (instance != null) {
 			getLogger().warning("Please do not use /reload or plugin reloaders. Do \"/cc reload\" instead.");
 			return;
@@ -131,7 +134,9 @@ public class ChestCommands extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
 	}
 	
-	
+	private void loadMCVer() {
+		mcVersion = Integer.parseInt(Utils.getBukkitVersion().split("_")[1]);
+	}
 	
 	@Override
 	public void onDisable() {

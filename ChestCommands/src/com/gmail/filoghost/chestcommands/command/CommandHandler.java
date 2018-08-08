@@ -18,6 +18,7 @@ public class CommandHandler extends CommandFramework {
 		super(label);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(CommandSender sender, String label, String[] args) {
 		if (args.length == 0) {
