@@ -36,10 +36,10 @@
 			<id>confuser-repo</id>
 			<url>https://ci.frostcast.net/plugin/repository/everything/</url>
 		</repository>
-        <repository>
-            <id>bstats-repo</id>
-            <url>http://repo.bstats.org/content/repositories/releases/</url>
-        </repository>
+		<repository>
+			<id>bstats-repo</id>
+			<url>http://repo.bstats.org/content/repositories/releases/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -68,12 +68,12 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/PlayerPoints.jar</systemPath>
 		</dependency>
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit-lite</artifactId>
-            <version>1.2</version>
-            <scope>compile</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit-lite</artifactId>
+			<version>1.2</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -100,12 +100,12 @@
 				<version>3.1.0</version>
 				<configuration>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
-                	<relocations>
-				    	<relocation>
-					    	<pattern>org.bstats</pattern>
+					<relocations>
+						<relocation>
+							<pattern>org.bstats</pattern>
 							<shadedPattern>com.gmail.filoghost.holographicdisplays.metrics</shadedPattern>
 						</relocation>
-				</relocations>
+					</relocations>
 				</configuration>
 				<executions>
 					<execution>
