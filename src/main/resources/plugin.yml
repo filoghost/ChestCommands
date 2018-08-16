@@ -1,0 +1,15 @@
+name: ${project.name}
+main: com.gmail.filoghost.chestcommands.ChestCommands
+version: ${project.version}
+softdepend: [Vault, BarAPI, PlayerPoints]
+
+commands:
+   chestcommands:
+      description: Main command for ChestCommands.
+      usage: /<command> (Startup error)
+      aliases: [cc]
+
+permissions:
+  chestcommands.economy.bypass:
+    description: Bypass command costs.
+    default: false
