@@ -1,7 +1,7 @@
 name: ${project.name}
 main: com.gmail.filoghost.chestcommands.ChestCommands
 version: ${project.version}
-softdepend: [Vault, BarAPI, PlayerPoints]
+softdepend: [Vault, BarAPI]
 
 commands:
    chestcommands:

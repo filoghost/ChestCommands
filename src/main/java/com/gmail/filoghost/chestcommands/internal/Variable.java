@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
-import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
 
 public enum Variable {
 	
@@ -32,16 +31,6 @@ public enum Variable {
 				return EconomyBridge.formatMoney(EconomyBridge.getMoney(executor));
 			} else {
 				return "[ECONOMY PLUGIN NOT FOUND]";
-			}
-		}
-	},
-	
-	POINTS("{points}") {
-		public String getReplacement(Player executor) {
-			if (PlayerPointsBridge.hasValidPlugin()) {
-				return String.valueOf(PlayerPointsBridge.getPoints(executor));
-			} else {
-				return "[PLAYER POINTS PLUGIN NOT FOUND]";
 			}
 		}
 	},

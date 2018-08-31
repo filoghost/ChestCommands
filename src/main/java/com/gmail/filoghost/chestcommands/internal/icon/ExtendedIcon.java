@@ -10,7 +10,6 @@ import org.bukkit.inventory.InventoryView;
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
-import com.gmail.filoghost.chestcommands.bridge.PlayerPointsBridge;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
@@ -27,7 +26,6 @@ public class ExtendedIcon extends Icon {
 	private boolean viewPermissionNegated;
 	
 	private double moneyPrice;
-	private int playerPointsPrice;
 	private int expLevelsPrice;
 	private RequiredItem requiredItem;
 	
@@ -107,14 +105,6 @@ public class ExtendedIcon extends Icon {
 		this.moneyPrice = moneyPrice;
 	}
 
-	public int getPlayerPointsPrice() {
-		return playerPointsPrice;
-	}
-
-	public void setPlayerPointsPrice(int playerPointsPrice) {
-		this.playerPointsPrice = playerPointsPrice;
-	}
-
 	public int getExpLevelsPrice() {
 		return expLevelsPrice;
 	}
@@ -166,18 +156,6 @@ public class ExtendedIcon extends Icon {
 			}
 		}
 		
-		if (playerPointsPrice > 0) {
-			if (!PlayerPointsBridge.hasValidPlugin()) {
-				player.sendMessage(ChatColor.RED + "This command has a price in points, but the plugin PlayerPoints was not found. For security, the command has been blocked. Please inform the staff.");
-				return closeOnClick;
-			}
-			
-			if (!PlayerPointsBridge.hasPoints(player, playerPointsPrice)) {
-				player.sendMessage(ChestCommands.getLang().no_points.replace("{points}", Integer.toString(playerPointsPrice)));
-				return closeOnClick;
-			}
-		}
-		
 		if (expLevelsPrice > 0) {
 			if (player.getLevel() < expLevelsPrice) {
 				player.sendMessage(ChestCommands.getLang().no_exp.replace("{levels}", Integer.toString(expLevelsPrice)));
@@ -198,20 +176,12 @@ public class ExtendedIcon extends Icon {
 			}
 		}
 		
-		// Take the money, the points and the required item.
+		// Take the money and the required item.
 		
 		boolean changedVariables = false; // To update the placeholders.
 		
 		if (moneyPrice > 0) {
 			if (!EconomyBridge.takeMoney(player, moneyPrice)) {
-				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
-				return closeOnClick;
-			}
-			changedVariables = true;
-		}
-		
-		if (playerPointsPrice > 0) {
-			if (!PlayerPointsBridge.takePoints(player, playerPointsPrice)) {
 				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
 				return closeOnClick;
 			}

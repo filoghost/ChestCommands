@@ -158,17 +158,6 @@ a-talking-head:
   POSITION-Y: 2
 
 
-a-talking-head:
-  COMMAND: 'tell: This is a simple message, without using commands!'
-  NAME: '&3Tells you something.'
-  LORE:
-    - '&7It tells you something without commands.'
-  ID: head
-  DATA-VALUE: 3
-  POSITION-X: 1
-  POSITION-Y: 2
-
-
 test-multiple-command:
   COMMAND: 'console: Say Did you know that...; console: say you can run multiple commands?;'
   NAME: '&aMultiple commands'
