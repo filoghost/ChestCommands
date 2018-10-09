@@ -1,12 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.gmail.filoghost.chestcommands</groupId>
-	<artifactId>chestcommands-plugin</artifactId>
+	<artifactId>chestcommands-parent</artifactId>
+	<name>ChestCommands Parent</name>
 	<version>3.1.4</version>
+	<packaging>pom</packaging>
 
-	<name>ChestCommands</name>
 	<url>http://dev.bukkit.org/bukkit-plugins/chest-commands</url>
 
 	<scm>
@@ -17,97 +19,33 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- Disable tests -->
-		<skipTests>true</skipTests>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.test.skip>true</maven.test.skip>
+		<spigot-api.version>1.8-R0.1-SNAPSHOT</spigot-api.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
-		</repository>
-		<repository>
-			<id>confuser-repo</id>
-			<url>https://ci.frostcast.net/plugin/repository/everything/</url>
-		</repository>
-		<repository>
-			<id>bstats-repo</id>
-			<url>http://repo.bstats.org/content/repositories/releases/</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.12.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>VaultAPI</artifactId>
-			<version>1.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>me.confuser</groupId>
-			<artifactId>BarAPI</artifactId>
-			<version>3.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bstats</groupId>
-			<artifactId>bstats-bukkit-lite</artifactId>
-			<version>1.2</version>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>Plugin</module>
+	</modules>
 
 	<build>
-		<defaultGoal>clean install</defaultGoal>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<relocations>
-						<relocation>
-							<pattern>org.bstats</pattern>
-							<shadedPattern>com.gmail.filoghost.chestcommands.metrics</shadedPattern>
-						</relocation>
-					</relocations>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+							<manifest>
+								<addClasspath>false</addClasspath>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+	
 </project>
