@@ -95,7 +95,7 @@
 					<relocations>
 						<relocation>
 							<pattern>org.bstats</pattern>
-							<shadedPattern>com.gmail.filoghost.holographicdisplays.metrics</shadedPattern>
+							<shadedPattern>com.gmail.filoghost.chestcommands.metrics</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>
