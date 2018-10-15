@@ -45,6 +45,7 @@ public class IconSerializer {
 				SKULL_OWNER = "SKULL-OWNER",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
+				COINS = "COINS",
 				EXP_LEVELS = "LEVELS",
 				REQUIRED_ITEM = "REQUIRED-ITEM",
 				PERMISSION = "PERMISSION",
@@ -157,7 +158,14 @@ public class IconSerializer {
 		} else if (price < 0.0) {
 			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
 		}
-		
+
+		int coins = section.getInt(Nodes.COINS);
+		if (coins > 0) {
+			icon.setLegendsCoinsPrice(coins);
+		} else if (coins < 0) {
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative COINS: " + coins);
+		}
+
 		int levels = section.getInt(Nodes.EXP_LEVELS);
 		if (levels > 0) {
 			icon.setExpLevelsPrice(levels);

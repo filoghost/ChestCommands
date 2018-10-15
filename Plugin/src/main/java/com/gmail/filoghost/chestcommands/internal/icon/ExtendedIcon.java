@@ -16,6 +16,7 @@ package com.gmail.filoghost.chestcommands.internal.icon;
 
 import java.util.List;
 
+import com.gmail.filoghost.chestcommands.bridge.LegendsCoinsBrigde;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -35,7 +36,9 @@ public class ExtendedIcon extends Icon {
 	private String permission;
 	private String permissionMessage;
 	private String viewPermission;
-	
+
+	private int legendsCoinsPrice;
+
 	private boolean permissionNegated;
 	private boolean viewPermissionNegated;
 	
@@ -119,6 +122,14 @@ public class ExtendedIcon extends Icon {
 		this.moneyPrice = moneyPrice;
 	}
 
+	public int getLegendsCoinsPrice() {
+		return legendsCoinsPrice;
+	}
+
+	public void setLegendsCoinsPrice (int legendsCoinsPrice) {
+		this.legendsCoinsPrice = legendsCoinsPrice;
+	}
+
 	public int getExpLevelsPrice() {
 		return expLevelsPrice;
 	}
@@ -169,6 +180,18 @@ public class ExtendedIcon extends Icon {
 				return closeOnClick;
 			}
 		}
+
+		if (legendsCoinsPrice > 0) {
+			if (!LegendsCoinsBrigde.hasValidPlugin()) {
+				player.sendMessage(ChatColor.RED + "This command has a price in points, but the plugin LegendsCoins was not found. For security, the command has been blocked. Please inform the staff.");
+				return closeOnClick;
+			}
+
+			if (!LegendsCoinsBrigde.hasCoins(player, legendsCoinsPrice)) {
+				player.sendMessage(ChestCommands.getLang().no_coins.replace("{coins}", Integer.toString(legendsCoinsPrice)));
+				return closeOnClick;
+			}
+		}
 		
 		if (expLevelsPrice > 0) {
 			if (player.getLevel() < expLevelsPrice) {
@@ -201,7 +224,15 @@ public class ExtendedIcon extends Icon {
 			}
 			changedVariables = true;
 		}
-		
+
+		if (legendsCoinsPrice > 0) {
+			if (!LegendsCoinsBrigde.takeCoins(player, legendsCoinsPrice)) {
+				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
+				return closeOnClick;
+			}
+			changedVariables = true;
+		}
+
 		if (expLevelsPrice > 0) {
 			player.setLevel(player.getLevel() - expLevelsPrice);
 		}
