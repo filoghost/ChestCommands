@@ -14,6 +14,7 @@
  */
 package com.gmail.filoghost.chestcommands.internal;
 
+import com.gmail.filoghost.chestcommands.bridge.LegendsCoinsBrigde;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -45,6 +46,16 @@ public enum Variable {
 				return EconomyBridge.formatMoney(EconomyBridge.getMoney(executor));
 			} else {
 				return "[ECONOMY PLUGIN NOT FOUND]";
+			}
+		}
+	},
+
+	POINTS("{coins}") {
+		public String getReplacement(Player executor) {
+			if (LegendsCoinsBrigde.hasValidPlugin()) {
+				return String.valueOf(LegendsCoinsBrigde.getCoins(executor));
+			} else {
+				return "[LEGENDS COINS PLUGIN NOT FOUND]";
 			}
 		}
 	},

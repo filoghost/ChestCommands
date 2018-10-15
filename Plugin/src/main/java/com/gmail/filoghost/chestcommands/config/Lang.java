@@ -23,6 +23,7 @@ public class Lang extends SpecialConfig {
 	public String default_no_icon_permission = "&cYou don't have permission for this icon.";
 	public String no_required_item = "&cYou must have &e{amount}x {material} &c(ID: {id}, data value: {datavalue}) for this.";
 	public String no_money = "&cYou need {money}$ for this.";
+	public String no_coins = "&cYou need {coins}$ for this.";
 	public String no_exp = "&cYou need {levels} XP levels for this.";
 	public String menu_not_found = "&cMenu not found! Please inform the staff.";
 	public String open_menu = "&aOpening the menu \"{menu}\".";

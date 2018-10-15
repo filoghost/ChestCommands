@@ -192,6 +192,27 @@ public class Icon {
 		this.color = color;
 	}
 
+	public String calculateSkullOwner(Player player){
+		if (getSkullOwner() != null) {
+			String name = this.skullOwner;
+
+			if (player != null) {
+				if(name.equalsIgnoreCase("{player}")){
+					name = player.getName();
+				}
+			}
+
+			if (name.isEmpty()) {
+				// Add a color to display the name empty.
+				return ChatColor.WHITE.toString();
+			} else {
+				return name;
+			}
+		}
+
+		return null;
+	}
+
 	public String getSkullOwner() {
 		return skullOwner;
 	}
@@ -211,12 +232,12 @@ public class Icon {
 	public ClickHandler getClickHandler() {
 		return clickHandler;
 	}
-	
+
 	protected String calculateName(Player pov) {
 		if (hasName()) {
-			
+
 			String name = this.name;
-			
+
 			if (pov != null && nameVariables != null) {
 				for (Variable nameVariable : nameVariables) {
 					name = name.replace(nameVariable.getText(), nameVariable.getReplacement(pov));
@@ -230,7 +251,7 @@ public class Icon {
 				return name;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -296,7 +317,8 @@ public class Icon {
 		}
 		
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
-			((SkullMeta) itemMeta).setOwner(skullOwner);
+			((SkullMeta) itemMeta).setOwner(calculateSkullOwner(pov));
+			pov.sendMessage(calculateSkullOwner(pov));
 		}
 		
 		itemStack.setItemMeta(itemMeta);

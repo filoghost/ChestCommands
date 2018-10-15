@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.gmail.filoghost.chestcommands.bridge.LegendsCoinsBrigde;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,6 +94,10 @@ public class ChestCommands extends JavaPlugin {
 		
 		if (BarAPIBridge.setupPlugin()) {
 			getLogger().info("Hooked BarAPI");
+		}
+
+		if (LegendsCoinsBrigde.setupPlugin()) {
+			getLogger().info("Hooked LegendsCoins");
 		}
 		
 		AttributeRemover.setup();
