@@ -318,7 +318,6 @@ public class Icon {
 		
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
 			((SkullMeta) itemMeta).setOwner(calculateSkullOwner(pov));
-			pov.sendMessage(calculateSkullOwner(pov));
 		}
 		
 		itemStack.setItemMeta(itemMeta);
