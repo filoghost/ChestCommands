@@ -52,15 +52,17 @@ public class Icon {
 	
 	private Set<Variable> nameVariables;
 	private Map<Integer, Set<Variable>> loreVariables;
+	private Boolean skullVariable;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item.
 	
 	public Icon() {
 		enchantments = new HashMap<Enchantment, Integer>();
 		closeOnClick = true;
+        skullVariable = false;
 	}
 	
 	public boolean hasVariables() {
-		return nameVariables != null || loreVariables != null;
+		return nameVariables != null || loreVariables != null || skullVariable;
 	}
 	
 	public void setMaterial(Material material) {
@@ -192,6 +194,28 @@ public class Icon {
 		this.color = color;
 	}
 
+	public String calculateSkullOwner(Player player){
+		if (getSkullOwner() != null) {
+			String name = this.skullOwner;
+
+			if (player != null) {
+				if(name.equalsIgnoreCase("{player}")){
+                    skullVariable = true;
+					name = player.getName();
+				}
+			}
+
+			if (name.isEmpty()) {
+				// Add a color to display the name empty.
+				return ChatColor.WHITE.toString();
+			} else {
+				return name;
+			}
+		}
+
+		return null;
+	}
+
 	public String getSkullOwner() {
 		return skullOwner;
 	}
@@ -211,7 +235,7 @@ public class Icon {
 	public ClickHandler getClickHandler() {
 		return clickHandler;
 	}
-	
+
 	protected String calculateName(Player pov) {
 		if (hasName()) {
 			
@@ -296,7 +320,7 @@ public class Icon {
 		}
 		
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
-			((SkullMeta) itemMeta).setOwner(skullOwner);
+			((SkullMeta) itemMeta).setOwner(calculateSkullOwner(pov));
 		}
 		
 		itemStack.setItemMeta(itemMeta);

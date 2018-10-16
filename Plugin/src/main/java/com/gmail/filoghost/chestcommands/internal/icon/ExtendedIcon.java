@@ -35,7 +35,7 @@ public class ExtendedIcon extends Icon {
 	private String permission;
 	private String permissionMessage;
 	private String viewPermission;
-	
+
 	private boolean permissionNegated;
 	private boolean viewPermissionNegated;
 	

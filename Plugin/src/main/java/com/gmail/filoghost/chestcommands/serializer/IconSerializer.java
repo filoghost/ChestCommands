@@ -157,7 +157,7 @@ public class IconSerializer {
 		} else if (price < 0.0) {
 			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
 		}
-		
+
 		int levels = section.getInt(Nodes.EXP_LEVELS);
 		if (levels > 0) {
 			icon.setExpLevelsPrice(levels);
