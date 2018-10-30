@@ -184,6 +184,7 @@ public class IconSerializer {
 		return icon;
 	}
 	
+	
 	public static Coords loadCoordsFromSection(ConfigurationSection section) {
 		Validate.notNull(section, "ConfigurationSection cannot be null");
 		
@@ -199,53 +200,6 @@ public class IconSerializer {
 		}
 		
 		return new Coords(x, y);
-	}
-	
-//	/**
-//	 * Reads a list of strings or a single String as list.
-//	 */
-//	private static List<String> readAsList(ConfigurationSection section, String node) {
-//		if (section.isList(node)) {
-//			return section.getStringList(node);
-//		} else if (section.isString(node)) {
-//			return Arrays.asList(section.getString(node));
-//		} else {
-//			return null;
-//		}
-//	}
-	
-	public static void saveToSection(Icon icon, ConfigurationSection section) {
-		Validate.notNull(icon, "Icon cannot be null");
-		Validate.notNull(section, "ConfigurationSection cannot be null");
-		
-		section.set(Nodes.ID, serializeIconID(icon));
-		
-		if (icon.getEnchantments().size() > 0) {
-			section.set(Nodes.ENCHANT, 1);
-		}
-		
-		//TODO not finished
-	}
-	
-	public static String serializeIconID(Icon icon) {
-		if (icon.getMaterial() == null) {
-			return "Not set";
-		}
-		
-		StringBuilder output = new StringBuilder();
-		output.append(Utils.formatMaterial(icon.getMaterial()));
-		
-		if (icon.getDataValue() > 0) {
-			output.append(":");
-			output.append(icon.getDataValue());
-		}
-		
-		if (icon.getAmount() != 1) {
-			output.append(", ");
-			output.append(icon.getAmount());
-		}
-		
-		return output.toString();
 	}
 	
 }
