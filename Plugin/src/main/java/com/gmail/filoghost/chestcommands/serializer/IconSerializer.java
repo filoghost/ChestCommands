@@ -34,10 +34,11 @@ public class IconSerializer {
 	
 	private static class Nodes {
 		
-		public static final
-				String ID = "ID",
-				DATA_VALUE = "DATA-VALUE",
+		public static final	String
+				ID = "ID",
 				AMOUNT = "AMOUNT",
+				DATA_VALUE = "DATA-VALUE",
+				DURABILITY = "DURABILITY",
 				NAME = "NAME",
 				LORE = "LORE",
 				ENCHANT = "ENCHANTMENT",
@@ -98,7 +99,9 @@ public class IconSerializer {
 			}
 		}
 		
-		if (section.isSet(Nodes.DATA_VALUE)) {
+		if (section.isSet(Nodes.DURABILITY)) {
+			icon.setDataValue((short) section.getInt(Nodes.DURABILITY));
+		} else if (section.isSet(Nodes.DATA_VALUE)) { // Alias
 			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
 		}
 		
