@@ -1,4 +1,4 @@
-name: ${project.name}
+name: ChestCommands
 main: com.gmail.filoghost.chestcommands.ChestCommands
 version: ${project.version}
 softdepend: [Vault, BarAPI]
