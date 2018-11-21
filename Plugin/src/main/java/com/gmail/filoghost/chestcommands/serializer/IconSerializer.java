@@ -29,6 +29,8 @@ import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.ItemStackReader;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import com.gmail.filoghost.chestcommands.util.Validate;
+import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
+import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
 public class IconSerializer {
 	
@@ -39,6 +41,7 @@ public class IconSerializer {
 				AMOUNT = "AMOUNT",
 				DATA_VALUE = "DATA-VALUE",
 				DURABILITY = "DURABILITY",
+				NBT_DATA = "NBT-DATA",
 				NAME = "NAME",
 				LORE = "LORE",
 				ENCHANT = "ENCHANTMENT",
@@ -81,6 +84,7 @@ public class IconSerializer {
 			return y;
 		}
 	}
+	
 
 	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorLogger errorLogger) {
 		Validate.notNull(section, "ConfigurationSection cannot be null");
@@ -99,14 +103,25 @@ public class IconSerializer {
 			}
 		}
 		
+		if (section.isSet(Nodes.AMOUNT)) {
+			icon.setAmount(section.getInt(Nodes.AMOUNT));
+		}
+		
 		if (section.isSet(Nodes.DURABILITY)) {
 			icon.setDataValue((short) section.getInt(Nodes.DURABILITY));
 		} else if (section.isSet(Nodes.DATA_VALUE)) { // Alias
 			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
 		}
 		
-		if (section.isSet(Nodes.AMOUNT)) {
-			icon.setAmount(section.getInt(Nodes.AMOUNT));
+		if (section.isSet(Nodes.NBT_DATA)) {
+			String nbtData = section.getString(Nodes.NBT_DATA);
+			try {
+				// Check that NBT has valid syntax before applying it to the icon.
+				MojangsonParser.parse(nbtData);
+				icon.setNBTData(nbtData);
+			} catch (MojangsonParseException e) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid NBT-DATA: " + e.getMessage());
+			}
 		}
 		
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeName(section.getString(Nodes.NAME))));

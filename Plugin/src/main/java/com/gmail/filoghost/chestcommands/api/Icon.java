@@ -20,8 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -32,6 +34,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.internal.Variable;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
@@ -41,6 +44,7 @@ public class Icon {
 	private int amount;
 	private short dataValue;
 	
+	private String nbtData;
 	private String name;
 	private List<String> lore;
 	private Map<Enchantment, Integer> enchantments;
@@ -91,6 +95,14 @@ public class Icon {
 	
 	public short getDataValue() {
 		return dataValue;
+	}
+	
+	public void setNBTData(String nbtData) {
+		this.nbtData = nbtData;
+	}
+	
+	public String getNBTData() {
+		return nbtData;
 	}
 	
 	public void setName(String name) {
@@ -275,6 +287,7 @@ public class Icon {
 		return output;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public ItemStack createItemstack(Player pov) {
 		
 		if (!this.hasVariables() && cachedItem != null) {
@@ -285,11 +298,26 @@ public class Icon {
 		// If the material is not set, display BEDROCK.
 		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, dataValue) : new ItemStack(Material.BEDROCK, amount);
 		
-		// Apply name, lore and color.
+		// First try to apply NBT data.
+		if (nbtData != null) {
+			try {
+				// Note: this method should not throw any exception. It should log directly to the console.
+				Bukkit.getUnsafe().modifyItemStack(itemStack, nbtData);
+			} catch (Throwable t) {
+				this.nbtData = null;
+				ChestCommands.getInstance().getLogger().log(Level.WARNING, "Could not apply NBT-DATA to an item.", t);
+			}
+		}
+		
+		// Then apply data from config nodes, overwriting NBT data if there are confliting values.
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		
-		itemMeta.setDisplayName(calculateName(pov));
-		itemMeta.setLore(calculateLore(pov));
+		if (hasName()) {
+			itemMeta.setDisplayName(calculateName(pov));
+		}
+		if (hasLore()) {
+			itemMeta.setLore(calculateLore(pov));
+		}
 		
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(color);
@@ -301,7 +329,6 @@ public class Icon {
 		
 		itemStack.setItemMeta(itemMeta);
 		
-		// Apply enchants.
 		if (enchantments.size() > 0) {
 			for (Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());
