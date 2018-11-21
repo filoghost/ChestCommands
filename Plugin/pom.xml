@@ -69,6 +69,13 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
+			<resource>
+				<directory>..</directory>
+				<includes>
+					<include>LICENSE.txt</include>
+					<include>THIRD-PARTY.txt</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
