@@ -78,9 +78,9 @@ public class ItemStackReader {
 			input = splitByColons[0];
 		}
 		
-		Material material = Utils.matchMaterial(input);
+		Material material = MaterialsRegistry.matchMaterial(input);
 		
-		if (material == null || material == Material.AIR) {
+		if (material == null || MaterialsRegistry.isAir(material)) {
 			throw new FormatException("invalid material \"" + input + "\"");
 		}
 		this.material = material;

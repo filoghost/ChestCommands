@@ -27,8 +27,8 @@ import com.gmail.filoghost.chestcommands.bridge.EconomyBridge;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
+import com.gmail.filoghost.chestcommands.util.MaterialsRegistry;
 import com.gmail.filoghost.chestcommands.util.StringUtils;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class ExtendedIcon extends Icon {
 
@@ -181,7 +181,7 @@ public class ExtendedIcon extends Icon {
 			
 			if (!requiredItem.hasItem(player)) {
 				player.sendMessage(ChestCommands.getLang().no_required_item
-						.replace("{material}", Utils.formatMaterial(requiredItem.getMaterial()))
+						.replace("{material}", MaterialsRegistry.formatMaterial(requiredItem.getMaterial()))
 						.replace("{id}", Integer.toString(requiredItem.getMaterial().getId()))
 						.replace("{amount}", Integer.toString(requiredItem.getAmount()))
 						.replace("{datavalue}", requiredItem.hasRestrictiveDataValue() ? Short.toString(requiredItem.getDataValue()) : ChestCommands.getLang().any)
