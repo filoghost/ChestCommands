@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -70,8 +71,6 @@ public class ChestCommands extends JavaPlugin {
 	private static int lastReloadErrors;
 	private static String newVersion;
 	
-	private static AttributeRemover attributeRemover;
-	
 	@Override
 	public void onEnable() {
 		if (instance != null) {
@@ -95,7 +94,11 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().info("Hooked BarAPI");
 		}
 		
-		AttributeRemover.setup();
+		try {
+			AttributeRemover.setup();
+		} catch (Throwable t) {
+			getLogger().log(Level.WARNING, "Could not enable the attribute remover for this version. Attributes will show up on items.", t);
+		}
 		
 		if (settings.update_notifications) {
 			new SimpleUpdater(this, 56919).checkForUpdates(new ResponseHandler() {
@@ -326,8 +329,4 @@ public class ChestCommands extends JavaPlugin {
 		ChestCommands.lastReloadErrors = lastReloadErrors;
 	}
 
-	public static AttributeRemover getAttributeRemover() {
-		return attributeRemover;
-	}
-	
 }

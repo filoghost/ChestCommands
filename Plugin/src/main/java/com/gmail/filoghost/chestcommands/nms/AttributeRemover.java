@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class AttributeRemover {
@@ -41,37 +40,28 @@ public class AttributeRemover {
 	private static Method nbtSetMethod;
 	
 	
-	public static boolean setup() {
-		
+	public static void setup() throws Throwable {
 		if (Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) {
 			// We can use the new Bukkit API (1.8.3+)
 			useItemFlags = true;
 			
 		} else {
+			// Try to get the NMS methods and classes
+			nbtTagCompoundClass = getNmsClass("NBTTagCompound");
+			nbtTagListClass = getNmsClass("NBTTagList");
+			nmsItemstackClass = getNmsClass("ItemStack");
 			
-			try {
-				// Try to get the NMS methods and classes
-				nbtTagCompoundClass = getNmsClass("NBTTagCompound");
-				nbtTagListClass = getNmsClass("NBTTagList");
-				nmsItemstackClass = getNmsClass("ItemStack");
-				
-				asNmsCopyMethod = getObcClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
-				asCraftMirrorMethod = getObcClass("inventory.CraftItemStack").getMethod("asCraftMirror", nmsItemstackClass);
-				
-				hasTagMethod = nmsItemstackClass.getMethod("hasTag");
-				getTagMethod = nmsItemstackClass.getMethod("getTag");
-				setTagMethod = nmsItemstackClass.getMethod("setTag", nbtTagCompoundClass);
-				
-				nbtSetMethod = nbtTagCompoundClass.getMethod("set", String.class, getNmsClass("NBTBase"));
-				
-				useReflection = true;
-				
-			} catch (Exception e) {
-				ChestCommands.getInstance().getLogger().info("Could not enable the attribute remover for this version (" + e + "). Attributes will show up on items.");
-			}
+			asNmsCopyMethod = getObcClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
+			asCraftMirrorMethod = getObcClass("inventory.CraftItemStack").getMethod("asCraftMirror", nmsItemstackClass);
+			
+			hasTagMethod = nmsItemstackClass.getMethod("hasTag");
+			getTagMethod = nmsItemstackClass.getMethod("getTag");
+			setTagMethod = nmsItemstackClass.getMethod("setTag", nbtTagCompoundClass);
+			
+			nbtSetMethod = nbtTagCompoundClass.getMethod("set", String.class, getNmsClass("NBTBase"));
+			
+			useReflection = true;
 		}
-		
-		return true;
 	}
 	
 	
