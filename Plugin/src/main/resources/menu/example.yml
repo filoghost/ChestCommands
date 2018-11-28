@@ -183,6 +183,17 @@ permission:
   PERMISSION-MESSAGE: 'You don''t have the correct permission!'
 
 
+using-nbt-tags:
+  NAME: '&aUsing NBT tags'
+  LORE:
+    - 'This item was colored using custom NBT tags.'
+    - 'All NBT tags valid in Minecraft can be used.'
+  ID: leather chestplate
+  NBT-DATA: '{display: {color: 8910400}}'
+  POSITION-X: 4
+  POSITION-Y: 2
+
+
 menu-close-no-commands-no-lore:
   NAME: '&6Close the menu'
   ID: redstone lamp
