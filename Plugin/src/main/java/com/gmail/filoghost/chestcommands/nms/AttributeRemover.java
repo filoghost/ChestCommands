@@ -66,11 +66,11 @@ public class AttributeRemover {
 	
 	
 	private static Class<?> getNmsClass(String name) throws ClassNotFoundException {
-		return Class.forName("net.minecraft.server." + Utils.getBukkitVersion() + "." + name);
+		return Class.forName("net.minecraft.server." + Utils.getNMSVersion() + "." + name);
 	}
 	
 	private static Class<?> getObcClass(String name) throws ClassNotFoundException {
-		return Class.forName("org.bukkit.craftbukkit." + Utils.getBukkitVersion() + "." + name);
+		return Class.forName("org.bukkit.craftbukkit." + Utils.getNMSVersion() + "." + name);
 	}
 	
 	public static ItemStack hideAttributes(ItemStack item) {

@@ -44,17 +44,17 @@ import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
 
 public class Utils {
 	
-	private static String bukkitVersion;
+	private static String nmsVersion;
 	private static DecimalFormat decimalFormat = new DecimalFormat("0.##");
 	
 	
-	public static String getBukkitVersion() {
-		if (bukkitVersion == null) {
+	public static String getNMSVersion() {
+		if (nmsVersion == null) {
 			String packageName = Bukkit.getServer().getClass().getPackage().getName();
-			bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
+			nmsVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
 		}
 		
-		return bukkitVersion;
+		return nmsVersion;
 	}
 
 	public static String colorizeName(String input) {
