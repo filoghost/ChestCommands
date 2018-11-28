@@ -6,29 +6,32 @@
 
 menu-settings:
 
-  # name - appears as the title - REQUIRED
+  # REQUIRED
+  # Appears as the title of the menu.
   name: '&1Example menu'
 
-  # rows - the number of rows of the chest - REQUIRED
+  # REQUIRED
+  # The number of rows in the menu.
   rows: 3
 
-  # command - OPTIONAL (you can remove this or set it to '')
+  # OPTIONAL (you can remove this or set it to '')
   # Bind multiple commands using ; (command: 'menu; m; me')
   command: 'menu'
 
-  # auto-refresh - OPTIONAL
+  # OPTIONAL
   # How frequently the menu will be refreshed, in seconds.
   # Useful if you have variables in items' descriptions.
   auto-refresh: 5
 
-  # This command command will be execute when the menu is opened.
+  # OPTIONAL
+  # This command command will be executed when the menu is opened.
   # Supports all the icon command types.
-  open-action: 'sound: note pling; tell: &eYou opened the example menu.'
+  open-action: 'tell: &eYou opened the example menu.'
 
-  # open-with-item - OPTIONAL
-  # The menu will open only right-clicking with orange wool [35:1]
+  # OPTIONAL
+  # The menu will open only when right-clicking with a compass.
   open-with-item:
-    id: wool:1
+    id: compass
     left-click: false
     right-click: true
 
@@ -46,36 +49,38 @@ spawncmd:
   LORE:
     - 'It justs executes /spawn'
     - 'as the player who clicked.'
-  ID: bed
+  ID: enderpearl
   POSITION-X: 1
   POSITION-Y: 1
 
 
-colored-enchanted-stacked-wool:
-  NAME: '&aWool with additional data'
+durability-armor:
+  NAME: '&aDamaged armor'
   LORE:
-    - 'This wool has a data value, an amount'
-    - 'greater than 1, and two enchantments.'
-  ID: wool
-  DATA-VALUE: 1
-  AMOUNT: 10
-  ENCHANTMENT: knockback, 10; durability, 10
+    - 'This armor is damaged.'
+  ID: diamond helmet
+  DATA-VALUE: 200
   POSITION-X: 2
   POSITION-Y: 1
 
 
-this-text-will-not-appear:
-  NAME: '&dFormatting codes'
+enchanted-sword:
+  NAME: '&aEnchanted sword'
   LORE:
-    - 'You can use all the formatting codes!'
-    - '&fColors: &c#c &a#a &9#9 &e#e &f... ...'
-    - '&fRandom (#k): &kfy379!H'
-    - '&fBold (#l): &lexample'
-    - '&fStrikethrough (#m): &mexample'
-    - '&fUnderline (#n): &nexample'
-    - '&fItalic (#o): &oexample'
-  ID: paper
+    - 'This sword is glowing.'
+  ID: diamond sword
+  ENCHANTMENT: durability, 1
   POSITION-X: 3
+  POSITION-Y: 1
+
+
+some-arrows:
+  NAME: '&aSome arrows'
+  LORE:
+    - 'You can set the amount of items to display.'
+  ID: arrow
+  AMOUNT: 5
+  POSITION-X: 4
   POSITION-Y: 1
 
 
@@ -85,7 +90,7 @@ test-from-console:
   LORE:
     - 'It broadcasts your name with the command /say.'
   ID: command block
-  POSITION-X: 4
+  POSITION-X: 5
   POSITION-Y: 1
 
 
@@ -96,7 +101,7 @@ test-as-op:
     - 'Be careful with this type of commands.'
     - 'It will ignore nearly all the permissions.'
   ID: command block
-  POSITION-X: 5
+  POSITION-X: 6
   POSITION-Y: 1
 
 
@@ -106,8 +111,8 @@ test-with-placeholder:
   LORE:
     - 'Placeholders will be replaced when the item'
     - 'is clicked.'
-  ID: empty map
-  POSITION-X: 6
+  ID: water bucket
+  POSITION-X: 7
   POSITION-Y: 1
 
 
@@ -120,7 +125,7 @@ economy-give:
     - 'It gives you a gold ingot.'
   ID: gold ingot
   PRICE: 50
-  POSITION-X: 7
+  POSITION-X: 8
   POSITION-Y: 1
 
 
@@ -132,8 +137,23 @@ economy-take:
     - 'This command is the opposite of the previous.'
     - 'It will take you a gold ingot and give you $50.'
   ID: gold ingot
-  POSITION-X: 8
+  POSITION-X: 9
   POSITION-Y: 1
+
+
+formatting-codes:
+  NAME: '&dFormatting codes'
+  LORE:
+    - 'You can use all the formatting codes!'
+    - '&fColors: &c#c &a#a &9#9 &e#e &f... ...'
+    - '&fRandom (#k): &kfy379!H'
+    - '&fBold (#l): &lexample'
+    - '&fStrikethrough (#m): &mexample'
+    - '&fUnderline (#n): &nexample'
+    - '&fItalic (#o): &oexample'
+  ID: paper
+  POSITION-X: 1
+  POSITION-Y: 2
 
 
 will-not-close:
@@ -143,18 +163,17 @@ will-not-close:
     - '&7clicking on this item.'
   ID: sign
   KEEP-OPEN: true
-  POSITION-X: 9
-  POSITION-Y: 1
+  POSITION-X: 2
+  POSITION-Y: 2
 
 
-a-talking-head:
+talking-fish:
   COMMAND: 'tell: This is a simple message, without using commands!'
   NAME: '&3Tells you something.'
   LORE:
     - '&7It tells you something without commands.'
-  ID: head
-  DATA-VALUE: 3
-  POSITION-X: 1
+  ID: torch
+  POSITION-X: 3
   POSITION-Y: 2
 
 
@@ -164,7 +183,7 @@ test-multiple-command:
   LORE:
     - 'Example of multiple commands.'
   ID: golden apple
-  POSITION-X: 2
+  POSITION-X: 4
   POSITION-Y: 2
 
 
@@ -176,21 +195,21 @@ permission:
     - 'permission "chestcommands.test".'
     - 'Otherwise, a configurable error'
     - 'message will be displayed.'
-  ID: iron bar
-  POSITION-X: 3
+  ID: iron bars
+  POSITION-X: 5
   POSITION-Y: 2
   PERMISSION: chestcommands.test
   PERMISSION-MESSAGE: 'You don''t have the correct permission!'
 
 
-using-nbt-tags:
+nbt-tags:
   NAME: '&aUsing NBT tags'
   LORE:
     - 'This item was colored using custom NBT tags.'
     - 'All NBT tags valid in Minecraft can be used.'
   ID: leather chestplate
   NBT-DATA: '{display: {color: 8910400}}'
-  POSITION-X: 4
+  POSITION-X: 6
   POSITION-Y: 2
 
 
