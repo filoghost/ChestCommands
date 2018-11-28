@@ -45,11 +45,11 @@ public class SpecialConfig {
 	
 	public void load() throws IOException, InvalidConfigurationException, Exception {
 		
-		// Check if the configuration was initialized.
+		// Check if the configuration was initialized
 		if (defaultValuesMap == null) {
 			defaultValuesMap = new HashMap<String, Object>();
 			
-			// Put the values in the default values map.
+			// Put the values in the default values map
 			for (Field field : getClass().getDeclaredFields()) {
 				if (!isValidField(field)) continue;
 						
@@ -70,10 +70,10 @@ public class SpecialConfig {
 			}
 		}
 		
-		// First of all, try to load the yaml file.
+		// First of all, try to load the yaml file
 		config.load();
 		
-		// Save default values not set.
+		// Save default values not set
 		boolean needsSave = false;
 		for (Entry<String, Object> entry : defaultValuesMap.entrySet()) {
 			if (!config.isSet(entry.getKey())) {
@@ -87,7 +87,7 @@ public class SpecialConfig {
 			config.save();
 		}
 		
-		// Now read change the fields.
+		// Now read change the fields
 		for (Field field : getClass().getDeclaredFields()) {
 			
 			if (!isValidField(field)) continue;
@@ -110,7 +110,7 @@ public class SpecialConfig {
 					field.set(this, config.getDouble(configKey));
 					
 				} else if (type == String.class) {
-					field.set(this, Utils.addColors(config.getString(configKey))); // Always add colors.
+					field.set(this, Utils.addColors(config.getString(configKey))); // Always add colors
 					
 				} else {
 					config.getPlugin().getLogger().warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");

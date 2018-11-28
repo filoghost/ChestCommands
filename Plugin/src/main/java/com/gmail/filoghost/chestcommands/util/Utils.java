@@ -228,7 +228,7 @@ public class Utils {
 		try {
 			plugin.saveResource(name, false);
 		} catch (Exception ex) {
-			// Shhh...
+			// Ignore
 		}
 	}
 	

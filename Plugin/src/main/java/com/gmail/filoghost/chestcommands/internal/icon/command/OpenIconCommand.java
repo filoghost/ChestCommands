@@ -33,8 +33,10 @@ public class OpenIconCommand extends IconCommand {
 		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
 		if (menu != null) {
 			
-			// Delay the task, since this command is executed in ClickInventoryEvent
-			// and opening another inventory in the same moment is not a good idea.
+			/* 
+			 * Delay the task, since this command is executed in ClickInventoryEvent
+			 * and opening another inventory in the same moment is not a good idea.
+			 */
 			Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new Runnable() {
 				public void run() {
 					if (player.hasPermission(menu.getPermission())) {

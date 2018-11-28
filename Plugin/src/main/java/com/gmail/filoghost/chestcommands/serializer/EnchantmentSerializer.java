@@ -53,7 +53,7 @@ public class EnchantmentSerializer {
 		
 		for (Enchantment enchant : Enchantment.values()) {
 			if (enchant != null) {
-				// Accepts the ugly default names too.
+				// Accepts the ugly default names too
 				enchantmentsMap.put(formatLowercase(enchant.getName()), enchant);
 			}
 		}

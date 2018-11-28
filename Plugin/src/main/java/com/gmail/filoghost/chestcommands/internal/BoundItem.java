@@ -36,7 +36,7 @@ public class BoundItem {
 		this.menu = menu;
 		this.material = material;
 		this.clickType = clickType;
-		data = -1; // -1 = any.
+		data = -1; // -1 = any
 	}
 	
 	public void setRestrictiveData(short data) {
@@ -52,16 +52,16 @@ public class BoundItem {
 			return false;
 		}
 		
-		// First, they must have the same material.
+		// First, they must have the same material
 		if (this.material != item.getType()) {
 			return false;
 		}
-		// Check if the data value is valid (-1 = any data value).
+		// Check if the data value is valid (-1 = any data value)
 		if (this.data != -1 && this.data != item.getDurability()) {
 			return false;
 		}
 		
-		// Finally checks the action.
+		// Finally checks the action
 		return clickType.isValidInteract(action);
 	}
 }

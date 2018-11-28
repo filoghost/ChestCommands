@@ -36,7 +36,7 @@ public class BungeeCordUtils {
 			DataOutputStream out = new DataOutputStream(byteArray);
 		 
 			out.writeUTF("Connect");
-			out.writeUTF(server); // Target Server.
+			out.writeUTF(server); // Target Server
 		    
 			player.sendPluginMessage(ChestCommands.getInstance(), "BungeeCord", byteArray.toByteArray());
 			

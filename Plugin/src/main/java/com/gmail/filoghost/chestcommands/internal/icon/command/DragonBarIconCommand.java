@@ -31,7 +31,7 @@ public class DragonBarIconCommand extends IconCommand {
 		seconds = 1;
 		message = command;
 		
-		String[] split = command.split("\\|", 2); // Max of 2 pieces.
+		String[] split = command.split("\\|", 2); // Max of 2 pieces
 		if (split.length > 1 && Utils.isValidPositiveInteger(split[0].trim())) {
 			seconds = Integer.parseInt(split[0].trim());
 			message = split[1].trim();

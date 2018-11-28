@@ -46,7 +46,7 @@ public class AsciiPlaceholders {
 		List<String> lines = Utils.readLines(file);
 		for (String line : lines) {
 			
-			// Comment or empty line.
+			// Comment or empty line
 			if (line.isEmpty() || line.startsWith("#"))  {
 				continue;
 			}
@@ -100,7 +100,7 @@ public class AsciiPlaceholders {
 	
 	private static String unquote(String input) {
 		if (input.length() < 2) {
-			// Cannot be quoted.
+			// Cannot be quoted
 			return input;
 		}
 		if (input.startsWith("'") && input.endsWith("'")) {

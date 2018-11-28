@@ -24,7 +24,7 @@ public class StringUtils {
 		return stripChars(input, removed.toCharArray());
 	}
 	
-	// Removes the first slash, and returns the all the chars until a space is encontered.
+	// Removes the first slash, and returns the all the chars until a space is encontered
 	public static String getCleanCommand(String message) {
 		char[] chars = message.toCharArray();
 		

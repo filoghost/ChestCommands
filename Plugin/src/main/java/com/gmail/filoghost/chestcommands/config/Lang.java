@@ -27,7 +27,7 @@ public class Lang extends SpecialConfig {
 	public String menu_not_found = "&cMenu not found! Please inform the staff.";
 	public String open_menu = "&aOpening the menu \"{menu}\".";
 	public String open_menu_others = "&aOpening the menu \"{menu}\" to {player}.";
-	public String any = "any"; // Used in no_required_item when data value is not restrictive.
+	public String any = "any"; // Used in no_required_item when data value is not restrictive
 
 	public Lang(PluginConfig config) {
 		super(config);

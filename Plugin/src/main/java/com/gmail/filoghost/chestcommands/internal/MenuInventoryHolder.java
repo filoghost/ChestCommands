@@ -34,10 +34,12 @@ public class MenuInventoryHolder implements InventoryHolder {
 	
 	@Override
 	public Inventory getInventory() {
-		// This inventory will not do anything.
-		// I'm 90% sure that it doesn't break any other plugin,
-		// because the only way you can get here is using InventoryClickEvent,
-		// that is cancelled by ChestCommands, or using InventoryOpenEvent.
+		/* 
+		 * This inventory will not do anything.
+		 * I'm 90% sure that it doesn't break any other plugin,
+		 * because the only way you can get here is using InventoryClickEvent,
+		 * that is cancelled by ChestCommands, or using InventoryOpenEvent.
+		 */
 		return Bukkit.createInventory(null, iconMenu.getSize());
 	}
 	

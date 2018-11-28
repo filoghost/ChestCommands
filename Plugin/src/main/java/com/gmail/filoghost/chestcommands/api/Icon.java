@@ -56,7 +56,7 @@ public class Icon {
 	
 	private Set<Variable> nameVariables;
 	private Map<Integer, Set<Variable>> loreVariables;
-	private ItemStack cachedItem; // When there are no variables, we don't recreate the item.
+	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 	
 	public Icon() {
 		enchantments = new HashMap<Enchantment, Integer>();
@@ -236,7 +236,7 @@ public class Icon {
 			}
 
 			if (name.isEmpty()) {
-				// Add a color to display the name empty.
+				// Add a color to display the name empty
 				return ChatColor.WHITE.toString();
 			} else {
 				return name;
@@ -269,7 +269,7 @@ public class Icon {
 					output.add(line);
 				}
 			} else {
-				// Otherwise just copy the lines.
+				// Otherwise just copy the lines
 				output.addAll(lore);
 			}
 		}
@@ -280,7 +280,7 @@ public class Icon {
 				output = Utils.newArrayList();
 			}
 			
-			// Add an error message.
+			// Add an error message
 			output.add(ChatColor.RED + "(Invalid material)");
 		}
 		
@@ -291,17 +291,17 @@ public class Icon {
 	public ItemStack createItemstack(Player pov) {
 		
 		if (!this.hasVariables() && cachedItem != null) {
-			// Performance.
+			// Performance
 			return cachedItem;
 		}
 		
-		// If the material is not set, display BEDROCK.
+		// If the material is not set, display BEDROCK
 		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, dataValue) : new ItemStack(Material.BEDROCK, amount);
 		
-		// First try to apply NBT data.
+		// First try to apply NBT data
 		if (nbtData != null) {
 			try {
-				// Note: this method should not throw any exception. It should log directly to the console.
+				// Note: this method should not throw any exception. It should log directly to the console
 				Bukkit.getUnsafe().modifyItemStack(itemStack, nbtData);
 			} catch (Throwable t) {
 				this.nbtData = null;
@@ -309,7 +309,7 @@ public class Icon {
 			}
 		}
 		
-		// Then apply data from config nodes, overwriting NBT data if there are confliting values.
+		// Then apply data from config nodes, overwriting NBT data if there are confliting values
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		
 		if (hasName()) {
@@ -336,7 +336,7 @@ public class Icon {
 		}
 		
 		if (!this.hasVariables()) {
-			// If there are no variables, cache the item.
+			// If there are no variables, cache the item
 			cachedItem = itemStack;
 		}
 		

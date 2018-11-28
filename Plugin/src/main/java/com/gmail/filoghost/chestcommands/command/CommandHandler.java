@@ -35,7 +35,7 @@ public class CommandHandler extends CommandFramework {
 	@Override
 	public void execute(CommandSender sender, String label, String[] args) {
 		if (args.length == 0) {
-			// This info is accessible to anyone. Please don't remove it, remember that Chest Commands is developed for FREE.
+			// This info is accessible to anyone. Please don't remove it, remember that Chest Commands is developed for free
 			sender.sendMessage(ChestCommands.CHAT_PREFIX);
 			sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getInstance().getDescription().getVersion());
 			sender.sendMessage(ChatColor.GREEN + "Developer: " + ChatColor.GRAY + "filoghost");

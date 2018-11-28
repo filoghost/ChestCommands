@@ -43,7 +43,7 @@ public class CommandSerializer {
 		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
 		commandTypesMap.put(commandPattern("op:"), OpIconCommand.class);
 		commandTypesMap.put(commandPattern("(open|menu):"), OpenIconCommand.class);
-		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand.class); // The colon is optional.
+		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand.class); // The colon is optional
 		commandTypesMap.put(commandPattern("tell:"), TellIconCommand.class);
 		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand.class);
 		commandTypesMap.put(commandPattern("give:"), GiveIconCommand.class);
@@ -53,7 +53,7 @@ public class CommandSerializer {
 	}
 	
 	private static Pattern commandPattern(String regex) {
-		return Pattern.compile("^(?i)" + regex); // Case insensitive and only at the beginning.
+		return Pattern.compile("^(?i)" + regex); // Case insensitive and only at the beginning
 	}
 	
 	public static void checkClassConstructors(ErrorLogger errorLogger) {
@@ -93,18 +93,18 @@ public class CommandSerializer {
 		for (Entry<Pattern, Class<? extends IconCommand>> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
-				// Remove the command prefix and trim the spaces.
+				// Remove the command prefix and trim the spaces
 				String cleanCommand = matcher.replaceFirst("").trim();
 				
 				try {
 					return entry.getValue().getDeclaredConstructor(String.class).newInstance(cleanCommand);
 				} catch (Exception e) {
-					// Checked at startup.
+					// Checked at startup
 				}
 			}
 		}
 		
-		return new PlayerIconCommand(input); // Normal command, no match found.
+		return new PlayerIconCommand(input); // Normal command, no match found
 	}
 	
 }

@@ -193,11 +193,11 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().warning("Unhandled error while reading the placeholders! Please inform the developer.");
 		}
 		
-		// Load the menus.
+		// Load the menus
 		File menusFolder = new File(getDataFolder(), "menu");
 		
 		if (!menusFolder.isDirectory()) {
-			// Create the directory with the default menu.
+			// Create the directory with the default menu
 			menusFolder.mkdirs();
 			Utils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
@@ -250,7 +250,7 @@ public class ChestCommands extends JavaPlugin {
 			}
 		}
 		
-		// Register the BungeeCord plugin channel.
+		// Register the BungeeCord plugin channel
 		if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this, "BungeeCord")) {
 			Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		}

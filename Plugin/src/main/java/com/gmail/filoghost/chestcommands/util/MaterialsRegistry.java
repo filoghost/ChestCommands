@@ -24,19 +24,19 @@ import org.bukkit.Material;
 @SuppressWarnings("deprecation")
 public class MaterialsRegistry {
 	
-	// Material names have been changed in 1.13, when dolphins were added.
+	// Material names have been changed in 1.13, when dolphins were added
 	private static final boolean USE_NEW_MATERIAL_NAMES = Utils.isClassLoaded("org.bukkit.entity.Dolphin"); 
 	
-	// Characters to ignore when searching materials by name.
+	// Characters to ignore when searching materials by name
 	private static final char[] IGNORE_CHARS = {'-', '_', ' '};
 	
-	// Default material names are ugly.
+	// Default material names are ugly
 	private static final Map<String, Material> MATERIALS_BY_ALIAS = new HashMap<String, Material>();
 	
-	// Materials that are considered air (with 1.13+ compatibility).
+	// Materials that are considered air (with 1.13+ compatibility)
 	private static final Collection<Material> AIR_MATERIALS = getExistingMaterials("AIR", "CAVE_AIR", "VOID_AIR");
 	
-	// Materials that have a "Sign" block state (with 1.13+ compatibility).
+	// Materials that have a "Sign" block state (with 1.13+ compatibility)
 	private static final Collection<Material> SIGN_MATERIALS = getExistingMaterials("SIGN", "SIGN_POST", "WALL_SIGN");
 	
 	
@@ -48,7 +48,7 @@ public class MaterialsRegistry {
 		try {
 			addMaterialAlias(name, Material.valueOf(materialEnumName));
 		} catch (IllegalArgumentException e) {
-			// Ignore, do not add a new alias.
+			// Ignore, do not add a new alias
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class MaterialsRegistry {
 			try {
 				existingMaterials.add(Material.valueOf(materialEnumName));
 			} catch (IllegalArgumentException e) {
-				// Ignore, not existing.
+				// Ignore, not existing
 			}
 		}
 		
@@ -95,12 +95,12 @@ public class MaterialsRegistry {
 			addMaterialAlias(material.toString(), material);
 			
 			if (!useNewMaterialNames()) {
-				// Add numerical IDs in versions before 1.13.
+				// Add numerical IDs in versions before 1.13
 				addMaterialAlias(String.valueOf(material.getId()), material);
 			}
 		}
 		
-		// Add some default useful aliases (when present).
+		// Add some default useful aliases (when present)
 		tryAddMaterialAlias("iron bar",				"IRON_FENCE");
 		tryAddMaterialAlias("iron bars",			"IRON_FENCE");
 		tryAddMaterialAlias("glass pane",			"THIN_GLASS");

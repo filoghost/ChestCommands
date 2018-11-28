@@ -82,7 +82,7 @@ public class SignListener implements Listener {
 	
 	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSignChangeMonitor(SignChangeEvent event) {
-		// Prevent players with permissions for creating colored signs from creating menu signs.
+		// Prevent players with permissions for creating colored signs from creating menu signs
 		if (event.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]") && !event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
 			event.setLine(0, ChatColor.stripColor(event.getLine(0)));
 		}

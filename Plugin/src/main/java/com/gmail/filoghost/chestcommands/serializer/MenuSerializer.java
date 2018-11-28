@@ -99,7 +99,7 @@ public class MenuSerializer {
 			}
 			
 		} else {
-			rows = 6; // Defaults to 6 rows.
+			rows = 6; // Defaults to 6 rows
 			errorLogger.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
 		}
 		

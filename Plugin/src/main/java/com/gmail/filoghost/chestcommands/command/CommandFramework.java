@@ -62,7 +62,7 @@ public abstract class CommandFramework implements CommandExecutor {
 		} catch (CommandException ex) {
 
 			if (ex.getMessage() != null && !ex.getMessage().isEmpty()) {
-				// Use RED by default.
+				// Use RED by default
 				sender.sendMessage(ChatColor.RED + ex.getMessage());
 			}
 		}

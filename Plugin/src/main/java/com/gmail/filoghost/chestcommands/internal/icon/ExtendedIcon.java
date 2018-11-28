@@ -147,7 +147,7 @@ public class ExtendedIcon extends Icon {
 	@Override
 	public boolean onClick(Player player) {
 		
-		// Check all the requirements.
+		// Check all the requirements
 		
 		if (!canClickIcon(player)) {
 			if (permissionMessage != null) {
@@ -190,9 +190,9 @@ public class ExtendedIcon extends Icon {
 			}
 		}
 		
-		// Take the money and the required item.
+		// Take the money and the required item
 		
-		boolean changedVariables = false; // To update the placeholders.
+		boolean changedVariables = false; // To update the placeholders
 		
 		if (moneyPrice > 0) {
 			if (!EconomyBridge.takeMoney(player, moneyPrice)) {

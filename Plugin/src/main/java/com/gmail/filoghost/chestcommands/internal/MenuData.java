@@ -23,11 +23,11 @@ import com.gmail.filoghost.chestcommands.util.ClickType;
 
 public class MenuData {
 
-	// Required data.
+	// Required data
 	private String title;
 	private int rows;
 	
-	// Optional data.
+	// Optional data
 	private String[] commands;
 	private Material boundMaterial;
 	private short boundDataValue;
@@ -38,7 +38,7 @@ public class MenuData {
 	public MenuData(String title, int rows) {
 		this.title = title;
 		this.rows = rows;
-		boundDataValue = -1; // -1 = any.
+		boundDataValue = -1; // -1 = any
 	}
 	
 	public String getTitle() {

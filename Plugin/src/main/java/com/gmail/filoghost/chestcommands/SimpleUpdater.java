@@ -68,7 +68,7 @@ public final class SimpleUpdater {
 					JSONArray filesArray = (JSONArray) readJson("https://api.curseforge.com/servermods/files?projectIds=" + projectId);
 
 					if (filesArray.size() == 0) {
-						// The array cannot be empty, there must be at least one file. The project ID is not valid.
+						// The array cannot be empty, there must be at least one file. The project ID is not valid
 						plugin.getLogger().warning("The project ID (" + projectId + ") provided for updating is invalid or curse had a problem.");
 						plugin.getLogger().warning("If the error persists, please inform the author.");
 						return;
@@ -127,16 +127,16 @@ public final class SimpleUpdater {
 		String pluginVersion = plugin.getDescription().getVersion();
 		
 		if (pluginVersion == null) {
-			// Do not throw exceptions, just consider it as v0.
+			// Do not throw exceptions, just consider it as v0
 			pluginVersion = "0";
 		}
 		
 		if (!remoteVersion.matches("v?[0-9\\.]+")) {
-			// Should always be checked before by this class.
+			// Should always be checked before by this class
 			throw new IllegalArgumentException("fetched version's format is incorrect");
 		}
 		
-		// Remove all the "v" from the versions, replace multiple full stops with a single full stop, and split them.
+		// Remove all the "v" from the versions, replace multiple full stops with a single full stop, and split them
 		String[] pluginVersionSplit = pluginVersion.replace("v", "").replaceAll("[\\.]{2,}", ".").split("\\.");
 		String[] remoteVersionSplit = remoteVersion.replace("v", "").replaceAll("[\\.]{2,}", ".").split("\\.");
 		
@@ -161,7 +161,7 @@ public final class SimpleUpdater {
 				return false;
 			}
 			
-			// Continue the loop.
+			// Continue the loop
 		}
 		
 		return false;

@@ -112,7 +112,7 @@ public class ExtendedIconMenu extends IconMenu {
 								ItemStack newItem = AttributeRemover.hideAttributes(extIcon.createItemstack(player));
 								inventory.setItem(i, newItem);
 							} else {
-								// Performance, only update name and lore.
+								// Performance, only update name and lore
 								ItemStack oldItem = AttributeRemover.hideAttributes(inventory.getItem(i));
 								ItemMeta meta = oldItem.getItemMeta();
 								meta.setDisplayName(extIcon.calculateName(player));

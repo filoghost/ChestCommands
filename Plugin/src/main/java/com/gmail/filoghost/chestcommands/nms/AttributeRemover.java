@@ -32,8 +32,8 @@ public class AttributeRemover {
 	private static Class<?> nbtTagCompoundClass;
 	private static Class<?> nbtTagListClass;
 	private static Class<?> nmsItemstackClass;
-	private static Method asNmsCopyMethod; // static
-	private static Method asCraftMirrorMethod; // static
+	private static Method asNmsCopyMethod;
+	private static Method asCraftMirrorMethod;
 	private static Method hasTagMethod;
 	private static Method getTagMethod;
 	private static Method setTagMethod;
@@ -111,10 +111,12 @@ public class AttributeRemover {
 				nbtSetMethod.invoke(nbtCompound, "AttributeModifiers", nbtList);
 				return (ItemStack) asCraftMirrorMethod.invoke(null, nmsItemstack);
 				
-			} catch (Exception e) {	}
+			} catch (Throwable t) {
+				// Ignore
+			}
 		}
 		
-		// On failure
+		// On failure just return the item
 		return item;
 	}
 	

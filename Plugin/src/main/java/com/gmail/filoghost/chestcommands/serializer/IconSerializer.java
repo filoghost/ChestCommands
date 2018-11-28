@@ -89,7 +89,7 @@ public class IconSerializer {
 	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorLogger errorLogger) {
 		Validate.notNull(section, "ConfigurationSection cannot be null");
 		
-		// The icon is valid even without a Material.
+		// The icon is valid even without a Material
 		ExtendedIcon icon = new ExtendedIcon();
 		
 		if (section.isSet(Nodes.ID)) {
@@ -116,7 +116,7 @@ public class IconSerializer {
 		if (section.isSet(Nodes.NBT_DATA)) {
 			String nbtData = section.getString(Nodes.NBT_DATA);
 			try {
-				// Check that NBT has valid syntax before applying it to the icon.
+				// Check that NBT has valid syntax before applying it to the icon
 				MojangsonParser.parse(nbtData);
 				icon.setNBTData(nbtData);
 			} catch (MojangsonParseException e) {

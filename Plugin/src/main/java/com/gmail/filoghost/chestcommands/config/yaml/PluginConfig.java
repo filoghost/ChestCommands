@@ -52,7 +52,7 @@ public class PluginConfig extends YamlConfiguration {
 			}
 		}
 		
-		// To reset all the values when loading.
+		// To reset all the values when loading
 		for (String section : this.getKeys(false)) {
 			set(section, null);
 		}

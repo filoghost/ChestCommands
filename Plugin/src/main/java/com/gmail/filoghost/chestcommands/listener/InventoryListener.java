@@ -57,7 +57,7 @@ public class InventoryListener implements Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getInventory().getHolder() instanceof MenuInventoryHolder) {
 			
-			event.setCancelled(true); // First thing to do, if an exception is thrown at least the player doesn't take the item.
+			event.setCancelled(true); // First thing to do, if an exception is thrown at least the player doesn't take the item
 			
 			IconMenu menu = ((MenuInventoryHolder) event.getInventory().getHolder()).getIconMenu();
 			int slot = event.getRawSlot();
@@ -81,7 +81,7 @@ public class InventoryListener implements Listener {
 						}
 					}
 					
-					// Closes the inventory and executes commands AFTER the event.
+					// Closes the inventory and executes commands AFTER the event
 					Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new ExecuteCommandsTask(clicker, icon));
 				}
 			}

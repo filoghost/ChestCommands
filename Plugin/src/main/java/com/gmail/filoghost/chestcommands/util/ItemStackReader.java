@@ -21,7 +21,7 @@ import com.gmail.filoghost.chestcommands.exception.FormatException;
 
 public class ItemStackReader {
 
-	private Material material = Material.STONE; // In the worst case (bad exception handling) we just get stone.
+	private Material material = Material.STONE; // In the worst case (bad exception handling) we just get stone
 	private int amount = 1;
 	private short dataValue = 0;
 	private boolean explicitDataValue = false;
@@ -34,11 +34,11 @@ public class ItemStackReader {
 	public ItemStackReader(String input, boolean parseAmount) throws FormatException {
 		Validate.notNull(input, "input cannot be null");
 		
-		// Remove spaces, they're not needed.
+		// Remove spaces, they're not needed
 		input = StringUtils.stripChars(input, " _-");
 		
 		if (parseAmount) {
-			// Read the optional amount.
+			// Read the optional amount
 			String[] splitAmount = input.split(",");
 		
 			if (splitAmount.length > 1) {
@@ -51,13 +51,13 @@ public class ItemStackReader {
 				if (amount <= 0) throw new FormatException("invalid amount \"" + splitAmount[1] + "\"");
 				this.amount = amount;
 			
-				// Only keep the first part as input.
+				// Only keep the first part as input
 				input = splitAmount[0];
 			}
 		}
 		
 		
-		// Read the optional data value.
+		// Read the optional data value
 		String[] splitByColons = input.split(":");
 		
 		if (splitByColons.length > 1) {
@@ -74,7 +74,7 @@ public class ItemStackReader {
 			this.explicitDataValue = true;
 			this.dataValue = dataValue;
 			
-			// Only keep the first part as input.
+			// Only keep the first part as input
 			input = splitByColons[0];
 		}
 		

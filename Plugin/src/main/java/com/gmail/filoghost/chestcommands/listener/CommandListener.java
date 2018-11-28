@@ -32,7 +32,7 @@ public class CommandListener implements Listener {
 			return;
 		}
 		
-		// Very fast method compared to split & substring.
+		// Very fast method compared to split & substring
 		String command = StringUtils.getCleanCommand(event.getMessage());
 		
 		if (command.isEmpty()) {
