@@ -47,29 +47,29 @@ public class AttributeRemover {
 			
 		} else {
 			// Try to get the NMS methods and classes
-			nbtTagCompoundClass = getNmsClass("NBTTagCompound");
-			nbtTagListClass = getNmsClass("NBTTagList");
-			nmsItemstackClass = getNmsClass("ItemStack");
+			nbtTagCompoundClass = getNMSClass("NBTTagCompound");
+			nbtTagListClass = getNMSClass("NBTTagList");
+			nmsItemstackClass = getNMSClass("ItemStack");
 			
-			asNmsCopyMethod = getObcClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
-			asCraftMirrorMethod = getObcClass("inventory.CraftItemStack").getMethod("asCraftMirror", nmsItemstackClass);
+			asNmsCopyMethod = getOBCClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
+			asCraftMirrorMethod = getOBCClass("inventory.CraftItemStack").getMethod("asCraftMirror", nmsItemstackClass);
 			
 			hasTagMethod = nmsItemstackClass.getMethod("hasTag");
 			getTagMethod = nmsItemstackClass.getMethod("getTag");
 			setTagMethod = nmsItemstackClass.getMethod("setTag", nbtTagCompoundClass);
 			
-			nbtSetMethod = nbtTagCompoundClass.getMethod("set", String.class, getNmsClass("NBTBase"));
+			nbtSetMethod = nbtTagCompoundClass.getMethod("set", String.class, getNMSClass("NBTBase"));
 			
 			useReflection = true;
 		}
 	}
 	
 	
-	private static Class<?> getNmsClass(String name) throws ClassNotFoundException {
+	private static Class<?> getNMSClass(String name) throws ClassNotFoundException {
 		return Class.forName("net.minecraft.server." + Utils.getNMSVersion() + "." + name);
 	}
 	
-	private static Class<?> getObcClass(String name) throws ClassNotFoundException {
+	private static Class<?> getOBCClass(String name) throws ClassNotFoundException {
 		return Class.forName("org.bukkit.craftbukkit." + Utils.getNMSVersion() + "." + name);
 	}
 	
