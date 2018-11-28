@@ -22,6 +22,8 @@ import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
+import com.gmail.filoghost.chestcommands.command.framework.CommandFramework;
+import com.gmail.filoghost.chestcommands.command.framework.CommandValidate;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
