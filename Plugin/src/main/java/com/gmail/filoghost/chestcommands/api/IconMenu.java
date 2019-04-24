@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
-import com.gmail.filoghost.chestcommands.util.AttributeRemover;
+import com.gmail.filoghost.chestcommands.util.ItemUtils;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import com.gmail.filoghost.chestcommands.util.Validate;
 
@@ -93,7 +93,7 @@ public class IconMenu {
 		
 		for (int i = 0; i < icons.length; i++) {
 			if (icons[i] != null) {
-				inventory.setItem(i, AttributeRemover.hideAttributes(icons[i].createItemstack(player)));
+				inventory.setItem(i, ItemUtils.hideAttributes(icons[i].createItemstack(player)));
 			}
 		}
 		

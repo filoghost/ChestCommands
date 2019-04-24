@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import com.gmail.filoghost.chestcommands.bridge.PlaceholderAPIBridge;
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,7 +46,6 @@ import com.gmail.filoghost.chestcommands.listener.CommandListener;
 import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
 import com.gmail.filoghost.chestcommands.listener.SignListener;
-import com.gmail.filoghost.chestcommands.util.AttributeRemover;
 import com.gmail.filoghost.chestcommands.serializer.CommandSerializer;
 import com.gmail.filoghost.chestcommands.serializer.MenuSerializer;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
@@ -54,7 +53,6 @@ import com.gmail.filoghost.chestcommands.task.RefreshMenusTask;
 import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
-import com.gmail.filoghost.chestcommands.util.VersionUtils;
 
 public class ChestCommands extends JavaPlugin {
 	
@@ -198,7 +196,7 @@ public class ChestCommands extends JavaPlugin {
 		if (!menusFolder.isDirectory()) {
 			// Create the directory with the default menu
 			menusFolder.mkdirs();
-			Utils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
+			BukkitUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 				
 		List<PluginConfig> menusList = loadMenus(menusFolder);
@@ -254,9 +252,9 @@ public class ChestCommands extends JavaPlugin {
 			Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Loads all the configuration files recursively into a list.
 	 */
@@ -273,11 +271,11 @@ public class ChestCommands extends JavaPlugin {
 		}
 		return list;
 	}
-	
-	
-	
+
+
+
 	public static void closeAllMenus() {
-		for (Player player : VersionUtils.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getOpenInventory() != null) {
 				if (player.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || player.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
 					player.closeInventory();
@@ -285,9 +283,9 @@ public class ChestCommands extends JavaPlugin {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	public static ChestCommands getInstance() {
 		return instance;
 	}

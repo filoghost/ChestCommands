@@ -14,7 +14,10 @@
  */
 package com.gmail.filoghost.chestcommands.util;
 
-public class Validate {
+public final class Validate {
+
+	private Validate() {
+	}
 
 	public static void notNull(Object object, String error) {
 		if (object == null) {

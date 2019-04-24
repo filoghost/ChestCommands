@@ -14,16 +14,16 @@
  */
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class BroadcastIconCommand extends IconCommand {
 
 	public BroadcastIconCommand(String command) {
-		super(Utils.addColors(command));
+		super(FormatUtils.addColors(command));
 	}
 
 	@Override

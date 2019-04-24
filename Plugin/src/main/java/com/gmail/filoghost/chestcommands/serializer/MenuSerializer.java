@@ -14,6 +14,7 @@
  */
 package com.gmail.filoghost.chestcommands.serializer;
 
+import com.gmail.filoghost.chestcommands.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -23,10 +24,6 @@ import com.gmail.filoghost.chestcommands.exception.FormatException;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuData;
 import com.gmail.filoghost.chestcommands.serializer.IconSerializer.Coords;
-import com.gmail.filoghost.chestcommands.util.ClickType;
-import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.gmail.filoghost.chestcommands.util.ItemStackReader;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class MenuSerializer {
 	
@@ -79,7 +76,7 @@ public class MenuSerializer {
 	 */
 	public static MenuData loadMenuData(PluginConfig config, ErrorLogger errorLogger) {
 		
-		String title = Utils.addColors(config.getString(Nodes.MENU_NAME));
+		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
 		int rows;
 		
 		if (title == null) {

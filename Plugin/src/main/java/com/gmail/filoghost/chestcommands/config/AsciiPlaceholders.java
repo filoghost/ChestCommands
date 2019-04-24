@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
@@ -40,7 +42,7 @@ public class AsciiPlaceholders {
 		File file = new File(ChestCommands.getInstance().getDataFolder(), "placeholders.yml");
 		
 		if (!file.exists()) {
-			Utils.saveResourceSafe(ChestCommands.getInstance(), "placeholders.yml");
+			BukkitUtils.saveResourceSafe(ChestCommands.getInstance(), "placeholders.yml");
 		}
 		
 		List<String> lines = Utils.readLines(file);
@@ -58,7 +60,7 @@ public class AsciiPlaceholders {
 				
 			int indexOf = line.indexOf(':');
 			String placeholder = unquote(line.substring(0, indexOf).trim());
-			String replacement = Utils.addColors(StringEscapeUtils.unescapeJava(unquote(line.substring(indexOf + 1, line.length()).trim())));
+			String replacement = FormatUtils.addColors(StringEscapeUtils.unescapeJava(unquote(line.substring(indexOf + 1, line.length()).trim())));
 
 			if (placeholder.length() == 0 || replacement.length() == 0) {
 				errorLogger.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder and the replacement must have both at least 1 character.");

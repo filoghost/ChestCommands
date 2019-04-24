@@ -14,14 +14,13 @@
  */
 package com.gmail.filoghost.chestcommands.bridge;
 
+import com.gmail.filoghost.chestcommands.util.MenuUtils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class EconomyBridge {
 	
@@ -76,7 +75,7 @@ public class EconomyBridge {
 		EconomyResponse response = economy.withdrawPlayer(player.getName(), player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
 		
-		Utils.refreshMenu(player);
+		MenuUtils.refreshMenu(player);
 		
 		return result;
 	}
@@ -88,7 +87,7 @@ public class EconomyBridge {
 		EconomyResponse response = economy.depositPlayer(player.getName(), player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
 		
-		Utils.refreshMenu(player);
+		MenuUtils.refreshMenu(player);
 		
 		return result;
 	}

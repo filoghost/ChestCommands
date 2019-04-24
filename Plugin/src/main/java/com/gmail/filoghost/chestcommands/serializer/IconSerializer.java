@@ -16,6 +16,7 @@ package com.gmail.filoghost.chestcommands.serializer;
 
 import java.util.List;
 
+import com.gmail.filoghost.chestcommands.util.*;
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.gmail.filoghost.chestcommands.api.Icon;
@@ -25,10 +26,6 @@ import com.gmail.filoghost.chestcommands.internal.CommandsClickHandler;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.gmail.filoghost.chestcommands.util.ItemStackReader;
-import com.gmail.filoghost.chestcommands.util.Utils;
-import com.gmail.filoghost.chestcommands.util.Validate;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
@@ -126,8 +123,8 @@ public class IconSerializer {
 			}
 		}
 		
-		icon.setName(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeName(section.getString(Nodes.NAME))));
-		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(Utils.colorizeLore(section.getStringList(Nodes.LORE))));
+		icon.setName(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeName(section.getString(Nodes.NAME))));
+		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeLore(section.getStringList(Nodes.LORE))));
 		
 		if (section.isSet(Nodes.ENCHANT)) {
 			icon.setEnchantments(EnchantmentSerializer.loadEnchantments(section.getString(Nodes.ENCHANT), iconName, menuFileName, errorLogger));
@@ -135,7 +132,7 @@ public class IconSerializer {
 		
 		if (section.isSet(Nodes.COLOR)) {
 			try {
-				icon.setColor(Utils.parseColor(section.getString(Nodes.COLOR)));
+				icon.setColor(ItemUtils.parseColor(section.getString(Nodes.COLOR)));
 			} catch (FormatException e) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}
@@ -145,7 +142,7 @@ public class IconSerializer {
 
 		if (section.isSet(Nodes.BANNER_COLOR)) {
 			try {
-				icon.setBannerColor(Utils.parseDyeColor(section.getString(Nodes.BANNER_COLOR)));
+				icon.setBannerColor(ItemUtils.parseDyeColor(section.getString(Nodes.BANNER_COLOR)));
 			} catch (FormatException e) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BASE-COLOUR: " + e.getMessage());
 			}
@@ -153,14 +150,14 @@ public class IconSerializer {
 
 		if (section.isSet(Nodes.BANNER_PATTERNS)) {
 			try {
-				icon.setBannerPatterns(Utils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
+				icon.setBannerPatterns(ItemUtils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
 			} catch (FormatException e) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid PATTERN-LIST: " + e.getMessage());
 			}
 		}
 		
 		icon.setPermission(section.getString(Nodes.PERMISSION));
-		icon.setPermissionMessage(Utils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
+		icon.setPermissionMessage(FormatUtils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
 		icon.setViewPermission(section.getString(Nodes.VIEW_PERMISSION));
 		
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);

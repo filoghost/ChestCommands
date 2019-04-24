@@ -22,7 +22,7 @@ import java.util.Map;
 import org.bukkit.Material;
 
 @SuppressWarnings("deprecation")
-public class MaterialsRegistry {
+public final class MaterialsRegistry {
 	
 	// Material names have been changed in 1.13, when dolphins were added
 	private static final boolean USE_NEW_MATERIAL_NAMES = Utils.isClassLoaded("org.bukkit.entity.Dolphin"); 
@@ -38,7 +38,9 @@ public class MaterialsRegistry {
 	
 	// Materials that have a "Sign" block state (with 1.13+ compatibility)
 	private static final Collection<Material> SIGN_MATERIALS = getExistingMaterials("SIGN", "SIGN_POST", "WALL_SIGN");
-	
+
+	private MaterialsRegistry() {
+	}
 	
 	private static void addMaterialAlias(String name, Material material) {
 		MATERIALS_BY_ALIAS.put(StringUtils.stripChars(name, IGNORE_CHARS).toLowerCase(), material);

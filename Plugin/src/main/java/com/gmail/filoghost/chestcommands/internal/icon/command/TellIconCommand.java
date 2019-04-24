@@ -14,15 +14,15 @@
  */
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class TellIconCommand extends IconCommand {
 
 	public TellIconCommand(String command) {
-		super(Utils.addColors(command));
+		super(FormatUtils.addColors(command));
 	}
 
 	@Override

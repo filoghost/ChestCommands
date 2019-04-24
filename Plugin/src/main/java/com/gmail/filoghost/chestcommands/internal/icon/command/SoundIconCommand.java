@@ -14,12 +14,12 @@
  */
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class SoundIconCommand extends IconCommand {
 	
@@ -42,7 +42,7 @@ public class SoundIconCommand extends IconCommand {
 
 		String[] split = command.split(",");
 
-		sound = Utils.matchSound(split[0]);
+		sound = BukkitUtils.matchSound(split[0]);
 		if (sound == null) {
 			errorMessage = ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".";
 			return;

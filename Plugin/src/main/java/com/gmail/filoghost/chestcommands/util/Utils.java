@@ -19,112 +19,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.*;
 
-import org.bukkit.*;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.plugin.Plugin;
+public final class Utils {
 
-import com.gmail.filoghost.chestcommands.ChestCommands;
-import com.gmail.filoghost.chestcommands.exception.FormatException;
-import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
-import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
-
-public class Utils {
-	
-	private static String nmsVersion;
-	private static DecimalFormat decimalFormat = new DecimalFormat("0.##");
-	
-	
-	public static String getNMSVersion() {
-		if (nmsVersion == null) {
-			String packageName = Bukkit.getServer().getClass().getPackage().getName();
-			nmsVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
-		}
-		
-		return nmsVersion;
+	private Utils() {
 	}
 
-	public static String colorizeName(String input) {
-		if (input == null || input.isEmpty()) return input;
-
-		if (input.charAt(0) != ChatColor.COLOR_CHAR) {
-			return ChestCommands.getSettings().default_color__name + addColors(input);
-		} else {
-			return addColors(input);
-		}
-	}
-
-	public static List<String> colorizeLore(List<String> input) {
-		if (input == null || input.isEmpty()) return input;
-		
-		for (int i = 0; i < input.size(); i++) {
-			
-			String line = input.get(i);
-			
-			if (line.isEmpty()) continue;
-			
-			if (line.charAt(0) != ChatColor.COLOR_CHAR) {
-				input.set(i, ChestCommands.getSettings().default_color__lore + addColors(line));
-			} else {
-				input.set(i, addColors(line));
-			}
-		}
-		return input;
-	}
-	
-	public static void refreshMenu(Player player) {
-		InventoryView view = player.getOpenInventory();
-		if (view != null) {
-			Inventory topInventory = view.getTopInventory();
-			if (topInventory.getHolder() instanceof MenuInventoryHolder) {
-				MenuInventoryHolder menuHolder = (MenuInventoryHolder) topInventory.getHolder();
-				
-				if (menuHolder.getIconMenu() instanceof ExtendedIconMenu) {
-					((ExtendedIconMenu) menuHolder.getIconMenu()).refresh(player, topInventory);
-				}
-			}
-		}
-	}
-	
-	public static String addColors(String input) {
-		if (input == null || input.isEmpty()) return input;
-		return ChatColor.translateAlternateColorCodes('&', input);
-	}
-	
-	public static List<String> addColors(List<String> input) {
-		if (input == null || input.isEmpty()) return input;
-		for (int i = 0; i < input.size(); i++) {
-			input.set(i, addColors(input.get(i)));
-		}
-		return input;
-	}
-	
-	public static String addYamlExtension(String input) {
-		if (input == null) return null;
-		return input.toLowerCase().endsWith(".yml") ? input : input + ".yml";
-	}
-	
-	public static String decimalFormat(double number) {
-		return decimalFormat.format(number);
-	}
-	
-	public static Sound matchSound(String input) {
-		if (input == null) return null;
-		
-		input = StringUtils.stripChars(input.toLowerCase(), " _-");
-
-		for (Sound sound : Sound.values()) {
-			if (StringUtils.stripChars(sound.toString().toLowerCase(), "_").equals(input)) return sound;
-		}
-		return null;
-	}
-	
 	public static int makePositive(int i) {
 		return i < 0 ? 0 : i;
 	}
@@ -191,65 +92,7 @@ public class Utils {
 			}
 		}
 	}
-	
-	public static Color parseColor(String input) throws FormatException {
-		String[] split = StringUtils.stripChars(input, " ").split(",");
-		
-		if (split.length != 3) {
-			throw new FormatException("it must be in the format \"red, green, blue\".");
-		}
-		
-		int red, green, blue;
-		
-		try {
-			red = Integer.parseInt(split[0]);
-			green = Integer.parseInt(split[1]);
-			blue = Integer.parseInt(split[2]);
-		} catch (NumberFormatException ex) {
-			throw new FormatException("it contains invalid numbers.");
-		}
-		
-		if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-			throw new FormatException("it should only contain numbers between 0 and 255.");
-		}
-		
-		return Color.fromRGB(red, green, blue);
-	}
 
-	public static DyeColor parseDyeColor(String input) throws FormatException {
-		DyeColor color;
-		try {
-			color = DyeColor.valueOf(input.toUpperCase());
-		} catch(IllegalArgumentException e) {
-			throw new FormatException("it must be a valid colour.");
-		}
-		return color;
-	}
-
-	public static List<Pattern> parseBannerPatternList(List<String> input) throws FormatException {
-		List<Pattern> patterns = new ArrayList<Pattern>();
-		for(String str : input) {
-			String[] split = str.split(":");
-			if (split.length != 2) {
-				throw new FormatException("it must be in the format \"pattern:colour\".");
-			}
-			try {
-				patterns.add(new Pattern(parseDyeColor(split[1]), PatternType.valueOf(split[0].toUpperCase())));
-			} catch(IllegalArgumentException e) {
-				throw new FormatException("it must be a valid pattern type.");
-			}
-		}
-		return patterns;
-	}
-
-	public static void saveResourceSafe(Plugin plugin, String name) {
-		try {
-			plugin.saveResource(name, false);
-		} catch (Exception ex) {
-			// Ignore
-		}
-	}
-	
 	public static <T> Set<T> newHashSet() {
 		return new HashSet<T>();
 	}
@@ -261,26 +104,7 @@ public class Utils {
 	public static <T> List<T> newArrayList() {
 		return new ArrayList<T>();
 	}
-	
-	public static String join(Iterable<?> iterable, String separator) {
-		StringBuilder builder = new StringBuilder();
-		Iterator<?> iter = iterable.iterator();
-		
-		boolean first = true;
-		
-		while (iter.hasNext()) {
-			if (first) {
-				first = false;
-			} else {
-				builder.append(separator);
-			}
-			
-			builder.append(iter.next());
-		}
-		
-		return builder.toString();
-	}
-	
+
 	public static boolean isClassLoaded(String name) {
 		try {
 			Class.forName(name);

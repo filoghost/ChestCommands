@@ -29,7 +29,7 @@ import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.AttributeRemover;
+import com.gmail.filoghost.chestcommands.util.ItemUtils;
 
 public class ExtendedIconMenu extends IconMenu {
 	
@@ -87,7 +87,7 @@ public class ExtendedIconMenu extends IconMenu {
 						continue;
 					}
 						
-					inventory.setItem(i, AttributeRemover.hideAttributes(icons[i].createItemstack(player)));
+					inventory.setItem(i, ItemUtils.hideAttributes(icons[i].createItemstack(player)));
 				}
 			}
 		
@@ -109,11 +109,11 @@ public class ExtendedIconMenu extends IconMenu {
 						if (extIcon.canViewIcon(player)) {
 							
 							if (inventory.getItem(i) == null) {
-								ItemStack newItem = AttributeRemover.hideAttributes(extIcon.createItemstack(player));
+								ItemStack newItem = ItemUtils.hideAttributes(extIcon.createItemstack(player));
 								inventory.setItem(i, newItem);
 							} else {
 								// Performance, only update name and lore
-								ItemStack oldItem = AttributeRemover.hideAttributes(inventory.getItem(i));
+								ItemStack oldItem = ItemUtils.hideAttributes(inventory.getItem(i));
 								ItemMeta meta = oldItem.getItemMeta();
 								meta.setDisplayName(extIcon.calculateName(player));
 								meta.setLore(extIcon.calculateLore(player));

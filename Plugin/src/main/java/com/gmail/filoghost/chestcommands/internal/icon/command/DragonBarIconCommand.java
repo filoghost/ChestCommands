@@ -14,6 +14,7 @@
  */
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
 import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.bridge.BarAPIBridge;
@@ -42,7 +43,7 @@ public class DragonBarIconCommand extends IconCommand {
 			message = split[1].trim();
 		}
 
-		message = Utils.addColors(message);
+		message = FormatUtils.addColors(message);
 	}
 
 	@Override

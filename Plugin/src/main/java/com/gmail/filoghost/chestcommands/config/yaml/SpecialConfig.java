@@ -21,9 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
-
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 /**
  * A special configuration wrapper that reads the values using reflection.
@@ -110,7 +109,7 @@ public class SpecialConfig {
 					field.set(this, config.getDouble(configKey));
 					
 				} else if (type == String.class) {
-					field.set(this, Utils.addColors(config.getString(configKey))); // Always add colors
+					field.set(this, FormatUtils.addColors(config.getString(configKey))); // Always add colors
 					
 				} else {
 					config.getPlugin().getLogger().warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");

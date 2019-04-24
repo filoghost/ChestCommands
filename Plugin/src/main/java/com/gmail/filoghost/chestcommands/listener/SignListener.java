@@ -14,6 +14,7 @@
  */
 package com.gmail.filoghost.chestcommands.listener;
 
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,6 @@ import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.util.MaterialsRegistry;
-import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class SignListener implements Listener {
 
@@ -41,7 +41,7 @@ public class SignListener implements Listener {
 			if (sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]")) {
 				
 				sign.getLine(1);
-				ExtendedIconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(Utils.addYamlExtension(sign.getLine(1)));
+				ExtendedIconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(BukkitUtils.addYamlExtension(sign.getLine(1)));
 				if (iconMenu != null) {
 					
 					if (event.getPlayer().hasPermission(iconMenu.getPermission())) {
@@ -68,7 +68,7 @@ public class SignListener implements Listener {
 				return;
 			}
 				
-			IconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(Utils.addYamlExtension(event.getLine(1)));
+			IconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(BukkitUtils.addYamlExtension(event.getLine(1)));
 			if (iconMenu == null) {
 				event.setLine(0, ChatColor.RED + event.getLine(0));
 				event.getPlayer().sendMessage(ChatColor.RED + "That menu was not found.");
@@ -76,7 +76,7 @@ public class SignListener implements Listener {
 			}
 				
 			event.setLine(0, ChatColor.DARK_BLUE + event.getLine(0));
-			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + Utils.addYamlExtension(event.getLine(1)) + ".");
+			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + BukkitUtils.addYamlExtension(event.getLine(1)) + ".");
 		}
 	}
 	
