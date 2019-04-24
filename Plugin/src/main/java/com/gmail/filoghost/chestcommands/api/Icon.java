@@ -19,13 +19,12 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import com.gmail.filoghost.chestcommands.internal.VariableManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -45,6 +44,8 @@ public class Icon {
 	private Map<Enchantment, Integer> enchantments;
 	private Color color;
 	private String skullOwner;
+	private DyeColor bannerColor;
+	private List<Pattern> bannerPatterns;
 	
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
@@ -184,6 +185,22 @@ public class Icon {
 		this.skullOwner = skullOwner;
 	}
 
+	public DyeColor getBannerColor() {
+		return bannerColor;
+	}
+
+	public void setBannerColor(DyeColor bannerColor) {
+		this.bannerColor = bannerColor;
+	}
+
+	public List<Pattern> getBannerPatterns() {
+		return bannerPatterns;
+	}
+
+	public void setBannerPatterns(List<Pattern> bannerPatterns) {
+		this.bannerPatterns = bannerPatterns;
+	}
+
 	public void setCloseOnClick(boolean closeOnClick) {
 		this.closeOnClick = closeOnClick;
 	}
@@ -289,6 +306,14 @@ public class Icon {
 		
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
 			((SkullMeta) itemMeta).setOwner(skullOwner);
+		}
+
+		if (bannerColor != null && itemMeta instanceof BannerMeta) {
+			BannerMeta bannerMeta = (BannerMeta) itemMeta;
+			bannerMeta.setBaseColor(bannerColor);
+			if (bannerPatterns != null) {
+				((BannerMeta) itemMeta).setPatterns(bannerPatterns);
+			}
 		}
 		
 		itemStack.setItemMeta(itemMeta);

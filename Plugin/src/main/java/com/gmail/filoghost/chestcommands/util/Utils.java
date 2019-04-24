@@ -22,10 +22,9 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -216,8 +215,33 @@ public class Utils {
 		
 		return Color.fromRGB(red, green, blue);
 	}
-	
-	
+
+	public static DyeColor parseDyeColor(String input) throws FormatException {
+		DyeColor color;
+		try {
+			color = DyeColor.valueOf(input.toUpperCase());
+		} catch(IllegalArgumentException e) {
+			throw new FormatException("it must be a valid colour.");
+		}
+		return color;
+	}
+
+	public static List<Pattern> parseBannerPatternList(List<String> input) throws FormatException {
+		List<Pattern> patterns = new ArrayList<Pattern>();
+		for(String str : input) {
+			String[] split = str.split(":");
+			if (split.length != 2) {
+				throw new FormatException("it must be in the format \"pattern:colour\".");
+			}
+			try {
+				patterns.add(new Pattern(parseDyeColor(split[1]), PatternType.valueOf(split[0].toUpperCase())));
+			} catch(IllegalArgumentException e) {
+				throw new FormatException("it must be a valid pattern type.");
+			}
+		}
+		return patterns;
+	}
+
 	public static void saveResourceSafe(Plugin plugin, String name) {
 		try {
 			plugin.saveResource(name, false);

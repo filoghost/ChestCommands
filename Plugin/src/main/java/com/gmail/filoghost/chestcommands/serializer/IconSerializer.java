@@ -47,6 +47,8 @@ public class IconSerializer {
 				ENCHANT = "ENCHANTMENT",
 				COLOR = "COLOR",
 				SKULL_OWNER = "SKULL-OWNER",
+				BANNER_COLOR = "BANNER-COLOUR",
+				BANNER_PATTERNS = "BANNER-PATTERNS",
 				COMMAND = "COMMAND",
 				PRICE = "PRICE",
 				EXP_LEVELS = "LEVELS",
@@ -140,6 +142,22 @@ public class IconSerializer {
 		}
 		
 		icon.setSkullOwner(section.getString(Nodes.SKULL_OWNER));
+
+		if (section.isSet(Nodes.BANNER_COLOR)) {
+			try {
+				icon.setBannerColor(Utils.parseDyeColor(section.getString(Nodes.BANNER_COLOR)));
+			} catch (FormatException e) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BASE-COLOUR: " + e.getMessage());
+			}
+		}
+
+		if (section.isSet(Nodes.BANNER_PATTERNS)) {
+			try {
+				icon.setBannerPatterns(Utils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
+			} catch (FormatException e) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid PATTERN-LIST: " + e.getMessage());
+			}
+		}
 		
 		icon.setPermission(section.getString(Nodes.PERMISSION));
 		icon.setPermissionMessage(Utils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
