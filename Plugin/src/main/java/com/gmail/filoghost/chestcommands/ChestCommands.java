@@ -45,7 +45,7 @@ import com.gmail.filoghost.chestcommands.listener.CommandListener;
 import com.gmail.filoghost.chestcommands.listener.InventoryListener;
 import com.gmail.filoghost.chestcommands.listener.JoinListener;
 import com.gmail.filoghost.chestcommands.listener.SignListener;
-import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
+import com.gmail.filoghost.chestcommands.util.AttributeRemover;
 import com.gmail.filoghost.chestcommands.serializer.CommandSerializer;
 import com.gmail.filoghost.chestcommands.serializer.MenuSerializer;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
@@ -93,13 +93,7 @@ public class ChestCommands extends JavaPlugin {
 		if (BarAPIBridge.setupPlugin()) {
 			getLogger().info("Hooked BarAPI");
 		}
-		
-		try {
-			AttributeRemover.setup();
-		} catch (Throwable t) {
-			getLogger().log(Level.WARNING, "Could not enable the attribute remover for this version. Attributes will show up on items.", t);
-		}
-		
+
 		if (settings.update_notifications) {
 			new SimpleUpdater(this, 56919).checkForUpdates(new ResponseHandler() {
 				

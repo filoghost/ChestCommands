@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
-import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
+import com.gmail.filoghost.chestcommands.util.AttributeRemover;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import com.gmail.filoghost.chestcommands.util.Validate;
 

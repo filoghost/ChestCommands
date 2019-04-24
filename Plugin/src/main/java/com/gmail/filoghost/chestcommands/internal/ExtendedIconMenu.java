@@ -29,7 +29,7 @@ import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
+import com.gmail.filoghost.chestcommands.util.AttributeRemover;
 
 public class ExtendedIconMenu extends IconMenu {
 	
