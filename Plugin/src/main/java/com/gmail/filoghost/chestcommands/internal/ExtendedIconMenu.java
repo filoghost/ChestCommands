@@ -132,7 +132,6 @@ public class ExtendedIconMenu extends IconMenu {
 		}
 	}
 	
-	
 	public void sendNoPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
 		if (noPermMessage != null && !noPermMessage.isEmpty()) {

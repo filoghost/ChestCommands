@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import com.gmail.filoghost.chestcommands.bridge.PlaceholderAPIBridge;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -92,6 +93,10 @@ public class ChestCommands extends JavaPlugin {
 		
 		if (BarAPIBridge.setupPlugin()) {
 			getLogger().info("Hooked BarAPI");
+		}
+
+		if (PlaceholderAPIBridge.setupPlugin()) {
+			getLogger().info("Hooked PlaceholderAPI");
 		}
 
 		if (settings.update_notifications) {

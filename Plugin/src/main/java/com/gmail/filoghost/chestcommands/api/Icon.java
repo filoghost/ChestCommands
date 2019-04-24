@@ -14,15 +14,11 @@
  */
 package com.gmail.filoghost.chestcommands.api;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
-import java.util.Set;
 
+import com.gmail.filoghost.chestcommands.internal.VariableManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -35,7 +31,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
-import com.gmail.filoghost.chestcommands.internal.Variable;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
 public class Icon {
@@ -53,9 +48,9 @@ public class Icon {
 	
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
-	
-	private Set<Variable> nameVariables;
-	private Map<Integer, Set<Variable>> loreVariables;
+
+	private boolean nameHasVariables;
+	private boolean[] loreLinesWithVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 	
 	public Icon() {
@@ -64,7 +59,7 @@ public class Icon {
 	}
 	
 	public boolean hasVariables() {
-		return nameVariables != null || loreVariables != null;
+		return nameHasVariables || loreLinesWithVariables != null;
 	}
 	
 	public void setMaterial(Material material) {
@@ -107,20 +102,7 @@ public class Icon {
 	
 	public void setName(String name) {
 		this.name = name;
-		this.nameVariables = null; // Reset the variables
-		
-		if (name != null) {
-			for (Variable variable : Variable.values()) {
-				if (name.contains(variable.getText())) {
-					
-					if (nameVariables == null) {
-						nameVariables = new HashSet<Variable>();
-					}
-		
-					nameVariables.add(variable);
-				}
-			}
-		}
+		this.nameHasVariables = VariableManager.hasVariables(name);
 	}
 	
 	public boolean hasName() {
@@ -135,26 +117,16 @@ public class Icon {
 	
 	public void setLore(List<String> lore) {
 		this.lore = lore;
-		this.loreVariables = null; // Reset the variables
+		this.loreLinesWithVariables = null;
 		
 		if (lore != null) {
 			for (int i = 0; i < lore.size(); i++) {
-				for (Variable variable : Variable.values()) {
-					if (lore.get(i).contains(variable.getText())) {
-						
-						if (loreVariables == null) {
-							loreVariables = new HashMap<Integer, Set<Variable>>();
-						}
-						
-						Set<Variable> lineVariables = loreVariables.get(i);
-						
-						if (lineVariables == null) {
-							lineVariables = new HashSet<Variable>();
-							loreVariables.put(i, lineVariables);
-						}
-						
-						lineVariables.add(variable);
+				if (VariableManager.hasVariables(lore.get(i))) {
+					if (this.loreLinesWithVariables == null) {
+						this.loreLinesWithVariables = new boolean[lore.size()];
 					}
+					loreLinesWithVariables[i] = true;
+					break;
 				}
 			}
 		}
@@ -229,10 +201,8 @@ public class Icon {
 			
 			String name = this.name;
 			
-			if (pov != null && nameVariables != null) {
-				for (Variable nameVariable : nameVariables) {
-					name = name.replace(nameVariable.getText(), nameVariable.getReplacement(pov));
-				}
+			if (pov != null && nameHasVariables) {
+				name = VariableManager.setVariables(name, pov);
 			}
 
 			if (name.isEmpty()) {
@@ -254,18 +224,12 @@ public class Icon {
 			
 			output = Utils.newArrayList();
 
-			if (pov != null && loreVariables != null) {
+			if (pov != null && loreLinesWithVariables != null) {
 				for (int i = 0; i < lore.size(); i++) {
-					
 					String line = lore.get(i);
-					
-					Set<Variable> lineVariables = loreVariables.get(i);
-					if (lineVariables != null) {
-						for (Variable lineVariable : lineVariables) {
-							line = line.replace(lineVariable.getText(), lineVariable.getReplacement(pov));
-						}
+					if(loreLinesWithVariables[i]) {
+						line = VariableManager.setVariables(line, pov);
 					}
-					
 					output.add(line);
 				}
 			} else {

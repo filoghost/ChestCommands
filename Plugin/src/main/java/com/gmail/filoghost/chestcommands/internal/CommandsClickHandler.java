@@ -52,6 +52,4 @@ public class CommandsClickHandler implements ClickHandler {
 		return closeOnClick;
 	}
 
-	
-	
 }

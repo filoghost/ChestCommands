@@ -29,11 +29,16 @@ public class GiveIconCommand extends IconCommand {
 	
 	public GiveIconCommand(String command) {
 		super(command);
-		
+		if (!hasVariables) {
+			parseItem(super.command);
+		}
+	}
+
+	private void parseItem(String command) {
 		try {
 			ItemStackReader reader = new ItemStackReader(command, true);
 			itemToGive = reader.createStack();
-			
+			errorMessage = null;
 		} catch (FormatException e) {
 			errorMessage = ChatColor.RED + "Invalid item to give: " + e.getMessage();
 		}
@@ -41,6 +46,9 @@ public class GiveIconCommand extends IconCommand {
 
 	@Override
 	public void execute(Player player) {
+		if (hasVariables) {
+			parseItem(getParsedCommand(player));
+		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);
 			return;

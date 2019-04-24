@@ -30,7 +30,8 @@ public class OpenIconCommand extends IconCommand {
 
 	@Override
 	public void execute(final Player player) {
-		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(command.toLowerCase());
+		String target = hasVariables ? getParsedCommand(player) : command;
+		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(target.toLowerCase());
 		if (menu != null) {
 			
 			/* 

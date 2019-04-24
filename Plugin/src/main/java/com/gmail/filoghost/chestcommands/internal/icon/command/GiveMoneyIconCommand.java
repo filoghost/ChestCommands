@@ -28,17 +28,25 @@ public class GiveMoneyIconCommand extends IconCommand {
 	
 	public GiveMoneyIconCommand(String command) {
 		super(command);
-		
+		if (!hasVariables) {
+			parseMoney(super.command);
+		}
+	}
+
+	private void parseMoney(String command) {
 		if (!Utils.isValidPositiveDouble(command)) {
 			errorMessage = ChatColor.RED + "Invalid money amount: " + command;
 			return;
 		}
-		
+		errorMessage = null;
 		moneyToGive = Double.parseDouble(command);
 	}
 
 	@Override
 	public void execute(Player player) {
+		if (hasVariables) {
+			parseMoney(getParsedCommand(player));
+		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);
 			return;

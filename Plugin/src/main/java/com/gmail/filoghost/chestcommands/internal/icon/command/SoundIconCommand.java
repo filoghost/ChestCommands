@@ -30,24 +30,30 @@ public class SoundIconCommand extends IconCommand {
 	
 	public SoundIconCommand(String command) {
 		super(command);
-		
+		if (!hasVariables) {
+			parseSound(super.command);
+		}
+	}
+
+	private void parseSound(String command) {
+		errorMessage = null;
 		pitch = 1.0f;
 		volume = 1.0f;
-		
+
 		String[] split = command.split(",");
-		
+
 		sound = Utils.matchSound(split[0]);
 		if (sound == null) {
 			errorMessage = ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".";
 			return;
 		}
-		
+
 		if (split.length > 1) {
 			try {
 				pitch = Float.parseFloat(split[1].trim());
 			} catch (NumberFormatException e) {	}
 		}
-		
+
 		if (split.length > 2) {
 			try {
 				volume = Float.parseFloat(split[2].trim());
@@ -57,6 +63,9 @@ public class SoundIconCommand extends IconCommand {
 
 	@Override
 	public void execute(Player player) {
+		if (hasVariables) {
+			parseSound(getParsedCommand(player));
+		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);
 			return;
