@@ -73,7 +73,7 @@ public final class ItemUtils {
 		DyeColor color;
 		try {
 			color = DyeColor.valueOf(input.toUpperCase());
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw new FormatException("it must be a valid colour.");
 		}
 		return color;
@@ -81,14 +81,14 @@ public final class ItemUtils {
 
 	public static List<Pattern> parseBannerPatternList(List<String> input) throws FormatException {
 		List<Pattern> patterns = new ArrayList<Pattern>();
-		for(String str : input) {
+		for (String str : input) {
 			String[] split = str.split(":");
 			if (split.length != 2) {
 				throw new FormatException("it must be in the format \"pattern:colour\".");
 			}
 			try {
 				patterns.add(new Pattern(parseDyeColor(split[1]), PatternType.valueOf(split[0].toUpperCase())));
-			} catch(IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				throw new FormatException("it must be a valid pattern type.");
 			}
 		}

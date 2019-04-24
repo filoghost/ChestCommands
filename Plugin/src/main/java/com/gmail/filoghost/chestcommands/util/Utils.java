@@ -3,22 +3,18 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.gmail.filoghost.chestcommands.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public final class Utils {
@@ -29,7 +25,7 @@ public final class Utils {
 	public static int makePositive(int i) {
 		return i < 0 ? 0 : i;
 	}
-	
+
 	public static boolean isValidInteger(String input) {
 		try {
 			Integer.parseInt(input);
@@ -38,7 +34,7 @@ public final class Utils {
 			return false;
 		}
 	}
-	
+
 	public static boolean isValidPositiveInteger(String input) {
 		try {
 			return Integer.parseInt(input) > 0;
@@ -46,7 +42,7 @@ public final class Utils {
 			return false;
 		}
 	}
-	
+
 	public static boolean isValidShort(String input) {
 		try {
 			Short.parseShort(input);
@@ -55,7 +51,7 @@ public final class Utils {
 			return false;
 		}
 	}
-	
+
 	public static boolean isValidPositiveDouble(String input) {
 		try {
 			return Double.parseDouble(input) > 0.0;
@@ -63,7 +59,7 @@ public final class Utils {
 			return false;
 		}
 	}
-	
+
 	public static List<String> readLines(File file) throws IOException, Exception {
 		BufferedReader br = null;
 
@@ -96,11 +92,11 @@ public final class Utils {
 	public static <T> Set<T> newHashSet() {
 		return new HashSet<T>();
 	}
-	
+
 	public static <T, V> Map<T, V> newHashMap() {
 		return new HashMap<T, V>();
 	}
-	
+
 	public static <T> List<T> newArrayList() {
 		return new ArrayList<T>();
 	}
@@ -117,5 +113,5 @@ public final class Utils {
 	public static boolean isNullOrEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
 	}
-	
+
 }

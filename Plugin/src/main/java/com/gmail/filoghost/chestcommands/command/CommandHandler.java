@@ -3,22 +3,16 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.gmail.filoghost.chestcommands.command;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.Permissions;
@@ -27,6 +21,11 @@ import com.gmail.filoghost.chestcommands.command.framework.CommandValidate;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.task.ErrorLoggerTask;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandHandler extends CommandFramework {
 
@@ -44,9 +43,8 @@ public class CommandHandler extends CommandFramework {
 			sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + label + " help");
 			return;
 		}
-		
-		
-		
+
+
 		if (args[0].equalsIgnoreCase("help")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "help"), "You don't have permission.");
 			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Commands:");
@@ -55,19 +53,18 @@ public class CommandHandler extends CommandFramework {
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " open <menu> [player]" + ChatColor.GRAY + " - Opens a menu for a player.");
 			return;
 		}
-		
-		
-		
+
+
 		if (args[0].equalsIgnoreCase("reload")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "reload"), "You don't have permission.");
-			
+
 			ChestCommands.closeAllMenus();
-			
+
 			ErrorLogger errorLogger = new ErrorLogger();
 			ChestCommands.getInstance().load(errorLogger);
-			
+
 			ChestCommands.setLastReloadErrors(errorLogger.getSize());
-			
+
 			if (!errorLogger.hasErrors()) {
 				sender.sendMessage(ChestCommands.CHAT_PREFIX + "Plugin reloaded.");
 			} else {
@@ -79,15 +76,14 @@ public class CommandHandler extends CommandFramework {
 			}
 			return;
 		}
-		
-		
-		
+
+
 		if (args[0].equalsIgnoreCase("open")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open"), "You don't have permission.");
 			CommandValidate.minLength(args, 2, "Usage: /" + label + " open <menu> [player]");
-			
+
 			Player target = null;
-			
+
 			if (!(sender instanceof Player)) {
 				CommandValidate.minLength(args, 3, "You must specify a player from the console.");
 				target = Bukkit.getPlayerExact(args[2]);
@@ -98,15 +94,15 @@ public class CommandHandler extends CommandFramework {
 				} else {
 					target = (Player) sender;
 				}
-				
+
 			}
-			
+
 			CommandValidate.notNull(target, "That player is not online.");
-			
+
 			String menuName = args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml";
 			ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(menuName);
 			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
-			
+
 			if (!sender.hasPermission(menu.getPermission())) {
 				menu.sendNoPermissionMessage(sender);
 				return;
@@ -121,23 +117,22 @@ public class CommandHandler extends CommandFramework {
 					sender.sendMessage(ChestCommands.getLang().open_menu_others.replace("{menu}", menuName).replace("{player}", target.getName()));
 				}
 			}
-			
+
 			menu.open(target);
 			return;
 		}
-		
-		
-		
+
+
 		if (args[0].equalsIgnoreCase("list")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "list"), "You don't have permission.");
 			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Loaded menus:");
 			for (String file : ChestCommands.getFileNameToMenuMap().keySet()) {
 				sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
 			}
-			
+
 			return;
 		}
-		
+
 		sender.sendMessage(ChatColor.RED + "Unknown sub-command \"" + args[0] + "\".");
 	}
 

@@ -3,28 +3,28 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.gmail.filoghost.chestcommands.serializer;
 
+import com.gmail.filoghost.chestcommands.util.ErrorLogger;
+import com.gmail.filoghost.chestcommands.util.StringUtils;
+import org.bukkit.enchantments.Enchantment;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.enchantments.Enchantment;
-
-import com.gmail.filoghost.chestcommands.util.ErrorLogger;
-import com.gmail.filoghost.chestcommands.util.StringUtils;
-
 public class EnchantmentSerializer {
-	
+
 	private static Map<String, Enchantment> enchantmentsMap = new HashMap<String, Enchantment>();
+
 	static {
 		enchantmentsMap.put(formatLowercase("Protection"), Enchantment.PROTECTION_ENVIRONMENTAL);
 		enchantmentsMap.put(formatLowercase("Fire Protection"), Enchantment.PROTECTION_FIRE);
@@ -50,7 +50,7 @@ public class EnchantmentSerializer {
 		enchantmentsMap.put(formatLowercase("Infinity"), Enchantment.ARROW_INFINITE);
 		enchantmentsMap.put(formatLowercase("Lure"), Enchantment.LURE);
 		enchantmentsMap.put(formatLowercase("Luck Of The Sea"), Enchantment.LUCK);
-		
+
 		for (Enchantment enchant : Enchantment.values()) {
 			if (enchant != null) {
 				// Accepts the ugly default names too
@@ -65,18 +65,18 @@ public class EnchantmentSerializer {
 
 	public static Map<Enchantment, Integer> loadEnchantments(String input, String iconName, String menuFileName, ErrorLogger errorLogger) {
 		Map<Enchantment, Integer> output = new HashMap<Enchantment, Integer>();
-		
+
 		if (input == null || input.isEmpty()) {
 			return output;
 		}
-		
+
 		for (String singleEnchant : input.split(";")) {
-			
+
 			int level = 1;
-			
+
 			if (singleEnchant.contains(",")) {
 				String[] levelSplit = singleEnchant.split(",");
-				
+
 				try {
 					level = Integer.parseInt(levelSplit[1].trim());
 				} catch (NumberFormatException ex) {
@@ -84,25 +84,25 @@ public class EnchantmentSerializer {
 				}
 				singleEnchant = levelSplit[0];
 			}
-			
+
 			Enchantment ench = matchEnchantment(singleEnchant);
-			
+
 			if (ench == null) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + singleEnchant);
 			} else {
 				output.put(ench, level);
 			}
 		}
-		
+
 		return output;
 	}
-	
+
 	public static Enchantment matchEnchantment(String input) {
 		if (input == null) {
 			return null;
 		}
-		
+
 		return enchantmentsMap.get(formatLowercase(input));
 	}
-	
+
 }

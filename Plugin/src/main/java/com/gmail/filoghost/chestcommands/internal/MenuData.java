@@ -3,30 +3,29 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.gmail.filoghost.chestcommands.internal;
 
-import java.util.List;
-
-import org.bukkit.Material;
-
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.util.ClickType;
+import org.bukkit.Material;
+
+import java.util.List;
 
 public class MenuData {
 
 	// Required data
 	private String title;
 	private int rows;
-	
+
 	// Optional data
 	private String[] commands;
 	private Material boundMaterial;
@@ -34,33 +33,33 @@ public class MenuData {
 	private ClickType clickType;
 	private List<IconCommand> openActions;
 	private int refreshTenths;
-	
+
 	public MenuData(String title, int rows) {
 		this.title = title;
 		this.rows = rows;
 		boundDataValue = -1; // -1 = any
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public int getRows() {
 		return rows;
 	}
-	
+
 	public boolean hasCommands() {
 		return commands != null && commands.length > 0;
 	}
-	
+
 	public void setCommands(String[] commands) {
 		this.commands = commands;
 	}
-	
+
 	public String[] getCommands() {
 		return commands;
 	}
-	
+
 	public boolean hasBoundMaterial() {
 		return boundMaterial != null;
 	}
@@ -72,7 +71,7 @@ public class MenuData {
 	public void setBoundMaterial(Material boundMaterial) {
 		this.boundMaterial = boundMaterial;
 	}
-	
+
 	public boolean hasBoundDataValue() {
 		return boundDataValue > -1;
 	}
