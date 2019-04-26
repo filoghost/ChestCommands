@@ -16,7 +16,7 @@ package com.gmail.filoghost.chestcommands.task;
 
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.internal.MenuInventoryHolder;
-import org.bukkit.Bukkit;
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -28,7 +28,7 @@ public class RefreshMenusTask implements Runnable {
 	@Override
 	public void run() {
 
-		for (Player player : Bukkit.getOnlinePlayers()) {
+		for (Player player : BukkitUtils.getOnlinePlayers()) {
 
 			InventoryView view = player.getOpenInventory();
 			if (view == null) {
