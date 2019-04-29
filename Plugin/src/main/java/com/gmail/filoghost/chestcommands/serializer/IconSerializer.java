@@ -122,7 +122,7 @@ public class IconSerializer {
 		
 		String isUnbreakableStr = section.getString(Nodes.UNBREAKABLE, section.getString(Nodes.UNBREAKABLE_DAMAGED,section.getString(Nodes.UNBREAKABLE_UNBREAKING, null)));
 		boolean isUnbreakable = isUnbreakableStr == null || "1".equals(isUnbreakableStr) || "true".equalsIgnoreCase(isUnbreakableStr);
-        icon.setIsUnbreakable(isUnbreakable);
+		icon.setIsUnbreakable(isUnbreakable);
 		
 		if (section.isSet(Nodes.DAMAGE)) {
 			icon.setDamageValue(section.getInt(Nodes.DAMAGE));
