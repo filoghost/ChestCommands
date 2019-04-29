@@ -1,7 +1,7 @@
 name: ChestCommands
 main: com.gmail.filoghost.chestcommands.ChestCommands
 version: ${project.version}
-api-version: 1.13
+api-version: 1.14
 
 softdepend: [Vault, BarAPI]
 

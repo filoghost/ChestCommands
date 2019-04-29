@@ -30,6 +30,7 @@ import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.nms.AttributeRemover;
+import org.bukkit.inventory.InventoryHolder;
 
 public class ExtendedIconMenu extends IconMenu {
 	
@@ -78,7 +79,8 @@ public class ExtendedIconMenu extends IconMenu {
 				}
 			}
 			
-			Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
+            InventoryHolder menuInventoryHolder = new MenuInventoryHolder(this);
+			Inventory inventory = Bukkit.createInventory(menuInventoryHolder, icons.length, title);
 	
 			for (int i = 0; i < icons.length; i++) {
 				if (icons[i] != null) {

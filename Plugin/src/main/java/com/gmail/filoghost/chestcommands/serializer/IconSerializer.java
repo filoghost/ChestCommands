@@ -41,6 +41,13 @@ public class IconSerializer {
 				AMOUNT = "AMOUNT",
 				DATA_VALUE = "DATA-VALUE",
 				DURABILITY = "DURABILITY",
+				DAMAGE = "DAMAGE",
+				CUSTOM_MODEL_DATA = "CUSTOM-MODEL-DATA",
+            
+				UNBREAKABLE = "UNBREAKABLE", // These correspond to the Unbreakable NBT tag on item stacks.
+				UNBREAKABLE_UNBREAKING = "UNBREAKING",
+				UNBREAKABLE_DAMAGED = "DAMAGED", 
+            
 				NBT_DATA = "NBT-DATA",
 				NAME = "NAME",
 				LORE = "LORE",
@@ -112,7 +119,18 @@ public class IconSerializer {
 		} else if (section.isSet(Nodes.DATA_VALUE)) { // Alias
 			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
 		}
-		
+        
+        boolean isUnbreakable = section.getBoolean(Nodes.UNBREAKABLE, section.getBoolean(Nodes.UNBREAKABLE_DAMAGED,section.getBoolean(Nodes.UNBREAKABLE_UNBREAKING, true)));
+		icon.setIsUnbreakable(isUnbreakable);
+        
+        if (section.isSet(Nodes.DAMAGE)) {
+			icon.setDamageValue(section.getInt(Nodes.DAMAGE));
+		}
+        
+		if (section.isSet(Nodes.CUSTOM_MODEL_DATA)) {
+			icon.setCustomModelDataValue(section.getInt(Nodes.CUSTOM_MODEL_DATA));
+		}
+        
 		if (section.isSet(Nodes.NBT_DATA)) {
 			String nbtData = section.getString(Nodes.NBT_DATA);
 			try {

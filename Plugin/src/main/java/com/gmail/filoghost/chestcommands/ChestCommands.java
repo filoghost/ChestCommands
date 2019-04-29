@@ -54,6 +54,7 @@ import com.gmail.filoghost.chestcommands.util.CaseInsensitiveMap;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import com.gmail.filoghost.chestcommands.util.VersionUtils;
+import org.bukkit.event.HandlerList;
 
 public class ChestCommands extends JavaPlugin {
 	
@@ -146,6 +147,19 @@ public class ChestCommands extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		closeAllMenus();
+        HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
+        getServer().getServicesManager().unregisterAll(this);
+        this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+        instance = null;
+        settings = null;
+        lang = null;
+        fileNameToMenuMap = null;
+        commandsToMenuMap = null;
+        boundItems = null;
+        newVersion = null;
+        lastReloadErrors = 0;
 	}
 	
 	

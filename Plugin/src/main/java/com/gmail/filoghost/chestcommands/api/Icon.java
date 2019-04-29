@@ -37,13 +37,16 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.internal.Variable;
 import com.gmail.filoghost.chestcommands.util.Utils;
+import org.bukkit.inventory.meta.Damageable;
 
 public class Icon {
 
 	private Material material;
 	private int amount;
 	private short dataValue;
-	
+	private Integer damageValue = null;
+	private Integer customModelDataValue = null;
+    private boolean isUnbreakable = true;
 	private String nbtData;
 	private String name;
 	private List<String> lore;
@@ -83,9 +86,33 @@ public class Icon {
 		this.amount = amount;
 	}
 	
+    public void setIsUnbreakable(boolean unbreakable) {
+        this.isUnbreakable = unbreakable;
+    }
+    
+    public boolean isUnbreakable(){
+        return this.isUnbreakable;
+    }
+    
 	public int getAmount() {
 		return amount;
 	}
+
+    public int getDamageValue() {
+        return damageValue != null ? damageValue.intValue() : 0;
+    }
+
+    public void setDamageValue(int damageValue) {
+        this.damageValue = damageValue;
+    }
+
+    public int getCustomModelDataValue() {
+        return customModelDataValue != null ? customModelDataValue.intValue() : 0;
+    }
+
+    public void setCustomModelDataValue(Integer customModelDataValue) {
+        this.customModelDataValue = customModelDataValue;
+    }
 	
 	public void setDataValue(short dataValue) {
 		if (dataValue < 0) dataValue = 0;
@@ -311,14 +338,15 @@ public class Icon {
 		
 		// Then apply data from config nodes, overwriting NBT data if there are confliting values
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		
-		if (hasName()) {
+
+        if (hasName()) {
 			itemMeta.setDisplayName(calculateName(pov));
 		}
 		if (hasLore()) {
 			itemMeta.setLore(calculateLore(pov));
 		}
 		
+        
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(color);
 		}
@@ -326,7 +354,17 @@ public class Icon {
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
 			((SkullMeta) itemMeta).setOwner(skullOwner);
 		}
-		
+        
+        if (this.damageValue != null && itemMeta instanceof Damageable) {
+            ((Damageable)itemMeta).setDamage(this.damageValue);
+        }
+        
+        itemMeta.setUnbreakable(this.isUnbreakable); // If true, damaged = 0, Unbreaking = 1
+        
+        if (this.customModelDataValue != null) {
+            itemMeta.setCustomModelData(this.customModelDataValue);
+        }
+        
 		itemStack.setItemMeta(itemMeta);
 		
 		if (enchantments.size() > 0) {
