@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 public class VariableManager {
 
 	public static boolean hasVariables(String message) {
+		if(message == null) {
+			return false;
+		}
 		for (Variable variable : Variable.values()) {
 			if (message.contains(variable.getText())) {
 				return true;
