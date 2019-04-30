@@ -130,7 +130,6 @@ public class Icon {
 						this.loreLinesWithVariables = new boolean[lore.size()];
 					}
 					loreLinesWithVariables[i] = true;
-					break;
 				}
 			}
 		}
