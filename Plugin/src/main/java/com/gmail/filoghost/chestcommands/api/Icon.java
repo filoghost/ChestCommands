@@ -54,6 +54,7 @@ public class Icon {
 
 	private boolean nameHasVariables;
 	private boolean[] loreLinesWithVariables;
+	private boolean skullOwnerHasVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
 	public Icon() {
@@ -62,7 +63,7 @@ public class Icon {
 	}
 
 	public boolean hasVariables() {
-		return nameHasVariables || loreLinesWithVariables != null;
+		return nameHasVariables || loreLinesWithVariables != null || skullOwnerHasVariables;
 	}
 
 	public void setMaterial(Material material) {
@@ -185,6 +186,7 @@ public class Icon {
 
 	public void setSkullOwner(String skullOwner) {
 		this.skullOwner = skullOwner;
+		this.skullOwnerHasVariables = VariableManager.hasVariables(skullOwner);
 	}
 
 	public DyeColor getBannerColor() {
@@ -307,6 +309,10 @@ public class Icon {
 		}
 
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
+			String skullOwner = this.skullOwner;
+			if(skullOwnerHasVariables) {
+				skullOwner = VariableManager.setVariables(skullOwner, pov);
+			}
 			((SkullMeta) itemMeta).setOwner(skullOwner);
 		}
 
