@@ -6,10 +6,10 @@
 	<groupId>com.gmail.filoghost.chestcommands</groupId>
 	<artifactId>chestcommands-parent</artifactId>
 	<name>ChestCommands Parent</name>
-	<version>3.2.0</version>
+	<version>3.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<url>http://dev.bukkit.org/bukkit-plugins/chest-commands</url>
+	<url>https://dev.bukkit.org/bukkit-plugins/chest-commands</url>
 
 	<scm>
 		<url>https://github.com/filoghost/ChestCommands</url>
@@ -22,7 +22,7 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.test.skip>true</maven.test.skip>
-		<spigot-api.version>1.8-R0.1-SNAPSHOT</spigot-api.version>
+		<spigot-api.version>1.8.8-R0.1-SNAPSHOT</spigot-api.version>
 	</properties>
 
 	<modules>

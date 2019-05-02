@@ -3,20 +3,19 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package com.gmail.filoghost.chestcommands.internal.icon.command;
 
-import org.bukkit.entity.Player;
-
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
+import org.bukkit.entity.Player;
 
 public class OpIconCommand extends IconCommand {
 
@@ -26,14 +25,14 @@ public class OpIconCommand extends IconCommand {
 
 	@Override
 	public void execute(Player player) {
-		
+
 		if (player.isOp()) {
 			player.chat("/" + getParsedCommand(player));
-			
+
 		} else {
 			player.setOp(true);
 			player.chat("/" + getParsedCommand(player));
-        	player.setOp(false);
+			player.setOp(false);
 		}
 	}
 

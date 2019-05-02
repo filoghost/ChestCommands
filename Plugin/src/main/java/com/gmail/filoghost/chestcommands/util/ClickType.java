@@ -3,12 +3,12 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
@@ -21,8 +21,8 @@ public enum ClickType {
 	LEFT,
 	RIGHT,
 	BOTH;
-	
-	public static ClickType fromOptions(boolean left, boolean right) {		
+
+	public static ClickType fromOptions(boolean left, boolean right) {
 		if (left && right) {
 			return BOTH;
 		} else if (left && !right) {
@@ -33,7 +33,7 @@ public enum ClickType {
 			return null;
 		}
 	}
-	
+
 	public boolean isValidInteract(Action action) {
 		if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
 			return this == LEFT || this == BOTH;
@@ -43,5 +43,5 @@ public enum ClickType {
 			return false;
 		}
 	}
-	
+
 }
