@@ -60,6 +60,7 @@ public class Icon {
 	public Icon() {
 		enchantments = new HashMap<Enchantment, Integer>();
 		closeOnClick = true;
+		amount = 1;        
 	}
 
 	public boolean hasVariables() {
