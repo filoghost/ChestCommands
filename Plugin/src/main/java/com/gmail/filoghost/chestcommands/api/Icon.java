@@ -16,6 +16,7 @@ package com.gmail.filoghost.chestcommands.api;
 
 import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.internal.VariableManager;
+import com.gmail.filoghost.chestcommands.util.BukkitUtils;
 import com.gmail.filoghost.chestcommands.util.Utils;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
@@ -39,6 +40,9 @@ public class Icon {
 	private Material material;
 	private int amount;
 	private short dataValue;
+	private Integer damageValue = null;
+	private Integer customModelDataValue = null;
+	private boolean isUnbreakable = true;
 
 	private String nbtData;
 	private String name;
@@ -60,7 +64,7 @@ public class Icon {
 	public Icon() {
 		enchantments = new HashMap<Enchantment, Integer>();
 		closeOnClick = true;
-		amount = 1;        
+		amount = 1;		
 	}
 
 	public boolean hasVariables() {
@@ -75,7 +79,30 @@ public class Icon {
 	public Material getMaterial() {
 		return material;
 	}
+	
+	public void setIsUnbreakable(boolean unbreakable) {
+		this.isUnbreakable = unbreakable;
+	}
 
+	public boolean isUnbreakable(){
+		return this.isUnbreakable;
+	}
+	public int getDamageValue() {
+		return damageValue != null ? damageValue.intValue() : 0;
+	}
+
+	public void setDamageValue(int damageValue) {
+		this.damageValue = damageValue;
+	}
+
+	public int getCustomModelDataValue() {
+		return customModelDataValue != null ? customModelDataValue.intValue() : 0;
+	}
+
+	public void setCustomModelDataValue(Integer customModelDataValue) {
+		this.customModelDataValue = customModelDataValue;
+	}
+	
 	public void setAmount(int amount) {
 		if (amount < 1) amount = 1;
 		else if (amount > 127) amount = 127;
@@ -323,9 +350,19 @@ public class Icon {
 				((BannerMeta) itemMeta).setPatterns(bannerPatterns);
 			}
 		}
+		
+		if (this.damageValue != null) {
+			BukkitUtils.setDamageValueForItemMeta(itemMeta, this.damageValue);
+		}
+		
+		BukkitUtils.setUnbreakableValueForItemMeta(itemMeta, this.isUnbreakable);
 
+		if (this.customModelDataValue != null) {
+			BukkitUtils.setCustomModelDataForItemMeta(itemMeta, this.customModelDataValue);
+		}
+		
 		itemStack.setItemMeta(itemMeta);
-
+		
 		if (enchantments.size() > 0) {
 			for (Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());

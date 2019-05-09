@@ -27,6 +27,7 @@ import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class IconSerializer {
 
@@ -54,7 +55,13 @@ public class IconSerializer {
 				VIEW_PERMISSION = "VIEW-PERMISSION",
 				KEEP_OPEN = "KEEP-OPEN",
 				POSITION_X = "POSITION-X",
-				POSITION_Y = "POSITION-Y";
+				POSITION_Y = "POSITION-Y",
+				DAMAGE = "DAMAGE",
+				CUSTOM_MODEL_DATA = "CUSTOM-MODEL-DATA",
+				UNBREAKABLE = "UNBREAKABLE",			// These correspond to the Unbreakable NBT tag on item stacks.
+				UNBREAKABLE_UNBREAKING = "UNBREAKING",
+				UNBREAKABLE_DAMAGED = "DAMAGED"
+			;
 	}
 
 	public static class Coords {
@@ -120,6 +127,35 @@ public class IconSerializer {
 			} catch (MojangsonParseException e) {
 				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid NBT-DATA: " + e.getMessage());
 			}
+		}
+
+		{
+			// The "damaged" syntax matches up to this TAG used for resource packs. 
+			// See the link: https://minecraft.gamepedia.com/Model#Item%20models
+			// This is a tad confusing, so we also add the UNBREAKABLE tag as an 
+			// inverse. Still confused?
+			// icon.setIsUnbreakable(true) becomes Predicate: { Damaged: 0 } in resource pack terms.
+			// [config]: [value] => [resource pack json data for the "Damaged" tag]
+			// DAMAGED: 1 => 1
+			// UNBREAKABLE: 1 => 0
+			// UNBREAKABLE: NULL => 0
+			// UNBREAKABLE: 0 => 1
+			String isDamaged = section.getString(Nodes.UNBREAKABLE_DAMAGED, null);
+			if (isDamaged != null) {
+				icon.setIsUnbreakable(!("1".equals(isDamaged) || "true".equalsIgnoreCase(isDamaged)));
+			} else {
+				String isUnbreakableStr = section.getString(Nodes.UNBREAKABLE, section.getString(Nodes.UNBREAKABLE_UNBREAKING, null));
+				boolean isUnbreakable = isUnbreakableStr == null || "1".equals(isUnbreakableStr) || "true".equalsIgnoreCase(isUnbreakableStr);
+				icon.setIsUnbreakable(isUnbreakable);
+			}
+		}
+		
+		if (section.isSet(Nodes.DAMAGE)) {
+			icon.setDamageValue(section.getInt(Nodes.DAMAGE));
+		}
+
+		if (section.isSet(Nodes.CUSTOM_MODEL_DATA)) {
+			icon.setCustomModelDataValue(section.getInt(Nodes.CUSTOM_MODEL_DATA));
 		}
 
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeName(section.getString(Nodes.NAME))));

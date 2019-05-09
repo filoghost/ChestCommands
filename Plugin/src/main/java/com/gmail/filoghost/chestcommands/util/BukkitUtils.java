@@ -9,6 +9,9 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public final class BukkitUtils {
 
@@ -27,6 +30,45 @@ public final class BukkitUtils {
 	private BukkitUtils() {
 	}
 
+	// itemMeta.setCustomModelData(this.customModelDataValue);
+	public static void setCustomModelDataForItemMeta(ItemMeta itemMeta, int customModelDataValue) {
+		 try {
+			Method declaredMethod = ItemMeta.class.getDeclaredMethod("setCustomModelData", Integer.class);
+			declaredMethod.invoke(itemMeta, customModelDataValue);
+		} catch (Exception ex) {
+			Logger.getLogger(BukkitUtils.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+ 
+	// itemMeta.setUnbreakable(this.isUnbreakable); // If true, damaged = 0, Unbreaking = 1
+	public static void setUnbreakableValueForItemMeta(ItemMeta itemMeta, boolean unbreakable) {
+		try {
+			Method declaredMethod = ItemMeta.class.getDeclaredMethod("setUnbreakable", boolean.class);
+			declaredMethod.invoke(itemMeta, unbreakable);
+		} catch (Exception ex) {
+			Logger.getLogger(BukkitUtils.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	
+	/**
+	 *  if (damageableInterface.isAssignableFrom(itemMeta.getClass())){
+	 *	  ((Damageable)itemMeta).setDamage(this.damageValue);
+	 *  }
+	 * @param itemMeta
+	 * @param damageVal 
+	 */
+	  
+	public static void setDamageValueForItemMeta(ItemMeta itemMeta, int damageVal){
+		try {
+			Class<?> damageableInterface = Class.forName("org.bukkit.inventory.meta.Damageable");
+			Method declaredMethod = damageableInterface.getDeclaredMethod("setDamage", int.class);
+			declaredMethod.invoke(itemMeta, damageVal);
+		} catch (Exception ex) {
+			Logger.getLogger(BukkitUtils.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
 	public static Collection<? extends Player> getOnlinePlayers() {
 		try {
 			if (LEGACY_GET_ONLINE_PLAYERS == null) {
