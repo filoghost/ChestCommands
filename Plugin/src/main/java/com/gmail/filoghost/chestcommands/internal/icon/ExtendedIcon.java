@@ -40,7 +40,7 @@ public class ExtendedIcon extends Icon {
 
 	private double moneyPrice;
 	private int expLevelsPrice;
-	private RequiredItem requiredItem;
+	private List<RequiredItem> requiredItems;
 
 	public ExtendedIcon() {
 		super();
@@ -126,12 +126,12 @@ public class ExtendedIcon extends Icon {
 		this.expLevelsPrice = expLevelsPrice;
 	}
 
-	public RequiredItem getRequiredItem() {
-		return requiredItem;
+	public List<RequiredItem> getRequiredItems() {
+		return requiredItems;
 	}
 
-	public void setRequiredItem(RequiredItem requiredItem) {
-		this.requiredItem = requiredItem;
+	public void setRequiredItems(List<RequiredItem> requiredItems) {
+		this.requiredItems = requiredItems;
 	}
 
 	public String calculateName(Player pov) {
@@ -176,16 +176,16 @@ public class ExtendedIcon extends Icon {
 			}
 		}
 
-		if (requiredItem != null) {
-
-			if (!requiredItem.hasItem(player)) {
-				player.sendMessage(ChestCommands.getLang().no_required_item
-						.replace("{material}", MaterialsRegistry.formatMaterial(requiredItem.getMaterial()))
-						.replace("{id}", Integer.toString(requiredItem.getMaterial().getId()))
-						.replace("{amount}", Integer.toString(requiredItem.getAmount()))
-						.replace("{datavalue}", requiredItem.hasRestrictiveDataValue() ? Short.toString(requiredItem.getDataValue()) : ChestCommands.getLang().any)
-				);
-				return closeOnClick;
+		if (requiredItems != null) {
+			for (RequiredItem item : requiredItems) {
+				if (!item.hasItem(player)) {
+					player.sendMessage(ChestCommands.getLang().no_required_item
+							.replace("{material}", MaterialsRegistry.formatMaterial(item.getMaterial()))
+							.replace("{amount}", Integer.toString(item.getAmount()))
+							.replace("{datavalue}", item.hasRestrictiveDataValue() ? Short.toString(item.getDataValue()) : ChestCommands.getLang().any)
+					);
+					return closeOnClick;
+				}
 			}
 		}
 
@@ -205,8 +205,10 @@ public class ExtendedIcon extends Icon {
 			player.setLevel(player.getLevel() - expLevelsPrice);
 		}
 
-		if (requiredItem != null) {
-			requiredItem.takeItem(player);
+		if (requiredItems != null) {
+			for (RequiredItem item : requiredItems) {
+				item.takeItem(player);
+			}
 		}
 
 		if (changedVariables) {
