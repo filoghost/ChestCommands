@@ -177,15 +177,19 @@ public class ExtendedIcon extends Icon {
 		}
 
 		if (requiredItems != null) {
+			boolean notHasItem = false;
 			for (RequiredItem item : requiredItems) {
 				if (!item.hasItem(player)) {
+					notHasItem = true;
 					player.sendMessage(ChestCommands.getLang().no_required_item
 							.replace("{material}", MaterialsRegistry.formatMaterial(item.getMaterial()))
 							.replace("{amount}", Integer.toString(item.getAmount()))
 							.replace("{datavalue}", item.hasRestrictiveDataValue() ? Short.toString(item.getDataValue()) : ChestCommands.getLang().any)
 					);
-					return closeOnClick;
 				}
+			}
+			if (notHasItem) {
+				return closeOnClick;
 			}
 		}
 
