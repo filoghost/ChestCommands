@@ -161,7 +161,7 @@ will-not-close:
   LORE:
     - '&7The menu will not close'
     - '&7clicking on this item.'
-  ID: sign
+  ID: book
   KEEP-OPEN: true
   POSITION-X: 2
   POSITION-Y: 2
