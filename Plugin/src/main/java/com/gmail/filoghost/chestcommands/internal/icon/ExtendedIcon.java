@@ -142,7 +142,6 @@ public class ExtendedIcon extends Icon {
 		return super.calculateLore(pov);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onClick(Player player) {
 

@@ -24,7 +24,6 @@ import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.util.*;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
