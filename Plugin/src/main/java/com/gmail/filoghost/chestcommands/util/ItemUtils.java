@@ -156,7 +156,7 @@ public final class ItemUtils {
 		try {
 			color = DyeColor.valueOf(input.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			throw new FormatException("it must be a valid colour.");
+			throw new FormatException("it must be a valid color.");
 		}
 		return color;
 	}
@@ -166,7 +166,7 @@ public final class ItemUtils {
 		for (String str : input) {
 			String[] split = str.split(":");
 			if (split.length != 2) {
-				throw new FormatException("it must be in the format \"pattern:colour\".");
+				throw new FormatException("it must be in the format \"pattern:color\".");
 			}
 			try {
 				patterns.add(new Pattern(parseDyeColor(split[1]), PatternType.valueOf(split[0].toUpperCase())));

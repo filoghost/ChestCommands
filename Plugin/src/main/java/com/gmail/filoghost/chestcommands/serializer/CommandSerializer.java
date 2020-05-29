@@ -14,13 +14,11 @@
  */
 package com.gmail.filoghost.chestcommands.serializer;
 
-import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
 import com.gmail.filoghost.chestcommands.internal.icon.command.*;
 import com.gmail.filoghost.chestcommands.util.ErrorLogger;
 import com.gmail.filoghost.chestcommands.util.Utils;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -58,26 +56,7 @@ public class CommandSerializer {
 			}
 		}
 	}
-
-	public static List<IconCommand> readCommands(String input) {
-		String separator = ChestCommands.getSettings().multiple_commands_separator;
-		if (separator == null || separator.length() == 0) {
-			separator = ";";
-		}
-
-		String[] split = input.split(Pattern.quote(separator));
-		List<IconCommand> iconCommands = Utils.newArrayList();
-
-		for (String command : split) {
-			String trim = command.trim();
-
-			if (trim.length() > 0) {
-				iconCommands.add(matchCommand(trim));
-			}
-		}
-
-		return iconCommands;
-	}
+	
 
 	public static IconCommand matchCommand(String input) {
 

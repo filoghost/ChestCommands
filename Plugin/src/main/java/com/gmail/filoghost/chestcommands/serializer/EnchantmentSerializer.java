@@ -63,38 +63,29 @@ public class EnchantmentSerializer {
 		return StringUtils.stripChars(string, " _-").toLowerCase();
 	}
 
-	public static Map<Enchantment, Integer> loadEnchantments(String input, String iconName, String menuFileName, ErrorLogger errorLogger) {
-		Map<Enchantment, Integer> output = new HashMap<Enchantment, Integer>();
+	public static EnchantmentDetails parseEnchantment(String input, String iconName, String menuFileName, ErrorLogger errorLogger) {
+		int level = 1;
 
-		if (input == null || input.isEmpty()) {
-			return output;
+		if (input.contains(",")) {
+			String[] levelSplit = input.split(",");
+
+			try {
+				level = Integer.parseInt(levelSplit[1].trim());
+			} catch (NumberFormatException ex) {
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment level: " + levelSplit[1]);
+			}
+			input = levelSplit[0];
 		}
 
-		for (String singleEnchant : input.split(";")) {
+		Enchantment ench = matchEnchantment(input);
 
-			int level = 1;
-
-			if (singleEnchant.contains(",")) {
-				String[] levelSplit = singleEnchant.split(",");
-
-				try {
-					level = Integer.parseInt(levelSplit[1].trim());
-				} catch (NumberFormatException ex) {
-					errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment level: " + levelSplit[1]);
-				}
-				singleEnchant = levelSplit[0];
-			}
-
-			Enchantment ench = matchEnchantment(singleEnchant);
-
-			if (ench == null) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + singleEnchant);
-			} else {
-				output.put(ench, level);
-			}
+		if (ench == null) {
+			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + input);
+		} else {
+			return new EnchantmentDetails(ench, level);
 		}
 
-		return output;
+		return null;
 	}
 
 	public static Enchantment matchEnchantment(String input) {
@@ -103,6 +94,27 @@ public class EnchantmentSerializer {
 		}
 
 		return enchantmentsMap.get(formatLowercase(input));
+	}
+	
+	
+	public static class EnchantmentDetails {
+		
+		private final Enchantment enchantment;
+		private final int level;
+		
+		public EnchantmentDetails(Enchantment enchantment, int level) {
+			this.enchantment = enchantment;
+			this.level = level;
+		}
+
+		public Enchantment getEnchantment() {
+			return enchantment;
+		}
+
+		public int getLevel() {
+			return level;
+		}
+		
 	}
 
 }

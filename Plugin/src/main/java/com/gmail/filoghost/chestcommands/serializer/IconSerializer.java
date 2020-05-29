@@ -14,49 +14,56 @@
  */
 package com.gmail.filoghost.chestcommands.serializer;
 
+import java.util.List;
+import java.util.Map;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+
+import com.gmail.filoghost.chestcommands.ChestCommands;
 import com.gmail.filoghost.chestcommands.api.Icon;
 import com.gmail.filoghost.chestcommands.config.AsciiPlaceholders;
+import com.gmail.filoghost.chestcommands.config.ConfigUtil;
 import com.gmail.filoghost.chestcommands.exception.FormatException;
 import com.gmail.filoghost.chestcommands.internal.CommandsClickHandler;
 import com.gmail.filoghost.chestcommands.internal.RequiredItem;
 import com.gmail.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import com.gmail.filoghost.chestcommands.internal.icon.IconCommand;
-import com.gmail.filoghost.chestcommands.util.*;
+import com.gmail.filoghost.chestcommands.serializer.EnchantmentSerializer.EnchantmentDetails;
+import com.gmail.filoghost.chestcommands.util.ErrorLogger;
+import com.gmail.filoghost.chestcommands.util.FormatUtils;
+import com.gmail.filoghost.chestcommands.util.ItemStackReader;
+import com.gmail.filoghost.chestcommands.util.ItemUtils;
+import com.gmail.filoghost.chestcommands.util.Utils;
+import com.gmail.filoghost.chestcommands.util.Validate;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import com.gmail.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class IconSerializer {
 
 	private static class Nodes {
 
-		public static final String
-				ID = "ID",
-				AMOUNT = "AMOUNT",
-				DATA_VALUE = "DATA-VALUE",
-				DURABILITY = "DURABILITY",
-				NBT_DATA = "NBT-DATA",
-				NAME = "NAME",
-				LORE = "LORE",
-				ENCHANT = "ENCHANTMENT",
-				COLOR = "COLOR",
-				SKULL_OWNER = "SKULL-OWNER",
-				BANNER_COLOR = "BANNER-COLOUR",
-				BANNER_PATTERNS = "BANNER-PATTERNS",
-				COMMAND = "COMMAND",
-				PRICE = "PRICE",
-				EXP_LEVELS = "LEVELS",
-				REQUIRED_ITEM = "REQUIRED-ITEM",
-				PERMISSION = "PERMISSION",
-				PERMISSION_MESSAGE = "PERMISSION-MESSAGE",
-				VIEW_PERMISSION = "VIEW-PERMISSION",
-				KEEP_OPEN = "KEEP-OPEN",
-				POSITION_X = "POSITION-X",
-				POSITION_Y = "POSITION-Y";
+		public static final String[] MATERIAL = {"MATERIAL", "ID"};
+		public static final String AMOUNT = "AMOUNT";
+		public static final String[] DURABILITY = {"DURABILITY", "DATA-VALUE"};
+		public static final String[] NBT_DATA = {"NBT-DATA", "NBT"};
+		public static final String NAME = "NAME";
+		public static final String LORE = "LORE";
+		public static final String[] ENCHANTMENTS = {"ENCHANTMENTS", "ENCHANTMENT"};
+		public static final String COLOR = "COLOR";
+		public static final String SKULL_OWNER = "SKULL-OWNER";
+		public static final String BANNER_COLOR = "BANNER-COLOR";
+		public static final String BANNER_PATTERNS = "BANNER-PATTERNS";
+		public static final String[] ACTIONS = {"ACTIONS", "COMMAND"};
+		public static final String PRICE = "PRICE";
+		public static final String EXP_LEVELS = "LEVELS";
+		public static final String[] REQUIRED_ITEMS = {"REQUIRED-ITEMS", "REQUIRED-ITEM"};
+		public static final String PERMISSION = "PERMISSION";
+		public static final String PERMISSION_MESSAGE = "PERMISSION-MESSAGE";
+		public static final String VIEW_PERMISSION = "VIEW-PERMISSION";
+		public static final String KEEP_OPEN = "KEEP-OPEN";
+		public static final String POSITION_X = "POSITION-X";
+		public static final String POSITION_Y = "POSITION-Y";
 	}
 
 	public static class Coords {
@@ -92,9 +99,10 @@ public class IconSerializer {
 		// The icon is valid even without a Material
 		ExtendedIcon icon = new ExtendedIcon();
 
-		if (section.isSet(Nodes.ID)) {
+		String material = ConfigUtil.getAnyString(section, Nodes.MATERIAL);
+		if (material != null) {
 			try {
-				ItemStackReader itemReader = new ItemStackReader(section.getString(Nodes.ID), true);
+				ItemStackReader itemReader = new ItemStackReader(material, true);
 				icon.setMaterial(itemReader.getMaterial());
 				icon.setDataValue(itemReader.getDataValue());
 				icon.setAmount(itemReader.getAmount());
@@ -106,15 +114,14 @@ public class IconSerializer {
 		if (section.isSet(Nodes.AMOUNT)) {
 			icon.setAmount(section.getInt(Nodes.AMOUNT));
 		}
-
-		if (section.isSet(Nodes.DURABILITY)) {
-			icon.setDataValue((short) section.getInt(Nodes.DURABILITY));
-		} else if (section.isSet(Nodes.DATA_VALUE)) { // Alias
-			icon.setDataValue((short) section.getInt(Nodes.DATA_VALUE));
+		
+		Integer durability = ConfigUtil.getAnyInt(section, Nodes.DURABILITY);
+		if (durability != null) {
+			icon.setDataValue(durability.shortValue());
 		}
 
-		if (section.isSet(Nodes.NBT_DATA)) {
-			String nbtData = section.getString(Nodes.NBT_DATA);
+		String nbtData = ConfigUtil.getAnyString(section, Nodes.NBT_DATA);
+		if (nbtData != null) {
 			try {
 				// Check that NBT has valid syntax before applying it to the icon
 				MojangsonParser.parse(nbtData);
@@ -127,8 +134,23 @@ public class IconSerializer {
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeName(section.getString(Nodes.NAME))));
 		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeLore(section.getStringList(Nodes.LORE))));
 
-		if (section.isSet(Nodes.ENCHANT)) {
-			icon.setEnchantments(EnchantmentSerializer.loadEnchantments(section.getString(Nodes.ENCHANT), iconName, menuFileName, errorLogger));
+		List<String> serializedEnchantments = ConfigUtil.getStringListOrInlineList(section, ";", Nodes.ENCHANTMENTS);
+		
+		if (serializedEnchantments != null && !serializedEnchantments.isEmpty()) {
+			Map<Enchantment, Integer> enchantments = Utils.newHashMap();
+			
+			for (String serializedEnchantment : serializedEnchantments) {
+				if (serializedEnchantment != null && !serializedEnchantment.isEmpty()) {
+					EnchantmentDetails enchantment = EnchantmentSerializer.parseEnchantment(serializedEnchantment, iconName, menuFileName, errorLogger);
+					if (enchantment != null) {
+						enchantments.put(enchantment.getEnchantment(), enchantment.getLevel());
+					}
+				}
+			}
+			
+			if (!enchantments.isEmpty()) {
+				icon.setEnchantments(enchantments);
+			}
 		}
 
 		if (section.isSet(Nodes.COLOR)) {
@@ -141,11 +163,12 @@ public class IconSerializer {
 
 		icon.setSkullOwner(section.getString(Nodes.SKULL_OWNER));
 
-		if (section.isSet(Nodes.BANNER_COLOR)) {
+		String bannerColor = ConfigUtil.getAnyString(section, Nodes.BANNER_COLOR);
+		if (bannerColor != null) {
 			try {
-				icon.setBannerColor(ItemUtils.parseDyeColor(section.getString(Nodes.BANNER_COLOR)));
+				icon.setBannerColor(ItemUtils.parseDyeColor(bannerColor));
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BASE-COLOUR: " + e.getMessage());
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-COLOR: " + e.getMessage());
 			}
 		}
 
@@ -153,7 +176,7 @@ public class IconSerializer {
 			try {
 				icon.setBannerPatterns(ItemUtils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid PATTERN-LIST: " + e.getMessage());
+				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-PATTERNS: " + e.getMessage());
 			}
 		}
 
@@ -164,25 +187,20 @@ public class IconSerializer {
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
 		icon.setCloseOnClick(closeOnClick);
 
-		if (section.isSet(Nodes.COMMAND)) {
-
-			List<IconCommand> commands;
-
-			if (section.isList(Nodes.COMMAND)) {
-				commands = Utils.newArrayList();
-
-				for (String commandString : section.getStringList(Nodes.COMMAND)) {
-					if (commandString.isEmpty()) {
-						continue;
-					}
-					commands.add(CommandSerializer.matchCommand(commandString));
+		List<String> serializedCommands = ConfigUtil.getStringListOrInlineList(section, ChestCommands.getSettings().multiple_commands_separator, Nodes.ACTIONS);
+		
+		if (serializedCommands != null && !serializedCommands.isEmpty()) {
+			List<IconCommand> commands = Utils.newArrayList();
+			
+			for (String serializedCommand : serializedCommands) {
+				if (serializedCommand != null && !serializedCommand.isEmpty()) {
+					commands.add(CommandSerializer.matchCommand(serializedCommand));
 				}
-
-			} else {
-				commands = CommandSerializer.readCommands(section.getString(Nodes.COMMAND));
 			}
 
-			icon.setClickHandler(new CommandsClickHandler(commands, closeOnClick));
+			if (!commands.isEmpty()) {
+				icon.setClickHandler(new CommandsClickHandler(commands, closeOnClick));
+			}
 		}
 
 		double price = section.getDouble(Nodes.PRICE);
@@ -199,28 +217,27 @@ public class IconSerializer {
 			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
 		}
 
-		if (section.isSet(Nodes.REQUIRED_ITEM)) {
-			List<String> requiredItemsStrings;
-			if (section.isList(Nodes.REQUIRED_ITEM)) {
-				requiredItemsStrings = section.getStringList(Nodes.REQUIRED_ITEM);
-			} else {
-				requiredItemsStrings = Collections.singletonList(section.getString(Nodes.REQUIRED_ITEM));
-			}
-
-			List<RequiredItem> requiredItems = new ArrayList<RequiredItem>();
-			for (String requiredItemText : requiredItemsStrings) {
+		List<String> serializedRequiredItems = ConfigUtil.getStringListOrSingle(section, Nodes.REQUIRED_ITEMS);
+		
+		if (serializedRequiredItems != null && !serializedRequiredItems.isEmpty()) {
+			List<RequiredItem> requiredItems = Utils.newArrayList();
+			
+			for (String serializedItem : serializedRequiredItems) {
 				try {
-					ItemStackReader itemReader = new ItemStackReader(requiredItemText, true);
+					ItemStackReader itemReader = new ItemStackReader(serializedItem, true);
 					RequiredItem requiredItem = new RequiredItem(itemReader.getMaterial(), itemReader.getAmount());
 					if (itemReader.hasExplicitDataValue()) {
 						requiredItem.setRestrictiveDataValue(itemReader.getDataValue());
 					}
 					requiredItems.add(requiredItem);
 				} catch (FormatException e) {
-					errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid REQUIRED-ITEM: " + e.getMessage());
+					errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has invalid REQUIRED-ITEMS: " + e.getMessage());
 				}
 			}
-			icon.setRequiredItems(requiredItems);
+			
+			if (!requiredItems.isEmpty()) {
+				icon.setRequiredItems(requiredItems);
+			}
 		}
 
 		return icon;
