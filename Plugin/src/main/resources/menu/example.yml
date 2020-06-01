@@ -64,7 +64,7 @@ durability-armor:
   NAME: '&aDamaged armor'
   LORE:
     - 'This armor is damaged.'
-  DATA-VALUE: 200
+  DURABILITY: 200
 
 
 enchanted-sword:
@@ -74,7 +74,8 @@ enchanted-sword:
   NAME: '&aEnchanted sword'
   LORE:
     - 'This sword is glowing.'
-  ENCHANTMENT: durability, 1
+  ENCHANTMENTS:
+    - durability, 1
 
 
 some-arrows:
