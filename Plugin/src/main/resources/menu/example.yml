@@ -192,18 +192,6 @@ talking-fish:
   POSITION-Y: 2
 
 
-test-multiple-command:
-  ACTIONS:
-    - 'console: say Did you know that...'
-    - 'console: say you can run multiple commands?'
-  NAME: '&aMultiple commands'
-  LORE:
-    - 'Example of multiple commands.'
-  MATERIAL: golden apple
-  POSITION-X: 4
-  POSITION-Y: 2
-
-
 permission:
   ACTIONS:
     - 'tell: &a[v] You have the correct permission!'
@@ -214,7 +202,7 @@ permission:
     - 'Otherwise, a configurable error'
     - 'message will be displayed.'
   MATERIAL: iron bars
-  POSITION-X: 5
+  POSITION-X: 4
   POSITION-Y: 2
   PERMISSION: chestcommands.test
   PERMISSION-MESSAGE: 'You don''t have the correct permission!'
@@ -227,7 +215,7 @@ nbt-tags:
     - 'All NBT tags valid in Minecraft can be used.'
   MATERIAL: leather chestplate
   NBT-DATA: '{display: {color: 8910400}}'
-  POSITION-X: 6
+  POSITION-X: 5
   POSITION-Y: 2
 
 
