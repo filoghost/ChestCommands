@@ -205,7 +205,7 @@ permission:
   PERMISSION: chestcommands.test
   PERMISSION-MESSAGE: 'You don''t have the correct permission.'
   ACTIONS:
-    - 'tell: &a[v] You have the correct permission.'
+    - 'tell: &a✔ You have the correct permission.'
 
 
 nbt-tags:
