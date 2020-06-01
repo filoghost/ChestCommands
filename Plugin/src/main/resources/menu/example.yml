@@ -45,14 +45,13 @@ menu-settings:
 ######################
 
 
-spawncmd:
+spawn-command:
   MATERIAL: enderpearl
   POSITION-X: 1
   POSITION-Y: 1
   NAME: '&e/spawn'
   LORE:
-    - 'It justs executes /spawn'
-    - 'as the player who clicked.'
+    - 'Makes the player run the /spawn command.'
   ACTIONS:
     - 'spawn'
 
@@ -63,7 +62,7 @@ durability-armor:
   POSITION-Y: 1
   NAME: '&aDamaged armor'
   LORE:
-    - 'This armor is damaged.'
+    - 'This armor appears damaged.'
   DURABILITY: 200
 
 
@@ -73,12 +72,12 @@ enchanted-sword:
   POSITION-Y: 1
   NAME: '&aEnchanted sword'
   LORE:
-    - 'This sword is glowing.'
+    - 'This sword has a glowing effects.'
   ENCHANTMENTS:
     - durability, 1
 
 
-some-arrows:
+multiple-items:
   MATERIAL: arrow
   POSITION-X: 4
   POSITION-Y: 1
@@ -88,7 +87,7 @@ some-arrows:
   AMOUNT: 5
 
 
-test-from-console:
+command-from-console:
   MATERIAL: command block
   POSITION-X: 5
   POSITION-Y: 1
@@ -99,26 +98,26 @@ test-from-console:
     - 'console: say Hello {player}!'
 
 
-test-as-op:
+command-as-op:
   MATERIAL: command block
   POSITION-X: 6
   POSITION-Y: 1
   NAME: '&cRuns command as OP.'
   LORE:
     - 'Be careful with this type of commands.'
-    - 'It will ignore nearly all the permissions.'
+    - 'It will ignore nearly all the permission checks.'
   ACTIONS:
     - 'op: say Hello world!'
 
 
-test-with-placeholder:
+placeholders:
   MATERIAL: water bucket
   POSITION-X: 7
   POSITION-Y: 1
-  NAME: '&6This message contains some placeholders'
+  NAME: '&6Placeholders'
   LORE:
-    - 'Placeholders will be replaced when the item'
-    - 'is clicked.'
+    - 'This item''s actions contain placeholders'
+    - 'that will be replaced when the item is clicked.'
   ACTIONS:
     - 'tell: &9Online players: &f{online}/{max_players}'
     - 'tell: &9Your name: &f{player}'
@@ -133,11 +132,11 @@ economy-give:
   NAME: '&eEconomy & Give command'
   LORE:
     - 'This command will be executed'
-    - 'only if you have at least 50$!'
+    - 'only if you have at least 50$.'
     - 'It gives you a gold ingot.'
   PRICE: 50
   ACTIONS:
-    - 'tell: &aYou have paid 50$ for this command!'
+    - 'tell: &aYou have paid 50$'
     - 'give: gold ingot'
 
 
@@ -153,7 +152,7 @@ economy-take:
     - gold ingot
   ACTIONS:
     - 'tell: &aYou have been paid 50$'
-    - 'givemoney: 50'
+    - 'give-money: 50'
 
 
 formatting-codes:
@@ -163,12 +162,12 @@ formatting-codes:
   NAME: '&dFormatting codes'
   LORE:
     - 'You can use all the formatting codes!'
-    - '&fColors: &c#c &a#a &9#9 &e#e &f... ...'
-    - '&fRandom (#k): &kfy379!H'
-    - '&fBold (#l): &lexample'
-    - '&fStrikethrough (#m): &mexample'
-    - '&fUnderline (#n): &nexample'
-    - '&fItalic (#o): &oexample'
+    - 'Colors: &c#c &a#a &9#9 &e#e &f... ...'
+    - 'Random (#k): &kexample'
+    - 'Bold (#l): &lexample'
+    - 'Strikethrough (#m): &mexample'
+    - 'Underline (#n): &nexample'
+    - 'Italic (#o): &oexample'
 
 
 will-not-close:
@@ -177,20 +176,20 @@ will-not-close:
   POSITION-Y: 2
   NAME: '&2Info'
   LORE:
-    - '&7The menu will not close'
-    - '&7clicking on this item.'
+    - 'The menu will not close'
+    - 'when clicking on this item.'
   KEEP-OPEN: true
 
 
-talking-fish:
+chat-message:
   MATERIAL: torch
   POSITION-X: 3
   POSITION-Y: 2
-  NAME: '&3Tells you something.'
+  NAME: '&3Chat message'
   LORE:
-    - '&7It tells you something without commands.'
+    - 'Sends a chat message without commands.'
   ACTIONS:
-    - 'tell: This is a simple message, without using commands!'
+    - 'tell: This is a simple message, without using commands.'
 
 
 permission:
@@ -204,27 +203,27 @@ permission:
     - 'Otherwise, a configurable error'
     - 'message will be displayed.'
   PERMISSION: chestcommands.test
-  PERMISSION-MESSAGE: 'You don''t have the correct permission!'
+  PERMISSION-MESSAGE: 'You don''t have the correct permission.'
   ACTIONS:
-    - 'tell: &a[v] You have the correct permission!'
+    - 'tell: &a[v] You have the correct permission.'
 
 
 nbt-tags:
   MATERIAL: leather chestplate
   POSITION-X: 5
   POSITION-Y: 2
-  NAME: '&aUsing NBT tags'
+  NAME: '&aNBT tags'
   LORE:
     - 'This item was colored using custom NBT tags.'
     - 'All NBT tags valid in Minecraft can be used.'
   NBT-DATA: '{display: {color: 8910400}}'
 
 
-menu-close-no-commands-no-lore:
+close-without-actions:
   MATERIAL: redstone lamp
   POSITION-X: 9
   POSITION-Y: 3
   NAME: '&6Close the menu'
   LORE:
-    - 'Create an item without command,'
-    - 'the GUI will just close.'
+    - 'An item without actions will just close'
+    - 'the window when clicked.'
