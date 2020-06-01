@@ -21,7 +21,7 @@ menu-settings:
 
   # OPTIONAL
   # How frequently the menu will be refreshed, in seconds.
-  # Useful if you have variables in items' descriptions.
+  # Useful if you have variables in icon descriptions.
   auto-refresh: 5
 
   # OPTIONAL
@@ -40,7 +40,7 @@ menu-settings:
 
 ######################
 #+                  +#
-#       ITEMS        #
+#       ICONS        #
 #+                  +#
 ######################
 
@@ -116,8 +116,8 @@ placeholders:
   POSITION-Y: 1
   NAME: '&6Placeholders'
   LORE:
-    - 'This item''s actions contain placeholders'
-    - 'that will be replaced when the item is clicked.'
+    - 'This icon''s actions contain placeholders'
+    - 'that will be replaced when the icon is clicked.'
   ACTIONS:
     - 'tell: &9Online players: &f{online}/{max_players}'
     - 'tell: &9Your name: &f{player}'
@@ -177,7 +177,7 @@ will-not-close:
   NAME: '&2Info'
   LORE:
     - 'The menu will not close'
-    - 'when clicking on this item.'
+    - 'when clicking on this icon.'
   KEEP-OPEN: true
 
 
@@ -198,7 +198,7 @@ permission:
   POSITION-Y: 2
   NAME: '&8Permission test'
   LORE:
-    - 'To use this item, you need the'
+    - 'To use this icon you need the'
     - 'permission "chestcommands.test".'
     - 'Otherwise, a configurable error'
     - 'message will be displayed.'
@@ -225,5 +225,5 @@ close-without-actions:
   POSITION-Y: 3
   NAME: '&6Close the menu'
   LORE:
-    - 'An item without actions will just close'
+    - 'An icon without actions will just close'
     - 'the window when clicked.'
