@@ -46,116 +46,119 @@ menu-settings:
 
 
 spawncmd:
-  ACTIONS:
-    - 'spawn'
+  MATERIAL: enderpearl
+  POSITION-X: 1
+  POSITION-Y: 1
   NAME: '&e/spawn'
   LORE:
     - 'It justs executes /spawn'
     - 'as the player who clicked.'
-  MATERIAL: enderpearl
-  POSITION-X: 1
-  POSITION-Y: 1
+  ACTIONS:
+    - 'spawn'
 
 
 durability-armor:
+  MATERIAL: diamond helmet
+  POSITION-X: 2
+  POSITION-Y: 1
   NAME: '&aDamaged armor'
   LORE:
     - 'This armor is damaged.'
-  MATERIAL: diamond helmet
   DATA-VALUE: 200
-  POSITION-X: 2
-  POSITION-Y: 1
 
 
 enchanted-sword:
+  MATERIAL: diamond sword
+  POSITION-X: 3
+  POSITION-Y: 1
   NAME: '&aEnchanted sword'
   LORE:
     - 'This sword is glowing.'
-  MATERIAL: diamond sword
   ENCHANTMENT: durability, 1
-  POSITION-X: 3
-  POSITION-Y: 1
 
 
 some-arrows:
+  MATERIAL: arrow
+  POSITION-X: 4
+  POSITION-Y: 1
   NAME: '&aSome arrows'
   LORE:
     - 'You can set the amount of items to display.'
-  MATERIAL: arrow
   AMOUNT: 5
-  POSITION-X: 4
-  POSITION-Y: 1
 
 
 test-from-console:
-  ACTIONS:
-    - 'console: say Hello {player}!'
-  NAME: '&cRuns command from the console.'
-  LORE:
-    - 'It broadcasts your name with the command /say.'
   MATERIAL: command block
   POSITION-X: 5
   POSITION-Y: 1
+  NAME: '&cRuns command from the console.'
+  LORE:
+    - 'It broadcasts your name with the command /say.'
+  ACTIONS:
+    - 'console: say Hello {player}!'
 
 
 test-as-op:
-  ACTIONS:
-    - 'op: say Hello world!'
+  MATERIAL: command block
+  POSITION-X: 6
+  POSITION-Y: 1
   NAME: '&cRuns command as OP.'
   LORE:
     - 'Be careful with this type of commands.'
     - 'It will ignore nearly all the permissions.'
-  MATERIAL: command block
-  POSITION-X: 6
-  POSITION-Y: 1
+  ACTIONS:
+    - 'op: say Hello world!'
 
 
 test-with-placeholder:
+  MATERIAL: water bucket
+  POSITION-X: 7
+  POSITION-Y: 1
+  NAME: '&6This message contains some placeholders'
+  LORE:
+    - 'Placeholders will be replaced when the item'
+    - 'is clicked.'
   ACTIONS:
     - 'tell: &9Online players: &f{online}/{max_players}'
     - 'tell: &9Your name: &f{player}'
     - 'tell: &9The world you are in: &f{world}'
     - 'tell: &9Money: &f{money}'
-  NAME: '&6This message contains some placeholders'
-  LORE:
-    - 'Placeholders will be replaced when the item'
-    - 'is clicked.'
-  MATERIAL: water bucket
-  POSITION-X: 7
-  POSITION-Y: 1
 
 
 economy-give:
-  ACTIONS:
-    - 'tell: &aYou have paid 50$ for this command!'
-    - 'give: gold ingot'
+  MATERIAL: gold ingot
+  POSITION-X: 8
+  POSITION-Y: 1
   NAME: '&eEconomy & Give command'
   LORE:
     - 'This command will be executed'
     - 'only if you have at least 50$!'
     - 'It gives you a gold ingot.'
-  MATERIAL: gold ingot
   PRICE: 50
-  POSITION-X: 8
-  POSITION-Y: 1
+  ACTIONS:
+    - 'tell: &aYou have paid 50$ for this command!'
+    - 'give: gold ingot'
 
 
 economy-take:
+  MATERIAL: gold ingot
+  POSITION-X: 9
+  POSITION-Y: 1
+  NAME: '&eEconomy & Required item'
+  LORE:
+    - 'This command is the opposite of the previous.'
+    - 'It will take you a gold ingot and give you $50.'
   REQUIRED-ITEMS:
     - gold ingot
   ACTIONS:
     - 'tell: &aYou have been paid 50$'
     - 'givemoney: 50'
-  NAME: '&eEconomy & Required item'
-  LORE:
-    - 'This command is the opposite of the previous.'
-    - 'It will take you a gold ingot and give you $50.'
-  MATERIAL: gold ingot
-  POSITION-X: 9
-  POSITION-Y: 1
 
 
 formatting-codes:
+  MATERIAL: paper
+  POSITION-X: 1
+  POSITION-Y: 2
   NAME: '&dFormatting codes'
   LORE:
     - 'You can use all the formatting codes!'
@@ -165,65 +168,62 @@ formatting-codes:
     - '&fStrikethrough (#m): &mexample'
     - '&fUnderline (#n): &nexample'
     - '&fItalic (#o): &oexample'
-  MATERIAL: paper
-  POSITION-X: 1
-  POSITION-Y: 2
 
 
 will-not-close:
+  MATERIAL: book
+  POSITION-X: 2
+  POSITION-Y: 2
   NAME: '&2Info'
   LORE:
     - '&7The menu will not close'
     - '&7clicking on this item.'
-  MATERIAL: book
   KEEP-OPEN: true
-  POSITION-X: 2
-  POSITION-Y: 2
 
 
 talking-fish:
-  ACTIONS:
-    - 'tell: This is a simple message, without using commands!'
-  NAME: '&3Tells you something.'
-  LORE:
-    - '&7It tells you something without commands.'
   MATERIAL: torch
   POSITION-X: 3
   POSITION-Y: 2
+  NAME: '&3Tells you something.'
+  LORE:
+    - '&7It tells you something without commands.'
+  ACTIONS:
+    - 'tell: This is a simple message, without using commands!'
 
 
 permission:
-  ACTIONS:
-    - 'tell: &a[v] You have the correct permission!'
+  MATERIAL: iron bars
+  POSITION-X: 4
+  POSITION-Y: 2
   NAME: '&8Permission test'
   LORE:
     - 'To use this item, you need the'
     - 'permission "chestcommands.test".'
     - 'Otherwise, a configurable error'
     - 'message will be displayed.'
-  MATERIAL: iron bars
-  POSITION-X: 4
-  POSITION-Y: 2
   PERMISSION: chestcommands.test
   PERMISSION-MESSAGE: 'You don''t have the correct permission!'
+  ACTIONS:
+    - 'tell: &a[v] You have the correct permission!'
 
 
 nbt-tags:
+  MATERIAL: leather chestplate
+  POSITION-X: 5
+  POSITION-Y: 2
   NAME: '&aUsing NBT tags'
   LORE:
     - 'This item was colored using custom NBT tags.'
     - 'All NBT tags valid in Minecraft can be used.'
-  MATERIAL: leather chestplate
   NBT-DATA: '{display: {color: 8910400}}'
-  POSITION-X: 5
-  POSITION-Y: 2
 
 
 menu-close-no-commands-no-lore:
-  NAME: '&6Close the menu'
   MATERIAL: redstone lamp
+  POSITION-X: 9
+  POSITION-Y: 3
+  NAME: '&6Close the menu'
   LORE:
     - 'Create an item without command,'
     - 'the GUI will just close.'
-  POSITION-X: 9
-  POSITION-Y: 3
