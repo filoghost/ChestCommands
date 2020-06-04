@@ -1,5 +1,5 @@
 name: ChestCommands
-main: com.gmail.filoghost.chestcommands.ChestCommands
+main: me.filoghost.chestcommands.ChestCommands
 version: ${project.version}
 api-version: 1.13
 
