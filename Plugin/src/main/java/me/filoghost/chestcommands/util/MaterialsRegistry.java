@@ -31,7 +31,7 @@ public final class MaterialsRegistry {
 	private static final char[] IGNORE_CHARS = {'-', '_', ' '};
 
 	// Default material names are ugly
-	private static final Map<String, Material> MATERIALS_BY_ALIAS = new HashMap<String, Material>();
+	private static final Map<String, Material> MATERIALS_BY_ALIAS = new HashMap<>();
 
 	// Materials that are considered air (with 1.13+ compatibility)
 	private static final Collection<Material> AIR_MATERIALS = getExistingMaterials("AIR", "CAVE_AIR", "VOID_AIR");

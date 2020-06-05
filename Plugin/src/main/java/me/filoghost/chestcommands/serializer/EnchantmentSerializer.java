@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class EnchantmentSerializer {
 
-	private static Map<String, Enchantment> enchantmentsMap = new HashMap<String, Enchantment>();
+	private static Map<String, Enchantment> enchantmentsMap = new HashMap<>();
 
 	static {
 		enchantmentsMap.put(formatLowercase("Protection"), Enchantment.PROTECTION_ENVIRONMENTAL);

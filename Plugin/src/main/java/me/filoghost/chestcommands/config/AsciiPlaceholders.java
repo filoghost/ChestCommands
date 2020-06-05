@@ -24,6 +24,7 @@ import me.filoghost.chestcommands.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,7 +34,7 @@ import java.util.Map.Entry;
  */
 public class AsciiPlaceholders {
 
-	private static Map<String, String> placeholders = Utils.newHashMap();
+	private static Map<String, String> placeholders = new HashMap<>();
 
 
 	public static void load(ErrorLogger errorLogger) throws IOException, Exception {

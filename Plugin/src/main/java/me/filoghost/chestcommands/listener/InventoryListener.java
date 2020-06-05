@@ -30,13 +30,12 @@ import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.BoundItem;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.task.ExecuteCommandsTask;
-import me.filoghost.chestcommands.util.Utils;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryListener implements Listener {
 
-	private static Map<Player, Long> antiClickSpam = Utils.newHashMap();
+	private static Map<Player, Long> antiClickSpam = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent event) {

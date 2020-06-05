@@ -21,7 +21,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.filoghost.chestcommands.SimpleUpdater.ResponseHandler;
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.bridge.PlaceholderAPIBridge;
@@ -46,10 +45,10 @@ import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorLogger;
-import me.filoghost.chestcommands.util.Utils;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +79,7 @@ public class ChestCommands extends JavaPlugin {
 		instance = this;
 		fileNameToMenuMap = CaseInsensitiveMap.create();
 		commandsToMenuMap = CaseInsensitiveMap.create();
-		boundItems = Utils.newHashSet();
+		boundItems = new HashSet<>();
 
 		settings = new Settings(new PluginConfig(this, "config.yml"));
 		lang = new Lang(new PluginConfig(this, "lang.yml"));
@@ -98,21 +97,17 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		if (settings.update_notifications) {
-			new SimpleUpdater(this, 56919).checkForUpdates(new ResponseHandler() {
+			new SimpleUpdater(this, 56919).checkForUpdates((String newVersion) -> {
+				ChestCommands.newVersion = newVersion;
 
-				@Override
-				public void onUpdateFound(String newVersion) {
-					ChestCommands.newVersion = newVersion;
-
-					if (settings.use_console_colors) {
-						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + "Found a new version: " + newVersion + ChatColor.WHITE + " (yours: v" + getDescription().getVersion() + ")");
-						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "Download it on Bukkit Dev:");
-						Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "dev.bukkit.org/bukkit-plugins/chest-commands");
-					} else {
-						getLogger().info("Found a new version available: " + newVersion);
-						getLogger().info("Download it on Bukkit Dev:");
-						getLogger().info("dev.bukkit.org/bukkit-plugins/chest-commands");
-					}
+				if (settings.use_console_colors) {
+					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + "Found a new version: " + newVersion + ChatColor.WHITE + " (yours: v" + getDescription().getVersion() + ")");
+					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "Download it on Bukkit Dev:");
+					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "dev.bukkit.org/bukkit-plugins/chest-commands");
+				} else {
+					getLogger().info("Found a new version available: " + newVersion);
+					getLogger().info("Download it on Bukkit Dev:");
+					getLogger().info("dev.bukkit.org/bukkit-plugins/chest-commands");
 				}
 			});
 		}
@@ -256,7 +251,7 @@ public class ChestCommands extends JavaPlugin {
 	 * Loads all the configuration files recursively into a list.
 	 */
 	private List<PluginConfig> loadMenus(File file) {
-		List<PluginConfig> list = Utils.newArrayList();
+		List<PluginConfig> list = new ArrayList<>();
 		if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
 				list.addAll(loadMenus(subFile));

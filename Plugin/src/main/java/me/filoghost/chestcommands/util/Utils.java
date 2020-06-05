@@ -64,7 +64,7 @@ public final class Utils {
 		BufferedReader br = null;
 
 		try {
-			List<String> lines = newArrayList();
+			List<String> lines = new ArrayList<>();
 
 			if (!file.exists()) {
 				throw new FileNotFoundException();
@@ -87,18 +87,6 @@ public final class Utils {
 				}
 			}
 		}
-	}
-
-	public static <T> Set<T> newHashSet() {
-		return new HashSet<T>();
-	}
-
-	public static <T, V> Map<T, V> newHashMap() {
-		return new HashMap<T, V>();
-	}
-
-	public static <T> List<T> newArrayList() {
-		return new ArrayList<T>();
 	}
 
 	public static boolean isClassLoaded(String name) {

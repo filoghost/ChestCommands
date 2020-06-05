@@ -20,8 +20,7 @@ import org.bukkit.ChatColor;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.ErrorLogger;
 import me.filoghost.chestcommands.util.StringUtils;
-import me.filoghost.chestcommands.util.Utils;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorLoggerTask implements Runnable {
@@ -35,7 +34,7 @@ public class ErrorLoggerTask implements Runnable {
 	@Override
 	public void run() {
 
-		List<String> lines = Utils.newArrayList();
+		List<String> lines = new ArrayList<>();
 
 		lines.add(" ");
 		lines.add(ChatColor.RED + "#------------------- Chest Commands Errors -------------------#");

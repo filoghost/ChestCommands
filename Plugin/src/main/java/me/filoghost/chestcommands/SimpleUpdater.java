@@ -59,44 +59,38 @@ public final class SimpleUpdater {
 	 * @param responseHandler the response handler
 	 */
 	public void checkForUpdates(final ResponseHandler responseHandler) {
-		Thread updaterThread = new Thread(new Runnable() {
+		Thread updaterThread = new Thread(() -> {
+			try {
+				JSONArray filesArray = (JSONArray) readJson("https://api.curseforge.com/servermods/files?projectIds=" + projectId);
 
-			@Override
-			public void run() {
-
-				try {
-					JSONArray filesArray = (JSONArray) readJson("https://api.curseforge.com/servermods/files?projectIds=" + projectId);
-
-					if (filesArray.size() == 0) {
-						// The array cannot be empty, there must be at least one file.
-						// The project ID is not valid or curse returned a wrong response.
-						return;
-					}
-
-					String updateName = (String) ((JSONObject) filesArray.get(filesArray.size() - 1)).get("name");
-					final PluginVersion remoteVersion = new PluginVersion(updateName);
-					PluginVersion localVersion = new PluginVersion(plugin.getDescription().getVersion());
-
-					if (remoteVersion.isNewerThan(localVersion)) {
-						Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-							@Override
-							public void run() {
-								responseHandler.onUpdateFound(remoteVersion.toString());
-							}
-						});
-					}
-
-				} catch (IOException e) {
-					plugin.getLogger().warning("Could not contact BukkitDev to check for updates.");
-				} catch (InvalidVersionException e) {
-					plugin.getLogger().warning("Could not check for updates because of a version format error: " + e.getMessage() + ".");
-					plugin.getLogger().warning("Please notify the author of this error.");
-				} catch (Exception e) {
-					e.printStackTrace();
-					plugin.getLogger().warning("Unable to check for updates: unhandled exception.");
+				if (filesArray.size() == 0) {
+					// The array cannot be empty, there must be at least one file.
+					// The project ID is not valid or curse returned a wrong response.
+					return;
 				}
 
+				String updateName = (String) ((JSONObject) filesArray.get(filesArray.size() - 1)).get("name");
+				final PluginVersion remoteVersion = new PluginVersion(updateName);
+				PluginVersion localVersion = new PluginVersion(plugin.getDescription().getVersion());
+
+				if (remoteVersion.isNewerThan(localVersion)) {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+
+						@Override
+						public void run() {
+							responseHandler.onUpdateFound(remoteVersion.toString());
+						}
+					});
+				}
+
+			} catch (IOException e) {
+				plugin.getLogger().warning("Could not contact BukkitDev to check for updates.");
+			} catch (InvalidVersionException e) {
+				plugin.getLogger().warning("Could not check for updates because of a version format error: " + e.getMessage() + ".");
+				plugin.getLogger().warning("Please notify the author of this error.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				plugin.getLogger().warning("Unable to check for updates: unhandled exception.");
 			}
 		});
 

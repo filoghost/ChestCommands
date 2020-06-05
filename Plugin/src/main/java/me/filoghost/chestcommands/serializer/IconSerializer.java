@@ -14,6 +14,8 @@
  */
 package me.filoghost.chestcommands.serializer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,6 @@ import me.filoghost.chestcommands.util.ErrorLogger;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.ItemStackReader;
 import me.filoghost.chestcommands.util.ItemUtils;
-import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.Validate;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
@@ -137,7 +138,7 @@ public class IconSerializer {
 		List<String> serializedEnchantments = ConfigUtil.getStringListOrInlineList(section, ";", Nodes.ENCHANTMENTS);
 		
 		if (serializedEnchantments != null && !serializedEnchantments.isEmpty()) {
-			Map<Enchantment, Integer> enchantments = Utils.newHashMap();
+			Map<Enchantment, Integer> enchantments = new HashMap<>();
 			
 			for (String serializedEnchantment : serializedEnchantments) {
 				if (serializedEnchantment != null && !serializedEnchantment.isEmpty()) {
@@ -190,7 +191,7 @@ public class IconSerializer {
 		List<String> serializedCommands = ConfigUtil.getStringListOrInlineList(section, ChestCommands.getSettings().multiple_commands_separator, Nodes.ACTIONS);
 		
 		if (serializedCommands != null && !serializedCommands.isEmpty()) {
-			List<IconCommand> commands = Utils.newArrayList();
+			List<IconCommand> commands = new ArrayList<>();
 			
 			for (String serializedCommand : serializedCommands) {
 				if (serializedCommand != null && !serializedCommand.isEmpty()) {
@@ -220,7 +221,7 @@ public class IconSerializer {
 		List<String> serializedRequiredItems = ConfigUtil.getStringListOrSingle(section, Nodes.REQUIRED_ITEMS);
 		
 		if (serializedRequiredItems != null && !serializedRequiredItems.isEmpty()) {
-			List<RequiredItem> requiredItems = Utils.newArrayList();
+			List<RequiredItem> requiredItems = new ArrayList<>();
 			
 			for (String serializedItem : serializedRequiredItems) {
 				try {

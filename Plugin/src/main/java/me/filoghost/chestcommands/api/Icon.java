@@ -28,6 +28,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.internal.VariableManager;
 import me.filoghost.chestcommands.util.Utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,7 @@ public class Icon {
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
 	public Icon() {
-		enchantments = new HashMap<Enchantment, Integer>();
+		enchantments = new HashMap<>();
 		closeOnClick = true;
 		amount = 1;        
 	}
@@ -154,7 +155,7 @@ public class Icon {
 	}
 
 	public Map<Enchantment, Integer> getEnchantments() {
-		return new HashMap<Enchantment, Integer>(enchantments);
+		return new HashMap<>(enchantments);
 	}
 
 	public void addEnchantment(Enchantment ench) {
@@ -244,7 +245,7 @@ public class Icon {
 
 		if (hasLore()) {
 
-			output = Utils.newArrayList();
+			output = new ArrayList<>();
 
 			if (pov != null && loreLinesWithVariables != null) {
 				for (int i = 0; i < lore.size(); i++) {
@@ -263,7 +264,7 @@ public class Icon {
 		if (material == null) {
 
 			if (output == null) {
-				output = Utils.newArrayList();
+				output = new ArrayList<>();
 			}
 
 			// Add an error message

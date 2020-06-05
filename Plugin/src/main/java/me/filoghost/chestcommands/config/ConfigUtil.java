@@ -14,13 +14,12 @@
  */
 package me.filoghost.chestcommands.config;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.bukkit.configuration.ConfigurationSection;
-
-import me.filoghost.chestcommands.util.Utils;
 
 public class ConfigUtil {
 	
@@ -75,7 +74,7 @@ public class ConfigUtil {
 		}
 
 		String[] splitValues = input.split(Pattern.quote(separator));
-		List<String> values = Utils.newArrayList();
+		List<String> values = new ArrayList<>();
 
 		for (String value : splitValues) {
 			String trimmedValue = value.trim();

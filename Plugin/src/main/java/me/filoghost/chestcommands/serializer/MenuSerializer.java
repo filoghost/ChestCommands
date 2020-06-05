@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.serializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -32,7 +33,6 @@ import me.filoghost.chestcommands.util.ClickType;
 import me.filoghost.chestcommands.util.ErrorLogger;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.ItemStackReader;
-import me.filoghost.chestcommands.util.Utils;
 
 public class MenuSerializer {
 
@@ -119,7 +119,7 @@ public class MenuSerializer {
 		List<String> serializedOpenCommands = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);
 		
 		if (serializedOpenCommands != null && !serializedOpenCommands.isEmpty()) {
-			List<IconCommand> openCommands = Utils.newArrayList();
+			List<IconCommand> openCommands = new ArrayList<>();
 			
 			for (String serializedCommand : serializedOpenCommands) {
 				if (serializedCommand != null && !serializedCommand.isEmpty()) {

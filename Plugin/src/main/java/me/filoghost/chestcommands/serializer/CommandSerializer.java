@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.serializer;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -22,11 +23,10 @@ import java.util.regex.Pattern;
 import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.internal.icon.command.*;
 import me.filoghost.chestcommands.util.ErrorLogger;
-import me.filoghost.chestcommands.util.Utils;
 
 public class CommandSerializer {
 
-	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = Utils.newHashMap();
+	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = new HashMap<>();
 
 	static {
 		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
