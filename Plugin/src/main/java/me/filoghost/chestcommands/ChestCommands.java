@@ -45,6 +45,8 @@ import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,6 +85,15 @@ public class ChestCommands extends JavaPlugin {
 
 		settings = new Settings(new PluginConfig(this, "config.yml"));
 		lang = new Lang(new PluginConfig(this, "lang.yml"));
+		
+		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
+			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
+				criticalShutdown("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
+			} else {
+				criticalShutdown("ChestCommands requires at least Bukkit 1.8 to run.");
+			}
+			return;
+		}
 
 		if (!EconomyBridge.setupEconomy()) {
 			getLogger().warning("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
@@ -266,7 +277,7 @@ public class ChestCommands extends JavaPlugin {
 
 
 	public static void closeAllMenus() {
-		for (Player player : BukkitUtils.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getOpenInventory() != null) {
 				if (player.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || player.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
 					player.closeInventory();
@@ -314,6 +325,26 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void setLastReloadErrors(int lastReloadErrors) {
 		ChestCommands.lastReloadErrors = lastReloadErrors;
+	}
+	
+	private static void criticalShutdown(String... errorMessage) {
+		String separator = "****************************************************************************";
+		StringBuffer output = new StringBuffer("\n ");
+		output.append("\n" + separator);
+		for (String line : errorMessage) {
+			output.append("\n    " + line);
+		}
+		output.append("\n ");
+		output.append("\n    This plugin has been disabled.");
+		output.append("\n" + separator);
+		output.append("\n ");
+		
+		System.out.println(output);
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException ex) {}
+		instance.setEnabled(false);
 	}
 
 }

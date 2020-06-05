@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.internal;
 
-import me.filoghost.chestcommands.util.BukkitUtils;
+import org.bukkit.Bukkit;
 
 public class CachedGetters {
 
@@ -27,7 +27,7 @@ public class CachedGetters {
 		if (lastOnlinePlayersRefresh == 0 || now - lastOnlinePlayersRefresh > 1000) {
 			// getOnlinePlayers() could be expensive if called frequently
 			lastOnlinePlayersRefresh = now;
-			onlinePlayers = BukkitUtils.getOnlinePlayers().size();
+			onlinePlayers = Bukkit.getOnlinePlayers().size();
 		}
 
 		return onlinePlayers;

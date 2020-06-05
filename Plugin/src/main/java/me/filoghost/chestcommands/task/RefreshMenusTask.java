@@ -14,13 +14,13 @@
  */
 package me.filoghost.chestcommands.task;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.util.BukkitUtils;
 
 public class RefreshMenusTask implements Runnable {
 
@@ -29,7 +29,7 @@ public class RefreshMenusTask implements Runnable {
 	@Override
 	public void run() {
 
-		for (Player player : BukkitUtils.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 
 			InventoryView view = player.getOpenInventory();
 			if (view == null) {

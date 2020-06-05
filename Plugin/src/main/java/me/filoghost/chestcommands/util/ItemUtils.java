@@ -24,59 +24,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.exception.FormatException;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ItemUtils {
-
-	private static final boolean USE_ITEM_FLAGS_API;
-	private static final boolean USE_ITEM_FLAGS_REFLECTION;
-
-	// Reflection stuff
-	private static Class<?> nbtTagCompoundClass;
-	private static Class<?> nbtTagListClass;
-	private static Class<?> nmsItemstackClass;
-	private static Method asNmsCopyMethod;
-	private static Method asCraftMirrorMethod;
-	private static Method hasTagMethod;
-	private static Method getTagMethod;
-	private static Method setTagMethod;
-	private static Method nbtSetMethod;
-
-	static  {
-		if (Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) {
-			// We can use the new Bukkit API (1.8.3+)
-			USE_ITEM_FLAGS_API = true;
-			USE_ITEM_FLAGS_REFLECTION = false;
-
-		} else {
-			USE_ITEM_FLAGS_API = false;
-			// Try to get the NMS methods and classes
-			boolean success;
-			try {
-				nbtTagCompoundClass = NMSUtils.getNMSClass("NBTTagCompound");
-				nbtTagListClass = NMSUtils.getNMSClass("NBTTagList");
-				nmsItemstackClass = NMSUtils.getNMSClass("ItemStack");
-
-				asNmsCopyMethod = NMSUtils.getCraftBukkitClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
-				asCraftMirrorMethod = NMSUtils.getCraftBukkitClass("inventory.CraftItemStack").getMethod("asCraftMirror", nmsItemstackClass);
-
-				hasTagMethod = nmsItemstackClass.getMethod("hasTag");
-				getTagMethod = nmsItemstackClass.getMethod("getTag");
-				setTagMethod = nmsItemstackClass.getMethod("setTag", nbtTagCompoundClass);
-
-				nbtSetMethod = nbtTagCompoundClass.getMethod("set", String.class, NMSUtils.getNMSClass("NBTBase"));
-
-				success = true;
-			} catch (Exception e) {
-				new IllegalStateException("Could not enable the attribute remover for this version." +
-						"Attributes will show up on items.", e).printStackTrace();
-				success = false;
-			}
-			USE_ITEM_FLAGS_REFLECTION = success;
-		}
-	}
 
 	private ItemUtils() {
 	}
@@ -86,45 +37,12 @@ public final class ItemUtils {
 			return null;
 		}
 
-		if (USE_ITEM_FLAGS_API) {
-			ItemMeta meta = item.getItemMeta();
-			if (Utils.isNullOrEmpty(meta.getItemFlags())) {
-				// Add them only if necessary
-				meta.addItemFlags(ItemFlag.values());
-				item.setItemMeta(meta);
-			}
-			return item;
-
-		} else if (USE_ITEM_FLAGS_REFLECTION) {
-			try {
-
-				Object nmsItemstack = asNmsCopyMethod.invoke(null, item);
-				if (nmsItemstack == null) {
-					return item;
-				}
-
-				Object nbtCompound;
-				if ((Boolean) hasTagMethod.invoke(nmsItemstack)) {
-					nbtCompound = getTagMethod.invoke(nmsItemstack);
-				} else {
-					nbtCompound = nbtTagCompoundClass.newInstance();
-					setTagMethod.invoke(nmsItemstack, nbtCompound);
-				}
-
-				if (nbtCompound == null) {
-					return item;
-				}
-
-				Object nbtList = nbtTagListClass.newInstance();
-				nbtSetMethod.invoke(nbtCompound, "AttributeModifiers", nbtList);
-				return (ItemStack) asCraftMirrorMethod.invoke(null, nmsItemstack);
-
-			} catch (Throwable t) {
-				// Ignore
-			}
+		ItemMeta meta = item.getItemMeta();
+		if (Utils.isNullOrEmpty(meta.getItemFlags())) {
+			// Add them only if no flag was already set
+			meta.addItemFlags(ItemFlag.values());
+			item.setItemMeta(meta);
 		}
-
-		// On failure just return the item
 		return item;
 	}
 
