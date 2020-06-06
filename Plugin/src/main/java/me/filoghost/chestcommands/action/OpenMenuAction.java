@@ -37,7 +37,7 @@ public class OpenMenuAction extends Action {
 			 * Delay the task, since this action is executed in ClickInventoryEvent
 			 * and opening another inventory in the same moment is not a good idea.
 			 */
-			Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), () -> {
+			Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
 				if (player.hasPermission(menu.getPermission())) {
 					menu.open(player);
 				} else {

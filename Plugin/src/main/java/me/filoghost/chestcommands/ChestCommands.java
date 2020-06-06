@@ -141,12 +141,12 @@ public class ChestCommands extends JavaPlugin {
 
 		lastLoadErrors = errorCollector;
 		if (errorCollector.hasWarningsOrErrors()) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			Bukkit.getScheduler().runTaskLater(this, () -> {
 				errorCollector.logToConsole();
 			}, 10L);
 		}
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
+		Bukkit.getScheduler().runTaskTimer(this, new RefreshMenusTask(), 2L, 2L);
 	}
 
 

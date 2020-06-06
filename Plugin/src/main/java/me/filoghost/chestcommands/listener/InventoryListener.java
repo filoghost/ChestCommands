@@ -81,7 +81,7 @@ public class InventoryListener implements Listener {
 					}
 
 					// Closes the inventory and executes actions AFTER the event
-					Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
+					Bukkit.getScheduler().runTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
 				}
 			}
 		}
