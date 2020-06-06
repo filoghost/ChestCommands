@@ -46,7 +46,7 @@ import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
-import me.filoghost.chestcommands.serializer.MenuSerializer;
+import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
@@ -219,8 +219,8 @@ public class ChestCommands extends JavaPlugin {
 				continue;
 			}
 
-			MenuData data = MenuSerializer.loadMenuData(menuConfig, errorCollector);
-			ExtendedIconMenu iconMenu = MenuSerializer.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorCollector);
+			MenuData data = MenuParser.loadMenuData(menuConfig, errorCollector);
+			ExtendedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorCollector);
 
 			if (fileNameToMenuMap.containsKey(menuConfig.getFileName())) {
 				errorCollector.addError("Two menus have the same file name \"" + menuConfig.getFileName() + "\" with different cases. There will be problems opening one of these two menus.");

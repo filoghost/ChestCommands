@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.serializer;
+package me.filoghost.chestcommands.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import me.filoghost.chestcommands.action.*;
 
-public class ActionSerializer {
+public class ActionParser {
 
 	private static Map<Pattern, IconCommandFactory> commandTypesMap = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class ActionSerializer {
 		return Pattern.compile("^" + regex, Pattern.CASE_INSENSITIVE); // Case insensitive and only at the beginning
 	}
 
-	public static Action matchAction(String input) {
+	public static Action parseAction(String input) {
 		for (Entry<Pattern, IconCommandFactory> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {

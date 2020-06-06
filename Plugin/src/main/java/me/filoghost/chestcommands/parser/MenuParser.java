@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.serializer;
+package me.filoghost.chestcommands.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,12 @@ import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuData;
-import me.filoghost.chestcommands.serializer.IconSerializer.Coords;
+import me.filoghost.chestcommands.parser.IconParser.Coords;
 import me.filoghost.chestcommands.util.ClickType;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.ItemStackReader;
 
-public class MenuSerializer {
+public class MenuParser {
 
 	private static class Nodes {
 
@@ -62,8 +61,8 @@ public class MenuSerializer {
 
 			ConfigurationSection iconSection = config.getConfigurationSection(subSectionName);
 
-			Icon icon = IconSerializer.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
-			Coords coords = IconSerializer.loadCoordsFromSection(iconSection);
+			Icon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
+			Coords coords = IconParser.loadCoordsFromSection(iconSection);
 
 			if (!coords.isSetX() || !coords.isSetY()) {
 				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is missing POSITION-X and/or POSITION-Y.");
@@ -123,7 +122,7 @@ public class MenuSerializer {
 			
 			for (String serializedAction : serializedOpenActions) {
 				if (serializedAction != null && !serializedAction.isEmpty()) {
-					openActions.add(ActionSerializer.matchAction(serializedAction));
+					openActions.add(ActionParser.parseAction(serializedAction));
 				}
 			}
 
@@ -135,7 +134,7 @@ public class MenuSerializer {
 		String openItemMaterial = ConfigUtil.getAnyString(config, Nodes.OPEN_ITEM_MATERIAL);
 		if (openItemMaterial != null) {
 			try {
-				ItemStackReader itemReader = new ItemStackReader(openItemMaterial, false);
+				ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
 				menuData.setBoundMaterial(itemReader.getMaterial());
 
 				if (itemReader.hasExplicitDataValue()) {

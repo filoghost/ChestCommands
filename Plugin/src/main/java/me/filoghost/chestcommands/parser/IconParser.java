@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.serializer;
+package me.filoghost.chestcommands.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,16 +31,15 @@ import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.RunActionsClickHandler;
 import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.internal.icon.ExtendedIcon;
-import me.filoghost.chestcommands.serializer.EnchantmentSerializer.EnchantmentDetails;
+import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.ItemStackReader;
 import me.filoghost.chestcommands.util.ItemUtils;
 import me.filoghost.chestcommands.util.Validate;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
-public class IconSerializer {
+public class IconParser {
 
 	private static class Nodes {
 
@@ -103,7 +102,7 @@ public class IconSerializer {
 		String material = ConfigUtil.getAnyString(section, Nodes.MATERIAL);
 		if (material != null) {
 			try {
-				ItemStackReader itemReader = new ItemStackReader(material, true);
+				ItemStackParser itemReader = new ItemStackParser(material, true);
 				icon.setMaterial(itemReader.getMaterial());
 				icon.setDataValue(itemReader.getDataValue());
 				icon.setAmount(itemReader.getAmount());
@@ -142,7 +141,7 @@ public class IconSerializer {
 			
 			for (String serializedEnchantment : serializedEnchantments) {
 				if (serializedEnchantment != null && !serializedEnchantment.isEmpty()) {
-					EnchantmentDetails enchantment = EnchantmentSerializer.parseEnchantment(serializedEnchantment, iconName, menuFileName, errorCollector);
+					EnchantmentDetails enchantment = EnchantmentParser.parseEnchantment(serializedEnchantment, iconName, menuFileName, errorCollector);
 					if (enchantment != null) {
 						enchantments.put(enchantment.getEnchantment(), enchantment.getLevel());
 					}
@@ -195,7 +194,7 @@ public class IconSerializer {
 			
 			for (String serializedAction : serializedActions) {
 				if (serializedAction != null && !serializedAction.isEmpty()) {
-					actions.add(ActionSerializer.matchAction(serializedAction));
+					actions.add(ActionParser.parseAction(serializedAction));
 				}
 			}
 
@@ -225,7 +224,7 @@ public class IconSerializer {
 			
 			for (String serializedItem : serializedRequiredItems) {
 				try {
-					ItemStackReader itemReader = new ItemStackReader(serializedItem, true);
+					ItemStackParser itemReader = new ItemStackParser(serializedItem, true);
 					RequiredItem requiredItem = new RequiredItem(itemReader.getMaterial(), itemReader.getAmount());
 					if (itemReader.hasExplicitDataValue()) {
 						requiredItem.setRestrictiveDataValue(itemReader.getDataValue());

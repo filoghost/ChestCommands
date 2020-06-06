@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.serializer;
+package me.filoghost.chestcommands.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import org.bukkit.enchantments.Enchantment;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.StringUtils;
 
-public class EnchantmentSerializer {
+public class EnchantmentParser {
 
 	private static Map<String, Enchantment> enchantmentsMap = new HashMap<>();
 

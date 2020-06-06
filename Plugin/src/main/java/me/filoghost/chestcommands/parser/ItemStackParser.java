@@ -12,14 +12,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.util;
+package me.filoghost.chestcommands.parser;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.exception.FormatException;
+import me.filoghost.chestcommands.util.MaterialsRegistry;
+import me.filoghost.chestcommands.util.StringUtils;
+import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.Validate;
 
-public class ItemStackReader {
+public class ItemStackParser {
 
 	private Material material = Material.STONE; // In the worst case (bad exception handling) we just get stone
 	private int amount = 1;
@@ -31,7 +35,7 @@ public class ItemStackReader {
 	 * id can be either the id of the material or its name.
 	 * for example wool:5, 3 is a valid input.
 	 */
-	public ItemStackReader(String input, boolean parseAmount) throws FormatException {
+	public ItemStackParser(String input, boolean parseAmount) throws FormatException {
 		Validate.notNull(input, "input cannot be null");
 
 		// Remove spaces, they're not needed

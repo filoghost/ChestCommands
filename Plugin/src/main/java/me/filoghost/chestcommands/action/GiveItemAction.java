@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.exception.FormatException;
-import me.filoghost.chestcommands.util.ItemStackReader;
+import me.filoghost.chestcommands.parser.ItemStackParser;
 
 public class GiveItemAction extends Action {
 
@@ -35,7 +35,7 @@ public class GiveItemAction extends Action {
 
 	private void parseItem(String action) {
 		try {
-			ItemStackReader reader = new ItemStackReader(action, true);
+			ItemStackParser reader = new ItemStackParser(action, true);
 			itemToGive = reader.createStack();
 			errorMessage = null;
 		} catch (FormatException e) {
