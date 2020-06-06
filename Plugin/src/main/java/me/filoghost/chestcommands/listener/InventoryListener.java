@@ -25,66 +25,66 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.BoundItem;
-import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.task.ExecuteActionsTask;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryListener implements Listener {
-
+	
 	private static Map<Player, Long> antiClickSpam = new HashMap<>();
+	
+	private MenuManager menuManager;
+	
+	public InventoryListener(MenuManager menuManager) {
+		this.menuManager = menuManager;
+	}
+	
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent event) {
 		if (event.hasItem() && event.getAction() != Action.PHYSICAL) {
-			for (BoundItem boundItem : ChestCommands.getBoundItems()) {
-				if (boundItem.isValidTrigger(event.getItem(), event.getAction())) {
-					if (event.getPlayer().hasPermission(boundItem.getMenu().getPermission())) {
-						boundItem.getMenu().open(event.getPlayer());
-					} else {
-						boundItem.getMenu().sendNoPermissionMessage(event.getPlayer());
-					}
-				}
-			}
+			menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getInventory().getHolder() instanceof MenuInventoryHolder) {
+		IconMenu menu = menuManager.getIconMenu(event.getInventory());
+		if (menu == null) {
+			return;
+		}
+		
+		event.setCancelled(true); // First thing to do, if an exception is thrown at least the player doesn't take the item
 
-			event.setCancelled(true); // First thing to do, if an exception is thrown at least the player doesn't take the item
+		int slot = event.getRawSlot();
+		if (slot < 0 || slot >= menu.getSize()) {
+			return;
+		}
 
-			IconMenu menu = ((MenuInventoryHolder) event.getInventory().getHolder()).getIconMenu();
-			int slot = event.getRawSlot();
+		Icon icon = menu.getIconRaw(slot);
+		if (icon == null || event.getInventory().getItem(slot) == null) {
+			return;
+		}
 
-			if (slot >= 0 && slot < menu.getSize()) {
+		Player clicker = (Player) event.getWhoClicked();
 
-				Icon icon = menu.getIconRaw(slot);
+		Long cooldownUntil = antiClickSpam.get(clicker);
+		long now = System.currentTimeMillis();
+		int minDelay = ChestCommands.getSettings().anti_click_spam_delay;
 
-				if (icon != null && event.getInventory().getItem(slot) != null) {
-					Player clicker = (Player) event.getWhoClicked();
-
-					Long cooldownUntil = antiClickSpam.get(clicker);
-					long now = System.currentTimeMillis();
-					int minDelay = ChestCommands.getSettings().anti_click_spam_delay;
-
-					if (minDelay > 0) {
-						if (cooldownUntil != null && cooldownUntil > now) {
-							return;
-						} else {
-							antiClickSpam.put(clicker, now + minDelay);
-						}
-					}
-
-					// Closes the inventory and executes actions AFTER the event
-					Bukkit.getScheduler().runTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
-				}
+		if (minDelay > 0) {
+			if (cooldownUntil != null && cooldownUntil > now) {
+				return;
+			} else {
+				antiClickSpam.put(clicker, now + minDelay);
 			}
 		}
+
+		// Closes the inventory and executes actions AFTER the event
+		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
 	}
 
 	@EventHandler

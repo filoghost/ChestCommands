@@ -24,6 +24,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
@@ -31,6 +32,12 @@ import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.MaterialsRegistry;
 
 public class SignListener implements Listener {
+	
+	private MenuManager menuManager;
+	
+	public SignListener(MenuManager menuManager) {
+		this.menuManager = menuManager;
+	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
@@ -41,7 +48,7 @@ public class SignListener implements Listener {
 			if (sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]")) {
 
 				sign.getLine(1);
-				ExtendedIconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(BukkitUtils.addYamlExtension(sign.getLine(1)));
+				ExtendedIconMenu iconMenu = menuManager.getMenuByFileName(BukkitUtils.addYamlExtension(sign.getLine(1)));
 				if (iconMenu != null) {
 
 					if (event.getPlayer().hasPermission(iconMenu.getPermission())) {
@@ -68,7 +75,7 @@ public class SignListener implements Listener {
 				return;
 			}
 
-			IconMenu iconMenu = ChestCommands.getFileNameToMenuMap().get(BukkitUtils.addYamlExtension(event.getLine(1)));
+			IconMenu iconMenu = menuManager.getMenuByFileName(BukkitUtils.addYamlExtension(event.getLine(1)));
 			if (iconMenu == null) {
 				event.setLine(0, ChatColor.RED + event.getLine(0));
 				event.getPlayer().sendMessage(ChatColor.RED + "That menu was not found.");

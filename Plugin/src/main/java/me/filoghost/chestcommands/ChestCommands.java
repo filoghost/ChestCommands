@@ -17,11 +17,7 @@ package me.filoghost.chestcommands;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,7 +46,6 @@ import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
-import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
@@ -62,13 +57,9 @@ public class ChestCommands extends JavaPlugin {
 
 	
 	private static ChestCommands instance;
+	private MenuManager menuManager;
 	private static Settings settings;
 	private static Lang lang;
-
-	private static Map<String, ExtendedIconMenu> fileNameToMenuMap;
-	private static Map<String, ExtendedIconMenu> commandsToMenuMap;
-
-	private static Set<BoundItem> boundItems;
 
 	private static ErrorCollector lastLoadErrors;
 	private static String newVersion;
@@ -81,10 +72,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		instance = this;
-		fileNameToMenuMap = CaseInsensitiveMap.create();
-		commandsToMenuMap = CaseInsensitiveMap.create();
-		boundItems = new HashSet<>();
-
+		menuManager = new MenuManager();
 		settings = new Settings(new PluginConfig(this, "config.yml"));
 		lang = new Lang(new PluginConfig(this, "lang.yml"));
 		
@@ -129,12 +117,12 @@ public class ChestCommands extends JavaPlugin {
 		int pluginID = 3658;
 		new MetricsLite(this, pluginID);
 
-		Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
-		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
+		Bukkit.getPluginManager().registerEvents(new CommandListener(menuManager), this);
+		Bukkit.getPluginManager().registerEvents(new InventoryListener(menuManager), this);
 		Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
-		Bukkit.getPluginManager().registerEvents(new SignListener(), this);
+		Bukkit.getPluginManager().registerEvents(new SignListener(menuManager), this);
 
-		CommandFramework.register(this, new CommandHandler("chestcommands"));
+		CommandFramework.register(this, new CommandHandler(menuManager, "chestcommands"));
 
 		ErrorCollector errorCollector = new ErrorCollector();
 		load(errorCollector);
@@ -157,9 +145,7 @@ public class ChestCommands extends JavaPlugin {
 
 
 	public void load(ErrorCollector errorCollector) {
-		fileNameToMenuMap.clear();
-		commandsToMenuMap.clear();
-		boundItems.clear();
+		menuManager.clear();
 
 		try {
 			settings.load();
@@ -223,21 +209,7 @@ public class ChestCommands extends JavaPlugin {
 			MenuData data = MenuParser.loadMenuData(menuConfig, errorCollector);
 			ExtendedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorCollector);
 
-			if (fileNameToMenuMap.containsKey(menuConfig.getFileName())) {
-				errorCollector.addError("Two menus have the same file name \"" + menuConfig.getFileName() + "\" with different cases. There will be problems opening one of these two menus.");
-			}
-			fileNameToMenuMap.put(menuConfig.getFileName(), iconMenu);
-
-			if (data.hasCommands()) {
-				for (String command : data.getCommands()) {
-					if (!command.isEmpty()) {
-						if (commandsToMenuMap.containsKey(command)) {
-							errorCollector.addError("The menus \"" + commandsToMenuMap.get(command).getFileName() + "\" and \"" + menuConfig.getFileName() + "\" have the same command \"" + command + "\". Only one will be opened.");
-						}
-						commandsToMenuMap.put(command, iconMenu);
-					}
-				}
-			}
+			menuManager.registerMenu(menuConfig.getFileName(), data.getCommands(), iconMenu, errorCollector);
 
 			iconMenu.setRefreshTicks(data.getRefreshTenths());
 
@@ -250,7 +222,7 @@ public class ChestCommands extends JavaPlugin {
 				if (data.hasBoundDataValue()) {
 					boundItem.setRestrictiveData(data.getBoundDataValue());
 				}
-				boundItems.add(boundItem);
+				menuManager.registerTriggerItem(boundItem);
 			}
 		}
 
@@ -295,6 +267,10 @@ public class ChestCommands extends JavaPlugin {
 	public static ChestCommands getInstance() {
 		return instance;
 	}
+	
+	public MenuManager getMenuManager() {
+		return menuManager;
+	}
 
 	public static Settings getSettings() {
 		return settings;
@@ -310,18 +286,6 @@ public class ChestCommands extends JavaPlugin {
 
 	public static String getNewVersion() {
 		return newVersion;
-	}
-
-	public static Map<String, ExtendedIconMenu> getFileNameToMenuMap() {
-		return fileNameToMenuMap;
-	}
-
-	public static Map<String, ExtendedIconMenu> getCommandToMenuMap() {
-		return commandsToMenuMap;
-	}
-
-	public static Set<BoundItem> getBoundItems() {
-		return boundItems;
 	}
 
 	public static void setLastReloadErrors(ErrorCollector lastLoadErrors) {

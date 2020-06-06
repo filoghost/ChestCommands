@@ -19,11 +19,17 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.util.StringUtils;
 
 public class CommandListener implements Listener {
+	
+	private MenuManager menuManager;
+	
+	public CommandListener(MenuManager menuManager) {
+		this.menuManager = menuManager;
+	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
@@ -34,7 +40,7 @@ public class CommandListener implements Listener {
 			return;
 		}
 
-		ExtendedIconMenu menu = ChestCommands.getCommandToMenuMap().get(command);
+		ExtendedIconMenu menu = menuManager.getMenuByCommand(command);
 
 		if (menu != null) {
 			event.setCancelled(true);

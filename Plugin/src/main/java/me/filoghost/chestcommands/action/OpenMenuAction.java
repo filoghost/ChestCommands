@@ -30,7 +30,7 @@ public class OpenMenuAction extends Action {
 	@Override
 	public void execute(final Player player) {
 		String target = hasVariables ? getParsedAction(player) : action;
-		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(target.toLowerCase());
+		final ExtendedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(target.toLowerCase());
 		if (menu != null) {
 
 			/*

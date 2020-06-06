@@ -21,6 +21,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.command.framework.CommandValidate;
@@ -28,9 +29,12 @@ import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
-
-	public CommandHandler(String label) {
+	
+	private MenuManager menuManager;
+	
+	public CommandHandler(MenuManager menuManager, String label) {
 		super(label);
+		this.menuManager = menuManager;
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class CommandHandler extends CommandFramework {
 			CommandValidate.notNull(target, "That player is not online.");
 
 			String menuName = args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml";
-			ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(menuName);
+			ExtendedIconMenu menu = menuManager.getMenuByFileName(menuName);
 			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
 			if (!sender.hasPermission(menu.getPermission())) {
@@ -126,7 +130,7 @@ public class CommandHandler extends CommandFramework {
 		if (args[0].equalsIgnoreCase("list")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "list"), "You don't have permission.");
 			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Loaded menus:");
-			for (String file : ChestCommands.getFileNameToMenuMap().keySet()) {
+			for (String file : menuManager.getMenuFileNames()) {
 				sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
 			}
 
