@@ -89,7 +89,7 @@ public class EnchantmentParser {
 		return null;
 	}
 
-	public static Enchantment matchEnchantment(String input) {
+	private static Enchantment matchEnchantment(String input) {
 		if (input == null) {
 			return null;
 		}
@@ -103,7 +103,7 @@ public class EnchantmentParser {
 		private final Enchantment enchantment;
 		private final int level;
 		
-		public EnchantmentDetails(Enchantment enchantment, int level) {
+		private EnchantmentDetails(Enchantment enchantment, int level) {
 			this.enchantment = enchantment;
 			this.level = level;
 		}

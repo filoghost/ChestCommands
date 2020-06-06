@@ -68,7 +68,7 @@ public class ConfigUtil {
 		return null;
 	}
 	
-	public static List<String> getSeparatedValues(String input, String separator) {
+	private static List<String> getSeparatedValues(String input, String separator) {
 		if (separator == null || separator.length() == 0) {
 			separator = ";";
 		}

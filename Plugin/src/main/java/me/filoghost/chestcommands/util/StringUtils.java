@@ -103,24 +103,5 @@ public final class StringUtils {
 	public static boolean isNullOrEmpty(String s) {
 		return s == null || s.isEmpty();
 	}
-
-	public static String join(Iterable<?> iterable, String separator) {
-		StringBuilder builder = new StringBuilder();
-		Iterator<?> iter = iterable.iterator();
-
-		boolean first = true;
-
-		while (iter.hasNext()) {
-			if (first) {
-				first = false;
-			} else {
-				builder.append(separator);
-			}
-
-			builder.append(iter.next());
-		}
-
-		return builder.toString();
-	}
-
+	
 }

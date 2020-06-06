@@ -42,11 +42,6 @@ public class EconomyBridge {
 		return economy != null;
 	}
 
-	public static Economy getEconomy() {
-		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
-		return economy;
-	}
-
 	public static double getMoney(Player player) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		return economy.getBalance(player, player.getWorld().getName());

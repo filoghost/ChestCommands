@@ -4,28 +4,13 @@ import org.bukkit.ChatColor;
 
 import me.filoghost.chestcommands.ChestCommands;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public final class FormatUtils {
 
-	private static DecimalFormat decimalFormat = new DecimalFormat("0.##");
-
-	public static String decimalFormat(double number) {
-		return decimalFormat.format(number);
-	}
-
 	public static String addColors(String input) {
 		if (input == null || input.isEmpty()) return input;
 		return ChatColor.translateAlternateColorCodes('&', input);
-	}
-
-	public static List<String> addColors(List<String> input) {
-		if (input == null || input.isEmpty()) return input;
-		for (int i = 0; i < input.size(); i++) {
-			input.set(i, addColors(input.get(i)));
-		}
-		return input;
 	}
 
 	public static String colorizeName(String input) {

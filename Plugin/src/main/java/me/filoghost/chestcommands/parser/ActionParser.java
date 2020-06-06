@@ -57,7 +57,7 @@ public class ActionParser {
 	}
 	
 	
-	public static interface IconCommandFactory {
+	private static interface IconCommandFactory {
 		
 		Action create(String actionString);
 		

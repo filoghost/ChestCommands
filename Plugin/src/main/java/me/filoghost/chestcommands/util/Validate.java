@@ -31,10 +31,4 @@ public final class Validate {
 		}
 	}
 
-	public static void isFalse(boolean statement, String error) {
-		if (statement) {
-			throw new IllegalArgumentException(error);
-		}
-	}
-
 }

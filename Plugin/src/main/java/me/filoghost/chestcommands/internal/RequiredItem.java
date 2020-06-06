@@ -35,10 +35,6 @@ public class RequiredItem {
 		this.amount = amount;
 	}
 
-	public ItemStack createItemStack() {
-		return new ItemStack(material, amount, dataValue);
-	}
-
 	public Material getMaterial() {
 		return material;
 	}
@@ -62,7 +58,7 @@ public class RequiredItem {
 		return isDurabilityRestrictive;
 	}
 
-	public boolean isValidDataValue(short data) {
+	private boolean isValidDataValue(short data) {
 		if (!isDurabilityRestrictive) return true;
 		return data == this.dataValue;
 	}

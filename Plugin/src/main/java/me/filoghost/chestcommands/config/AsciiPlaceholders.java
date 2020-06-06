@@ -93,14 +93,6 @@ public class AsciiPlaceholders {
 		return input;
 	}
 
-	public static String symbolsToPlaceholders(String input) {
-		if (input == null) return null;
-		for (Entry<String, String> entry : placeholders.entrySet()) {
-			input = input.replace(entry.getValue(), entry.getKey());
-		}
-		return input;
-	}
-
 	private static String unquote(String input) {
 		if (input.length() < 2) {
 			// Cannot be quoted

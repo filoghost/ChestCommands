@@ -47,7 +47,7 @@ public class ExtendedIcon extends Icon {
 		super();
 	}
 
-	public boolean canClickIcon(Player player) {
+	private boolean canClickIcon(Player player) {
 		if (permission == null) {
 			return true;
 		}

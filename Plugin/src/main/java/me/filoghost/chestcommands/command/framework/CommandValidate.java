@@ -28,54 +28,6 @@ public class CommandValidate {
 		}
 	}
 
-	public static int getPositiveInteger(String input) {
-		try {
-			int i = Integer.parseInt(input);
-			if (i < 0) {
-				throw new CommandException("The number must be 0 or positive.");
-			}
-			return i;
-		} catch (NumberFormatException e) {
-			throw new CommandException("Invalid number \"" + input + "\".");
-		}
-	}
-
-	public static int getPositiveIntegerNotZero(String input) {
-		try {
-			int i = Integer.parseInt(input);
-			if (i <= 0) {
-				throw new CommandException("The number must be positive.");
-			}
-			return i;
-		} catch (NumberFormatException e) {
-			throw new CommandException("Invalid number \"" + input + "\".");
-		}
-	}
-
-	public static double getPositiveDouble(String input) {
-		try {
-			double d = Double.parseDouble(input);
-			if (d < 0) {
-				throw new CommandException("The number must be 0 or positive.");
-			}
-			return d;
-		} catch (NumberFormatException e) {
-			throw new CommandException("Invalid number \"" + input + "\".");
-		}
-	}
-
-	public static double getPositiveDoubleNotZero(String input) {
-		try {
-			double d = Integer.parseInt(input);
-			if (d <= 0) {
-				throw new CommandException("The number must be positive.");
-			}
-			return d;
-		} catch (NumberFormatException e) {
-			throw new CommandException("Invalid number \"" + input + "\".");
-		}
-	}
-
 	public static void minLength(Object[] array, int minLength, String msg) {
 		if (array.length < minLength) {
 			throw new CommandException(msg);
