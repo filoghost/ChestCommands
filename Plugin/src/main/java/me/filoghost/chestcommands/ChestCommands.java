@@ -46,7 +46,6 @@ import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
-import me.filoghost.chestcommands.serializer.CommandSerializer;
 import me.filoghost.chestcommands.serializer.MenuSerializer;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
@@ -160,8 +159,6 @@ public class ChestCommands extends JavaPlugin {
 		fileNameToMenuMap.clear();
 		commandsToMenuMap.clear();
 		boundItems.clear();
-
-		CommandSerializer.checkClassConstructors(errorCollector);
 
 		try {
 			settings.load();

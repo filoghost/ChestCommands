@@ -22,59 +22,46 @@ import java.util.regex.Pattern;
 
 import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.internal.icon.command.*;
-import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandSerializer {
 
-	private static Map<Pattern, Class<? extends IconCommand>> commandTypesMap = new HashMap<>();
+	private static Map<Pattern, IconCommandFactory> commandTypesMap = new HashMap<>();
 
 	static {
-		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand.class);
-		commandTypesMap.put(commandPattern("op:"), OpIconCommand.class);
-		commandTypesMap.put(commandPattern("(open|menu):"), OpenIconCommand.class);
-		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand.class); // The colon is optional
-		commandTypesMap.put(commandPattern("tell:"), TellIconCommand.class);
-		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand.class);
-		commandTypesMap.put(commandPattern("give:"), GiveIconCommand.class);
-		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand.class);
-		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand.class);
-		commandTypesMap.put(commandPattern("dragon-?bar:"), DragonBarIconCommand.class);
+		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand::new);
+		commandTypesMap.put(commandPattern("op:"), OpIconCommand::new);
+		commandTypesMap.put(commandPattern("(open|menu):"), OpenIconCommand::new);
+		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand::new); // The colon is optional
+		commandTypesMap.put(commandPattern("tell:"), TellIconCommand::new);
+		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand::new);
+		commandTypesMap.put(commandPattern("give:"), GiveIconCommand::new);
+		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand::new);
+		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand::new);
+		commandTypesMap.put(commandPattern("dragon-?bar:"), DragonBarIconCommand::new);
 	}
 
 	private static Pattern commandPattern(String regex) {
 		return Pattern.compile("^(?i)" + regex); // Case insensitive and only at the beginning
 	}
 
-	public static void checkClassConstructors(ErrorCollector errorCollector) {
-		for (Class<? extends IconCommand> clazz : commandTypesMap.values()) {
-			try {
-				clazz.getDeclaredConstructor(String.class).newInstance("");
-			} catch (Exception ex) {
-				String className = clazz.getName().replace("Command", "");
-				className = className.substring(className.lastIndexOf('.') + 1, className.length());
-				errorCollector.addError("Unable to register the \"" + className + "\" command type(" + ex.getClass().getName() + "), please inform the developer (filoghost). The plugin will still work, but all the \"" + className + "\" commands will be treated as normal commands.");
-			}
-		}
-	}
-	
-
 	public static IconCommand matchCommand(String input) {
-
-		for (Entry<Pattern, Class<? extends IconCommand>> entry : commandTypesMap.entrySet()) {
+		for (Entry<Pattern, IconCommandFactory> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
 				// Remove the command prefix and trim the spaces
 				String cleanCommand = matcher.replaceFirst("").trim();
-
-				try {
-					return entry.getValue().getDeclaredConstructor(String.class).newInstance(cleanCommand);
-				} catch (Exception e) {
-					// Checked at startup
-				}
+				return entry.getValue().create(cleanCommand);
 			}
 		}
 
 		return new PlayerIconCommand(input); // Normal command, no match found
+	}
+	
+	
+	public static interface IconCommandFactory {
+		
+		IconCommand create(String commandString);
+		
 	}
 
 }
