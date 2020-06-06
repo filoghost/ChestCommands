@@ -14,8 +14,6 @@
  */
 package me.filoghost.chestcommands.util;
 
-import java.util.Iterator;
-
 public final class StringUtils {
 
 	private StringUtils() {
