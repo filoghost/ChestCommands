@@ -48,18 +48,19 @@ import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.serializer.CommandSerializer;
 import me.filoghost.chestcommands.serializer.MenuSerializer;
-import me.filoghost.chestcommands.task.ErrorLoggerTask;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
-import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
 
 public class ChestCommands extends JavaPlugin {
 
+
 	public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
 
+	
 	private static ChestCommands instance;
 	private static Settings settings;
 	private static Lang lang;
@@ -69,7 +70,7 @@ public class ChestCommands extends JavaPlugin {
 
 	private static Set<BoundItem> boundItems;
 
-	private static int lastReloadErrors;
+	private static ErrorCollector lastLoadErrors;
 	private static String newVersion;
 
 	@Override
@@ -135,12 +136,14 @@ public class ChestCommands extends JavaPlugin {
 
 		CommandFramework.register(this, new CommandHandler("chestcommands"));
 
-		ErrorLogger errorLogger = new ErrorLogger();
-		load(errorLogger);
+		ErrorCollector errorCollector = new ErrorCollector();
+		load(errorCollector);
 
-		lastReloadErrors = errorLogger.getSize();
-		if (errorLogger.hasErrors()) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new ErrorLoggerTask(errorLogger), 10L);
+		lastLoadErrors = errorCollector;
+		if (errorCollector.hasWarningsOrErrors()) {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+				errorCollector.logToConsole();
+			}, 10L);
 		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshMenusTask(), 2L, 2L);
@@ -153,12 +156,12 @@ public class ChestCommands extends JavaPlugin {
 	}
 
 
-	public void load(ErrorLogger errorLogger) {
+	public void load(ErrorCollector errorCollector) {
 		fileNameToMenuMap.clear();
 		commandsToMenuMap.clear();
 		boundItems.clear();
 
-		CommandSerializer.checkClassConstructors(errorLogger);
+		CommandSerializer.checkClassConstructors(errorCollector);
 
 		try {
 			settings.load();
@@ -187,7 +190,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			AsciiPlaceholders.load(errorLogger);
+			AsciiPlaceholders.load(errorCollector);
 		} catch (IOException e) {
 			e.printStackTrace();
 			getLogger().warning("I/O error while reading the placeholders. They will not work.");
@@ -211,19 +214,19 @@ public class ChestCommands extends JavaPlugin {
 				menuConfig.load();
 			} catch (IOException e) {
 				e.printStackTrace();
-				errorLogger.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
+				errorCollector.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
 				continue;
 			} catch (InvalidConfigurationException e) {
 				e.printStackTrace();
-				errorLogger.addError("Invalid YAML configuration for the menu \"" + menuConfig.getFileName() + "\". Please look at the error above, or use an online YAML parser (google is your friend).");
+				errorCollector.addError("Invalid YAML configuration for the menu \"" + menuConfig.getFileName() + "\". Please look at the error above, or use an online YAML parser (google is your friend).");
 				continue;
 			}
 
-			MenuData data = MenuSerializer.loadMenuData(menuConfig, errorLogger);
-			ExtendedIconMenu iconMenu = MenuSerializer.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorLogger);
+			MenuData data = MenuSerializer.loadMenuData(menuConfig, errorCollector);
+			ExtendedIconMenu iconMenu = MenuSerializer.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorCollector);
 
 			if (fileNameToMenuMap.containsKey(menuConfig.getFileName())) {
-				errorLogger.addError("Two menus have the same file name \"" + menuConfig.getFileName() + "\" with different cases. There will be problems opening one of these two menus.");
+				errorCollector.addError("Two menus have the same file name \"" + menuConfig.getFileName() + "\" with different cases. There will be problems opening one of these two menus.");
 			}
 			fileNameToMenuMap.put(menuConfig.getFileName(), iconMenu);
 
@@ -231,7 +234,7 @@ public class ChestCommands extends JavaPlugin {
 				for (String command : data.getCommands()) {
 					if (!command.isEmpty()) {
 						if (commandsToMenuMap.containsKey(command)) {
-							errorLogger.addError("The menus \"" + commandsToMenuMap.get(command).getFileName() + "\" and \"" + menuConfig.getFileName() + "\" have the same command \"" + command + "\". Only one will be opened.");
+							errorCollector.addError("The menus \"" + commandsToMenuMap.get(command).getFileName() + "\" and \"" + menuConfig.getFileName() + "\" have the same command \"" + command + "\". Only one will be opened.");
 						}
 						commandsToMenuMap.put(command, iconMenu);
 					}
@@ -321,14 +324,14 @@ public class ChestCommands extends JavaPlugin {
 		return boundItems;
 	}
 
-	public static int getLastReloadErrors() {
-		return lastReloadErrors;
-	}
-
-	public static void setLastReloadErrors(int lastReloadErrors) {
-		ChestCommands.lastReloadErrors = lastReloadErrors;
+	public static void setLastReloadErrors(ErrorCollector lastLoadErrors) {
+		ChestCommands.lastLoadErrors = lastLoadErrors;
 	}
 	
+	public static ErrorCollector getLastLoadErrors() {
+		return lastLoadErrors;
+	}
+
 	private static void criticalShutdown(String... errorMessage) {
 		String separator = "****************************************************************************";
 		StringBuffer output = new StringBuffer("\n ");

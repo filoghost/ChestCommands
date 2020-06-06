@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.internal.icon.command.*;
-import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandSerializer {
 
@@ -45,14 +45,14 @@ public class CommandSerializer {
 		return Pattern.compile("^(?i)" + regex); // Case insensitive and only at the beginning
 	}
 
-	public static void checkClassConstructors(ErrorLogger errorLogger) {
+	public static void checkClassConstructors(ErrorCollector errorCollector) {
 		for (Class<? extends IconCommand> clazz : commandTypesMap.values()) {
 			try {
 				clazz.getDeclaredConstructor(String.class).newInstance("");
 			} catch (Exception ex) {
 				String className = clazz.getName().replace("Command", "");
 				className = className.substring(className.lastIndexOf('.') + 1, className.length());
-				errorLogger.addError("Unable to register the \"" + className + "\" command type(" + ex.getClass().getName() + "), please inform the developer (filoghost). The plugin will still work, but all the \"" + className + "\" commands will be treated as normal commands.");
+				errorCollector.addError("Unable to register the \"" + className + "\" command type(" + ex.getClass().getName() + "), please inform the developer (filoghost). The plugin will still work, but all the \"" + className + "\" commands will be treated as normal commands.");
 			}
 		}
 	}

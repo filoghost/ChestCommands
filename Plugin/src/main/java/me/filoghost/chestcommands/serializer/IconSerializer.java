@@ -32,7 +32,7 @@ import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.serializer.EnchantmentSerializer.EnchantmentDetails;
-import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.ItemStackReader;
 import me.filoghost.chestcommands.util.ItemUtils;
@@ -94,7 +94,7 @@ public class IconSerializer {
 	}
 
 
-	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorLogger errorLogger) {
+	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
 		Validate.notNull(section, "ConfigurationSection cannot be null");
 
 		// The icon is valid even without a Material
@@ -108,7 +108,7 @@ public class IconSerializer {
 				icon.setDataValue(itemReader.getDataValue());
 				icon.setAmount(itemReader.getAmount());
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid ID: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid ID: " + e.getMessage());
 			}
 		}
 
@@ -128,7 +128,7 @@ public class IconSerializer {
 				MojangsonParser.parse(nbtData);
 				icon.setNBTData(nbtData);
 			} catch (MojangsonParseException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid NBT-DATA: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid NBT-DATA: " + e.getMessage());
 			}
 		}
 
@@ -142,7 +142,7 @@ public class IconSerializer {
 			
 			for (String serializedEnchantment : serializedEnchantments) {
 				if (serializedEnchantment != null && !serializedEnchantment.isEmpty()) {
-					EnchantmentDetails enchantment = EnchantmentSerializer.parseEnchantment(serializedEnchantment, iconName, menuFileName, errorLogger);
+					EnchantmentDetails enchantment = EnchantmentSerializer.parseEnchantment(serializedEnchantment, iconName, menuFileName, errorCollector);
 					if (enchantment != null) {
 						enchantments.put(enchantment.getEnchantment(), enchantment.getLevel());
 					}
@@ -158,7 +158,7 @@ public class IconSerializer {
 			try {
 				icon.setColor(ItemUtils.parseColor(section.getString(Nodes.COLOR)));
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}
 		}
 
@@ -169,7 +169,7 @@ public class IconSerializer {
 			try {
 				icon.setBannerColor(ItemUtils.parseDyeColor(bannerColor));
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-COLOR: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-COLOR: " + e.getMessage());
 			}
 		}
 
@@ -177,7 +177,7 @@ public class IconSerializer {
 			try {
 				icon.setBannerPatterns(ItemUtils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
 			} catch (FormatException e) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-PATTERNS: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-PATTERNS: " + e.getMessage());
 			}
 		}
 
@@ -208,14 +208,14 @@ public class IconSerializer {
 		if (price > 0.0) {
 			icon.setMoneyPrice(price);
 		} else if (price < 0.0) {
-			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
+			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
 		}
 
 		int levels = section.getInt(Nodes.EXP_LEVELS);
 		if (levels > 0) {
 			icon.setExpLevelsPrice(levels);
 		} else if (levels < 0) {
-			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
+			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
 		}
 
 		List<String> serializedRequiredItems = ConfigUtil.getStringListOrSingle(section, Nodes.REQUIRED_ITEMS);
@@ -232,7 +232,7 @@ public class IconSerializer {
 					}
 					requiredItems.add(requiredItem);
 				} catch (FormatException e) {
-					errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has invalid REQUIRED-ITEMS: " + e.getMessage());
+					errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has invalid REQUIRED-ITEMS: " + e.getMessage());
 				}
 			}
 			

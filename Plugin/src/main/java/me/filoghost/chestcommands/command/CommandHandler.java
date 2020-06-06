@@ -25,8 +25,7 @@ import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.command.framework.CommandValidate;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.task.ErrorLoggerTask;
-import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
 
@@ -61,16 +60,16 @@ public class CommandHandler extends CommandFramework {
 
 			ChestCommands.closeAllMenus();
 
-			ErrorLogger errorLogger = new ErrorLogger();
-			ChestCommands.getInstance().load(errorLogger);
+			ErrorCollector errorCollector = new ErrorCollector();
+			ChestCommands.getInstance().load(errorCollector);
 
-			ChestCommands.setLastReloadErrors(errorLogger.getSize());
+			ChestCommands.setLastReloadErrors(errorCollector);
 
-			if (!errorLogger.hasErrors()) {
+			if (!errorCollector.hasWarningsOrErrors()) {
 				sender.sendMessage(ChestCommands.CHAT_PREFIX + "Plugin reloaded.");
 			} else {
-				new ErrorLoggerTask(errorLogger).run();
-				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errorLogger.getSize() + " error(s).");
+				errorCollector.logToConsole();
+				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errorCollector.getWarningsCount() + " warning(s) and " + errorCollector.getErrorsCount() + " error(s).");
 				if (!(sender instanceof ConsoleCommandSender)) {
 					sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Please check the console.");
 				}

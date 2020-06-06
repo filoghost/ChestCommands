@@ -30,7 +30,7 @@ import me.filoghost.chestcommands.internal.MenuData;
 import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.serializer.IconSerializer.Coords;
 import me.filoghost.chestcommands.util.ClickType;
-import me.filoghost.chestcommands.util.ErrorLogger;
+import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.ItemStackReader;
 
@@ -52,7 +52,7 @@ public class MenuSerializer {
 
 	}
 
-	public static ExtendedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorLogger errorLogger) {
+	public static ExtendedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorCollector errorCollector) {
 		ExtendedIconMenu iconMenu = new ExtendedIconMenu(title, rows, config.getFileName());
 
 		for (String subSectionName : config.getKeys(false)) {
@@ -62,16 +62,16 @@ public class MenuSerializer {
 
 			ConfigurationSection iconSection = config.getConfigurationSection(subSectionName);
 
-			Icon icon = IconSerializer.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorLogger);
+			Icon icon = IconSerializer.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
 			Coords coords = IconSerializer.loadCoordsFromSection(iconSection);
 
 			if (!coords.isSetX() || !coords.isSetY()) {
-				errorLogger.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is missing POSITION-X and/or POSITION-Y.");
+				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is missing POSITION-X and/or POSITION-Y.");
 				continue;
 			}
 
 			if (iconMenu.getIcon(coords.getX(), coords.getY()) != null) {
-				errorLogger.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is overriding another icon with the same position.");
+				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is overriding another icon with the same position.");
 			}
 
 			iconMenu.setIcon(coords.getX(), coords.getY(), icon);
@@ -83,13 +83,13 @@ public class MenuSerializer {
 	/**
 	 * Reads all the settings of a menu. It will never return a null title, even if not set.
 	 */
-	public static MenuData loadMenuData(PluginConfig config, ErrorLogger errorLogger) {
+	public static MenuData loadMenuData(PluginConfig config, ErrorCollector errorCollector) {
 
 		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
 		int rows;
 
 		if (title == null) {
-			errorLogger.addError("The menu \"" + config.getFileName() + "\" doesn't have a name set.");
+			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a name set.");
 			title = ChatColor.DARK_RED + "No title set";
 		}
 
@@ -106,7 +106,7 @@ public class MenuSerializer {
 
 		} else {
 			rows = 6; // Defaults to 6 rows
-			errorLogger.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
+			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
 		}
 
 		MenuData menuData = new MenuData(title, rows);
@@ -142,7 +142,7 @@ public class MenuSerializer {
 					menuData.setBoundDataValue(itemReader.getDataValue());
 				}
 			} catch (FormatException e) {
-				errorLogger.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
+				errorCollector.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
 			}
 
 			boolean leftClick = config.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);

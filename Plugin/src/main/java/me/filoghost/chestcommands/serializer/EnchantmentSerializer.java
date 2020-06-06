@@ -14,13 +14,13 @@
  */
 package me.filoghost.chestcommands.serializer;
 
-import org.bukkit.enchantments.Enchantment;
-
-import me.filoghost.chestcommands.util.ErrorLogger;
-import me.filoghost.chestcommands.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.enchantments.Enchantment;
+
+import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.StringUtils;
 
 public class EnchantmentSerializer {
 
@@ -64,7 +64,7 @@ public class EnchantmentSerializer {
 		return StringUtils.stripChars(string, " _-").toLowerCase();
 	}
 
-	public static EnchantmentDetails parseEnchantment(String input, String iconName, String menuFileName, ErrorLogger errorLogger) {
+	public static EnchantmentDetails parseEnchantment(String input, String iconName, String menuFileName, ErrorCollector errorCollector) {
 		int level = 1;
 
 		if (input.contains(",")) {
@@ -73,7 +73,7 @@ public class EnchantmentSerializer {
 			try {
 				level = Integer.parseInt(levelSplit[1].trim());
 			} catch (NumberFormatException ex) {
-				errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment level: " + levelSplit[1]);
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment level: " + levelSplit[1]);
 			}
 			input = levelSplit[0];
 		}
@@ -81,7 +81,7 @@ public class EnchantmentSerializer {
 		Enchantment ench = matchEnchantment(input);
 
 		if (ench == null) {
-			errorLogger.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + input);
+			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + input);
 		} else {
 			return new EnchantmentDetails(ench, level);
 		}

@@ -14,20 +14,20 @@
  */
 package me.filoghost.chestcommands.config;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.BukkitUtils;
-import me.filoghost.chestcommands.util.ErrorLogger;
-import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.Utils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringEscapeUtils;
+
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.util.BukkitUtils;
+import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Utils;
 
 /**
  * This is not a real YAML file ;)
@@ -37,7 +37,7 @@ public class AsciiPlaceholders {
 	private static Map<String, String> placeholders = new HashMap<>();
 
 
-	public static void load(ErrorLogger errorLogger) throws IOException, Exception {
+	public static void load(ErrorCollector errorCollector) throws IOException, Exception {
 
 		placeholders.clear();
 		File file = new File(ChestCommands.getInstance().getDataFolder(), "placeholders.yml");
@@ -55,7 +55,7 @@ public class AsciiPlaceholders {
 			}
 
 			if (!line.contains(":")) {
-				errorLogger.addError("Unable to parse a line(" + line + ") from placeholders.yml: it must contain ':' to separate the placeholder and the replacement.");
+				errorCollector.addError("Unable to parse a line(" + line + ") from placeholders.yml: it must contain ':' to separate the placeholder and the replacement.");
 				continue;
 			}
 
@@ -64,12 +64,12 @@ public class AsciiPlaceholders {
 			String replacement = FormatUtils.addColors(StringEscapeUtils.unescapeJava(unquote(line.substring(indexOf + 1, line.length()).trim())));
 
 			if (placeholder.length() == 0 || replacement.length() == 0) {
-				errorLogger.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder and the replacement must have both at least 1 character.");
+				errorCollector.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder and the replacement must have both at least 1 character.");
 				continue;
 			}
 
 			if (placeholder.length() > 100) {
-				errorLogger.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder cannot be longer than 100 characters.");
+				errorCollector.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder cannot be longer than 100 characters.");
 				continue;
 			}
 
