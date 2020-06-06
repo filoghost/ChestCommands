@@ -24,9 +24,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
+import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.icon.ExtendedIcon;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.util.ItemUtils;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class ExtendedIconMenu extends IconMenu {
 
 	private String fileName;
 	private String permission;
-	private List<IconCommand> openActions;
+	private List<Action> openActions;
 
 	private int refreshTicks;
 
@@ -45,11 +45,11 @@ public class ExtendedIconMenu extends IconMenu {
 		this.permission = Permissions.OPEN_MENU_BASE + fileName;
 	}
 
-	public List<IconCommand> getOpenActions() {
+	public List<Action> getOpenActions() {
 		return openActions;
 	}
 
-	public void setOpenActions(List<IconCommand> openAction) {
+	public void setOpenActions(List<Action> openAction) {
 		this.openActions = openAction;
 	}
 
@@ -73,7 +73,7 @@ public class ExtendedIconMenu extends IconMenu {
 	public void open(Player player) {
 		try {
 			if (openActions != null) {
-				for (IconCommand openAction : openActions) {
+				for (Action openAction : openActions) {
 					openAction.execute(player);
 				}
 			}

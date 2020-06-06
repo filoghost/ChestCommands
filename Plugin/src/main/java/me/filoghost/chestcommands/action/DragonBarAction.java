@@ -12,32 +12,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.Utils;
 
-public class DragonBarIconCommand extends IconCommand {
+public class DragonBarAction extends Action {
 
 	private String message;
 	private int seconds;
 
-	public DragonBarIconCommand(String command) {
-		super(command);
+	public DragonBarAction(String action) {
+		super(action);
 		if (!hasVariables) {
-			parseBar(super.command);
+			parseBar(super.action);
 		}
 	}
 
-	private void parseBar(String command) {
+	private void parseBar(String action) {
 		seconds = 1;
-		message = command;
+		message = action;
 
-		String[] split = command.split("\\|", 2); // Max of 2 pieces
+		String[] split = action.split("\\|", 2); // Max of 2 pieces
 		if (split.length > 1 && Utils.isValidPositiveInteger(split[0].trim())) {
 			seconds = Integer.parseInt(split[0].trim());
 			message = split[1].trim();
@@ -49,7 +48,7 @@ public class DragonBarIconCommand extends IconCommand {
 	@Override
 	public void execute(Player player) {
 		if (hasVariables) {
-			parseBar(getParsedCommand(player));
+			parseBar(getParsedAction(player));
 		}
 		if (BarAPIBridge.hasValidPlugin()) {
 			BarAPIBridge.setMessage(player, message, seconds);

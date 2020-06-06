@@ -12,22 +12,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.task;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
+import me.filoghost.chestcommands.api.Icon;
 
-public class ConsoleIconCommand extends IconCommand {
+public class ExecuteActionsTask implements Runnable {
 
-	public ConsoleIconCommand(String command) {
-		super(command);
+	private Player player;
+	private Icon icon;
+
+
+	public ExecuteActionsTask(Player player, Icon icon) {
+		this.player = player;
+		this.icon = icon;
 	}
+
 
 	@Override
-	public void execute(Player player) {
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getParsedCommand(player));
+	public void run() {
+		boolean close = icon.onClick(player);
+
+		if (close) {
+			player.closeInventory();
+		}
 	}
+
 
 }

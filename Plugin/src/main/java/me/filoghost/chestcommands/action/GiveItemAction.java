@@ -12,31 +12,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.exception.FormatException;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.util.ItemStackReader;
 
-public class GiveIconCommand extends IconCommand {
+public class GiveItemAction extends Action {
 
 	private ItemStack itemToGive;
 	private String errorMessage;
 
-	public GiveIconCommand(String command) {
-		super(command);
+	public GiveItemAction(String action) {
+		super(action);
 		if (!hasVariables) {
-			parseItem(super.command);
+			parseItem(super.action);
 		}
 	}
 
-	private void parseItem(String command) {
+	private void parseItem(String action) {
 		try {
-			ItemStackReader reader = new ItemStackReader(command, true);
+			ItemStackReader reader = new ItemStackReader(action, true);
 			itemToGive = reader.createStack();
 			errorMessage = null;
 		} catch (FormatException e) {
@@ -47,7 +46,7 @@ public class GiveIconCommand extends IconCommand {
 	@Override
 	public void execute(Player player) {
 		if (hasVariables) {
-			parseItem(getParsedCommand(player));
+			parseItem(getParsedAction(player));
 		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);

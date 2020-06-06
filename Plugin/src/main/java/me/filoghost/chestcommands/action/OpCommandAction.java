@@ -12,32 +12,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.task;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.api.Icon;
+public class OpCommandAction extends Action {
 
-public class ExecuteCommandsTask implements Runnable {
-
-	private Player player;
-	private Icon icon;
-
-
-	public ExecuteCommandsTask(Player player, Icon icon) {
-		this.player = player;
-		this.icon = icon;
+	public OpCommandAction(String action) {
+		super(action);
 	}
-
 
 	@Override
-	public void run() {
-		boolean close = icon.onClick(player);
+	public void execute(Player player) {
 
-		if (close) {
-			player.closeInventory();
+		if (player.isOp()) {
+			player.chat("/" + getParsedAction(player));
+
+		} else {
+			player.setOp(true);
+			player.chat("/" + getParsedAction(player));
+			player.setOp(false);
 		}
 	}
-
 
 }

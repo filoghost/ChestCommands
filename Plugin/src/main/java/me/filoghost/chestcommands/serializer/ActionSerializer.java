@@ -20,47 +20,46 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
-import me.filoghost.chestcommands.internal.icon.command.*;
+import me.filoghost.chestcommands.action.*;
 
-public class CommandSerializer {
+public class ActionSerializer {
 
 	private static Map<Pattern, IconCommandFactory> commandTypesMap = new HashMap<>();
 
 	static {
-		commandTypesMap.put(commandPattern("console:"), ConsoleIconCommand::new);
-		commandTypesMap.put(commandPattern("op:"), OpIconCommand::new);
-		commandTypesMap.put(commandPattern("(open|menu):"), OpenIconCommand::new);
-		commandTypesMap.put(commandPattern("server:?"), ServerIconCommand::new); // The colon is optional
-		commandTypesMap.put(commandPattern("tell:"), TellIconCommand::new);
-		commandTypesMap.put(commandPattern("broadcast:"), BroadcastIconCommand::new);
-		commandTypesMap.put(commandPattern("give:"), GiveIconCommand::new);
-		commandTypesMap.put(commandPattern("give-?money:"), GiveMoneyIconCommand::new);
-		commandTypesMap.put(commandPattern("sound:"), SoundIconCommand::new);
-		commandTypesMap.put(commandPattern("dragon-?bar:"), DragonBarIconCommand::new);
+		commandTypesMap.put(actionPattern("console:"), ConsoleCommandAction::new);
+		commandTypesMap.put(actionPattern("op:"), OpCommandAction::new);
+		commandTypesMap.put(actionPattern("(open|menu):"), OpenMenuAction::new);
+		commandTypesMap.put(actionPattern("server:?"), ChangeServerAction::new); // The colon is optional
+		commandTypesMap.put(actionPattern("tell:"), SendMessageAction::new);
+		commandTypesMap.put(actionPattern("broadcast:"), BroadcastAction::new);
+		commandTypesMap.put(actionPattern("give:"), GiveItemAction::new);
+		commandTypesMap.put(actionPattern("give-?money:"), GiveMoneyAction::new);
+		commandTypesMap.put(actionPattern("sound:"), PlaySoundAction::new);
+		commandTypesMap.put(actionPattern("dragon-?bar:"), DragonBarAction::new);
 	}
 
-	private static Pattern commandPattern(String regex) {
+	private static Pattern actionPattern(String regex) {
 		return Pattern.compile("^" + regex, Pattern.CASE_INSENSITIVE); // Case insensitive and only at the beginning
 	}
 
-	public static IconCommand matchCommand(String input) {
+	public static Action matchAction(String input) {
 		for (Entry<Pattern, IconCommandFactory> entry : commandTypesMap.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
-				// Remove the command prefix and trim the spaces
+				// Remove the action prefix and trim the spaces
 				String cleanCommand = matcher.replaceFirst("").trim();
 				return entry.getValue().create(cleanCommand);
 			}
 		}
 
-		return new PlayerIconCommand(input); // Normal command, no match found
+		return new PlayerCommandAction(input); // Default action, no match found
 	}
 	
 	
 	public static interface IconCommandFactory {
 		
-		IconCommand create(String commandString);
+		Action create(String actionString);
 		
 	}
 

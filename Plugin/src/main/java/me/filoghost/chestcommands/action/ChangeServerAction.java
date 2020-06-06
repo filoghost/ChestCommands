@@ -12,22 +12,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.bridge.bungee.BungeeCordUtils;
 
-public class TellIconCommand extends IconCommand {
+public class ChangeServerAction extends Action {
 
-	public TellIconCommand(String command) {
-		super(FormatUtils.addColors(command));
+	public ChangeServerAction(String action) {
+		super(action);
 	}
 
 	@Override
 	public void execute(Player player) {
-		player.sendMessage(getParsedCommand(player));
+		BungeeCordUtils.connect(player, hasVariables ? getParsedAction(player) : action);
 	}
 
 }

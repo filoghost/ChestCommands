@@ -12,23 +12,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
-import me.filoghost.chestcommands.util.FormatUtils;
+public class ConsoleCommandAction extends Action {
 
-public class BroadcastIconCommand extends IconCommand {
-
-	public BroadcastIconCommand(String command) {
-		super(FormatUtils.addColors(command));
+	public ConsoleCommandAction(String action) {
+		super(action);
 	}
 
 	@Override
 	public void execute(Player player) {
-		Bukkit.broadcastMessage(getParsedCommand(player));
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getParsedAction(player));
 	}
 
 }

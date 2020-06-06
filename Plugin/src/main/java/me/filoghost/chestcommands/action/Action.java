@@ -12,25 +12,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.internal.VariableManager;
 
-public abstract class IconCommand {
+public abstract class Action {
 
-	protected String command;
+	protected String action;
 	protected boolean hasVariables;
 
-	public IconCommand(String command) {
-		this.command = AsciiPlaceholders.placeholdersToSymbols(command).trim();
-		this.hasVariables = VariableManager.hasVariables(command);
+	public Action(String action) {
+		this.action = AsciiPlaceholders.placeholdersToSymbols(action).trim();
+		this.hasVariables = VariableManager.hasVariables(action);
 	}
 
-	public String getParsedCommand(Player executor) {
-		return hasVariables ? VariableManager.setVariables(command, executor) : command;
+	public String getParsedAction(Player executor) {
+		return hasVariables ? VariableManager.setVariables(action, executor) : action;
 	}
 
 	public abstract void execute(Player player);

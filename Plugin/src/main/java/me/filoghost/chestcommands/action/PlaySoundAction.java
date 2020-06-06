@@ -12,35 +12,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.util.BukkitUtils;
 
-public class SoundIconCommand extends IconCommand {
+public class PlaySoundAction extends Action {
 
 	private Sound sound;
 	private float pitch;
 	private float volume;
 	private String errorMessage;
 
-	public SoundIconCommand(String command) {
-		super(command);
+	public PlaySoundAction(String action) {
+		super(action);
 		if (!hasVariables) {
-			parseSound(super.command);
+			parseSound(super.action);
 		}
 	}
 
-	private void parseSound(String command) {
+	private void parseSound(String action) {
 		errorMessage = null;
 		pitch = 1.0f;
 		volume = 1.0f;
 
-		String[] split = command.split(",");
+		String[] split = action.split(",");
 
 		sound = BukkitUtils.matchSound(split[0]);
 		if (sound == null) {
@@ -66,7 +65,7 @@ public class SoundIconCommand extends IconCommand {
 	@Override
 	public void execute(Player player) {
 		if (hasVariables) {
-			parseSound(getParsedCommand(player));
+			parseSound(getParsedAction(player));
 		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);

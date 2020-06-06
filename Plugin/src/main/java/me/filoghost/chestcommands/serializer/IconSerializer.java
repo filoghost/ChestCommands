@@ -23,14 +23,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.exception.FormatException;
-import me.filoghost.chestcommands.internal.CommandsClickHandler;
+import me.filoghost.chestcommands.internal.RunActionsClickHandler;
 import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.internal.icon.ExtendedIcon;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.serializer.EnchantmentSerializer.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
@@ -188,19 +188,19 @@ public class IconSerializer {
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
 		icon.setCloseOnClick(closeOnClick);
 
-		List<String> serializedCommands = ConfigUtil.getStringListOrInlineList(section, ChestCommands.getSettings().multiple_commands_separator, Nodes.ACTIONS);
+		List<String> serializedActions = ConfigUtil.getStringListOrInlineList(section, ChestCommands.getSettings().multiple_commands_separator, Nodes.ACTIONS);
 		
-		if (serializedCommands != null && !serializedCommands.isEmpty()) {
-			List<IconCommand> commands = new ArrayList<>();
+		if (serializedActions != null && !serializedActions.isEmpty()) {
+			List<Action> actions = new ArrayList<>();
 			
-			for (String serializedCommand : serializedCommands) {
-				if (serializedCommand != null && !serializedCommand.isEmpty()) {
-					commands.add(CommandSerializer.matchCommand(serializedCommand));
+			for (String serializedAction : serializedActions) {
+				if (serializedAction != null && !serializedAction.isEmpty()) {
+					actions.add(ActionSerializer.matchAction(serializedAction));
 				}
 			}
 
-			if (!commands.isEmpty()) {
-				icon.setClickHandler(new CommandsClickHandler(commands, closeOnClick));
+			if (!actions.isEmpty()) {
+				icon.setClickHandler(new RunActionsClickHandler(actions, closeOnClick));
 			}
 		}
 

@@ -21,13 +21,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuData;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.serializer.IconSerializer.Coords;
 import me.filoghost.chestcommands.util.ClickType;
 import me.filoghost.chestcommands.util.ErrorCollector;
@@ -116,19 +116,19 @@ public class MenuSerializer {
 			menuData.setCommands(triggeringCommands.toArray(new String[0]));
 		}
 
-		List<String> serializedOpenCommands = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);
+		List<String> serializedOpenActions = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);
 		
-		if (serializedOpenCommands != null && !serializedOpenCommands.isEmpty()) {
-			List<IconCommand> openCommands = new ArrayList<>();
+		if (serializedOpenActions != null && !serializedOpenActions.isEmpty()) {
+			List<Action> openActions = new ArrayList<>();
 			
-			for (String serializedCommand : serializedOpenCommands) {
-				if (serializedCommand != null && !serializedCommand.isEmpty()) {
-					openCommands.add(CommandSerializer.matchCommand(serializedCommand));
+			for (String serializedAction : serializedOpenActions) {
+				if (serializedAction != null && !serializedAction.isEmpty()) {
+					openActions.add(ActionSerializer.matchAction(serializedAction));
 				}
 			}
 
-			if (!openCommands.isEmpty()) {
-				menuData.setOpenActions(openCommands);
+			if (!openActions.isEmpty()) {
+				menuData.setOpenActions(openActions);
 			}
 		}
 

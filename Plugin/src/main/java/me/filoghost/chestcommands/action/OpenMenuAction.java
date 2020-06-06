@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,22 +20,21 @@ import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 
-public class OpenIconCommand extends IconCommand {
+public class OpenMenuAction extends Action {
 
-	public OpenIconCommand(String command) {
-		super(command);
+	public OpenMenuAction(String action) {
+		super(action);
 	}
 
 	@Override
 	public void execute(final Player player) {
-		String target = hasVariables ? getParsedCommand(player) : command;
+		String target = hasVariables ? getParsedAction(player) : action;
 		final ExtendedIconMenu menu = ChestCommands.getFileNameToMenuMap().get(target.toLowerCase());
 		if (menu != null) {
 
 			/*
-			 * Delay the task, since this command is executed in ClickInventoryEvent
+			 * Delay the task, since this action is executed in ClickInventoryEvent
 			 * and opening another inventory in the same moment is not a good idea.
 			 */
 			Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), () -> {

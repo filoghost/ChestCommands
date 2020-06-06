@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.internal;
 
 import org.bukkit.Material;
 
-import me.filoghost.chestcommands.internal.icon.IconCommand;
+import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.util.ClickType;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class MenuData {
 	private Material boundMaterial;
 	private short boundDataValue;
 	private ClickType clickType;
-	private List<IconCommand> openActions;
+	private List<Action> openActions;
 	private int refreshTenths;
 
 	public MenuData(String title, int rows) {
@@ -93,11 +93,11 @@ public class MenuData {
 		this.clickType = clickType;
 	}
 
-	public List<IconCommand> getOpenActions() {
+	public List<Action> getOpenActions() {
 		return openActions;
 	}
 
-	public void setOpenActions(List<IconCommand> openAction) {
+	public void setOpenActions(List<Action> openAction) {
 		this.openActions = openAction;
 	}
 

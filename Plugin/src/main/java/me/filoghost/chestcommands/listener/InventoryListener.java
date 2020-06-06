@@ -29,7 +29,7 @@ import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.BoundItem;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.task.ExecuteCommandsTask;
+import me.filoghost.chestcommands.task.ExecuteActionsTask;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,8 +80,8 @@ public class InventoryListener implements Listener {
 						}
 					}
 
-					// Closes the inventory and executes commands AFTER the event
-					Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new ExecuteCommandsTask(clicker, icon));
+					// Closes the inventory and executes actions AFTER the event
+					Bukkit.getScheduler().scheduleSyncDelayedTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
 				}
 			}
 		}

@@ -12,40 +12,39 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon.command;
+package me.filoghost.chestcommands.action;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.internal.icon.IconCommand;
 import me.filoghost.chestcommands.util.Utils;
 
-public class GiveMoneyIconCommand extends IconCommand {
+public class GiveMoneyAction extends Action {
 
 	private double moneyToGive;
 	private String errorMessage;
 
-	public GiveMoneyIconCommand(String command) {
-		super(command);
+	public GiveMoneyAction(String action) {
+		super(action);
 		if (!hasVariables) {
-			parseMoney(super.command);
+			parseMoney(super.action);
 		}
 	}
 
-	private void parseMoney(String command) {
-		if (!Utils.isValidPositiveDouble(command)) {
-			errorMessage = ChatColor.RED + "Invalid money amount: " + command;
+	private void parseMoney(String action) {
+		if (!Utils.isValidPositiveDouble(action)) {
+			errorMessage = ChatColor.RED + "Invalid money amount: " + action;
 			return;
 		}
 		errorMessage = null;
-		moneyToGive = Double.parseDouble(command);
+		moneyToGive = Double.parseDouble(action);
 	}
 
 	@Override
 	public void execute(Player player) {
 		if (hasVariables) {
-			parseMoney(getParsedCommand(player));
+			parseMoney(getParsedAction(player));
 		}
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);

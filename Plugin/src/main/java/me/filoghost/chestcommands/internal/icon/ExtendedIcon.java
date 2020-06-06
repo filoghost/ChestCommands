@@ -159,7 +159,7 @@ public class ExtendedIcon extends Icon {
 
 		if (moneyPrice > 0) {
 			if (!EconomyBridge.hasValidEconomy()) {
-				player.sendMessage(ChatColor.RED + "This command has a price, but Vault with a compatible economy plugin was not found. For security, the command has been blocked. Please inform the staff.");
+				player.sendMessage(ChatColor.RED + "This action has a price, but Vault with a compatible economy plugin was not found. For security, the action has been blocked. Please inform the staff.");
 				return closeOnClick;
 			}
 
