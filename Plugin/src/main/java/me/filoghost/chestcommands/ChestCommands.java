@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
@@ -280,8 +281,10 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.getOpenInventory() != null) {
-				if (player.getOpenInventory().getTopInventory().getHolder() instanceof MenuInventoryHolder || player.getOpenInventory().getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
+			InventoryView openInventory = player.getOpenInventory();
+			if (openInventory != null) {
+				if (openInventory.getTopInventory().getHolder() instanceof MenuInventoryHolder 
+						|| openInventory.getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
 					player.closeInventory();
 				}
 			}
