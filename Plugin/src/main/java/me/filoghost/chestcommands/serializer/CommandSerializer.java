@@ -41,7 +41,7 @@ public class CommandSerializer {
 	}
 
 	private static Pattern commandPattern(String regex) {
-		return Pattern.compile("^(?i)" + regex); // Case insensitive and only at the beginning
+		return Pattern.compile("^" + regex, Pattern.CASE_INSENSITIVE); // Case insensitive and only at the beginning
 	}
 
 	public static IconCommand matchCommand(String input) {
