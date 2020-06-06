@@ -73,6 +73,12 @@
 			<artifactId>bstats-bukkit-lite</artifactId>
 			<version>1.7</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>me.filoghost.updatechecker</groupId>
+			<artifactId>updatechecker</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -108,6 +114,10 @@
 						<relocation>
 							<pattern>org.bstats</pattern>
 							<shadedPattern>me.filoghost.chestcommands.metrics</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>me.filoghost.updatechecker</pattern>
+							<shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>

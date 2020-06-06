@@ -14,6 +14,14 @@
  */
 package me.filoghost.chestcommands;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,14 +54,7 @@ import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorLogger;
 import me.filoghost.chestcommands.util.Utils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import me.filoghost.updatechecker.UpdateChecker;
 
 public class ChestCommands extends JavaPlugin {
 
@@ -108,17 +109,17 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		if (settings.update_notifications) {
-			new SimpleUpdater(this, 56919).checkForUpdates((String newVersion) -> {
+			UpdateChecker.run(this, 56919, (String newVersion) -> {
 				ChestCommands.newVersion = newVersion;
 
 				if (settings.use_console_colors) {
 					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + "Found a new version: " + newVersion + ChatColor.WHITE + " (yours: v" + getDescription().getVersion() + ")");
 					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "Download it on Bukkit Dev:");
-					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "dev.bukkit.org/bukkit-plugins/chest-commands");
+					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "https://dev.bukkit.org/projects/chest-commands");
 				} else {
 					getLogger().info("Found a new version available: " + newVersion);
 					getLogger().info("Download it on Bukkit Dev:");
-					getLogger().info("dev.bukkit.org/bukkit-plugins/chest-commands");
+					getLogger().info("https://dev.bukkit.org/projects/chest-commands");
 				}
 			});
 		}
