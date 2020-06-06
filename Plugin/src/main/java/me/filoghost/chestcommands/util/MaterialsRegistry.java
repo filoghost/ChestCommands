@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.util;
 
 import org.bukkit.Material;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,9 +34,6 @@ public final class MaterialsRegistry {
 
 	// Materials that are considered air (with 1.13+ compatibility)
 	private static final Collection<Material> AIR_MATERIALS = getExistingMaterials("AIR", "CAVE_AIR", "VOID_AIR");
-
-	// Materials that have a "Sign" block state (with 1.13+ compatibility)
-	private static final Collection<Material> SIGN_MATERIALS = getExistingMaterials("SIGN", "SIGN_POST", "WALL_SIGN");
 
 	private MaterialsRegistry() {
 	}
@@ -83,11 +79,7 @@ public final class MaterialsRegistry {
 	public static boolean isAir(Material material) {
 		return AIR_MATERIALS.contains(material);
 	}
-
-	public static boolean isSign(Material material) {
-		return SIGN_MATERIALS.contains(material);
-	}
-
+	
 	static {
 		for (Material material : Material.values()) {
 			addMaterialAlias(material.toString(), material);

@@ -15,7 +15,9 @@
 package me.filoghost.chestcommands.listener;
 
 import org.bukkit.ChatColor;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,9 +31,16 @@ import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.util.BukkitUtils;
-import me.filoghost.chestcommands.util.MaterialsRegistry;
 
 public class SignListener implements Listener {
+	
+	private static final int HEADER_LINE = 0;
+	private static final int FILENAME_LINE = 1;
+	
+	private static final String SIGN_CREATION_TRIGGER = "[menu]";
+	
+	private static final ChatColor VALID_SIGN_COLOR = ChatColor.DARK_BLUE;
+	private static final String VALID_SIGN_HEADER = VALID_SIGN_COLOR + SIGN_CREATION_TRIGGER;
 	
 	private MenuManager menuManager;
 	
@@ -40,59 +49,83 @@ public class SignListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEvent event) {
+	public void onSignClick(PlayerInteractEvent event) {
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+		
+		BlockState clickedBlockState = event.getClickedBlock().getState();
+		
+		if (!(clickedBlockState instanceof Sign)) {
+			return;
+		}
+		
+		Sign sign = (Sign) clickedBlockState;
+		
+		if (!sign.getLine(HEADER_LINE).equalsIgnoreCase(VALID_SIGN_HEADER)) {
+			return;
+		}
 
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && MaterialsRegistry.isSign(event.getClickedBlock().getType())) {
-
-			Sign sign = (Sign) event.getClickedBlock().getState();
-			if (sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]")) {
-
-				sign.getLine(1);
-				ExtendedIconMenu iconMenu = menuManager.getMenuByFileName(BukkitUtils.addYamlExtension(sign.getLine(1)));
-				if (iconMenu != null) {
-
-					if (event.getPlayer().hasPermission(iconMenu.getPermission())) {
-						iconMenu.open(event.getPlayer());
-					} else {
-						iconMenu.sendNoPermissionMessage(event.getPlayer());
-					}
-
-				} else {
-					sign.setLine(0, ChatColor.RED + ChatColor.stripColor(sign.getLine(0)));
-					event.getPlayer().sendMessage(ChestCommands.getLang().menu_not_found);
-				}
-			}
+		String menuFileName = BukkitUtils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
+		ExtendedIconMenu menu = menuManager.getMenuByFileName(menuFileName);
+		
+		if (menu == null) {
+			event.getPlayer().sendMessage(ChestCommands.getLang().menu_not_found);
+			return;
+		}
+		
+		if (event.getPlayer().hasPermission(menu.getPermission())) {
+			menu.open(event.getPlayer());
+		} else {
+			menu.sendNoPermissionMessage(event.getPlayer());
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onSignChange(SignChangeEvent event) {
-		if (event.getLine(0).equalsIgnoreCase("[menu]") && event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
-
-			if (event.getLine(1).isEmpty()) {
-				event.setLine(0, ChatColor.RED + event.getLine(0));
-				event.getPlayer().sendMessage(ChatColor.RED + "You must set a valid menu name in the second line.");
+	public void onCreateMenuSign(SignChangeEvent event) {
+		if (isCreatingMenuSign(event.getLine(HEADER_LINE)) && canCreateMenuSign(event.getPlayer())) {
+			String menuFileName = event.getLine(FILENAME_LINE).trim();
+			
+			if (menuFileName.isEmpty()) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "You must write a menu name in the second line.");
 				return;
 			}
-
-			IconMenu iconMenu = menuManager.getMenuByFileName(BukkitUtils.addYamlExtension(event.getLine(1)));
+			
+			menuFileName = BukkitUtils.addYamlExtension(menuFileName);
+	
+			IconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
-				event.setLine(0, ChatColor.RED + event.getLine(0));
-				event.getPlayer().sendMessage(ChatColor.RED + "That menu was not found.");
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(ChatColor.RED + "Menu \"" + menuFileName + "\" was not found.");
 				return;
 			}
-
-			event.setLine(0, ChatColor.DARK_BLUE + event.getLine(0));
-			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + BukkitUtils.addYamlExtension(event.getLine(1)) + ".");
+	
+			event.setLine(HEADER_LINE, VALID_SIGN_COLOR + event.getLine(HEADER_LINE));
+			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + menuFileName + ".");
 		}
 	}
 
+	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSignChangeMonitor(SignChangeEvent event) {
-		// Prevent players with permissions for creating colored signs from creating menu signs
-		if (event.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]") && !event.getPlayer().hasPermission(Permissions.SIGN_CREATE)) {
-			event.setLine(0, ChatColor.stripColor(event.getLine(0)));
+		// Prevent players without permissions from creating menu signs
+		if (isValidMenuSign(event.getLine(HEADER_LINE)) && !canCreateMenuSign(event.getPlayer())) {
+			event.setLine(HEADER_LINE, ChatColor.stripColor(event.getLine(HEADER_LINE)));
 		}
+	}
+	
+	private boolean isCreatingMenuSign(String headerLine) {
+		return headerLine.equalsIgnoreCase(SIGN_CREATION_TRIGGER);
+	}
+	
+	private boolean isValidMenuSign(String headerLine) {
+		return headerLine.equalsIgnoreCase(VALID_SIGN_HEADER);
+	}
+	
+	private boolean canCreateMenuSign(Player player) {
+		return player.hasPermission(Permissions.SIGN_CREATE);
 	}
 
 }
