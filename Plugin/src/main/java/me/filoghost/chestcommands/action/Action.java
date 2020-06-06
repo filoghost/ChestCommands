@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
-import me.filoghost.chestcommands.internal.VariableManager;
+import me.filoghost.chestcommands.variable.VariableManager;
 
 public abstract class Action {
 
