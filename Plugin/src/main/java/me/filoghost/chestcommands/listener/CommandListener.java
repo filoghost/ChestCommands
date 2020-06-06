@@ -27,11 +27,6 @@ public class CommandListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
-
-		if (ChestCommands.getSettings().use_only_commands_without_args && event.getMessage().contains(" ")) {
-			return;
-		}
-
 		// Very fast method compared to split & substring
 		String command = StringUtils.getCleanCommand(event.getMessage());
 

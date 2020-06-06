@@ -25,7 +25,6 @@ public class Settings extends SpecialConfig {
 	public String multiple_commands_separator = ";";
 	public boolean update_notifications = true;
 	public int anti_click_spam_delay = 200;
-	public boolean use_only_commands_without_args = true;
 
 	public Settings(PluginConfig config) {
 		super(config);
