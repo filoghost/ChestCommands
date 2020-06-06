@@ -22,7 +22,7 @@ public class Permissions {
 			SEE_ERRORS = "chestcommands.errors",
 			SIGN_CREATE = "chestcommands.sign",
 
-	COMMAND_BASE = "chestcommands.command.",
+			COMMAND_BASE = "chestcommands.command.",
 			OPEN_MENU_BASE = "chestcommands.open.";
 
 }
