@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal.icon;
+package me.filoghost.chestcommands.internal;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,9 +22,6 @@ import org.bukkit.inventory.InventoryView;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.util.MaterialsRegistry;
 import me.filoghost.chestcommands.util.StringUtils;
 

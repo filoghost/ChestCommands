@@ -17,7 +17,6 @@ package me.filoghost.chestcommands.internal;
 import org.bukkit.Material;
 
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.util.ClickType;
 
 import java.util.List;
 

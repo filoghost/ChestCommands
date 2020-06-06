@@ -18,7 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.util.ClickType;
 import me.filoghost.chestcommands.util.Validate;
 
 public class BoundItem {

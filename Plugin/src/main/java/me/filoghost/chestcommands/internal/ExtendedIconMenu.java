@@ -26,7 +26,6 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.icon.ExtendedIcon;
 import me.filoghost.chestcommands.util.ItemUtils;
 
 import java.util.List;
