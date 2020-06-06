@@ -96,6 +96,14 @@ public class ExtendedIconMenu extends IconMenu {
 			player.sendMessage(ChatColor.RED + "An internal error occurred while opening the menu. The staff should check the console for errors.");
 		}
 	}
+	
+	public void openCheckingPermission(Player player) {
+		if (player.hasPermission(getPermission())) {
+			open(player);
+		} else {
+			sendNoPermissionMessage(player);
+		}
+	}
 
 	public void refresh(Player player, Inventory inventory) {
 		try {

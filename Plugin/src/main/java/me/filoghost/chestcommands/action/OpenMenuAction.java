@@ -38,11 +38,7 @@ public class OpenMenuAction extends Action {
 			 * and opening another inventory in the same moment is not a good idea.
 			 */
 			Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
-				if (player.hasPermission(menu.getPermission())) {
-					menu.open(player);
-				} else {
-					menu.sendNoPermissionMessage(player);
-				}
+				menu.openCheckingPermission(player);
 			});
 
 		} else {

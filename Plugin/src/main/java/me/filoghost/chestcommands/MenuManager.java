@@ -79,11 +79,7 @@ public class MenuManager {
 	public void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {
 		for (BoundItem boundItem : boundItems) {
 			if (boundItem.isValidTrigger(itemInHand, clickAction)) {
-				if (player.hasPermission(boundItem.getMenu().getPermission())) {
-					boundItem.getMenu().open(player);
-				} else {
-					boundItem.getMenu().sendNoPermissionMessage(player);
-				}
+				boundItem.getMenu().openCheckingPermission(player);
 			}
 		}
 	}

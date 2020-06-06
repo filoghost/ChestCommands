@@ -44,12 +44,7 @@ public class CommandListener implements Listener {
 
 		if (menu != null) {
 			event.setCancelled(true);
-
-			if (event.getPlayer().hasPermission(menu.getPermission())) {
-				menu.open(event.getPlayer());
-			} else {
-				menu.sendNoPermissionMessage(event.getPlayer());
-			}
+			menu.openCheckingPermission(event.getPlayer());
 		}
 	}
 

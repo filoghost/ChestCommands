@@ -74,11 +74,7 @@ public class SignListener implements Listener {
 			return;
 		}
 		
-		if (event.getPlayer().hasPermission(menu.getPermission())) {
-			menu.open(event.getPlayer());
-		} else {
-			menu.sendNoPermissionMessage(event.getPlayer());
-		}
+		menu.openCheckingPermission(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
