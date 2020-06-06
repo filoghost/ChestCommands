@@ -49,14 +49,14 @@ public class EconomyBridge {
 
 	public static double getMoney(Player player) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
-		return economy.getBalance(player.getName(), player.getWorld().getName());
+		return economy.getBalance(player, player.getWorld().getName());
 	}
 
 	public static boolean hasMoney(Player player, double minimum) {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (minimum < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + minimum);
 
-		double balance = economy.getBalance(player.getName(), player.getWorld().getName());
+		double balance = economy.getBalance(player, player.getWorld().getName());
 
 		if (balance < minimum) {
 			return false;
@@ -72,7 +72,7 @@ public class EconomyBridge {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
 
-		EconomyResponse response = economy.withdrawPlayer(player.getName(), player.getWorld().getName(), amount);
+		EconomyResponse response = economy.withdrawPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
 
 		MenuUtils.refreshMenu(player);
@@ -84,7 +84,7 @@ public class EconomyBridge {
 		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
 		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
 
-		EconomyResponse response = economy.depositPlayer(player.getName(), player.getWorld().getName(), amount);
+		EconomyResponse response = economy.depositPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
 
 		MenuUtils.refreshMenu(player);
