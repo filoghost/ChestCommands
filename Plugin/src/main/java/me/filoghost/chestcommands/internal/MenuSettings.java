@@ -14,8 +14,6 @@
  */
 package me.filoghost.chestcommands.internal;
 
-import org.bukkit.Material;
-
 import me.filoghost.chestcommands.action.Action;
 
 import java.util.List;
@@ -31,14 +29,11 @@ public class MenuSettings {
 	private List<Action> openActions;
 	private int refreshTenths;
 
-	private Material boundMaterial;
-	private short boundDataValue;
-	private ClickType clickType;
+	private OpenTrigger openTrigger;
 	
 	public MenuSettings(String title, int rows) {
 		this.title = title;
 		this.rows = rows;
-		boundDataValue = -1; // -1 = any
 	}
 
 	public String getTitle() {
@@ -61,38 +56,6 @@ public class MenuSettings {
 		return commands;
 	}
 
-	public boolean hasBoundMaterial() {
-		return boundMaterial != null;
-	}
-
-	public Material getBoundMaterial() {
-		return boundMaterial;
-	}
-
-	public void setBoundMaterial(Material boundMaterial) {
-		this.boundMaterial = boundMaterial;
-	}
-
-	public boolean hasBoundDataValue() {
-		return boundDataValue > -1;
-	}
-
-	public short getBoundDataValue() {
-		return boundDataValue;
-	}
-
-	public void setBoundDataValue(short boundDataValue) {
-		this.boundDataValue = boundDataValue;
-	}
-
-	public ClickType getClickType() {
-		return clickType;
-	}
-
-	public void setClickType(ClickType clickType) {
-		this.clickType = clickType;
-	}
-
 	public List<Action> getOpenActions() {
 		return openActions;
 	}
@@ -108,4 +71,13 @@ public class MenuSettings {
 	public void setRefreshTenths(int refreshTenths) {
 		this.refreshTenths = refreshTenths;
 	}
+	
+	public OpenTrigger getOpenTrigger() {
+		return openTrigger;
+	}
+
+	public void setOpenTrigger(OpenTrigger openTrigger) {
+		this.openTrigger = openTrigger;
+	}
+	
 }

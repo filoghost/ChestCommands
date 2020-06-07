@@ -34,7 +34,6 @@ import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
-import me.filoghost.chestcommands.internal.BoundItem;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuSettings;
 import me.filoghost.chestcommands.listener.CommandListener;
@@ -209,12 +208,8 @@ public class ChestCommands extends JavaPlugin {
 				iconMenu.setOpenActions(data.getOpenActions());
 			}
 
-			if (data.hasBoundMaterial() && data.getClickType() != null) {
-				BoundItem boundItem = new BoundItem(iconMenu, data.getBoundMaterial(), data.getClickType());
-				if (data.hasBoundDataValue()) {
-					boundItem.setRestrictiveData(data.getBoundDataValue());
-				}
-				menuManager.registerTriggerItem(boundItem);
+			if (data.getOpenTrigger() != null) {
+				menuManager.registerTriggerItem(data.getOpenTrigger(), iconMenu);
 			}
 		}
 

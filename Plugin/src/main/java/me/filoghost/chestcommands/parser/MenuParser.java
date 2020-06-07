@@ -29,6 +29,7 @@ import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.ClickType;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuSettings;
+import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.parser.IconParser.Coords;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
@@ -133,22 +134,23 @@ public class MenuParser {
 
 		String openItemMaterial = ConfigUtil.getAnyString(config, Nodes.OPEN_ITEM_MATERIAL);
 		if (openItemMaterial != null) {
-			try {
-				ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
-				menuData.setBoundMaterial(itemReader.getMaterial());
-
-				if (itemReader.hasExplicitDataValue()) {
-					menuData.setBoundDataValue(itemReader.getDataValue());
-				}
-			} catch (FormatException e) {
-				errorCollector.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
-			}
-
 			boolean leftClick = config.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);
 			boolean rightClick = config.getBoolean(Nodes.OPEN_ITEM_RIGHT_CLICK);
-
+			
 			if (leftClick || rightClick) {
-				menuData.setClickType(ClickType.fromOptions(leftClick, rightClick));
+				try {
+					ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
+					ClickType clickType = ClickType.fromOptions(leftClick, rightClick);
+					
+					OpenTrigger openTrigger = new OpenTrigger(itemReader.getMaterial(), clickType);
+					
+					if (itemReader.hasExplicitDataValue()) {
+						openTrigger.setRestrictiveDurability(itemReader.getDataValue());
+					}
+					
+				} catch (FormatException e) {
+					errorCollector.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
+				}
 			}
 		}
 

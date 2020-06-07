@@ -16,9 +16,8 @@ package me.filoghost.chestcommands;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -27,9 +26,9 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.BoundItem;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
+import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorCollector;
 
@@ -38,18 +37,18 @@ public class MenuManager {
 	private static Map<String, ExtendedIconMenu> fileNameToMenuMap;
 	private static Map<String, ExtendedIconMenu> commandsToMenuMap;
 
-	private static Set<BoundItem> boundItems;
+	private static Map<OpenTrigger, ExtendedIconMenu> openTriggers;
 	
 	public MenuManager() {
 		fileNameToMenuMap = CaseInsensitiveMap.create();
 		commandsToMenuMap = CaseInsensitiveMap.create();
-		boundItems = new HashSet<>();
+		openTriggers = new HashMap<>();
 	}
 	
 	public void clear() {
 		fileNameToMenuMap.clear();
 		commandsToMenuMap.clear();
-		boundItems.clear();
+		openTriggers.clear();
 	}
 
 	public ExtendedIconMenu getMenuByFileName(String fileName) {
@@ -73,16 +72,16 @@ public class MenuManager {
 		}		
 	}
 
-	public void registerTriggerItem(BoundItem boundItem) {
-		boundItems.add(boundItem);
+	public void registerTriggerItem(OpenTrigger openTrigger, ExtendedIconMenu menu) {
+		openTriggers.put(openTrigger, menu);
 	}
 
 	public void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {
-		for (BoundItem boundItem : boundItems) {
-			if (boundItem.isValidTrigger(itemInHand, clickAction)) {
-				boundItem.getMenu().openCheckingPermission(player);
+		openTriggers.forEach((openTrigger, menu) -> {
+			if (openTrigger.matches(itemInHand, clickAction)) {
+				menu.openCheckingPermission(player);
 			}
-		}
+		});
 	}
 
 	public ExtendedIconMenu getMenuByCommand(String command) {
