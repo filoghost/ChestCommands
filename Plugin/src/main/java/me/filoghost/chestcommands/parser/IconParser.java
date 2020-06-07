@@ -27,7 +27,6 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.ConfigUtil;
-import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.RunActionsClickHandler;
 import me.filoghost.chestcommands.internal.ExtendedIcon;
 import me.filoghost.chestcommands.internal.RequiredItem;

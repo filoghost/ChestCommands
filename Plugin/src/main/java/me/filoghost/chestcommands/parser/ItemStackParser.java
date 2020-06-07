@@ -17,7 +17,6 @@ package me.filoghost.chestcommands.parser;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.Preconditions;

@@ -18,7 +18,7 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import me.filoghost.chestcommands.exception.FormatException;
+
 import me.filoghost.chestcommands.util.Registry;
 import java.util.ArrayList;
 import java.util.List;
