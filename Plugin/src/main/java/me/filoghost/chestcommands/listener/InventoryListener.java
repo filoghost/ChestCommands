@@ -49,15 +49,27 @@ public class InventoryListener implements Listener {
 			menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
 		}
 	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-	public void onInventoryClick(InventoryClickEvent event) {
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+	public void onEarlyInventoryClick(InventoryClickEvent event) {
 		IconMenu menu = MenuManager.getOpenMenu(event.getInventory());
 		if (menu == null) {
 			return;
 		}
 		
-		event.setCancelled(true); // First thing to do, if an exception is thrown at least the player doesn't take the item
+		// Cancel the event as early as possible
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+	public void onLateInventoryClick(InventoryClickEvent event) {
+		IconMenu menu = MenuManager.getOpenMenu(event.getInventory());
+		if (menu == null) {
+			return;
+		}
+		
+		// Make sure the event is still cancelled (in case another plugin wrongly uncancels it)
+		event.setCancelled(true);
 
 		int slot = event.getRawSlot();
 		if (slot < 0 || slot >= menu.getSize()) {
