@@ -2,6 +2,8 @@ package me.filoghost.chestcommands.bridge;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
+import me.filoghost.chestcommands.util.Preconditions;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -26,17 +28,13 @@ public class PlaceholderAPIBridge {
 	}
 
 	public static boolean hasPlaceholders(String message) {
-		if (!hasValidPlugin()) {
-			throw new IllegalStateException("PlaceholderAPI plugin was not found!");
-		}
-
+		Preconditions.checkState(hasValidPlugin(), "PlaceholderAPI plugin not found");
+		
 		return PlaceholderAPI.containsPlaceholders(message);
 	}
 
 	public static String setPlaceholders(String message, Player executor) {
-		if (!hasValidPlugin()) {
-			throw new IllegalStateException("PlaceholderAPI plugin was not found!");
-		}
+		Preconditions.checkState(hasValidPlugin(), "PlaceholderAPI plugin not found");
 
 		return PlaceholderAPI.setPlaceholders(executor, message);
 	}

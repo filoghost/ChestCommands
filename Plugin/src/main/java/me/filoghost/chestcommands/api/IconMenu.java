@@ -21,7 +21,7 @@ import org.bukkit.inventory.Inventory;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.util.ItemUtils;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.Validate;
+import me.filoghost.chestcommands.util.Preconditions;
 
 import java.util.Arrays;
 
@@ -87,7 +87,7 @@ public class IconMenu {
 	}
 
 	public void open(Player player) {
-		Validate.notNull(player, "Player cannot be null");
+		Preconditions.notNull(player, "player");
 
 		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
 

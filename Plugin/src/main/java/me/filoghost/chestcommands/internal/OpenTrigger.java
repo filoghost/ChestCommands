@@ -18,7 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.util.Validate;
+import me.filoghost.chestcommands.util.Preconditions;
 
 public class OpenTrigger {
 
@@ -28,10 +28,9 @@ public class OpenTrigger {
 	private boolean isRestrictiveDurability;
 
 	public OpenTrigger(Material material, ClickType clickType) {
-		Validate.notNull(material, "Material cannot be null");
-		Validate.notNull(material, "ClickType cannot be null");
-		Validate.isTrue(material != Material.AIR, "Material cannot be AIR");
-
+		Preconditions.checkArgumentNotAir(material, "material");
+		Preconditions.notNull(clickType, "clickType");
+		
 		this.material = material;
 		this.clickType = clickType;
 	}

@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import me.filoghost.chestcommands.MenuManager;
+import me.filoghost.chestcommands.util.Preconditions;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -30,11 +31,11 @@ public class EconomyBridge {
 		if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
 			return false;
 		}
-		RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
+		RegisteredServiceProvider<Economy> economyServiceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
+		if (economyServiceProvider == null) {
 			return false;
 		}
-		economy = rsp.getProvider();
+		economy = economyServiceProvider.getProvider();
 		return economy != null;
 	}
 
@@ -88,15 +89,11 @@ public class EconomyBridge {
 	}
 
 	private static void checkValidEconomy() {
-		if (!hasValidEconomy()) {
-			throw new IllegalStateException("Economy plugin was not found!");
-		}
+		Preconditions.checkState(hasValidEconomy(), "economy plugin not found");
 	}
 	
 	private static void checkPositiveAmount(double amount) {
-		if (amount < 0.0) {
-			throw new IllegalArgumentException("Invalid amount of money: " + amount);
-		}
+		Preconditions.checkArgument(amount >= 0.0, "amount cannot be negative");
 	}
 
 	public static String formatMoney(double amount) {

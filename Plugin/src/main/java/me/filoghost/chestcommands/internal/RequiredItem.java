@@ -18,7 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.util.Validate;
+import me.filoghost.chestcommands.util.Preconditions;
 
 public class RequiredItem {
 
@@ -28,8 +28,7 @@ public class RequiredItem {
 	private boolean isDurabilityRestrictive = false;
 
 	public RequiredItem(Material material, int amount) {
-		Validate.notNull(material, "Material cannot be null");
-		Validate.isTrue(material != Material.AIR, "Material cannot be air");
+		Preconditions.checkArgumentNotAir(material, "material");
 
 		this.material = material;
 		this.amount = amount;
@@ -48,7 +47,7 @@ public class RequiredItem {
 	}
 
 	public void setRestrictiveDataValue(short data) {
-		Validate.isTrue(data >= 0, "Data value cannot be negative");
+		Preconditions.checkArgument(data >= 0, "Data value cannot be negative");
 
 		this.dataValue = data;
 		isDurabilityRestrictive = true;

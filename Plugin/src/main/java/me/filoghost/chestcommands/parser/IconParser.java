@@ -35,7 +35,7 @@ import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.ItemUtils;
-import me.filoghost.chestcommands.util.Validate;
+import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
@@ -94,7 +94,7 @@ public class IconParser {
 
 
 	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
-		Validate.notNull(section, "ConfigurationSection cannot be null");
+		Preconditions.notNull(section, "section");
 
 		// The icon is valid even without a Material
 		ExtendedIcon icon = new ExtendedIcon();
@@ -245,7 +245,7 @@ public class IconParser {
 
 
 	public static Coords loadCoordsFromSection(ConfigurationSection section) {
-		Validate.notNull(section, "ConfigurationSection cannot be null");
+		Preconditions.notNull(section, "section");
 
 		Integer x = null;
 		Integer y = null;

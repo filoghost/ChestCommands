@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.Validate;
+import me.filoghost.chestcommands.util.Preconditions;
 
 public class ItemStackParser {
 
@@ -35,7 +35,7 @@ public class ItemStackParser {
 	 * for example wool:5, 3 is a valid input.
 	 */
 	public ItemStackParser(String input, boolean parseAmount) throws FormatException {
-		Validate.notNull(input, "input cannot be null");
+		Preconditions.notNull(input, "input");
 
 		// Remove spaces, they're not needed
 		input = input.replace(" ", "");

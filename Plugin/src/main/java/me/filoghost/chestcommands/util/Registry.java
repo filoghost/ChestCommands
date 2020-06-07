@@ -55,9 +55,7 @@ public class Registry<T> {
 	}
 	
 	public void putIfEnumExists(String key, String enumValueName) {
-		if (!valuesType.isEnum()) {
-			throw new IllegalArgumentException("Value type is not an enum");
-		}
+		Preconditions.checkState(valuesType.isEnum(), "value type is not an enum");
 		
 		try {
 			@SuppressWarnings({ "unchecked", "rawtypes" })

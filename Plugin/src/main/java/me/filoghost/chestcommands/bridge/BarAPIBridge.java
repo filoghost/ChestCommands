@@ -15,6 +15,8 @@
 package me.filoghost.chestcommands.bridge;
 
 import me.confuser.barapi.BarAPI;
+import me.filoghost.chestcommands.util.Preconditions;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -40,8 +42,8 @@ public class BarAPIBridge {
 
 	@SuppressWarnings("deprecation")
 	public static void setMessage(Player player, String message, int seconds) {
-		if (!hasValidPlugin()) throw new IllegalStateException("BarAPI plugin was not found!");
-
+		Preconditions.checkState(hasValidPlugin(), "BarAPI plugin not found");
+		
 		BarAPI.setMessage(player, message, seconds);
 	}
 
