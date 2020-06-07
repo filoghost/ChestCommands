@@ -25,9 +25,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public interface Icon {
+import me.filoghost.chestcommands.api.internal.BackendAPI;
 
-	boolean hasVariables();
+public interface Icon {
+	
+	public static Icon create(Material material) {
+		return BackendAPI.getImplementation().createIcon(material);
+	}
 
 	void setMaterial(Material material);
 
@@ -37,9 +41,9 @@ public interface Icon {
 
 	int getAmount();
 
-	void setDataValue(short dataValue);
+	void setDurability(short durability);
 
-	short getDataValue();
+	short getDurability();
 
 	void setNBTData(String nbtData);
 
@@ -91,8 +95,8 @@ public interface Icon {
 
 	ClickHandler getClickHandler();
 
-	ItemStack createItemstack(Player pov);
+    ItemStack createItemstack(Player viewer);
 
-	boolean onClick(Player whoClicked);
+    boolean onClick(Player clicker);
 
 }

@@ -130,16 +130,6 @@ public class ExtendedIcon extends BasicIcon {
 	}
 
 	@Override
-	public String calculateName(Player pov) {
-		return super.calculateName(pov);
-	}
-
-	@Override
-	public List<String> calculateLore(Player pov) {
-		return super.calculateLore(pov);
-	}
-
-	@Override
 	public boolean onClick(Player player) {
 
 		// Check all the requirements

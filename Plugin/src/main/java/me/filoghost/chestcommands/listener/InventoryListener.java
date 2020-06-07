@@ -77,7 +77,7 @@ public class InventoryListener implements Listener {
 			return;
 		}
 
-		Icon icon = menu.getIconRaw(slot);
+		Icon icon = menu.getIconAtSlot(slot);
 		if (icon == null || event.getInventory().getItem(slot) == null) {
 			return;
 		}

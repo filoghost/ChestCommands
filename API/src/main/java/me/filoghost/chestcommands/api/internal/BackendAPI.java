@@ -14,6 +14,9 @@
  */
 package me.filoghost.chestcommands.api.internal;
 
+import org.bukkit.Material;
+
+import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
 
 public abstract class BackendAPI {
@@ -33,5 +36,9 @@ public abstract class BackendAPI {
 	}
 
 	public abstract IconMenu getMenuByFileName(String yamlFile);
+
+	public abstract Icon createIcon(Material material);
+
+	public abstract IconMenu createIconMenu(String title, int rows);
 
 }

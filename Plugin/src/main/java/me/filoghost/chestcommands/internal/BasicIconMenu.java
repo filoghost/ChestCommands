@@ -38,55 +38,53 @@ import me.filoghost.chestcommands.util.Utils;
  */
 public class BasicIconMenu implements IconMenu {
 
+    
+    private static final int COLUMNS = 9;
+    private final int rows;
 	protected final String title;
 	protected final Icon[] icons;
 
 
 	public BasicIconMenu(String title, int rows) {
 		this.title = title;
-		icons = new BasicIcon[rows * 9];
+		this.rows = rows;
+		icons = new BasicIcon[rows * COLUMNS];
 	}
 
 	@Override
 	public void setIcon(int x, int y, Icon icon) {
-		int slot = Utils.makePositive(y - 1) * 9 + Utils.makePositive(x - 1);
-		if (slot >= 0 && slot < icons.length) {
-			icons[slot] = icon;
-		}
-	}
-
-	@Override
-	public void setIconRaw(int slot, Icon icon) {
-		if (slot >= 0 && slot < icons.length) {
-			icons[slot] = icon;
-		}
+		icons[getSlotIndex(x, y)] = icon;
 	}
 
 	@Override
 	public Icon getIcon(int x, int y) {
-		int slot = Utils.makePositive(y - 1) * 9 + Utils.makePositive(x - 1);
-		if (slot >= 0 && slot < icons.length) {
-			return icons[slot];
-		}
+		return getIconAtSlot(getSlotIndex(x, y));
+	}
+	
+	public Icon getIconAtSlot(int slot) {
+	    Preconditions.checkIndex(slot, getSize(), "slot");
+		return icons[slot];
+	}
 
-		return null;
+	public int getSlotIndex(int x, int y) {
+	    Preconditions.checkIndex(x, getColumnCount(), "x");
+	    Preconditions.checkIndex(y, getRowCount(), "y");
+	    
+		int slot = y * getColumnCount() + x;
+		Preconditions.checkIndex(slot, getSize(), "slot");
+		return slot;
 	}
 
 	@Override
-	public Icon getIconRaw(int slot) {
-		if (slot >= 0 && slot < icons.length) {
-			return icons[slot];
-		}
-
-		return null;
+	public int getRowCount() {
+		return rows;
+	}
+	
+	@Override
+	public int getColumnCount() {
+		return COLUMNS;
 	}
 
-	@Override
-	public int getRows() {
-		return icons.length / 9;
-	}
-
-	@Override
 	public int getSize() {
 		return icons.length;
 	}
@@ -100,7 +98,7 @@ public class BasicIconMenu implements IconMenu {
 	public void open(Player player) {
 		Preconditions.notNull(player, "player");
 
-		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
+		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), getSize(), title);
 
 		for (int i = 0; i < icons.length; i++) {
 			if (icons[i] != null) {
@@ -129,4 +127,6 @@ public class BasicIconMenu implements IconMenu {
 	public String toString() {
 		return "IconMenu [title=" + title + ", icons=" + Arrays.toString(icons) + "]";
 	}
+
+	
 }

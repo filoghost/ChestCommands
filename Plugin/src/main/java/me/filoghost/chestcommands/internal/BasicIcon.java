@@ -66,7 +66,6 @@ public class BasicIcon implements Icon {
 		amount = 1;        
 	}
 
-	@Override
 	public boolean hasVariables() {
 		return nameHasVariables || loreLinesWithVariables != null || skullOwnerHasVariables;
 	}
@@ -96,14 +95,14 @@ public class BasicIcon implements Icon {
 	}
 
 	@Override
-	public void setDataValue(short dataValue) {
+	public void setDurability(short dataValue) {
 		if (dataValue < 0) dataValue = 0;
 
 		this.dataValue = dataValue;
 	}
 
 	@Override
-	public short getDataValue() {
+	public short getDurability() {
 		return dataValue;
 	}
 
@@ -252,13 +251,13 @@ public class BasicIcon implements Icon {
 		return clickHandler;
 	}
 
-	protected String calculateName(Player pov) {
+	protected String calculateName(Player viewer) {
 		if (hasName()) {
 
 			String name = this.name;
 
-			if (pov != null && nameHasVariables) {
-				name = VariableManager.setVariables(name, pov);
+			if (viewer != null && nameHasVariables) {
+				name = VariableManager.setVariables(name, viewer);
 			}
 
 			if (name.isEmpty()) {
@@ -272,7 +271,7 @@ public class BasicIcon implements Icon {
 		return null;
 	}
 
-	protected List<String> calculateLore(Player pov) {
+	protected List<String> calculateLore(Player viewer) {
 
 		List<String> output = null;
 
@@ -280,11 +279,11 @@ public class BasicIcon implements Icon {
 
 			output = new ArrayList<>();
 
-			if (pov != null && loreLinesWithVariables != null) {
+			if (viewer != null && loreLinesWithVariables != null) {
 				for (int i = 0; i < lore.size(); i++) {
 					String line = lore.get(i);
 					if (loreLinesWithVariables[i]) {
-						line = VariableManager.setVariables(line, pov);
+						line = VariableManager.setVariables(line, viewer);
 					}
 					output.add(line);
 				}
@@ -307,9 +306,8 @@ public class BasicIcon implements Icon {
 		return output;
 	}
 
-	@Override
 	@SuppressWarnings("deprecation")
-	public ItemStack createItemstack(Player pov) {
+	public ItemStack createItemstack(Player viewer) {
 
 		if (!this.hasVariables() && cachedItem != null) {
 			// Performance
@@ -334,10 +332,10 @@ public class BasicIcon implements Icon {
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
 		if (hasName()) {
-			itemMeta.setDisplayName(calculateName(pov));
+			itemMeta.setDisplayName(calculateName(viewer));
 		}
 		if (hasLore()) {
-			itemMeta.setLore(calculateLore(pov));
+			itemMeta.setLore(calculateLore(viewer));
 		}
 
 		if (color != null && itemMeta instanceof LeatherArmorMeta) {
@@ -347,7 +345,7 @@ public class BasicIcon implements Icon {
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
 			String skullOwner = this.skullOwner;
 			if(skullOwnerHasVariables) {
-				skullOwner = VariableManager.setVariables(skullOwner, pov);
+				skullOwner = VariableManager.setVariables(skullOwner, viewer);
 			}
 			((SkullMeta) itemMeta).setOwner(skullOwner);
 		}
@@ -376,7 +374,6 @@ public class BasicIcon implements Icon {
 		return itemStack;
 	}
 
-	@Override
 	public boolean onClick(Player whoClicked) {
 		if (clickHandler != null) {
 			return clickHandler.onClick(whoClicked);

@@ -102,7 +102,7 @@ public class IconParser {
 			try {
 				ItemStackParser itemReader = new ItemStackParser(material, true);
 				icon.setMaterial(itemReader.getMaterial());
-				icon.setDataValue(itemReader.getDataValue());
+				icon.setDurability(itemReader.getDataValue());
 				icon.setAmount(itemReader.getAmount());
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid ID: " + e.getMessage());
@@ -115,7 +115,7 @@ public class IconParser {
 		
 		Integer durability = ConfigUtil.getAnyInt(section, Nodes.DURABILITY);
 		if (durability != null) {
-			icon.setDataValue(durability.shortValue());
+			icon.setDurability(durability.shortValue());
 		}
 
 		String nbtData = ConfigUtil.getAnyString(section, Nodes.NBT_DATA);

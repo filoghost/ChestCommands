@@ -16,21 +16,23 @@ package me.filoghost.chestcommands.api;
 
 import org.bukkit.entity.Player;
 
+import me.filoghost.chestcommands.api.internal.BackendAPI;
+
 public interface IconMenu {
+	
+	public static IconMenu create(String title, int rowCount) {
+		return BackendAPI.getImplementation().createIconMenu(title, rowCount);
+	}
 
 	void setIcon(int x, int y, Icon icon);
 
-	void setIconRaw(int slot, Icon icon);
-
 	Icon getIcon(int x, int y);
 
-	Icon getIconRaw(int slot);
-
-	int getRows();
-
-	int getSize();
-
 	String getTitle();
+	
+	int getRowCount();
+	
+	int getColumnCount();
 
 	void open(Player player);
 

@@ -37,6 +37,17 @@ public final class Preconditions {
 			throw new IllegalStateException(errorMessage);
 		}
 	}
+
+	public static void checkIndex(int index, int size, String objectName) {
+		checkArgument(size >= 0, "size cannot be negative");
+		
+		if (index < 0) {
+			throw new IndexOutOfBoundsException(objectName + " (" + index + ") cannot be negative");
+		}
+		if (index >= size) {
+			throw new IndexOutOfBoundsException(objectName + " (" + index + ") must be less than size (" + size + ")");
+		}
+	}
 	
 	public static void checkArgumentNotAir(Material material, String objectName) {
 		notNull(material, objectName);

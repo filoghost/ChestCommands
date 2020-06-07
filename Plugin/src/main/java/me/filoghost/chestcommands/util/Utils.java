@@ -20,10 +20,6 @@ public final class Utils {
 
 	private Utils() {}
 
-	public static int makePositive(int i) {
-		return i < 0 ? 0 : i;
-	}
-
 	public static boolean isClassLoaded(String name) {
 		try {
 			Class.forName(name);

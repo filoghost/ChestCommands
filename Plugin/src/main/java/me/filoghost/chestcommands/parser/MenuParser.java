@@ -63,17 +63,28 @@ public class MenuParser {
 
 			BasicIcon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
 			Coords coords = IconParser.loadCoordsFromSection(iconSection);
+			
+			int actualX = coords.getX() - 1;
+			int actualY = coords.getY() - 1;
 
 			if (!coords.isSetX() || !coords.isSetY()) {
 				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is missing POSITION-X and/or POSITION-Y.");
 				continue;
+			}			
+			if (actualX < 0 || actualX >= iconMenu.getColumnCount()) {
+				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " has an invalid POSITION-X: it must be between 1 and " + iconMenu.getColumnCount() + " (was " + coords.getX() + ").");
+				continue;
 			}
-
-			if (iconMenu.getIcon(coords.getX(), coords.getY()) != null) {
+			if (actualY < 0 || actualY >= iconMenu.getRowCount()) {
+				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " has an invalid POSITION-Y: it must be between 1 and " + iconMenu.getRowCount() + " (was " + coords.getY() + ").");
+				continue;
+			}
+			
+			if (iconMenu.getIcon(actualX, actualY) != null) {
 				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is overriding another icon with the same position.");
 			}
 
-			iconMenu.setIcon(coords.getX(), coords.getY(), icon);
+			iconMenu.setIcon(actualX, actualY, icon);
 		}
 
 		return iconMenu;
