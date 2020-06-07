@@ -100,16 +100,10 @@ public class ChestCommands extends JavaPlugin {
 		if (settings.update_notifications) {
 			UpdateChecker.run(this, 56919, (String newVersion) -> {
 				ChestCommands.newVersion = newVersion;
-
-				if (settings.use_console_colors) {
-					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + "Found a new version: " + newVersion + ChatColor.WHITE + " (yours: v" + getDescription().getVersion() + ")");
-					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "Download it on Bukkit Dev:");
-					Bukkit.getConsoleSender().sendMessage(CHAT_PREFIX + ChatColor.WHITE + "https://dev.bukkit.org/projects/chest-commands");
-				} else {
-					getLogger().info("Found a new version available: " + newVersion);
-					getLogger().info("Download it on Bukkit Dev:");
-					getLogger().info("https://dev.bukkit.org/projects/chest-commands");
-				}
+				
+				getLogger().info("Found a new version: " + newVersion + " (yours: v" + getDescription().getVersion() + ")");
+				getLogger().info("Download the update on Bukkit Dev:");
+				getLogger().info("https://dev.bukkit.org/projects/chest-commands");
 			});
 		}
 
