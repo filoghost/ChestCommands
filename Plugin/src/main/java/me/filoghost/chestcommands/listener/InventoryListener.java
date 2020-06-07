@@ -28,7 +28,6 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.task.ExecuteActionsTask;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,8 +94,14 @@ public class InventoryListener implements Listener {
 			}
 		}
 
-		// Closes the inventory and executes actions AFTER the event
-		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), new ExecuteActionsTask(clicker, icon));
+		// Only handle the click AFTER the event has finished
+		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
+			boolean close = icon.onClick(clicker);
+
+			if (close) {
+				clicker.closeInventory();
+			}
+		});
 	}
 
 	@EventHandler
