@@ -47,7 +47,7 @@ public class BasicIcon implements Icon {
 	private String name;
 	private List<String> lore;
 	private Map<Enchantment, Integer> enchantments;
-	private Color color;
+	private Color leatherColor;
 	private String skullOwner;
 	private DyeColor bannerColor;
 	private List<Pattern> bannerPatterns;
@@ -196,13 +196,13 @@ public class BasicIcon implements Icon {
 	}
 
 	@Override
-	public Color getColor() {
-		return color;
+	public Color getLeatherColor() {
+		return leatherColor;
 	}
 
 	@Override
-	public void setColor(Color color) {
-		this.color = color;
+	public void setLeatherColor(Color leatherColor) {
+		this.leatherColor = leatherColor;
 	}
 
 	@Override
@@ -338,8 +338,8 @@ public class BasicIcon implements Icon {
 			itemMeta.setLore(calculateLore(viewer));
 		}
 
-		if (color != null && itemMeta instanceof LeatherArmorMeta) {
-			((LeatherArmorMeta) itemMeta).setColor(color);
+		if (leatherColor != null && itemMeta instanceof LeatherArmorMeta) {
+			((LeatherArmorMeta) itemMeta).setColor(leatherColor);
 		}
 
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {

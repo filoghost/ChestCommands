@@ -153,7 +153,7 @@ public class IconParser {
 
 		if (section.isSet(Nodes.COLOR)) {
 			try {
-				icon.setColor(ItemMetaParser.parseColor(section.getString(Nodes.COLOR)));
+				icon.setLeatherColor(ItemMetaParser.parseColor(section.getString(Nodes.COLOR)));
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}

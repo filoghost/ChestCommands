@@ -73,9 +73,9 @@ public interface Icon {
 
 	void clearEnchantments();
 
-	Color getColor();
+	Color getLeatherColor();
 
-	void setColor(Color color);
+	void setLeatherColor(Color leatherColor);
 
 	String getSkullOwner();
 
