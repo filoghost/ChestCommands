@@ -21,33 +21,27 @@ import me.filoghost.chestcommands.ChestCommands;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class BungeeCordUtils {
 
 	public static boolean connect(Player player, String server) {
-
-		try {
-
-			if (server.length() == 0) {
-				player.sendMessage("§cTarget server was \"\" (empty string) cannot connect to it.");
-				return false;
-			}
-
-			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(byteArray);
-
-			out.writeUTF("Connect");
-			out.writeUTF(server); // Target Server
-
-			player.sendPluginMessage(ChestCommands.getInstance(), "BungeeCord", byteArray.toByteArray());
-
-		} catch (Exception ex) {
-			player.sendMessage(ChatColor.RED + "An unexpected exception has occurred. Please notify the server's staff about this. (They should look at the console).");
-			ex.printStackTrace();
-			ChestCommands.getInstance().getLogger().warning("Could not connect \"" + player.getName() + "\" to the server \"" + server + "\".");
+		if (server.length() == 0) {
+			player.sendMessage(ChatColor.RED + "Target server was an empty string, cannot connect to it.");
 			return false;
 		}
 
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+
+		try {
+			dataOutputStream.writeUTF("Connect");
+			dataOutputStream.writeUTF(server); // Target Server
+		} catch (IOException ex) {
+			throw new AssertionError();
+		}
+
+		player.sendPluginMessage(ChestCommands.getInstance(), "BungeeCord", byteArrayOutputStream.toByteArray());
 		return true;
 	}
 
