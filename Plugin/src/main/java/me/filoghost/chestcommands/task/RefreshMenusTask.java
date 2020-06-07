@@ -25,15 +25,14 @@ public class RefreshMenusTask implements Runnable {
 
 	@Override
 	public void run() {
-
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			MenuView openMenu = MenuManager.getOpenMenu(player);
-			if (openMenu == null) {
+			MenuView openMenuView = MenuManager.getOpenMenuView(player);
+			if (openMenuView == null) {
 				return;
 			}
 			
-			if (elapsedTenths % openMenu.getMenu().getRefreshTicks() == 0) {
-				openMenu.getMenu().refresh(player, openMenu.getInventory());
+			if (elapsedTenths % openMenuView.getMenu().getRefreshTicks() == 0) {
+				openMenuView.getMenu().refresh(player, openMenuView.getInventory());
 			}
 		}
 

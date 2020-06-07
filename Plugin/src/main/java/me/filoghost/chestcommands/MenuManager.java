@@ -84,14 +84,6 @@ public class MenuManager {
 			}
 		}
 	}
-	
-	public IconMenu getIconMenu(Inventory inventory) {
-		if (inventory.getHolder() instanceof MenuInventoryHolder) {
-			return ((MenuInventoryHolder) inventory.getHolder()).getIconMenu();
-		} else {
-			return null;
-		}
-	}
 
 	public ExtendedIconMenu getMenuByCommand(String command) {
 		return commandsToMenuMap.get(command);
@@ -103,20 +95,20 @@ public class MenuManager {
 	
 	
 	public static void refreshOpenMenu(Player player) {
-		MenuView openMenu = getOpenMenu(player);
-		if (openMenu != null) {
-			openMenu.getMenu().refresh(player, openMenu.getInventory());
+		MenuView openMenuView = getOpenMenuView(player);
+		if (openMenuView != null) {
+			openMenuView.getMenu().refresh(player, openMenuView.getInventory());
 		}
 	}
 	
 	
-	public static MenuView getOpenMenu(Player player) {
+	public static IconMenu getOpenMenu(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {
 			return null;
 		}
 		
-		MenuView openMenu = getOpenMenu(view.getTopInventory());
+		IconMenu openMenu = getOpenMenu(view.getTopInventory());
 		if (openMenu == null) {
 			openMenu = getOpenMenu(view.getBottomInventory());
 		}
@@ -125,7 +117,31 @@ public class MenuManager {
 	}
 	
 	
-	private static MenuView getOpenMenu(Inventory inventory) {
+	public static IconMenu getOpenMenu(Inventory inventory) {
+		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
+			return null;
+		}
+		
+		return ((MenuInventoryHolder) inventory.getHolder()).getIconMenu();
+	}
+	
+	
+	public static MenuView getOpenMenuView(Player player) {
+		InventoryView view = player.getOpenInventory();
+		if (view == null) {
+			return null;
+		}
+		
+		MenuView openMenuView = getOpenMenuView(view.getTopInventory());
+		if (openMenuView == null) {
+			openMenuView = getOpenMenuView(view.getBottomInventory());
+		}
+		
+		return openMenuView;
+	}
+	
+	
+	private static MenuView getOpenMenuView(Inventory inventory) {
 		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
 			return null;
 		}

@@ -52,7 +52,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onInventoryClick(InventoryClickEvent event) {
-		IconMenu menu = menuManager.getIconMenu(event.getInventory());
+		IconMenu menu = MenuManager.getOpenMenu(event.getInventory());
 		if (menu == null) {
 			return;
 		}

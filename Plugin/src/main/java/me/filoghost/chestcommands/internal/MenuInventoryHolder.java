@@ -19,14 +19,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.util.Validate;
 
 /**
  * This class links an IconMenu with an Inventory, via InventoryHolder.
  */
 public class MenuInventoryHolder implements InventoryHolder {
 
-	private IconMenu iconMenu;
+	private final IconMenu iconMenu;
 
 	public MenuInventoryHolder(IconMenu iconMenu) {
 		this.iconMenu = iconMenu;
@@ -45,11 +44,6 @@ public class MenuInventoryHolder implements InventoryHolder {
 
 	public IconMenu getIconMenu() {
 		return iconMenu;
-	}
-
-	public void setIconMenu(IconMenu iconMenu) {
-		Validate.notNull(iconMenu, "IconMenu cannot be null");
-		this.iconMenu = iconMenu;
 	}
 
 }
