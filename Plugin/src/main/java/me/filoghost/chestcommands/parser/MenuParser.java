@@ -28,7 +28,7 @@ import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.exception.FormatException;
 import me.filoghost.chestcommands.internal.ClickType;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.internal.MenuData;
+import me.filoghost.chestcommands.internal.MenuSettings;
 import me.filoghost.chestcommands.parser.IconParser.Coords;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
@@ -82,7 +82,7 @@ public class MenuParser {
 	/**
 	 * Reads all the settings of a menu. It will never return a null title, even if not set.
 	 */
-	public static MenuData loadMenuData(PluginConfig config, ErrorCollector errorCollector) {
+	public static MenuSettings loadMenuData(PluginConfig config, ErrorCollector errorCollector) {
 
 		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
 		int rows;
@@ -108,7 +108,7 @@ public class MenuParser {
 			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
 		}
 
-		MenuData menuData = new MenuData(title, rows);
+		MenuSettings menuData = new MenuSettings(title, rows);
 		
 		List<String> triggeringCommands = ConfigUtil.getStringListOrInlineList(config, ";", Nodes.MENU_COMMANDS);
 		if (triggeringCommands != null) {

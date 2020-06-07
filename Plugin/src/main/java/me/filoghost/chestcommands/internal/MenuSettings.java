@@ -20,21 +20,22 @@ import me.filoghost.chestcommands.action.Action;
 
 import java.util.List;
 
-public class MenuData {
+public class MenuSettings {
 
-	// Required data
-	private String title;
-	private int rows;
+	// Required settings
+	private final String title;
+	private final int rows;
 
-	// Optional data
+	// Optional settings
 	private String[] commands;
-	private Material boundMaterial;
-	private short boundDataValue;
-	private ClickType clickType;
 	private List<Action> openActions;
 	private int refreshTenths;
 
-	public MenuData(String title, int rows) {
+	private Material boundMaterial;
+	private short boundDataValue;
+	private ClickType clickType;
+	
+	public MenuSettings(String title, int rows) {
 		this.title = title;
 		this.rows = rows;
 		boundDataValue = -1; // -1 = any
