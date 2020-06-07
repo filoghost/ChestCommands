@@ -43,13 +43,13 @@ public class EconomyBridge {
 	}
 
 	public static double getMoney(Player player) {
-		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
+		checkValidEconomy();
 		return economy.getBalance(player, player.getWorld().getName());
 	}
 
 	public static boolean hasMoney(Player player, double minimum) {
-		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
-		if (minimum < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + minimum);
+		checkValidEconomy();
+		checkPositiveAmount(minimum);
 
 		double balance = economy.getBalance(player, player.getWorld().getName());
 
@@ -64,8 +64,8 @@ public class EconomyBridge {
 	 * @return true if the operation was successful.
 	 */
 	public static boolean takeMoney(Player player, double amount) {
-		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
-		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
+		checkValidEconomy();
+		checkPositiveAmount(amount);
 
 		EconomyResponse response = economy.withdrawPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
@@ -76,8 +76,8 @@ public class EconomyBridge {
 	}
 
 	public static boolean giveMoney(Player player, double amount) {
-		if (!hasValidEconomy()) throw new IllegalStateException("Economy plugin was not found!");
-		if (amount < 0.0) throw new IllegalArgumentException("Invalid amount of money: " + amount);
+		checkValidEconomy();
+		checkPositiveAmount(amount);
 
 		EconomyResponse response = economy.depositPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
@@ -85,6 +85,18 @@ public class EconomyBridge {
 		MenuManager.refreshOpenMenu(player);
 
 		return result;
+	}
+
+	private static void checkValidEconomy() {
+		if (!hasValidEconomy()) {
+			throw new IllegalStateException("Economy plugin was not found!");
+		}
+	}
+	
+	private static void checkPositiveAmount(double amount) {
+		if (amount < 0.0) {
+			throw new IllegalArgumentException("Invalid amount of money: " + amount);
+		}
 	}
 
 	public static String formatMoney(double amount) {
