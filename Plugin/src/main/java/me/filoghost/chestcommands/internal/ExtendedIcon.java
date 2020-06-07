@@ -16,10 +16,8 @@ package me.filoghost.chestcommands.internal;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
@@ -132,10 +130,12 @@ public class ExtendedIcon extends Icon {
 		this.requiredItems = requiredItems;
 	}
 
+	@Override
 	public String calculateName(Player pov) {
 		return super.calculateName(pov);
 	}
 
+	@Override
 	public List<String> calculateLore(Player pov) {
 		return super.calculateLore(pov);
 	}
@@ -213,17 +213,7 @@ public class ExtendedIcon extends Icon {
 		}
 
 		if (changedVariables) {
-			InventoryView view = player.getOpenInventory();
-			if (view != null) {
-				Inventory topInventory = view.getTopInventory();
-				if (topInventory.getHolder() instanceof MenuInventoryHolder) {
-					MenuInventoryHolder menuHolder = (MenuInventoryHolder) topInventory.getHolder();
-
-					if (menuHolder.getIconMenu() instanceof ExtendedIconMenu) {
-						((ExtendedIconMenu) menuHolder.getIconMenu()).refresh(player, topInventory);
-					}
-				}
-			}
+			MenuManager.refreshOpenMenu(player);
 		}
 
 		return super.onClick(player);

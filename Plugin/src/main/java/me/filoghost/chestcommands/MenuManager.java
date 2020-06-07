@@ -23,6 +23,7 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.api.IconMenu;
@@ -101,5 +102,61 @@ public class MenuManager {
 	}
 	
 	
+	public static void refreshOpenMenu(Player player) {
+		MenuView openMenu = getOpenMenu(player);
+		if (openMenu != null) {
+			openMenu.getMenu().refresh(player, openMenu.getInventory());
+		}
+	}
+	
+	
+	public static MenuView getOpenMenu(Player player) {
+		InventoryView view = player.getOpenInventory();
+		if (view == null) {
+			return null;
+		}
+		
+		MenuView openMenu = getOpenMenu(view.getTopInventory());
+		if (openMenu == null) {
+			openMenu = getOpenMenu(view.getBottomInventory());
+		}
+		
+		return openMenu;
+	}
+	
+	
+	private static MenuView getOpenMenu(Inventory inventory) {
+		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
+			return null;
+		}
+		
+		MenuInventoryHolder menuInventoryHolder = (MenuInventoryHolder) inventory.getHolder();
+		if (!(menuInventoryHolder.getIconMenu() instanceof ExtendedIconMenu)) {
+			return null;
+		}
+			
+		return new MenuView((ExtendedIconMenu) menuInventoryHolder.getIconMenu(), inventory);		
+	}
+	
+	
+	public static class MenuView {
+		
+		private final ExtendedIconMenu menu;
+		private final Inventory inventory;
+		
+		public MenuView(ExtendedIconMenu menu, Inventory inventory) {
+			this.menu = menu;
+			this.inventory = inventory;
+		}
+
+		public ExtendedIconMenu getMenu() {
+			return menu;
+		}
+
+		public Inventory getInventory() {
+			return inventory;
+		}		
+		
+	}
 
 }

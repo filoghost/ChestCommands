@@ -23,7 +23,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
@@ -38,7 +37,6 @@ import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.internal.BoundItem;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
 import me.filoghost.chestcommands.internal.MenuData;
-import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
@@ -247,12 +245,8 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			InventoryView openInventory = player.getOpenInventory();
-			if (openInventory != null) {
-				if (openInventory.getTopInventory().getHolder() instanceof MenuInventoryHolder 
-						|| openInventory.getBottomInventory().getHolder() instanceof MenuInventoryHolder) {
-					player.closeInventory();
-				}
+			if (MenuManager.getOpenMenu(player) != null) {
+				player.closeInventory();
 			}
 		}
 	}
