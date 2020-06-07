@@ -197,19 +197,19 @@ public class ChestCommands extends JavaPlugin {
 				continue;
 			}
 
-			MenuSettings data = MenuParser.loadMenuData(menuConfig, errorCollector);
-			ExtendedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, data.getTitle(), data.getRows(), errorCollector);
+			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errorCollector);
+			ExtendedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errorCollector);
 
-			menuManager.registerMenu(menuConfig.getFileName(), data.getCommands(), iconMenu, errorCollector);
+			menuManager.registerMenu(menuConfig.getFileName(), menuSettings.getCommands(), iconMenu, errorCollector);
 
-			iconMenu.setRefreshTicks(data.getRefreshTenths());
+			iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
 
-			if (data.getOpenActions() != null) {
-				iconMenu.setOpenActions(data.getOpenActions());
+			if (menuSettings.getOpenActions() != null) {
+				iconMenu.setOpenActions(menuSettings.getOpenActions());
 			}
 
-			if (data.getOpenTrigger() != null) {
-				menuManager.registerTriggerItem(data.getOpenTrigger(), iconMenu);
+			if (menuSettings.getOpenTrigger() != null) {
+				menuManager.registerTriggerItem(menuSettings.getOpenTrigger(), iconMenu);
 			}
 		}
 

@@ -83,7 +83,7 @@ public class MenuParser {
 	/**
 	 * Reads all the settings of a menu. It will never return a null title, even if not set.
 	 */
-	public static MenuSettings loadMenuData(PluginConfig config, ErrorCollector errorCollector) {
+	public static MenuSettings loadMenuSettings(PluginConfig config, ErrorCollector errorCollector) {
 
 		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
 		int rows;
@@ -109,11 +109,11 @@ public class MenuParser {
 			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
 		}
 
-		MenuSettings menuData = new MenuSettings(title, rows);
+		MenuSettings menuSettings = new MenuSettings(title, rows);
 		
 		List<String> triggeringCommands = ConfigUtil.getStringListOrInlineList(config, ";", Nodes.MENU_COMMANDS);
 		if (triggeringCommands != null) {
-			menuData.setCommands(triggeringCommands.toArray(new String[0]));
+			menuSettings.setCommands(triggeringCommands.toArray(new String[0]));
 		}
 
 		List<String> serializedOpenActions = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);
@@ -128,7 +128,7 @@ public class MenuParser {
 			}
 
 			if (!openActions.isEmpty()) {
-				menuData.setOpenActions(openActions);
+				menuSettings.setOpenActions(openActions);
 			}
 		}
 
@@ -159,10 +159,10 @@ public class MenuParser {
 			if (tenthsToRefresh < 1) {
 				tenthsToRefresh = 1;
 			}
-			menuData.setRefreshTenths(tenthsToRefresh);
+			menuSettings.setRefreshTenths(tenthsToRefresh);
 		}
 
-		return menuData;
+		return menuSettings;
 	}
 
 }
