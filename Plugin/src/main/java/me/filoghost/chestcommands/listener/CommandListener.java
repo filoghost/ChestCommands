@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.util.StringUtils;
 
 public class CommandListener implements Listener {
 	
@@ -33,18 +32,32 @@ public class CommandListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
-		// Very fast method compared to split & substring
-		String command = StringUtils.getCleanCommand(event.getMessage());
-
-		if (command.isEmpty()) {
+		String command = getCommandName(event.getMessage());
+		
+		if (command == null) {
 			return;
 		}
 
 		ExtendedIconMenu menu = menuManager.getMenuByCommand(command);
-
-		if (menu != null) {
-			event.setCancelled(true);
-			menu.openCheckingPermission(event.getPlayer());
+		
+		if (menu == null) {
+			return;
+		}
+		
+		event.setCancelled(true);
+		menu.openCheckingPermission(event.getPlayer());
+	}
+	
+	private static String getCommandName(String fullCommand) {
+		if (!fullCommand.startsWith("/")) {
+			return null;
+		}
+		
+		int firstSpace = fullCommand.indexOf(' ');
+		if (firstSpace >= 1) {
+			return fullCommand.substring(1, firstSpace);
+		} else {
+			return fullCommand.substring(1);
 		}
 	}
 

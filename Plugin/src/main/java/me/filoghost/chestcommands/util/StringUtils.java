@@ -18,25 +18,6 @@ public final class StringUtils {
 
 	private StringUtils() {}
 
-	// Removes the first slash, and returns the all the chars until a space is encontered
-	public static String getCleanCommand(String message) {
-		char[] chars = message.toCharArray();
-
-		if (chars.length <= 1) {
-			return "";
-		}
-
-		int pos = 0;
-		for (int i = 1; i < chars.length; i++) {
-			if (chars[i] == ' ') {
-				break;
-			}
-
-			chars[(pos++)] = chars[i];
-		}
-
-		return new String(chars, 0, pos);
-	}
 
 	public static String stripChars(String input, char... removed) {
 		if (input == null || input.isEmpty() || removed.length == 0) {
