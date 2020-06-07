@@ -18,16 +18,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import me.filoghost.chestcommands.api.IconMenu;
-
 /**
  * This class links an IconMenu with an Inventory, via InventoryHolder.
  */
 public class MenuInventoryHolder implements InventoryHolder {
 
-	private final IconMenu iconMenu;
+	private final BasicIconMenu iconMenu;
 
-	public MenuInventoryHolder(IconMenu iconMenu) {
+	public MenuInventoryHolder(BasicIconMenu iconMenu) {
 		this.iconMenu = iconMenu;
 	}
 
@@ -42,7 +40,7 @@ public class MenuInventoryHolder implements InventoryHolder {
 		return Bukkit.createInventory(null, iconMenu.getSize());
 	}
 
-	public IconMenu getIconMenu() {
+	public BasicIconMenu getIconMenu() {
 		return iconMenu;
 	}
 

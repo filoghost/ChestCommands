@@ -18,14 +18,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
-import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.StringUtils;
 
 import java.util.List;
 
-public class ExtendedIcon extends Icon {
+public class ExtendedIcon extends BasicIcon {
 
 	private String permission;
 	private String permissionMessage;

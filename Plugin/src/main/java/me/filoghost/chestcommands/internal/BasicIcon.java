@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.api;
+package me.filoghost.chestcommands.internal;
 
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
@@ -25,6 +25,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.api.ClickHandler;
+import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.variable.VariableManager;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-public class Icon {
+public class BasicIcon implements Icon {
 
 	private Material material;
 	private int amount;
@@ -58,25 +60,29 @@ public class Icon {
 	private boolean skullOwnerHasVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
-	public Icon() {
+	public BasicIcon() {
 		enchantments = new HashMap<>();
 		closeOnClick = true;
 		amount = 1;        
 	}
 
+	@Override
 	public boolean hasVariables() {
 		return nameHasVariables || loreLinesWithVariables != null || skullOwnerHasVariables;
 	}
 
+	@Override
 	public void setMaterial(Material material) {
 		if (material == Material.AIR) material = null;
 		this.material = material;
 	}
 
+	@Override
 	public Material getMaterial() {
 		return material;
 	}
 
+	@Override
 	public void setAmount(int amount) {
 		if (amount < 1) amount = 1;
 		else if (amount > 127) amount = 127;
@@ -84,43 +90,52 @@ public class Icon {
 		this.amount = amount;
 	}
 
+	@Override
 	public int getAmount() {
 		return amount;
 	}
 
+	@Override
 	public void setDataValue(short dataValue) {
 		if (dataValue < 0) dataValue = 0;
 
 		this.dataValue = dataValue;
 	}
 
+	@Override
 	public short getDataValue() {
 		return dataValue;
 	}
 
+	@Override
 	public void setNBTData(String nbtData) {
 		this.nbtData = nbtData;
 	}
 
+	@Override
 	public String getNBTData() {
 		return nbtData;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 		this.nameHasVariables = VariableManager.hasVariables(name);
 	}
 
+	@Override
 	public boolean hasName() {
 		return name != null;
 	}
 
+	@Override
 	public void setLore(String... lore) {
 		if (lore != null) {
 			setLore(Arrays.asList(lore));
 		}
 	}
 
+	@Override
 	public void setLore(List<String> lore) {
 		this.lore = lore;
 		this.loreLinesWithVariables = null;
@@ -137,14 +152,17 @@ public class Icon {
 		}
 	}
 
+	@Override
 	public boolean hasLore() {
 		return lore != null && lore.size() > 0;
 	}
 
+	@Override
 	public List<String> getLore() {
 		return lore;
 	}
 
+	@Override
 	public void setEnchantments(Map<Enchantment, Integer> enchantments) {
 		if (enchantments == null) {
 			this.enchantments.clear();
@@ -153,67 +171,83 @@ public class Icon {
 		this.enchantments = enchantments;
 	}
 
+	@Override
 	public Map<Enchantment, Integer> getEnchantments() {
 		return new HashMap<>(enchantments);
 	}
 
+	@Override
 	public void addEnchantment(Enchantment ench) {
 		addEnchantment(ench, 1);
 	}
 
+	@Override
 	public void addEnchantment(Enchantment ench, Integer level) {
 		enchantments.put(ench, level);
 	}
 
+	@Override
 	public void removeEnchantment(Enchantment ench) {
 		enchantments.remove(ench);
 	}
 
+	@Override
 	public void clearEnchantments() {
 		enchantments.clear();
 	}
 
+	@Override
 	public Color getColor() {
 		return color;
 	}
 
+	@Override
 	public void setColor(Color color) {
 		this.color = color;
 	}
 
+	@Override
 	public String getSkullOwner() {
 		return skullOwner;
 	}
 
+	@Override
 	public void setSkullOwner(String skullOwner) {
 		this.skullOwner = skullOwner;
 		this.skullOwnerHasVariables = VariableManager.hasVariables(skullOwner);
 	}
 
+	@Override
 	public DyeColor getBannerColor() {
 		return bannerColor;
 	}
 
+	@Override
 	public void setBannerColor(DyeColor bannerColor) {
 		this.bannerColor = bannerColor;
 	}
 
+	@Override
 	public List<Pattern> getBannerPatterns() {
 		return bannerPatterns;
 	}
 
+	@Override
 	public void setBannerPatterns(List<Pattern> bannerPatterns) {
 		this.bannerPatterns = bannerPatterns;
 	}
 
+	@Override
 	public void setCloseOnClick(boolean closeOnClick) {
 		this.closeOnClick = closeOnClick;
 	}
 
+	@Override
 	public void setClickHandler(ClickHandler clickHandler) {
 		this.clickHandler = clickHandler;
 	}
 
+	@Override
 	public ClickHandler getClickHandler() {
 		return clickHandler;
 	}
@@ -273,6 +307,7 @@ public class Icon {
 		return output;
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public ItemStack createItemstack(Player pov) {
 
@@ -341,6 +376,7 @@ public class Icon {
 		return itemStack;
 	}
 
+	@Override
 	public boolean onClick(Player whoClicked) {
 		if (clickHandler != null) {
 			return clickHandler.onClick(whoClicked);

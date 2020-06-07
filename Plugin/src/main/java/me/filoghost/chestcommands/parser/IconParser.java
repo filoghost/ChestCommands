@@ -24,11 +24,11 @@ import org.bukkit.enchantments.Enchantment;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.internal.RunActionsClickHandler;
 import me.filoghost.chestcommands.internal.ExtendedIcon;
+import me.filoghost.chestcommands.internal.BasicIcon;
 import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
@@ -91,7 +91,7 @@ public class IconParser {
 	}
 
 
-	public static Icon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
+	public static BasicIcon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
 		Preconditions.notNull(section, "section");
 
 		// The icon is valid even without a Material

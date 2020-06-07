@@ -14,6 +14,9 @@
  */
 package me.filoghost.chestcommands.listener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,8 +31,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import java.util.HashMap;
-import java.util.Map;
+import me.filoghost.chestcommands.internal.BasicIconMenu;
 
 public class InventoryListener implements Listener {
 	
@@ -62,7 +64,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
-		IconMenu menu = MenuManager.getOpenMenu(event.getInventory());
+		BasicIconMenu menu = MenuManager.getOpenMenu(event.getInventory());
 		if (menu == null) {
 			return;
 		}

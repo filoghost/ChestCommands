@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.BasicIconMenu;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
@@ -116,7 +117,7 @@ public class MenuManager {
 	}
 	
 	
-	public static IconMenu getOpenMenu(Inventory inventory) {
+	public static BasicIconMenu getOpenMenu(Inventory inventory) {
 		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
 			return null;
 		}

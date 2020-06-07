@@ -22,11 +22,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.internal.ClickType;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.BasicIcon;
 import me.filoghost.chestcommands.internal.MenuSettings;
 import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.parser.IconParser.Coords;
@@ -61,7 +61,7 @@ public class MenuParser {
 
 			ConfigurationSection iconSection = config.getConfigurationSection(subSectionName);
 
-			Icon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
+			BasicIcon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
 			Coords coords = IconParser.loadCoordsFromSection(iconSection);
 
 			if (!coords.isSetX() || !coords.isSetY()) {

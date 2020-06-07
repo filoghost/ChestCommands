@@ -25,10 +25,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.IconMenu;
+
 import java.util.List;
 
-public class ExtendedIconMenu extends IconMenu {
+public class ExtendedIconMenu extends BasicIconMenu {
 
 	private String fileName;
 	private String permission;

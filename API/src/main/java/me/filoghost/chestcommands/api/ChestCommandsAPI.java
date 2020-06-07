@@ -16,9 +16,11 @@ package me.filoghost.chestcommands.api;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.api.internal.BackendAPI;
 
 public class ChestCommandsAPI {
+	
+	private ChestCommandsAPI() {}
 
 	/**
 	 * Checks if a menu with a given file name was loaded by the plugin.
@@ -26,7 +28,7 @@ public class ChestCommandsAPI {
 	 * @return true - if the menu was found.
 	 */
 	public static boolean isPluginMenu(String yamlFile) {
-		return ChestCommands.getInstance().getMenuManager().getMenuByFileName(yamlFile) != null;
+		return BackendAPI.getImplementation().getMenuByFileName(yamlFile) != null;
 	}
 
 	/**
@@ -38,7 +40,7 @@ public class ChestCommandsAPI {
 	 * @return true - if the menu was found and opened, false if not.
 	 */
 	public static boolean openPluginMenu(Player player, String yamlFile) {
-		IconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(yamlFile);
+		IconMenu menu = BackendAPI.getImplementation().getMenuByFileName(yamlFile);
 
 		if (menu != null) {
 			menu.open(player);

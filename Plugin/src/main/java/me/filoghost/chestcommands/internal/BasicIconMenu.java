@@ -12,7 +12,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.api;
+package me.filoghost.chestcommands.internal;
+
+import java.util.Arrays;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,11 +23,10 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.api.Icon;
+import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.util.Preconditions;
-
-import java.util.Arrays;
+import me.filoghost.chestcommands.util.Utils;
 
 /*
  *    MEMO: Raw slot numbers
@@ -35,17 +36,18 @@ import java.util.Arrays;
  *    ...
  *
  */
-public class IconMenu {
+public class BasicIconMenu implements IconMenu {
 
 	protected final String title;
 	protected final Icon[] icons;
 
 
-	public IconMenu(String title, int rows) {
+	public BasicIconMenu(String title, int rows) {
 		this.title = title;
-		icons = new Icon[rows * 9];
+		icons = new BasicIcon[rows * 9];
 	}
 
+	@Override
 	public void setIcon(int x, int y, Icon icon) {
 		int slot = Utils.makePositive(y - 1) * 9 + Utils.makePositive(x - 1);
 		if (slot >= 0 && slot < icons.length) {
@@ -53,12 +55,14 @@ public class IconMenu {
 		}
 	}
 
+	@Override
 	public void setIconRaw(int slot, Icon icon) {
 		if (slot >= 0 && slot < icons.length) {
 			icons[slot] = icon;
 		}
 	}
 
+	@Override
 	public Icon getIcon(int x, int y) {
 		int slot = Utils.makePositive(y - 1) * 9 + Utils.makePositive(x - 1);
 		if (slot >= 0 && slot < icons.length) {
@@ -68,6 +72,7 @@ public class IconMenu {
 		return null;
 	}
 
+	@Override
 	public Icon getIconRaw(int slot) {
 		if (slot >= 0 && slot < icons.length) {
 			return icons[slot];
@@ -76,18 +81,22 @@ public class IconMenu {
 		return null;
 	}
 
+	@Override
 	public int getRows() {
 		return icons.length / 9;
 	}
 
+	@Override
 	public int getSize() {
 		return icons.length;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public void open(Player player) {
 		Preconditions.notNull(player, "player");
 
