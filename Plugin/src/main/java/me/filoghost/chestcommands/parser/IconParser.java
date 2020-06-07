@@ -34,7 +34,6 @@ import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.ItemUtils;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
@@ -155,7 +154,7 @@ public class IconParser {
 
 		if (section.isSet(Nodes.COLOR)) {
 			try {
-				icon.setColor(ItemUtils.parseColor(section.getString(Nodes.COLOR)));
+				icon.setColor(ItemMetaParser.parseColor(section.getString(Nodes.COLOR)));
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}
@@ -166,7 +165,7 @@ public class IconParser {
 		String bannerColor = ConfigUtil.getAnyString(section, Nodes.BANNER_COLOR);
 		if (bannerColor != null) {
 			try {
-				icon.setBannerColor(ItemUtils.parseDyeColor(bannerColor));
+				icon.setBannerColor(ItemMetaParser.parseDyeColor(bannerColor));
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-COLOR: " + e.getMessage());
 			}
@@ -174,7 +173,7 @@ public class IconParser {
 
 		if (section.isSet(Nodes.BANNER_PATTERNS)) {
 			try {
-				icon.setBannerPatterns(ItemUtils.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
+				icon.setBannerPatterns(ItemMetaParser.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-PATTERNS: " + e.getMessage());
 			}

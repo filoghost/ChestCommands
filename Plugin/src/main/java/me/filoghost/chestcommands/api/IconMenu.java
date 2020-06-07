@@ -17,9 +17,11 @@ package me.filoghost.chestcommands.api;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.util.ItemUtils;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.Preconditions;
 
@@ -93,11 +95,25 @@ public class IconMenu {
 
 		for (int i = 0; i < icons.length; i++) {
 			if (icons[i] != null) {
-				inventory.setItem(i, ItemUtils.hideAttributes(icons[i].createItemstack(player)));
+				inventory.setItem(i, hideAttributes(icons[i].createItemstack(player)));
 			}
 		}
 
 		player.openInventory(inventory);
+	}
+	
+	protected ItemStack hideAttributes(ItemStack item) {
+		if (item == null) {
+			return null;
+		}
+
+		ItemMeta meta = item.getItemMeta();
+		if (Utils.isNullOrEmpty(meta.getItemFlags())) {
+			// Add them only if no flag was already set
+			meta.addItemFlags(ItemFlag.values());
+			item.setItemMeta(meta);
+		}
+		return item;
 	}
 
 	@Override

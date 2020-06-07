@@ -12,44 +12,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.util;
+package me.filoghost.chestcommands.parser;
 
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import me.filoghost.chestcommands.exception.FormatException;
-
+import me.filoghost.chestcommands.util.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ItemUtils {
+public final class ItemMetaParser {
 	
 	private static Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
 	private static Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
 
+	private ItemMetaParser() {}
 
-	private ItemUtils() {
-	}
-
-	public static ItemStack hideAttributes(ItemStack item) {
-		if (item == null) {
-			return null;
-		}
-
-		ItemMeta meta = item.getItemMeta();
-		if (Utils.isNullOrEmpty(meta.getItemFlags())) {
-			// Add them only if no flag was already set
-			meta.addItemFlags(ItemFlag.values());
-			item.setItemMeta(meta);
-		}
-		return item;
-	}
-
+	
 	public static Color parseColor(String input) throws FormatException {
 		String[] split = input.replace(" ", "").split(",");
 
