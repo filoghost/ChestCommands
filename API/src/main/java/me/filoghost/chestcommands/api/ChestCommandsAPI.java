@@ -25,7 +25,7 @@ public class ChestCommandsAPI {
 	/**
 	 * Checks if a menu with a given file name was loaded by the plugin.
 	 *
-	 * @return true - if the menu was found.
+	 * @return if the menu was found
 	 */
 	public static boolean isPluginMenu(String yamlFile) {
 		return BackendAPI.getImplementation().getMenuByFileName(yamlFile) != null;
@@ -35,9 +35,9 @@ public class ChestCommandsAPI {
 	 * Opens a menu loaded by ChestCommands to a player.
 	 * NOTE: this method ignores permissions.
 	 *
-	 * @param player   - the player that will see the GUI.
-	 * @param yamlFile - the file name of the menu to open. The .yml extension CANNOT be omitted.
-	 * @return true - if the menu was found and opened, false if not.
+	 * @param player the player that will see the menu
+	 * @param yamlFile the file name of the menu to open (with the .yml extension)
+	 * @return if the menu was found and opened
 	 */
 	public static boolean openPluginMenu(Player player, String yamlFile) {
 		IconMenu menu = BackendAPI.getImplementation().getMenuByFileName(yamlFile);
