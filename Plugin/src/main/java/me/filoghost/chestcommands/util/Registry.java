@@ -28,15 +28,15 @@ public class Registry<T> {
 	
 	
 
-	public static <E extends Enum<E>> Registry<E> fromEnumValues(Class<E> enumClass) {
-		Registry<E> registry = new Registry<>(enumClass);
+	public static <T extends Enum<T>> Registry<T> fromEnumValues(Class<T> enumClass) {
+		Registry<T> registry = new Registry<>(enumClass);
 		registry.putAll(enumClass.getEnumConstants(), Enum::name);
 		return registry;
 	}
 	
 	
-	public static <X> Registry<X> fromValues(X[] values, Function<X, String> toKeyFunction) {
-		Registry<X> registry = new Registry<>(null);
+	public static <T> Registry<T> fromValues(T[] values, Function<T, String> toKeyFunction) {
+		Registry<T> registry = new Registry<>(null);
 		registry.putAll(values, toKeyFunction);
 		return registry;
 	}
@@ -68,7 +68,7 @@ public class Registry<T> {
 		}
 	}
 	
-	public void putAll(T[] enumValues, Function<T, String> toKeyFunction) {
+	private void putAll(T[] enumValues, Function<T, String> toKeyFunction) {
 		for (T enumValue : enumValues) {
 			valuesMap.put(toKeyFormat(toKeyFunction.apply(enumValue)), enumValue);
 		}
