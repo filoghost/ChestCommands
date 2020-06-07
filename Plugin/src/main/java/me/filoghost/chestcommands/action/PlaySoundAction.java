@@ -18,9 +18,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.util.BukkitUtils;
+import me.filoghost.chestcommands.util.Registry;
 
 public class PlaySoundAction extends Action {
+	
+	private static Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
 
 	private Sound sound;
 	private float pitch;
@@ -41,7 +43,7 @@ public class PlaySoundAction extends Action {
 
 		String[] split = action.split(",");
 
-		sound = BukkitUtils.matchSound(split[0]);
+		sound = SOUNDS_REGISTRY.find(split[0]);
 		if (sound == null) {
 			errorMessage = ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".";
 			return;

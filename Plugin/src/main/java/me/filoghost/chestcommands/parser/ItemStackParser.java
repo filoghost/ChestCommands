@@ -18,8 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.exception.FormatException;
-import me.filoghost.chestcommands.util.MaterialsRegistry;
-import me.filoghost.chestcommands.util.StringUtils;
+import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.Validate;
 
@@ -39,7 +38,7 @@ public class ItemStackParser {
 		Validate.notNull(input, "input cannot be null");
 
 		// Remove spaces, they're not needed
-		input = StringUtils.stripChars(input, " _-");
+		input = input.replace(" ", "");
 
 		if (parseAmount) {
 			// Read the optional amount
@@ -82,9 +81,9 @@ public class ItemStackParser {
 			input = splitByColons[0];
 		}
 
-		Material material = MaterialsRegistry.matchMaterial(input);
+		Material material = MaterialsHelper.matchMaterial(input);
 
-		if (material == null || MaterialsRegistry.isAir(material)) {
+		if (material == null || MaterialsHelper.isAir(material)) {
 			throw new FormatException("invalid material \"" + input + "\"");
 		}
 		this.material = material;

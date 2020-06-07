@@ -22,7 +22,7 @@ import org.bukkit.inventory.InventoryView;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.util.MaterialsRegistry;
+import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.StringUtils;
 
 import java.util.List;
@@ -179,7 +179,7 @@ public class ExtendedIcon extends Icon {
 				if (!item.hasItem(player)) {
 					notHasItem = true;
 					player.sendMessage(ChestCommands.getLang().no_required_item
-							.replace("{material}", MaterialsRegistry.formatMaterial(item.getMaterial()))
+							.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
 							.replace("{amount}", Integer.toString(item.getAmount()))
 							.replace("{datavalue}", item.hasRestrictiveDataValue() ? Short.toString(item.getDataValue()) : ChestCommands.getLang().any)
 					);

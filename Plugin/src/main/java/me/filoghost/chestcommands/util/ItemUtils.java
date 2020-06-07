@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ItemUtils {
+	
+	private static Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
+	private static Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
+
 
 	private ItemUtils() {
 	}
@@ -47,7 +51,7 @@ public final class ItemUtils {
 	}
 
 	public static Color parseColor(String input) throws FormatException {
-		String[] split = StringUtils.stripChars(input, " ").split(",");
+		String[] split = input.replace(" ", "").split(",");
 
 		if (split.length != 3) {
 			throw new FormatException("it must be in the format \"red, green, blue\".");
@@ -71,10 +75,9 @@ public final class ItemUtils {
 	}
 
 	public static DyeColor parseDyeColor(String input) throws FormatException {
-		DyeColor color;
-		try {
-			color = DyeColor.valueOf(input.toUpperCase());
-		} catch (IllegalArgumentException e) {
+		DyeColor color = DYE_COLORS_REGISTRY.find(input);
+		
+		if (color == null) {
 			throw new FormatException("it must be a valid color.");
 		}
 		return color;
@@ -87,11 +90,15 @@ public final class ItemUtils {
 			if (split.length != 2) {
 				throw new FormatException("it must be in the format \"pattern:color\".");
 			}
-			try {
-				patterns.add(new Pattern(parseDyeColor(split[1]), PatternType.valueOf(split[0].toUpperCase())));
-			} catch (IllegalArgumentException e) {
+			
+			PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0]);
+			DyeColor patternColor = parseDyeColor(split[1]);
+			
+			if (patternType == null) {
 				throw new FormatException("it must be a valid pattern type.");
 			}
+			
+			patterns.add(new Pattern(patternColor, patternType));
 		}
 		return patterns;
 	}

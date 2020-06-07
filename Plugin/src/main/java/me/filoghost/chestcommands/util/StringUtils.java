@@ -16,16 +16,7 @@ package me.filoghost.chestcommands.util;
 
 public final class StringUtils {
 
-	private StringUtils() {
-	}
-
-	public static String stripChars(String input, String removed) {
-		if (removed == null || removed.isEmpty()) {
-			return input;
-		}
-
-		return stripChars(input, removed.toCharArray());
-	}
+	private StringUtils() {}
 
 	// Removes the first slash, and returns the all the chars until a space is encontered
 	public static String getCleanCommand(String message) {

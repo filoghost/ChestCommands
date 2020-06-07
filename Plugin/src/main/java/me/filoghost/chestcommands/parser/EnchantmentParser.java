@@ -14,54 +14,43 @@
  */
 package me.filoghost.chestcommands.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.enchantments.Enchantment;
 
+import me.filoghost.chestcommands.util.Registry;
 import me.filoghost.chestcommands.util.ErrorCollector;
-import me.filoghost.chestcommands.util.StringUtils;
 
 public class EnchantmentParser {
 
-	private static Map<String, Enchantment> enchantmentsMap = new HashMap<>();
+	private static Registry<Enchantment> ENCHANTMENTS_REGISTRY;
 
 	static {
-		enchantmentsMap.put(formatLowercase("Protection"), Enchantment.PROTECTION_ENVIRONMENTAL);
-		enchantmentsMap.put(formatLowercase("Fire Protection"), Enchantment.PROTECTION_FIRE);
-		enchantmentsMap.put(formatLowercase("Feather Falling"), Enchantment.PROTECTION_FALL);
-		enchantmentsMap.put(formatLowercase("Blast Protection"), Enchantment.PROTECTION_EXPLOSIONS);
-		enchantmentsMap.put(formatLowercase("Projectile Protection"), Enchantment.PROTECTION_PROJECTILE);
-		enchantmentsMap.put(formatLowercase("Respiration"), Enchantment.OXYGEN);
-		enchantmentsMap.put(formatLowercase("Aqua Affinity"), Enchantment.WATER_WORKER);
-		enchantmentsMap.put(formatLowercase("Thorns"), Enchantment.THORNS);
-		enchantmentsMap.put(formatLowercase("Sharpness"), Enchantment.DAMAGE_ALL);
-		enchantmentsMap.put(formatLowercase("Smite"), Enchantment.DAMAGE_UNDEAD);
-		enchantmentsMap.put(formatLowercase("Bane Of Arthropods"), Enchantment.DAMAGE_ARTHROPODS);
-		enchantmentsMap.put(formatLowercase("Knockback"), Enchantment.KNOCKBACK);
-		enchantmentsMap.put(formatLowercase("Fire Aspect"), Enchantment.FIRE_ASPECT);
-		enchantmentsMap.put(formatLowercase("Looting"), Enchantment.LOOT_BONUS_MOBS);
-		enchantmentsMap.put(formatLowercase("Efficiency"), Enchantment.DIG_SPEED);
-		enchantmentsMap.put(formatLowercase("Silk Touch"), Enchantment.SILK_TOUCH);
-		enchantmentsMap.put(formatLowercase("Unbreaking"), Enchantment.DURABILITY);
-		enchantmentsMap.put(formatLowercase("Fortune"), Enchantment.LOOT_BONUS_BLOCKS);
-		enchantmentsMap.put(formatLowercase("Power"), Enchantment.ARROW_DAMAGE);
-		enchantmentsMap.put(formatLowercase("Punch"), Enchantment.ARROW_KNOCKBACK);
-		enchantmentsMap.put(formatLowercase("Flame"), Enchantment.ARROW_FIRE);
-		enchantmentsMap.put(formatLowercase("Infinity"), Enchantment.ARROW_INFINITE);
-		enchantmentsMap.put(formatLowercase("Lure"), Enchantment.LURE);
-		enchantmentsMap.put(formatLowercase("Luck Of The Sea"), Enchantment.LUCK);
-
-		for (Enchantment enchant : Enchantment.values()) {
-			if (enchant != null) {
-				// Accepts the ugly default names too
-				enchantmentsMap.put(formatLowercase(enchant.getName()), enchant);
-			}
-		}
-	}
-
-	private static String formatLowercase(String string) {
-		return StringUtils.stripChars(string, " _-").toLowerCase();
+		ENCHANTMENTS_REGISTRY = Registry.fromValues(Enchantment.values(), Enchantment::getName);
+		
+		// Add aliases
+		ENCHANTMENTS_REGISTRY.put("Protection", Enchantment.PROTECTION_ENVIRONMENTAL);
+		ENCHANTMENTS_REGISTRY.put("Fire Protection", Enchantment.PROTECTION_FIRE);
+		ENCHANTMENTS_REGISTRY.put("Feather Falling", Enchantment.PROTECTION_FALL);
+		ENCHANTMENTS_REGISTRY.put("Blast Protection", Enchantment.PROTECTION_EXPLOSIONS);
+		ENCHANTMENTS_REGISTRY.put("Projectile Protection", Enchantment.PROTECTION_PROJECTILE);
+		ENCHANTMENTS_REGISTRY.put("Respiration", Enchantment.OXYGEN);
+		ENCHANTMENTS_REGISTRY.put("Aqua Affinity", Enchantment.WATER_WORKER);
+		ENCHANTMENTS_REGISTRY.put("Thorns", Enchantment.THORNS);
+		ENCHANTMENTS_REGISTRY.put("Sharpness", Enchantment.DAMAGE_ALL);
+		ENCHANTMENTS_REGISTRY.put("Smite", Enchantment.DAMAGE_UNDEAD);
+		ENCHANTMENTS_REGISTRY.put("Bane Of Arthropods", Enchantment.DAMAGE_ARTHROPODS);
+		ENCHANTMENTS_REGISTRY.put("Knockback", Enchantment.KNOCKBACK);
+		ENCHANTMENTS_REGISTRY.put("Fire Aspect", Enchantment.FIRE_ASPECT);
+		ENCHANTMENTS_REGISTRY.put("Looting", Enchantment.LOOT_BONUS_MOBS);
+		ENCHANTMENTS_REGISTRY.put("Efficiency", Enchantment.DIG_SPEED);
+		ENCHANTMENTS_REGISTRY.put("Silk Touch", Enchantment.SILK_TOUCH);
+		ENCHANTMENTS_REGISTRY.put("Unbreaking", Enchantment.DURABILITY);
+		ENCHANTMENTS_REGISTRY.put("Fortune", Enchantment.LOOT_BONUS_BLOCKS);
+		ENCHANTMENTS_REGISTRY.put("Power", Enchantment.ARROW_DAMAGE);
+		ENCHANTMENTS_REGISTRY.put("Punch", Enchantment.ARROW_KNOCKBACK);
+		ENCHANTMENTS_REGISTRY.put("Flame", Enchantment.ARROW_FIRE);
+		ENCHANTMENTS_REGISTRY.put("Infinity", Enchantment.ARROW_INFINITE);
+		ENCHANTMENTS_REGISTRY.put("Lure", Enchantment.LURE);
+		ENCHANTMENTS_REGISTRY.put("Luck Of The Sea", Enchantment.LUCK);
 	}
 
 	public static EnchantmentDetails parseEnchantment(String input, String iconName, String menuFileName, ErrorCollector errorCollector) {
@@ -78,7 +67,7 @@ public class EnchantmentParser {
 			input = levelSplit[0];
 		}
 
-		Enchantment ench = matchEnchantment(input);
+		Enchantment ench = ENCHANTMENTS_REGISTRY.find(input);
 
 		if (ench == null) {
 			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + input);
@@ -87,14 +76,6 @@ public class EnchantmentParser {
 		}
 
 		return null;
-	}
-
-	private static Enchantment matchEnchantment(String input) {
-		if (input == null) {
-			return null;
-		}
-
-		return enchantmentsMap.get(formatLowercase(input));
 	}
 	
 	
