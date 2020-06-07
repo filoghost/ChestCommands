@@ -25,7 +25,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.variable.VariableManager;
 
 import java.util.ArrayList;

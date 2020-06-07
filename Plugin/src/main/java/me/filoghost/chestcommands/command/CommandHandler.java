@@ -37,6 +37,7 @@ public class CommandHandler extends CommandFramework {
 		this.menuManager = menuManager;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(CommandSender sender, String label, String[] args) {
 		if (args.length == 0) {

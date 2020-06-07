@@ -38,6 +38,7 @@ public class BarAPIBridge {
 		return barAPI != null;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void setMessage(Player player, String message, int seconds) {
 		if (!hasValidPlugin()) throw new IllegalStateException("BarAPI plugin was not found!");
 
