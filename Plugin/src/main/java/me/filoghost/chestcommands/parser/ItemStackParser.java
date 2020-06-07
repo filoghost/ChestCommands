@@ -18,7 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.util.MaterialsHelper;
-import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.Preconditions;
 
 public class ItemStackParser {
@@ -44,14 +43,7 @@ public class ItemStackParser {
 			String[] splitAmount = input.split(",");
 
 			if (splitAmount.length > 1) {
-
-				if (!Utils.isValidInteger(splitAmount[1])) {
-					throw new FormatException("invalid amount \"" + splitAmount[1] + "\"");
-				}
-
-				int amount = Integer.parseInt(splitAmount[1]);
-				if (amount <= 0) throw new FormatException("invalid amount \"" + splitAmount[1] + "\"");
-				this.amount = amount;
+				this.amount = NumberParser.getStrictlyPositiveInteger(splitAmount[1], "invalid amount \"" + splitAmount[1] + "\"");
 
 				// Only keep the first part as input
 				input = splitAmount[0];
@@ -63,15 +55,7 @@ public class ItemStackParser {
 		String[] splitByColons = input.split(":");
 
 		if (splitByColons.length > 1) {
-
-			if (!Utils.isValidShort(splitByColons[1])) {
-				throw new FormatException("invalid data value \"" + splitByColons[1] + "\"");
-			}
-
-			short dataValue = Short.parseShort(splitByColons[1]);
-			if (dataValue < 0) {
-				throw new FormatException("invalid data value \"" + splitByColons[1] + "\"");
-			}
+			short dataValue = NumberParser.getPositiveShort(splitByColons[1], "invalid data value \"" + splitByColons[1] + "\"");
 
 			this.explicitDataValue = true;
 			this.dataValue = dataValue;

@@ -18,7 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.parser.FormatException;
+import me.filoghost.chestcommands.parser.NumberParser;
 
 public class GiveMoneyAction extends Action {
 
@@ -33,12 +34,11 @@ public class GiveMoneyAction extends Action {
 	}
 
 	private void parseMoney(String action) {
-		if (!Utils.isValidPositiveDouble(action)) {
+		try {
+			moneyToGive = NumberParser.getStrictlyPositiveDouble(action);
+		} catch (FormatException e) {
 			errorMessage = ChatColor.RED + "Invalid money amount: " + action;
-			return;
 		}
-		errorMessage = null;
-		moneyToGive = Double.parseDouble(action);
 	}
 
 	@Override

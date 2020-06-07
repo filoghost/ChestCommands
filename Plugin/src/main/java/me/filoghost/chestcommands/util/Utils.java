@@ -18,45 +18,10 @@ import java.util.*;
 
 public final class Utils {
 
-	private Utils() {
-	}
+	private Utils() {}
 
 	public static int makePositive(int i) {
 		return i < 0 ? 0 : i;
-	}
-
-	public static boolean isValidInteger(String input) {
-		try {
-			Integer.parseInt(input);
-			return true;
-		} catch (NumberFormatException ex) {
-			return false;
-		}
-	}
-
-	public static boolean isValidPositiveInteger(String input) {
-		try {
-			return Integer.parseInt(input) > 0;
-		} catch (NumberFormatException ex) {
-			return false;
-		}
-	}
-
-	public static boolean isValidShort(String input) {
-		try {
-			Short.parseShort(input);
-			return true;
-		} catch (NumberFormatException ex) {
-			return false;
-		}
-	}
-
-	public static boolean isValidPositiveDouble(String input) {
-		try {
-			return Double.parseDouble(input) > 0.0;
-		} catch (NumberFormatException ex) {
-			return false;
-		}
 	}
 
 	public static boolean isClassLoaded(String name) {

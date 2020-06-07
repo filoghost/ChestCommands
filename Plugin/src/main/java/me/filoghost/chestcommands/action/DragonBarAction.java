@@ -17,8 +17,9 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
+import me.filoghost.chestcommands.parser.FormatException;
+import me.filoghost.chestcommands.parser.NumberParser;
 import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.Utils;
 
 public class DragonBarAction extends Action {
 
@@ -37,9 +38,14 @@ public class DragonBarAction extends Action {
 		message = action;
 
 		String[] split = action.split("\\|", 2); // Max of 2 pieces
-		if (split.length > 1 && Utils.isValidPositiveInteger(split[0].trim())) {
-			seconds = Integer.parseInt(split[0].trim());
-			message = split[1].trim();
+		if (split.length > 1) {
+			try {
+				seconds =  NumberParser.getStrictlyPositiveInteger(split[0].trim());
+				message = split[1].trim();
+			} catch (FormatException ex) {
+				// Ignore
+				// TODO: notify with message
+			}
 		}
 
 		message = FormatUtils.addColors(message);
