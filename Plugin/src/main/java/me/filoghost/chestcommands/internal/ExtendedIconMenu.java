@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.internal;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -68,31 +67,26 @@ public class ExtendedIconMenu extends BasicIconMenu {
 
 	@Override
 	public void open(Player player) {
-		try {
-			if (openActions != null) {
-				for (Action openAction : openActions) {
-					openAction.execute(player);
-				}
+		if (openActions != null) {
+			for (Action openAction : openActions) {
+				openAction.execute(player);
 			}
-
-			Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
-
-			for (int i = 0; i < icons.length; i++) {
-				if (icons[i] != null) {
-
-					if (icons[i] instanceof ExtendedIcon && !((ExtendedIcon) icons[i]).canViewIcon(player)) {
-						continue;
-					}
-
-					inventory.setItem(i, hideAttributes(icons[i].createItemstack(player)));
-				}
-			}
-
-			player.openInventory(inventory);
-		} catch (Exception e) {
-			e.printStackTrace();
-			player.sendMessage(ChatColor.RED + "An internal error occurred while opening the menu. The staff should check the console for errors.");
 		}
+
+		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
+
+		for (int i = 0; i < icons.length; i++) {
+			if (icons[i] != null) {
+
+				if (icons[i] instanceof ExtendedIcon && !((ExtendedIcon) icons[i]).canViewIcon(player)) {
+					continue;
+				}
+
+				inventory.setItem(i, hideAttributes(icons[i].createItemstack(player)));
+			}
+		}
+
+		player.openInventory(inventory);
 	}
 	
 	public void openCheckingPermission(Player player) {
@@ -104,36 +98,31 @@ public class ExtendedIconMenu extends BasicIconMenu {
 	}
 
 	public void refresh(Player player, Inventory inventory) {
-		try {
-			for (int i = 0; i < icons.length; i++) {
-				if (icons[i] != null && icons[i] instanceof ExtendedIcon) {
-					ExtendedIcon extIcon = (ExtendedIcon) icons[i];
+		for (int i = 0; i < icons.length; i++) {
+			if (icons[i] != null && icons[i] instanceof ExtendedIcon) {
+				ExtendedIcon extIcon = (ExtendedIcon) icons[i];
 
-					if (extIcon.hasViewPermission() || extIcon.hasVariables()) {
-						// Then we have to refresh it
-						if (extIcon.canViewIcon(player)) {
+				if (extIcon.hasViewPermission() || extIcon.hasVariables()) {
+					// Then we have to refresh it
+					if (extIcon.canViewIcon(player)) {
 
-							if (inventory.getItem(i) == null) {
-								ItemStack newItem = hideAttributes(extIcon.createItemstack(player));
-								inventory.setItem(i, newItem);
-							} else {
-								// Performance, only update name and lore
-								ItemStack oldItem = hideAttributes(inventory.getItem(i));
-								ItemMeta meta = oldItem.getItemMeta();
-								meta.setDisplayName(extIcon.calculateName(player));
-								meta.setLore(extIcon.calculateLore(player));
-								oldItem.setItemMeta(meta);
-							}
-
+						if (inventory.getItem(i) == null) {
+							ItemStack newItem = hideAttributes(extIcon.createItemstack(player));
+							inventory.setItem(i, newItem);
 						} else {
-							inventory.setItem(i, null);
+							// Performance, only update name and lore
+							ItemStack oldItem = hideAttributes(inventory.getItem(i));
+							ItemMeta meta = oldItem.getItemMeta();
+							meta.setDisplayName(extIcon.calculateName(player));
+							meta.setLore(extIcon.calculateLore(player));
+							oldItem.setItemMeta(meta);
 						}
+
+					} else {
+						inventory.setItem(i, null);
 					}
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			player.sendMessage(ChatColor.RED + "An internal error occurred while refreshing the menu. The staff should check the console for errors.");
 		}
 	}
 
