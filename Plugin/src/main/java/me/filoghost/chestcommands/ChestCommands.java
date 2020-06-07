@@ -42,7 +42,7 @@ import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
-import me.filoghost.chestcommands.util.BukkitUtils;
+import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
@@ -180,7 +180,7 @@ public class ChestCommands extends JavaPlugin {
 		if (!menusFolder.isDirectory()) {
 			// Create the directory with the default menu
 			menusFolder.mkdirs();
-			BukkitUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
+			FileUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 
 		List<PluginConfig> menusList = loadMenus(menusFolder);

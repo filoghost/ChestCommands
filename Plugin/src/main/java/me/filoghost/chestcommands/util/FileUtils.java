@@ -2,10 +2,10 @@ package me.filoghost.chestcommands.util;
 
 import org.bukkit.plugin.Plugin;
 
-public final class BukkitUtils {
+public final class FileUtils {
 	
 
-	private BukkitUtils() {}
+	private FileUtils() {}
 	
 
 	public static String addYamlExtension(String input) {
@@ -18,8 +18,7 @@ public final class BukkitUtils {
 	public static void saveResourceSafe(Plugin plugin, String name) {
 		try {
 			plugin.saveResource(name, false);
-		} catch (Exception ignored) {
-		}
+		} catch (Exception ignored) {}
 	}
-
+	
 }

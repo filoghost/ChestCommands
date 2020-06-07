@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.util;
 
-import java.io.*;
 import java.util.*;
 
 public final class Utils {
@@ -57,35 +56,6 @@ public final class Utils {
 			return Double.parseDouble(input) > 0.0;
 		} catch (NumberFormatException ex) {
 			return false;
-		}
-	}
-
-	public static List<String> readLines(File file) throws IOException, Exception {
-		BufferedReader br = null;
-
-		try {
-			List<String> lines = new ArrayList<>();
-
-			if (!file.exists()) {
-				throw new FileNotFoundException();
-			}
-
-			br = new BufferedReader(new FileReader(file));
-			String line = br.readLine();
-
-			while (line != null) {
-				lines.add(line);
-				line = br.readLine();
-			}
-
-			return lines;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-				}
-			}
 		}
 	}
 

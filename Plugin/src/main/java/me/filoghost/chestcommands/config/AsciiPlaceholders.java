@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,9 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.BukkitUtils;
 import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.Utils;
 
 /**
  * This is not a real YAML file ;)
@@ -43,10 +43,10 @@ public class AsciiPlaceholders {
 		File file = new File(ChestCommands.getInstance().getDataFolder(), "placeholders.yml");
 
 		if (!file.exists()) {
-			BukkitUtils.saveResourceSafe(ChestCommands.getInstance(), "placeholders.yml");
+			FileUtils.saveResourceSafe(ChestCommands.getInstance(), "placeholders.yml");
 		}
 
-		List<String> lines = Utils.readLines(file);
+		List<String> lines = Files.readAllLines(file.toPath());
 		for (String line : lines) {
 
 			// Comment or empty line

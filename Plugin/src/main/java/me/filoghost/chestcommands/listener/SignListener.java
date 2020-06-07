@@ -30,7 +30,7 @@ import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.util.BukkitUtils;
+import me.filoghost.chestcommands.util.FileUtils;
 
 public class SignListener implements Listener {
 	
@@ -66,7 +66,7 @@ public class SignListener implements Listener {
 			return;
 		}
 
-		String menuFileName = BukkitUtils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
+		String menuFileName = FileUtils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
 		ExtendedIconMenu menu = menuManager.getMenuByFileName(menuFileName);
 		
 		if (menu == null) {
@@ -88,7 +88,7 @@ public class SignListener implements Listener {
 				return;
 			}
 			
-			menuFileName = BukkitUtils.addYamlExtension(menuFileName);
+			menuFileName = FileUtils.addYamlExtension(menuFileName);
 	
 			IconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
