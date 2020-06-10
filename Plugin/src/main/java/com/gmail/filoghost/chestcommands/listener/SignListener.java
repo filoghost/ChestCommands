@@ -19,7 +19,6 @@ import com.gmail.filoghost.chestcommands.Permissions;
 import com.gmail.filoghost.chestcommands.api.IconMenu;
 import com.gmail.filoghost.chestcommands.internal.ExtendedIconMenu;
 import com.gmail.filoghost.chestcommands.util.BukkitUtils;
-import com.gmail.filoghost.chestcommands.util.MaterialsRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -34,7 +33,7 @@ public class SignListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event) {
 
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && MaterialsRegistry.isSign(event.getClickedBlock().getType())) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.hasBlock() && event.getClickedBlock().getState() instanceof Sign) {
 
 			Sign sign = (Sign) event.getClickedBlock().getState();
 			if (sign.getLine(0).equalsIgnoreCase(ChatColor.DARK_BLUE + "[menu]")) {
