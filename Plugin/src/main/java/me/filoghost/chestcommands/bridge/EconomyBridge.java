@@ -18,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.util.Preconditions;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -71,8 +70,6 @@ public class EconomyBridge {
 		EconomyResponse response = economy.withdrawPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
 
-		MenuManager.refreshOpenMenu(player);
-
 		return result;
 	}
 
@@ -82,8 +79,6 @@ public class EconomyBridge {
 
 		EconomyResponse response = economy.depositPlayer(player, player.getWorld().getName(), amount);
 		boolean result = response.transactionSuccess();
-
-		MenuManager.refreshOpenMenu(player);
 
 		return result;
 	}

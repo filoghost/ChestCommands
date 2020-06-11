@@ -14,18 +14,21 @@
  */
 package me.filoghost.chestcommands.menu;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.action.GiveMoneyAction;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.StringUtils;
-
-import java.util.List;
 
 public class AdvancedIcon extends ConfigurableIconImpl {
 
@@ -40,7 +43,6 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	private int expLevelsPrice;
 	private List<RequiredItem> requiredItems;
 	private List<Action> clickActions;
-	private boolean hasOpenMenuAction;
 	
 	private boolean canClickIcon(Player player) {
 		if (permission == null) {
@@ -136,20 +138,10 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 
 	public void setClickActions(List<Action> clickActions) {
 		this.clickActions = clickActions;
-		
-		hasOpenMenuAction = false;
-		if (clickActions != null) {
-			for (Action action : clickActions) {
-				if (action instanceof OpenMenuAction) {
-					// Fix GUI closing if KEEP-OPEN is not set, and a command should open another GUI
-					hasOpenMenuAction = true;
-				}
-			}
-		}
 	}
 
 	@Override
-	public boolean onClick(Player player) {
+	public boolean onClick(Inventory inventory, Player player) {
 
 		// Check all the requirements
 
@@ -219,22 +211,34 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 				item.takeItemFrom(player.getInventory());
 			}
 		}
-
-		if (changedVariables) {
-			MenuManager.refreshOpenMenu(player);
-		}
+		
+		boolean hasOpenMenuAction = false;
 		
 		if (clickActions != null) {
 			for (Action action : clickActions) {
 				action.execute(player);
+				
+				if (action instanceof OpenMenuAction) {
+	                hasOpenMenuAction = true;
+	            } else if (action instanceof GiveMoneyAction) {
+	                changedVariables = true;
+	            }
 			}
 		}
 		
+		if (changedVariables) {
+            BaseIconMenu<?> menu = MenuManager.getOpenMenu(inventory);
+            if (menu instanceof AdvancedIconMenu) {
+                ((AdvancedIconMenu) menu).refresh(player, inventory);               
+            }
+        }
+		
+		// Force menu to stay open if actions open another menu
 		if (hasOpenMenuAction) {
 			return false;
+		} else {
+		    return closeOnClick;
 		}
-
-		return super.onClick(player);
 	}
 
 

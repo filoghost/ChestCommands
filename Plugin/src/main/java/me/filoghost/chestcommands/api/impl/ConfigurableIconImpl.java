@@ -14,10 +14,23 @@
  */
 package me.filoghost.chestcommands.api.impl;
 
-import org.bukkit.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,14 +42,6 @@ import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.variable.VariableManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
 
 public class ConfigurableIconImpl implements ConfigurableIcon {
 
@@ -377,12 +382,12 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	}
 
 	@Override
-	public boolean onClick(Player whoClicked) {
+	public boolean onClick(Inventory inventory, Player clicker) {
 		if (clickHandler == null) {
 			return closeOnClick;
 		}
 		
-		ClickResult result = clickHandler.onClick(whoClicked);
+		ClickResult result = clickHandler.onClick(clicker);
 		switch (result) {
 			case CLOSE: 
 				return true;

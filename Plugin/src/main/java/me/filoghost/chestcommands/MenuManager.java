@@ -93,14 +93,6 @@ public class MenuManager {
 	}
 	
 	
-	public static void refreshOpenMenu(Player player) {
-		MenuView openMenuView = getOpenMenuView(player);
-		if (openMenuView != null) {
-			openMenuView.getMenu().refresh(player, openMenuView.getInventory());
-		}
-	}
-	
-	
 	public static BaseIconMenu<?> getOpenMenu(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {

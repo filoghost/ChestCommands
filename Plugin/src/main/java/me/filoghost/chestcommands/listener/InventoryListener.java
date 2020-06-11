@@ -26,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
@@ -63,7 +64,8 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
-		BaseIconMenu<? extends Icon> menu = MenuManager.getOpenMenu(event.getInventory());
+	    Inventory inventory = event.getInventory();
+		BaseIconMenu<? extends Icon> menu = MenuManager.getOpenMenu(inventory);
 		if (menu == null) {
 			return;
 		}
@@ -97,7 +99,7 @@ public class InventoryListener implements Listener {
 
 		// Only handle the click AFTER the event has finished
 		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
-			boolean close = icon.onClick(clicker);
+			boolean close = icon.onClick(inventory, clicker);
 
 			if (close) {
 				clicker.closeInventory();

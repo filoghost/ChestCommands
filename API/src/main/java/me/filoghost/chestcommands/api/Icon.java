@@ -15,12 +15,13 @@
 package me.filoghost.chestcommands.api;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public interface Icon {
 
 	ItemStack createItemStack(Player viewer);
 
-	boolean onClick(Player clicker);
+	boolean onClick(Inventory inventory, Player clicker);
 
 }

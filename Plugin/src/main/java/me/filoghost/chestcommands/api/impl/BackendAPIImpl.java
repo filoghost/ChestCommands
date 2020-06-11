@@ -16,12 +16,13 @@ package me.filoghost.chestcommands.api.impl;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
+import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 
@@ -68,7 +69,7 @@ public class BackendAPIImpl extends BackendAPI {
 			}
 
 			@Override
-			public boolean onClick(Player clicker) {
+			public boolean onClick(Inventory inventory, Player clicker) {
 				return closeOnClick;
 			}
 			
