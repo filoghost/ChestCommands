@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.bridge.bungee;
+package me.filoghost.chestcommands.bridge;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BungeeCordUtils {
+public class BungeeCordBridge {
 
 	public static boolean connect(Player player, String server) {
 		if (server.length() == 0) {

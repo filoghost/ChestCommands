@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.bridge.bungee.BungeeCordUtils;
+import me.filoghost.chestcommands.bridge.BungeeCordBridge;
 
 public class ChangeServerAction extends Action {
 
@@ -26,7 +26,7 @@ public class ChangeServerAction extends Action {
 
 	@Override
 	public void execute(Player player) {
-		BungeeCordUtils.connect(player, hasVariables ? getParsedAction(player) : action);
+		BungeeCordBridge.connect(player, hasVariables ? getParsedAction(player) : action);
 	}
 
 }
