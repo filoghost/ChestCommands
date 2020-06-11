@@ -25,7 +25,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.Icon;
 
 public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
@@ -77,12 +76,8 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	}
 	
 	@Override
-	protected boolean canViewIcon(Player player, Icon icon) {
-		if (icon instanceof AdvancedIcon) {
-			return true;
-		}
-		
-		return ((AdvancedIcon) icon).canViewIcon(player);
+	protected boolean canViewIcon(Player player, AdvancedIcon icon) {
+		return icon.canViewIcon(player);
 	}
 	
 	public void openCheckingPermission(Player player) {

@@ -72,7 +72,7 @@ public class BaseIconMenu<T extends Icon> {
 		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), getSize(), title);
 
 		for (int i = 0; i < inventoryGrid.getSize(); i++) {
-			Icon icon = inventoryGrid.getElementAtIndex(i);
+			T icon = inventoryGrid.getElementAtIndex(i);
 			if (icon != null && canViewIcon(player, icon)) {
 				inventory.setItem(i, hideAttributes(icon.createItemStack(player)));
 			}
@@ -81,7 +81,7 @@ public class BaseIconMenu<T extends Icon> {
 		player.openInventory(inventory);
 	}
 	
-	protected boolean canViewIcon(Player player, Icon icon) {
+	protected boolean canViewIcon(Player player, T icon) {
 		return true;
 	}
 	
