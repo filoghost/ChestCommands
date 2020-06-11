@@ -26,7 +26,6 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.ConfigUtil;
-import me.filoghost.chestcommands.internal.RunActionsClickHandler;
 import me.filoghost.chestcommands.internal.AdvancedIcon;
 import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
@@ -196,7 +195,7 @@ public class IconParser {
 			}
 
 			if (!actions.isEmpty()) {
-				icon.setClickHandler(new RunActionsClickHandler(actions));
+				icon.setClickActions(actions);
 			}
 		}
 

@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.internal;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.util.Preconditions;
@@ -62,10 +62,10 @@ public class RequiredItem {
 		return data == this.dataValue;
 	}
 
-	public boolean hasItem(Player player) {
+	public boolean isItemContainedIn(Inventory inventory) {
 		int amountFound = 0;
 
-		for (ItemStack item : player.getInventory().getContents()) {
+		for (ItemStack item : inventory.getContents()) {
 			if (item != null && item.getType() == material && isValidDataValue(item.getDurability())) {
 				amountFound += item.getAmount();
 			}
@@ -74,14 +74,14 @@ public class RequiredItem {
 		return amountFound >= amount;
 	}
 
-	public boolean takeItem(Player player) {
+	public boolean takeItemFrom(Inventory inventory) {
 		if (amount <= 0) {
 			return true;
 		}
 
 		int itemsToTake = amount; //start from amount and decrease
 
-		ItemStack[] contents = player.getInventory().getContents();
+		ItemStack[] contents = inventory.getContents();
 		ItemStack current = null;
 
 
@@ -95,7 +95,7 @@ public class RequiredItem {
 					return true;
 				} else {
 					itemsToTake -= current.getAmount();
-					player.getInventory().setItem(i, new ItemStack(Material.AIR));
+					inventory.setItem(i, new ItemStack(Material.AIR));
 				}
 			}
 

@@ -18,6 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
+import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
@@ -37,6 +39,8 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	private double moneyPrice;
 	private int expLevelsPrice;
 	private List<RequiredItem> requiredItems;
+	private List<Action> clickActions;
+	private boolean hasOpenMenuAction;
 	
 	private boolean canClickIcon(Player player) {
 		if (permission == null) {
@@ -126,6 +130,24 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 		this.requiredItems = requiredItems;
 	}
 
+	public List<Action> getClickActions() {
+		return clickActions;
+	}
+
+	public void setClickActions(List<Action> clickActions) {
+		this.clickActions = clickActions;
+		
+		hasOpenMenuAction = false;
+		if (clickActions != null) {
+			for (Action action : clickActions) {
+				if (action instanceof OpenMenuAction) {
+					// Fix GUI closing if KEEP-OPEN is not set, and a command should open another GUI
+					hasOpenMenuAction = true;
+				}
+			}
+		}
+	}
+
 	@Override
 	public boolean onClick(Player player) {
 
@@ -162,7 +184,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 		if (requiredItems != null) {
 			boolean notHasItem = false;
 			for (RequiredItem item : requiredItems) {
-				if (!item.hasItem(player)) {
+				if (!item.isItemContainedIn(player.getInventory())) {
 					notHasItem = true;
 					player.sendMessage(ChestCommands.getLang().no_required_item
 							.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
@@ -194,12 +216,22 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 
 		if (requiredItems != null) {
 			for (RequiredItem item : requiredItems) {
-				item.takeItem(player);
+				item.takeItemFrom(player.getInventory());
 			}
 		}
 
 		if (changedVariables) {
 			MenuManager.refreshOpenMenu(player);
+		}
+		
+		if (clickActions != null) {
+			for (Action action : clickActions) {
+				action.execute(player);
+			}
+		}
+		
+		if (hasOpenMenuAction) {
+			return false;
 		}
 
 		return super.onClick(player);
