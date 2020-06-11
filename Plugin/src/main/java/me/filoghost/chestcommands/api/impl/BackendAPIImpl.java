@@ -23,7 +23,7 @@ import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
-import me.filoghost.chestcommands.internal.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 
 public class BackendAPIImpl extends BackendAPI {
 

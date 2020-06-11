@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.internal.BaseIconMenu;
+import me.filoghost.chestcommands.menu.BaseIconMenu;
 
 public class InventoryListener implements Listener {
 	

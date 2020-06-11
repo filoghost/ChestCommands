@@ -25,10 +25,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.internal.AdvancedIconMenu;
-import me.filoghost.chestcommands.internal.BaseIconMenu;
-import me.filoghost.chestcommands.internal.MenuInventoryHolder;
-import me.filoghost.chestcommands.internal.OpenTrigger;
+import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.BaseIconMenu;
+import me.filoghost.chestcommands.menu.MenuInventoryHolder;
+import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorCollector;
 

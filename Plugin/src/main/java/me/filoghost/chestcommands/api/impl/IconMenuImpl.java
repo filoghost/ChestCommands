@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.api.impl;
 
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.BaseIconMenu;
+import me.filoghost.chestcommands.menu.BaseIconMenu;
 
 public class IconMenuImpl extends BaseIconMenu<Icon> implements IconMenu {
 

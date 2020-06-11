@@ -19,7 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.internal.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 
 public class OpenMenuAction extends Action {
 
