@@ -28,7 +28,7 @@ public class ChestCommandsAPI {
 	 * @return if the menu was found
 	 */
 	public static boolean isPluginMenu(String yamlFile) {
-		return BackendAPI.getImplementation().getMenuByFileName(yamlFile) != null;
+		return BackendAPI.getImplementation().isPluginMenu(yamlFile);
 	}
 
 	/**
@@ -40,13 +40,6 @@ public class ChestCommandsAPI {
 	 * @return if the menu was found and opened
 	 */
 	public static boolean openPluginMenu(Player player, String yamlFile) {
-		IconMenu menu = BackendAPI.getImplementation().getMenuByFileName(yamlFile);
-
-		if (menu != null) {
-			menu.open(player);
-			return true;
-		} else {
-			return false;
-		}
+		return BackendAPI.getImplementation().openPluginMenu(player, yamlFile);
 	}
 }

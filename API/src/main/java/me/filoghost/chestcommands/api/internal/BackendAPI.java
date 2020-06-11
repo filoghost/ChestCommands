@@ -15,9 +15,12 @@
 package me.filoghost.chestcommands.api.internal;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.StaticIcon;
+import me.filoghost.chestcommands.api.ConfigurableIcon;
 
 public abstract class BackendAPI {
 	
@@ -34,11 +37,17 @@ public abstract class BackendAPI {
 		
 		return implementation;
 	}
+	
+	public abstract boolean isPluginMenu(String yamlFile);
 
-	public abstract IconMenu getMenuByFileName(String yamlFile);
-
-	public abstract Icon createIcon(Material material);
+	public abstract boolean openPluginMenu(Player player, String yamlFile);
 
 	public abstract IconMenu createIconMenu(String title, int rows);
+	
+	public abstract ConfigurableIcon createConfigurableIcon(Material material);
+
+	public abstract StaticIcon createStaticIcon(ItemStack itemStack, boolean closeOnClick);
+
+	
 
 }

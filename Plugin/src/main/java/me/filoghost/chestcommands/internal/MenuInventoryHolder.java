@@ -23,9 +23,9 @@ import org.bukkit.inventory.InventoryHolder;
  */
 public class MenuInventoryHolder implements InventoryHolder {
 
-	private final BasicIconMenu iconMenu;
+	private final BaseIconMenu<?> iconMenu;
 
-	public MenuInventoryHolder(BasicIconMenu iconMenu) {
+	public MenuInventoryHolder(BaseIconMenu<?> iconMenu) {
 		this.iconMenu = iconMenu;
 	}
 
@@ -37,10 +37,10 @@ public class MenuInventoryHolder implements InventoryHolder {
 		 * because the only way you can get here is using InventoryClickEvent,
 		 * that is cancelled by ChestCommands, or using InventoryOpenEvent.
 		 */
-		return Bukkit.createInventory(null, iconMenu.getSize());
+		return Bukkit.createInventory(null, 9);
 	}
 
-	public BasicIconMenu getIconMenu() {
+	public BaseIconMenu<?> getIconMenu() {
 		return iconMenu;
 	}
 

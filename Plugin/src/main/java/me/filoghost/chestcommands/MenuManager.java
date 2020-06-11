@@ -25,9 +25,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.internal.BasicIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
+import me.filoghost.chestcommands.internal.BaseIconMenu;
 import me.filoghost.chestcommands.internal.MenuInventoryHolder;
 import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
@@ -35,10 +34,10 @@ import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class MenuManager {
 	
-	private static Map<String, ExtendedIconMenu> fileNameToMenuMap;
-	private static Map<String, ExtendedIconMenu> commandsToMenuMap;
+	private static Map<String, AdvancedIconMenu> fileNameToMenuMap;
+	private static Map<String, AdvancedIconMenu> commandsToMenuMap;
 
-	private static Map<OpenTrigger, ExtendedIconMenu> openTriggers;
+	private static Map<OpenTrigger, AdvancedIconMenu> openTriggers;
 	
 	public MenuManager() {
 		fileNameToMenuMap = CaseInsensitiveMap.create();
@@ -52,11 +51,11 @@ public class MenuManager {
 		openTriggers.clear();
 	}
 
-	public ExtendedIconMenu getMenuByFileName(String fileName) {
+	public AdvancedIconMenu getMenuByFileName(String fileName) {
 		return fileNameToMenuMap.get(fileName);
 	}
 
-	public void registerMenu(String fileName, String[] triggerCommands, ExtendedIconMenu menu, ErrorCollector errorCollector) {
+	public void registerMenu(String fileName, String[] triggerCommands, AdvancedIconMenu menu, ErrorCollector errorCollector) {
 		if (fileNameToMenuMap.containsKey(fileName)) {
 			errorCollector.addError("Two menus have the same file name \"" + fileName + "\" with different cases. There will be problems opening one of these two menus.");
 		}
@@ -73,7 +72,7 @@ public class MenuManager {
 		}		
 	}
 
-	public void registerTriggerItem(OpenTrigger openTrigger, ExtendedIconMenu menu) {
+	public void registerTriggerItem(OpenTrigger openTrigger, AdvancedIconMenu menu) {
 		openTriggers.put(openTrigger, menu);
 	}
 
@@ -85,7 +84,7 @@ public class MenuManager {
 		});
 	}
 
-	public ExtendedIconMenu getMenuByCommand(String command) {
+	public AdvancedIconMenu getMenuByCommand(String command) {
 		return commandsToMenuMap.get(command);
 	}
 
@@ -102,13 +101,13 @@ public class MenuManager {
 	}
 	
 	
-	public static IconMenu getOpenMenu(Player player) {
+	public static BaseIconMenu<?> getOpenMenu(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {
 			return null;
 		}
 		
-		IconMenu openMenu = getOpenMenu(view.getTopInventory());
+		BaseIconMenu<?> openMenu = getOpenMenu(view.getTopInventory());
 		if (openMenu == null) {
 			openMenu = getOpenMenu(view.getBottomInventory());
 		}
@@ -117,7 +116,7 @@ public class MenuManager {
 	}
 	
 	
-	public static BasicIconMenu getOpenMenu(Inventory inventory) {
+	public static BaseIconMenu<?> getOpenMenu(Inventory inventory) {
 		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
 			return null;
 		}
@@ -147,25 +146,25 @@ public class MenuManager {
 		}
 		
 		MenuInventoryHolder menuInventoryHolder = (MenuInventoryHolder) inventory.getHolder();
-		if (!(menuInventoryHolder.getIconMenu() instanceof ExtendedIconMenu)) {
+		if (!(menuInventoryHolder.getIconMenu() instanceof AdvancedIconMenu)) {
 			return null;
 		}
 			
-		return new MenuView((ExtendedIconMenu) menuInventoryHolder.getIconMenu(), inventory);		
+		return new MenuView((AdvancedIconMenu) menuInventoryHolder.getIconMenu(), inventory);		
 	}
 	
 	
 	public static class MenuView {
 		
-		private final ExtendedIconMenu menu;
+		private final AdvancedIconMenu menu;
 		private final Inventory inventory;
 		
-		public MenuView(ExtendedIconMenu menu, Inventory inventory) {
+		public MenuView(AdvancedIconMenu menu, Inventory inventory) {
 			this.menu = menu;
 			this.inventory = inventory;
 		}
 
-		public ExtendedIconMenu getMenu() {
+		public AdvancedIconMenu getMenu() {
 			return menu;
 		}
 

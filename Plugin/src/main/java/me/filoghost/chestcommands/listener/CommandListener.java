@@ -20,7 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import me.filoghost.chestcommands.MenuManager;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 
 public class CommandListener implements Listener {
 	
@@ -38,7 +38,7 @@ public class CommandListener implements Listener {
 			return;
 		}
 
-		ExtendedIconMenu menu = menuManager.getMenuByCommand(command);
+		AdvancedIconMenu menu = menuManager.getMenuByCommand(command);
 		
 		if (menu == null) {
 			return;

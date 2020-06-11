@@ -18,29 +18,26 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
+import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.StringUtils;
 
 import java.util.List;
 
-public class ExtendedIcon extends BasicIcon {
+public class AdvancedIcon extends ConfigurableIconImpl {
 
 	private String permission;
-	private String permissionMessage;
-	private String viewPermission;
-
 	private boolean permissionNegated;
+	private String permissionMessage;
+	
+	private String viewPermission;
 	private boolean viewPermissionNegated;
 
 	private double moneyPrice;
 	private int expLevelsPrice;
 	private List<RequiredItem> requiredItems;
-
-	public ExtendedIcon() {
-		super();
-	}
-
+	
 	private boolean canClickIcon(Player player) {
 		if (permission == null) {
 			return true;

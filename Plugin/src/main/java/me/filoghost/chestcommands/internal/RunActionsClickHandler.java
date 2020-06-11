@@ -19,37 +19,41 @@ import org.bukkit.entity.Player;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickHandler;
+import me.filoghost.chestcommands.api.ClickResult;
 
 import java.util.List;
 
 public class RunActionsClickHandler implements ClickHandler {
 
 	private List<Action> actions;
-	private boolean closeOnClick;
+	private boolean forceClose;
 
-	public RunActionsClickHandler(List<Action> actions, boolean closeOnClick) {
+	public RunActionsClickHandler(List<Action> actions) {
 		this.actions = actions;
-		this.closeOnClick = closeOnClick;
 
 		if (actions != null && actions.size() > 0) {
 			for (Action action : actions) {
 				if (action instanceof OpenMenuAction) {
 					// Fix GUI closing if KEEP-OPEN is not set, and a command should open another GUI
-					this.closeOnClick = false;
+					this.forceClose = true;
 				}
 			}
 		}
 	}
 
 	@Override
-	public boolean onClick(Player player) {
+	public ClickResult onClick(Player player) {
 		if (actions != null && actions.size() > 0) {
 			for (Action action : actions) {
 				action.execute(player);
 			}
 		}
+		
+		if (forceClose) {
+			return ClickResult.CLOSE;
+		}
 
-		return closeOnClick;
+		return ClickResult.DEFAULT;
 	}
 
 }

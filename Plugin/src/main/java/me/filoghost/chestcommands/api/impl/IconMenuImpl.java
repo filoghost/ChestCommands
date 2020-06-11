@@ -3,42 +3,27 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands;
-
-import org.bukkit.Material;
+package me.filoghost.chestcommands.api.impl;
 
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.api.internal.BackendAPI;
-import me.filoghost.chestcommands.internal.BasicIcon;
-import me.filoghost.chestcommands.internal.BasicIconMenu;
+import me.filoghost.chestcommands.internal.BaseIconMenu;
 
-public class StandardBackendAPI extends BackendAPI {
+public class IconMenuImpl extends BaseIconMenu<Icon> implements IconMenu {
 
-	@Override
-	public IconMenu getMenuByFileName(String yamlFile) {
-		return ChestCommands.getInstance().getMenuManager().getMenuByFileName(yamlFile);
+	
+	public IconMenuImpl(String title, int rows) {
+		super(title, rows);
 	}
 
-	@Override
-	public Icon createIcon(Material material) {
-		BasicIcon icon = new BasicIcon();
-		icon.setMaterial(material);
-		return icon;
-	}
-
-	@Override
-	public IconMenu createIconMenu(String title, int rows) {
-		return new BasicIconMenu(title, rows);
-	}
-
+	
 }

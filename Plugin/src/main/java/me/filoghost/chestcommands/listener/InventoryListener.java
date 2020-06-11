@@ -30,8 +30,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.BasicIconMenu;
+import me.filoghost.chestcommands.internal.BaseIconMenu;
 
 public class InventoryListener implements Listener {
 	
@@ -53,7 +52,7 @@ public class InventoryListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEarlyInventoryClick(InventoryClickEvent event) {
-		IconMenu menu = MenuManager.getOpenMenu(event.getInventory());
+		BaseIconMenu<?> menu = MenuManager.getOpenMenu(event.getInventory());
 		if (menu == null) {
 			return;
 		}
@@ -64,7 +63,7 @@ public class InventoryListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
-		BasicIconMenu menu = MenuManager.getOpenMenu(event.getInventory());
+		BaseIconMenu<? extends Icon> menu = MenuManager.getOpenMenu(event.getInventory());
 		if (menu == null) {
 			return;
 		}

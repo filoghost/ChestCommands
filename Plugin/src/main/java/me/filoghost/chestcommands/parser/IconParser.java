@@ -27,8 +27,7 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.internal.RunActionsClickHandler;
-import me.filoghost.chestcommands.internal.ExtendedIcon;
-import me.filoghost.chestcommands.internal.BasicIcon;
+import me.filoghost.chestcommands.internal.AdvancedIcon;
 import me.filoghost.chestcommands.internal.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
@@ -91,11 +90,11 @@ public class IconParser {
 	}
 
 
-	public static BasicIcon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
+	public static AdvancedIcon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
 		Preconditions.notNull(section, "section");
 
 		// The icon is valid even without a Material
-		ExtendedIcon icon = new ExtendedIcon();
+		AdvancedIcon icon = new AdvancedIcon();
 
 		String material = ConfigUtil.getAnyString(section, Nodes.MATERIAL);
 		if (material != null) {
@@ -197,7 +196,7 @@ public class IconParser {
 			}
 
 			if (!actions.isEmpty()) {
-				icon.setClickHandler(new RunActionsClickHandler(actions, closeOnClick));
+				icon.setClickHandler(new RunActionsClickHandler(actions));
 			}
 		}
 

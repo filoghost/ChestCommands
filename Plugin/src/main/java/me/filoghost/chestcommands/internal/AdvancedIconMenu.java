@@ -14,7 +14,8 @@
  */
 package me.filoghost.chestcommands.internal;
 
-import org.bukkit.Bukkit;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,21 +25,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.api.Icon;
 
-import java.util.List;
+public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
-public class ExtendedIconMenu extends BasicIconMenu {
-
-	private String fileName;
+	private final String fileName;
+	
 	private String permission;
 	private List<Action> openActions;
-
 	private int refreshTicks;
 
-	public ExtendedIconMenu(String title, int rows, String fileName) {
+	public AdvancedIconMenu(String title, int rows, String fileName) {
 		super(title, rows);
 		this.fileName = fileName;
 		this.permission = Permissions.OPEN_MENU_BASE + fileName;
+	}
+	
+	public String getFileName() {
+		return fileName;
 	}
 
 	public List<Action> getOpenActions() {
@@ -51,10 +55,6 @@ public class ExtendedIconMenu extends BasicIconMenu {
 
 	public String getPermission() {
 		return permission;
-	}
-
-	public String getFileName() {
-		return fileName;
 	}
 
 	public int getRefreshTicks() {
@@ -72,25 +72,21 @@ public class ExtendedIconMenu extends BasicIconMenu {
 				openAction.execute(player);
 			}
 		}
-
-		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), icons.length, title);
-
-		for (int i = 0; i < icons.length; i++) {
-			if (icons[i] != null) {
-
-				if (icons[i] instanceof ExtendedIcon && !((ExtendedIcon) icons[i]).canViewIcon(player)) {
-					continue;
-				}
-
-				inventory.setItem(i, hideAttributes(icons[i].createItemstack(player)));
-			}
+		
+		super.open(player);
+	}
+	
+	@Override
+	protected boolean canViewIcon(Player player, Icon icon) {
+		if (icon instanceof AdvancedIcon) {
+			return true;
 		}
-
-		player.openInventory(inventory);
+		
+		return ((AdvancedIcon) icon).canViewIcon(player);
 	}
 	
 	public void openCheckingPermission(Player player) {
-		if (player.hasPermission(getPermission())) {
+		if (player.hasPermission(permission)) {
 			open(player);
 		} else {
 			sendNoPermissionMessage(player);
@@ -98,29 +94,27 @@ public class ExtendedIconMenu extends BasicIconMenu {
 	}
 
 	public void refresh(Player player, Inventory inventory) {
-		for (int i = 0; i < icons.length; i++) {
-			if (icons[i] != null && icons[i] instanceof ExtendedIcon) {
-				ExtendedIcon extIcon = (ExtendedIcon) icons[i];
+		for (int i = 0; i < inventoryGrid.getSize(); i++) {
+			AdvancedIcon icon = inventoryGrid.getElementAtIndex(i);
+			
+			if (icon.hasViewPermission() || icon.hasVariables()) {
+				// Then we have to refresh it
+				if (icon.canViewIcon(player)) {
 
-				if (extIcon.hasViewPermission() || extIcon.hasVariables()) {
-					// Then we have to refresh it
-					if (extIcon.canViewIcon(player)) {
-
-						if (inventory.getItem(i) == null) {
-							ItemStack newItem = hideAttributes(extIcon.createItemstack(player));
-							inventory.setItem(i, newItem);
-						} else {
-							// Performance, only update name and lore
-							ItemStack oldItem = hideAttributes(inventory.getItem(i));
-							ItemMeta meta = oldItem.getItemMeta();
-							meta.setDisplayName(extIcon.calculateName(player));
-							meta.setLore(extIcon.calculateLore(player));
-							oldItem.setItemMeta(meta);
-						}
-
+					if (inventory.getItem(i) == null) {
+						ItemStack newItem = hideAttributes(icon.createItemStack(player));
+						inventory.setItem(i, newItem);
 					} else {
-						inventory.setItem(i, null);
+						// Performance, only update name and lore
+						ItemStack oldItem = hideAttributes(inventory.getItem(i));
+						ItemMeta meta = oldItem.getItemMeta();
+						meta.setDisplayName(icon.calculateName(player));
+						meta.setLore(icon.calculateLore(player));
+						oldItem.setItemMeta(meta);
 					}
+
+				} else {
+					inventory.setItem(i, null);
 				}
 			}
 		}

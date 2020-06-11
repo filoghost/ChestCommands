@@ -19,7 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 
 public class OpenMenuAction extends Action {
 
@@ -30,7 +30,7 @@ public class OpenMenuAction extends Action {
 	@Override
 	public void execute(final Player player) {
 		String target = hasVariables ? getParsedAction(player) : action;
-		final ExtendedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(target.toLowerCase());
+		final AdvancedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(target.toLowerCase());
 		if (menu != null) {
 
 			/*

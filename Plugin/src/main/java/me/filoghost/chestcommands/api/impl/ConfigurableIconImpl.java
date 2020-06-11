@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.internal;
+package me.filoghost.chestcommands.api.impl;
 
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
@@ -26,7 +26,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickHandler;
-import me.filoghost.chestcommands.api.Icon;
+import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.variable.VariableManager;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-public class BasicIcon implements Icon {
+public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	private Material material;
 	private int amount;
@@ -60,7 +61,7 @@ public class BasicIcon implements Icon {
 	private boolean skullOwnerHasVariables;
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
-	public BasicIcon() {
+	public ConfigurableIconImpl() {
 		enchantments = new HashMap<>();
 		closeOnClick = true;
 		amount = 1;        
@@ -251,7 +252,7 @@ public class BasicIcon implements Icon {
 		return clickHandler;
 	}
 
-	protected String calculateName(Player viewer) {
+	public String calculateName(Player viewer) {
 		if (hasName()) {
 
 			String name = this.name;
@@ -271,7 +272,7 @@ public class BasicIcon implements Icon {
 		return null;
 	}
 
-	protected List<String> calculateLore(Player viewer) {
+	public List<String> calculateLore(Player viewer) {
 
 		List<String> output = null;
 
@@ -306,8 +307,9 @@ public class BasicIcon implements Icon {
 		return output;
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
-	public ItemStack createItemstack(Player viewer) {
+	public ItemStack createItemStack(Player viewer) {
 
 		if (!this.hasVariables() && cachedItem != null) {
 			// Performance
@@ -374,11 +376,20 @@ public class BasicIcon implements Icon {
 		return itemStack;
 	}
 
+	@Override
 	public boolean onClick(Player whoClicked) {
-		if (clickHandler != null) {
-			return clickHandler.onClick(whoClicked);
+		if (clickHandler == null) {
+			return closeOnClick;
 		}
-
-		return closeOnClick;
+		
+		ClickResult result = clickHandler.onClick(whoClicked);
+		switch (result) {
+			case CLOSE: 
+				return true;
+			case KEEP_OPEN: 
+				return false;
+			default: 
+				return closeOnClick;
+		}
 	}
 }

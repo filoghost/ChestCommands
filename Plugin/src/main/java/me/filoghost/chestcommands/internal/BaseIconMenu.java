@@ -14,8 +14,6 @@
  */
 package me.filoghost.chestcommands.internal;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,89 +22,67 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Utils;
 
-/*
- *    MEMO: Raw slot numbers
- *
- *    | 0| 1| 2| 3| 4| 5| 6| 7| 8|
- *    | 9|10|11|12|13|14|15|16|17|
- *    ...
- *
- */
-public class BasicIconMenu implements IconMenu {
+public class BaseIconMenu<T extends Icon> {
 
     
-    private static final int COLUMNS = 9;
-    private final int rows;
 	protected final String title;
-	protected final Icon[] icons;
+	protected final Grid<T> inventoryGrid;
 
 
-	public BasicIconMenu(String title, int rows) {
+	public BaseIconMenu(String title, int rows) {
 		this.title = title;
-		this.rows = rows;
-		icons = new BasicIcon[rows * COLUMNS];
+		this.inventoryGrid = new Grid<>(rows, 9);
 	}
 
-	@Override
-	public void setIcon(int x, int y, Icon icon) {
-		icons[getSlotIndex(x, y)] = icon;
+	public void setIcon(int x, int y, T icon) {
+		inventoryGrid.setElement(x, y, icon);
 	}
 
-	@Override
-	public Icon getIcon(int x, int y) {
-		return getIconAtSlot(getSlotIndex(x, y));
+	public T getIcon(int x, int y) {
+		return inventoryGrid.getElement(x, y);
 	}
 	
-	public Icon getIconAtSlot(int slot) {
-	    Preconditions.checkIndex(slot, getSize(), "slot");
-		return icons[slot];
+	public T getIconAtSlot(int slot) {
+		return inventoryGrid.getElementAtIndex(slot);
 	}
-
-	public int getSlotIndex(int x, int y) {
-	    Preconditions.checkIndex(x, getColumnCount(), "x");
-	    Preconditions.checkIndex(y, getRowCount(), "y");
-	    
-		int slot = y * getColumnCount() + x;
-		Preconditions.checkIndex(slot, getSize(), "slot");
-		return slot;
-	}
-
-	@Override
+	
 	public int getRowCount() {
-		return rows;
+		return inventoryGrid.getRows();
 	}
 	
-	@Override
 	public int getColumnCount() {
-		return COLUMNS;
+		return inventoryGrid.getColumns();
 	}
-
+	
 	public int getSize() {
-		return icons.length;
+		return inventoryGrid.getSize();
 	}
 
-	@Override
 	public String getTitle() {
 		return title;
 	}
 
-	@Override
+
 	public void open(Player player) {
 		Preconditions.notNull(player, "player");
 
 		Inventory inventory = Bukkit.createInventory(new MenuInventoryHolder(this), getSize(), title);
 
-		for (int i = 0; i < icons.length; i++) {
-			if (icons[i] != null) {
-				inventory.setItem(i, hideAttributes(icons[i].createItemstack(player)));
+		for (int i = 0; i < inventoryGrid.getSize(); i++) {
+			Icon icon = inventoryGrid.getElementAtIndex(i);
+			if (icon != null && canViewIcon(player, icon)) {
+				inventory.setItem(i, hideAttributes(icon.createItemStack(player)));
 			}
 		}
 
 		player.openInventory(inventory);
+	}
+	
+	protected boolean canViewIcon(Player player, Icon icon) {
+		return true;
 	}
 	
 	protected ItemStack hideAttributes(ItemStack item) {
@@ -125,8 +101,7 @@ public class BasicIconMenu implements IconMenu {
 
 	@Override
 	public String toString() {
-		return "IconMenu [title=" + title + ", icons=" + Arrays.toString(icons) + "]";
+		return "IconMenu [title=" + title + ", icons=" + inventoryGrid + "]";
 	}
-
 	
 }

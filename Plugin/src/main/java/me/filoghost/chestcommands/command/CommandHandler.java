@@ -25,7 +25,7 @@ import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.command.framework.CommandValidate;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
@@ -105,7 +105,7 @@ public class CommandHandler extends CommandFramework {
 			CommandValidate.notNull(target, "That player is not online.");
 
 			String menuName = args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml";
-			ExtendedIconMenu menu = menuManager.getMenuByFileName(menuName);
+			AdvancedIconMenu menu = menuManager.getMenuByFileName(menuName);
 			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
 			if (!sender.hasPermission(menu.getPermission())) {

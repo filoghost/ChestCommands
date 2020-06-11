@@ -14,89 +14,13 @@
  */
 package me.filoghost.chestcommands.api;
 
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.api.internal.BackendAPI;
-
 public interface Icon {
-	
-	public static Icon create(Material material) {
-		return BackendAPI.getImplementation().createIcon(material);
-	}
 
-	void setMaterial(Material material);
+	ItemStack createItemStack(Player viewer);
 
-	Material getMaterial();
-
-	void setAmount(int amount);
-
-	int getAmount();
-
-	void setDurability(short durability);
-
-	short getDurability();
-
-	void setNBTData(String nbtData);
-
-	String getNBTData();
-
-	void setName(String name);
-
-	boolean hasName();
-
-	void setLore(String... lore);
-
-	void setLore(List<String> lore);
-
-	boolean hasLore();
-
-	List<String> getLore();
-
-	void setEnchantments(Map<Enchantment, Integer> enchantments);
-
-	Map<Enchantment, Integer> getEnchantments();
-
-	void addEnchantment(Enchantment ench);
-
-	void addEnchantment(Enchantment ench, Integer level);
-
-	void removeEnchantment(Enchantment ench);
-
-	void clearEnchantments();
-
-	Color getLeatherColor();
-
-	void setLeatherColor(Color leatherColor);
-
-	String getSkullOwner();
-
-	void setSkullOwner(String skullOwner);
-
-	DyeColor getBannerColor();
-
-	void setBannerColor(DyeColor bannerColor);
-
-	List<Pattern> getBannerPatterns();
-
-	void setBannerPatterns(List<Pattern> bannerPatterns);
-
-	void setCloseOnClick(boolean closeOnClick);
-
-	void setClickHandler(ClickHandler clickHandler);
-
-	ClickHandler getClickHandler();
-
-    ItemStack createItemstack(Player viewer);
-
-    boolean onClick(Player clicker);
+	boolean onClick(Player clicker);
 
 }

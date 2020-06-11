@@ -24,9 +24,9 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.internal.AdvancedIcon;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 import me.filoghost.chestcommands.internal.ClickType;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
-import me.filoghost.chestcommands.internal.BasicIcon;
 import me.filoghost.chestcommands.internal.MenuSettings;
 import me.filoghost.chestcommands.internal.OpenTrigger;
 import me.filoghost.chestcommands.parser.IconParser.Coords;
@@ -51,8 +51,8 @@ public class MenuParser {
 
 	}
 
-	public static ExtendedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorCollector errorCollector) {
-		ExtendedIconMenu iconMenu = new ExtendedIconMenu(title, rows, config.getFileName());
+	public static AdvancedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorCollector errorCollector) {
+		AdvancedIconMenu iconMenu = new AdvancedIconMenu(title, rows, config.getFileName());
 
 		for (String subSectionName : config.getKeys(false)) {
 			if (subSectionName.equals("menu-settings")) {
@@ -61,7 +61,7 @@ public class MenuParser {
 
 			ConfigurationSection iconSection = config.getConfigurationSection(subSectionName);
 
-			BasicIcon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
+			AdvancedIcon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
 			Coords coords = IconParser.loadCoordsFromSection(iconSection);
 			
 			int actualX = coords.getX() - 1;

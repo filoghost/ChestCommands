@@ -34,7 +34,7 @@ import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 import me.filoghost.chestcommands.internal.MenuSettings;
 import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
@@ -198,7 +198,7 @@ public class ChestCommands extends JavaPlugin {
 			}
 
 			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errorCollector);
-			ExtendedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errorCollector);
+			AdvancedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errorCollector);
 
 			menuManager.registerMenu(menuConfig.getFileName(), menuSettings.getCommands(), iconMenu, errorCollector);
 

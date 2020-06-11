@@ -28,8 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.internal.ExtendedIconMenu;
+import me.filoghost.chestcommands.internal.AdvancedIconMenu;
 import me.filoghost.chestcommands.util.FileUtils;
 
 public class SignListener implements Listener {
@@ -67,7 +66,7 @@ public class SignListener implements Listener {
 		}
 
 		String menuFileName = FileUtils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
-		ExtendedIconMenu menu = menuManager.getMenuByFileName(menuFileName);
+		AdvancedIconMenu menu = menuManager.getMenuByFileName(menuFileName);
 		
 		if (menu == null) {
 			event.getPlayer().sendMessage(ChestCommands.getLang().menu_not_found);
@@ -90,7 +89,7 @@ public class SignListener implements Listener {
 			
 			menuFileName = FileUtils.addYamlExtension(menuFileName);
 	
-			IconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
+			AdvancedIconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.RED + "Menu \"" + menuFileName + "\" was not found.");
