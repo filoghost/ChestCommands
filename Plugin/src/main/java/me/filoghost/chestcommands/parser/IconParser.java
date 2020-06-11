@@ -100,7 +100,7 @@ public class IconParser {
 			try {
 				ItemStackParser itemReader = new ItemStackParser(material, true);
 				icon.setMaterial(itemReader.getMaterial());
-				icon.setDurability(itemReader.getDataValue());
+				icon.setDurability(itemReader.getDurability());
 				icon.setAmount(itemReader.getAmount());
 			} catch (FormatException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid ID: " + e.getMessage());
@@ -222,8 +222,8 @@ public class IconParser {
 				try {
 					ItemStackParser itemReader = new ItemStackParser(serializedItem, true);
 					RequiredItem requiredItem = new RequiredItem(itemReader.getMaterial(), itemReader.getAmount());
-					if (itemReader.hasExplicitDataValue()) {
-						requiredItem.setRestrictiveDataValue(itemReader.getDataValue());
+					if (itemReader.hasExplicitDurability()) {
+						requiredItem.setRestrictiveDurability(itemReader.getDurability());
 					}
 					requiredItems.add(requiredItem);
 				} catch (FormatException e) {

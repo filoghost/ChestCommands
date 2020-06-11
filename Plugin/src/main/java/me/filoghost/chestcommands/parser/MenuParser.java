@@ -154,8 +154,8 @@ public class MenuParser {
 					
 					OpenTrigger openTrigger = new OpenTrigger(itemReader.getMaterial(), clickType);
 					
-					if (itemReader.hasExplicitDataValue()) {
-						openTrigger.setRestrictiveDurability(itemReader.getDataValue());
+					if (itemReader.hasExplicitDurability()) {
+						openTrigger.setRestrictiveDurability(itemReader.getDurability());
 					}
 					
 				} catch (FormatException e) {

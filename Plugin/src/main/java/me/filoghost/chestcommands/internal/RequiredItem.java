@@ -24,7 +24,7 @@ public class RequiredItem {
 
 	private Material material;
 	private int amount;
-	private short dataValue;
+	private short durability;
 	private boolean isDurabilityRestrictive = false;
 
 	public RequiredItem(Material material, int amount) {
@@ -42,31 +42,31 @@ public class RequiredItem {
 		return amount;
 	}
 
-	public short getDataValue() {
-		return dataValue;
+	public short getDurability() {
+		return durability;
 	}
 
-	public void setRestrictiveDataValue(short data) {
-		Preconditions.checkArgument(data >= 0, "Data value cannot be negative");
+	public void setRestrictiveDurability(short durability) {
+		Preconditions.checkArgument(durability >= 0, "Durability cannot be negative");
 
-		this.dataValue = data;
+		this.durability = durability;
 		isDurabilityRestrictive = true;
 	}
 
-	public boolean hasRestrictiveDataValue() {
+	public boolean hasRestrictiveDurability() {
 		return isDurabilityRestrictive;
 	}
 
-	private boolean isValidDataValue(short data) {
+	private boolean isMatchingDurability(short data) {
 		if (!isDurabilityRestrictive) return true;
-		return data == this.dataValue;
+		return data == this.durability;
 	}
 
 	public boolean isItemContainedIn(Inventory inventory) {
 		int amountFound = 0;
 
 		for (ItemStack item : inventory.getContents()) {
-			if (item != null && item.getType() == material && isValidDataValue(item.getDurability())) {
+			if (item != null && item.getType() == material && isMatchingDurability(item.getDurability())) {
 				amountFound += item.getAmount();
 			}
 		}
@@ -89,7 +89,7 @@ public class RequiredItem {
 
 			current = contents[i];
 
-			if (current != null && current.getType() == material && isValidDataValue(current.getDurability())) {
+			if (current != null && current.getType() == material && isMatchingDurability(current.getDurability())) {
 				if (current.getAmount() > itemsToTake) {
 					current.setAmount(current.getAmount() - itemsToTake);
 					return true;

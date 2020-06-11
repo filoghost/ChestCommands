@@ -189,7 +189,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 					player.sendMessage(ChestCommands.getLang().no_required_item
 							.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
 							.replace("{amount}", Integer.toString(item.getAmount()))
-							.replace("{datavalue}", item.hasRestrictiveDataValue() ? Short.toString(item.getDataValue()) : ChestCommands.getLang().any)
+							.replace("{datavalue}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
 					);
 				}
 			}

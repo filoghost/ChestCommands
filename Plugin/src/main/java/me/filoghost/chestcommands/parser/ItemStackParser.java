@@ -24,8 +24,8 @@ public class ItemStackParser {
 
 	private Material material = Material.STONE; // In the worst case (bad exception handling) we just get stone
 	private int amount = 1;
-	private short dataValue = 0;
-	private boolean explicitDataValue = false;
+	private short durability = 0;
+	private boolean hasExplicitDurability = false;
 
 	/**
 	 * Reads item in the format "id:data, amount"
@@ -51,14 +51,14 @@ public class ItemStackParser {
 		}
 
 
-		// Read the optional data value
+		// Read the optional durability
 		String[] splitByColons = input.split(":");
 
 		if (splitByColons.length > 1) {
-			short dataValue = NumberParser.getPositiveShort(splitByColons[1], "invalid data value \"" + splitByColons[1] + "\"");
+			short durability = NumberParser.getPositiveShort(splitByColons[1], "invalid durability \"" + splitByColons[1] + "\"");
 
-			this.explicitDataValue = true;
-			this.dataValue = dataValue;
+			this.hasExplicitDurability = true;
+			this.durability = durability;
 
 			// Only keep the first part as input
 			input = splitByColons[0];
@@ -80,16 +80,16 @@ public class ItemStackParser {
 		return amount;
 	}
 
-	public short getDataValue() {
-		return dataValue;
+	public short getDurability() {
+		return durability;
 	}
 
-	public boolean hasExplicitDataValue() {
-		return explicitDataValue;
+	public boolean hasExplicitDurability() {
+		return hasExplicitDurability;
 	}
 
 	public ItemStack createStack() {
-		return new ItemStack(material, amount, dataValue);
+		return new ItemStack(material, amount, durability);
 	}
 
 }

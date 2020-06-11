@@ -42,7 +42,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	private Material material;
 	private int amount;
-	private short dataValue;
+	private short durability;
 
 	private String nbtData;
 	private String name;
@@ -96,15 +96,15 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	}
 
 	@Override
-	public void setDurability(short dataValue) {
-		if (dataValue < 0) dataValue = 0;
+	public void setDurability(short durability) {
+		if (durability < 0) durability = 0;
 
-		this.dataValue = dataValue;
+		this.durability = durability;
 	}
 
 	@Override
 	public short getDurability() {
-		return dataValue;
+		return durability;
 	}
 
 	@Override
@@ -317,7 +317,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 		}
 
 		// If the material is not set, display BEDROCK
-		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, dataValue) : new ItemStack(Material.BEDROCK, amount);
+		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, durability) : new ItemStack(Material.BEDROCK, amount);
 
 		// First try to apply NBT data
 		if (nbtData != null) {
