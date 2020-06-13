@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.menu;
+package me.filoghost.chestcommands.menu.icon;
 
 import java.util.List;
 
@@ -26,6 +26,9 @@ import me.filoghost.chestcommands.action.GiveMoneyAction;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
+import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.BaseIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 
 public class AdvancedIcon extends ConfigurableIconImpl {

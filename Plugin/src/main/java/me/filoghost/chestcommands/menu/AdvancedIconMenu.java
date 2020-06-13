@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 
 public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
