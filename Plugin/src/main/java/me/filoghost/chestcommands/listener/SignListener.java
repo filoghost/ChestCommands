@@ -26,9 +26,9 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.FileUtils;
 
 public class SignListener implements Listener {

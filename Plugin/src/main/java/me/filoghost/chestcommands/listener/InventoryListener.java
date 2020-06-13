@@ -29,9 +29,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.menu.BaseIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 
 public class InventoryListener implements Listener {
 	

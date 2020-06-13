@@ -16,8 +16,9 @@ package me.filoghost.chestcommands.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import me.filoghost.chestcommands.MenuManager;
-import me.filoghost.chestcommands.MenuManager.MenuView;
+
+import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.menu.MenuView;
 
 public class RefreshMenusTask implements Runnable {
 

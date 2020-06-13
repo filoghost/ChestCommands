@@ -39,6 +39,7 @@ import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;

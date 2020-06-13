@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.GiveMoneyAction;
 import me.filoghost.chestcommands.action.OpenMenuAction;

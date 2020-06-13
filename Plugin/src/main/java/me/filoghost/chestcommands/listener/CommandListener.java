@@ -19,8 +19,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import me.filoghost.chestcommands.MenuManager;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 
 public class CommandListener implements Listener {
 	

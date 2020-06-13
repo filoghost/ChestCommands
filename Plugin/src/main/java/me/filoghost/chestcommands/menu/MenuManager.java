@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands;
+package me.filoghost.chestcommands.menu;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,9 +25,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.BaseIconMenu;
-import me.filoghost.chestcommands.menu.MenuInventoryHolder;
 import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorCollector;
@@ -143,27 +140,6 @@ public class MenuManager {
 		}
 			
 		return new MenuView((AdvancedIconMenu) menuInventoryHolder.getIconMenu(), inventory);		
-	}
-	
-	
-	public static class MenuView {
-		
-		private final AdvancedIconMenu menu;
-		private final Inventory inventory;
-		
-		public MenuView(AdvancedIconMenu menu, Inventory inventory) {
-			this.menu = menu;
-			this.inventory = inventory;
-		}
-
-		public AdvancedIconMenu getMenu() {
-			return menu;
-		}
-
-		public Inventory getInventory() {
-			return inventory;
-		}		
-		
 	}
 
 }
