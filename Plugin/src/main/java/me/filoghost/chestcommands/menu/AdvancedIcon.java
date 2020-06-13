@@ -27,16 +27,13 @@ import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.util.MaterialsHelper;
-import me.filoghost.chestcommands.util.StringUtils;
 
 public class AdvancedIcon extends ConfigurableIconImpl {
 
-	private String permission;
-	private boolean permissionNegated;
-	private String permissionMessage;
+	private PermissionChecker clickPermissionChecker;
+	private String clickNoPermissionMessage;
 	
-	private String viewPermission;
-	private boolean viewPermissionNegated;
+	private PermissionChecker viewPermissionChecker;
 
 	private double moneyPrice;
 	private int expLevelsPrice;
@@ -44,67 +41,31 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	private List<Action> clickActions;
 	
 	private boolean canClickIcon(Player player) {
-		if (permission == null) {
-			return true;
-		}
-
-		if (permissionNegated) {
-			return !player.hasPermission(permission);
-		} else {
-			return player.hasPermission(permission);
-		}
+		return clickPermissionChecker == null || clickPermissionChecker.hasPermission(player);
+	}
+	
+	public boolean canViewIcon(Player player) {
+		return viewPermissionChecker == null || viewPermissionChecker.hasPermission(player);
+	}
+	
+	public boolean hasViewPermission() {
+		return viewPermissionChecker != null && !viewPermissionChecker.isEmpty();
 	}
 
 	public void setPermission(String permission) {
-		if (StringUtils.isNullOrEmpty(permission)) {
-			permission = null;
-		}
-
-		if (permission != null) {
-			if (permission.startsWith("-")) {
-				permissionNegated = true;
-				permission = permission.substring(1, permission.length()).trim();
-			}
-		}
-		this.permission = permission;
+		clickPermissionChecker = new PermissionChecker(permission);
 	}
 
 	public String getPermissionMessage() {
-		return permissionMessage;
+		return clickNoPermissionMessage;
 	}
 
-	public void setPermissionMessage(String permissionMessage) {
-		this.permissionMessage = permissionMessage;
+	public void setPermissionMessage(String clickNoPermissionMessage) {
+		this.clickNoPermissionMessage = clickNoPermissionMessage;
 	}
-
-	public boolean hasViewPermission() {
-		return viewPermission != null;
-	}
-
-	public boolean canViewIcon(Player player) {
-		if (viewPermission == null) {
-			return true;
-		}
-
-		if (viewPermissionNegated) {
-			return !player.hasPermission(viewPermission);
-		} else {
-			return player.hasPermission(viewPermission);
-		}
-	}
-
+		
 	public void setViewPermission(String viewPermission) {
-		if (StringUtils.isNullOrEmpty(viewPermission)) {
-			viewPermission = null;
-		}
-
-		if (viewPermission != null) {
-			if (viewPermission.startsWith("-")) {
-				viewPermissionNegated = true;
-				viewPermission = viewPermission.substring(1, viewPermission.length()).trim();
-			}
-		}
-		this.viewPermission = viewPermission;
+		viewPermissionChecker = new PermissionChecker(viewPermission);
 	}
 
 	public double getMoneyPrice() {
@@ -145,8 +106,8 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 		// Check all the requirements
 
 		if (!canClickIcon(player)) {
-			if (permissionMessage != null) {
-				player.sendMessage(permissionMessage);
+			if (clickNoPermissionMessage != null) {
+				player.sendMessage(clickNoPermissionMessage);
 			} else {
 				player.sendMessage(ChestCommands.getLang().default_no_icon_permission);
 			}
