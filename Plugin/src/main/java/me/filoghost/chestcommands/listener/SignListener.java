@@ -29,7 +29,6 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.FileUtils;
 
 public class SignListener implements Listener {
 	
@@ -65,7 +64,7 @@ public class SignListener implements Listener {
 			return;
 		}
 
-		String menuFileName = FileUtils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
+		String menuFileName = addYamlExtension(sign.getLine(FILENAME_LINE).trim());
 		AdvancedIconMenu menu = menuManager.getMenuByFileName(menuFileName);
 		
 		if (menu == null) {
@@ -87,7 +86,7 @@ public class SignListener implements Listener {
 				return;
 			}
 			
-			menuFileName = FileUtils.addYamlExtension(menuFileName);
+			menuFileName = addYamlExtension(menuFileName);
 	
 			AdvancedIconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
@@ -121,6 +120,17 @@ public class SignListener implements Listener {
 	
 	private boolean canCreateMenuSign(Player player) {
 		return player.hasPermission(Permissions.SIGN_CREATE);
+	}
+	
+	private String addYamlExtension(String fileName) {
+		if (fileName == null) {
+			return null;
+		}
+		if (fileName.toLowerCase().endsWith(".yml")) {
+			return fileName;
+		} else {
+			return fileName + ".yml";
+		}
 	}
 
 }
