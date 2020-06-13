@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.menu.icon;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.util.StringUtils;
+import me.filoghost.chestcommands.util.Strings;
 
 public class PermissionChecker {
 	
@@ -28,7 +28,7 @@ public class PermissionChecker {
 			permission = permission.trim();
 		}
 		
-		if (StringUtils.isNullOrEmpty(permission)) {
+		if (Strings.isNullOrEmpty(permission)) {
 			this.permission = null;
 			negated = false;
 		} else {

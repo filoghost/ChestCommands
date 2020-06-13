@@ -77,7 +77,7 @@ public class Registry<T> {
 	}
 	
 	private String toKeyFormat(String enumValueName) {
-		return StringUtils.stripChars(enumValueName, KEY_IGNORE_CHARS).toLowerCase();
+		return Strings.stripChars(enumValueName, KEY_IGNORE_CHARS).toLowerCase();
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public final class MaterialsHelper {
 	}
 
 	public static String formatMaterial(Material material) {
-		return StringUtils.capitalizeFully(material.toString().replace("_", " "));
+		return Strings.capitalizeFully(material.toString().replace("_", " "));
 	}
 
 	private static Collection<Material> getExistingMaterials(String... materialEnumNames) {

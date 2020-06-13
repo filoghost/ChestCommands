@@ -14,9 +14,9 @@
  */
 package me.filoghost.chestcommands.util;
 
-public final class StringUtils {
+public final class Strings {
 
-	private StringUtils() {}
+	private Strings() {}
 
 
 	public static String stripChars(String input, char... removed) {
