@@ -69,8 +69,6 @@ public interface ConfigurableIcon extends Icon {
 
 	void removeEnchantment(Enchantment ench);
 
-	void clearEnchantments();
-
 	Color getLeatherColor();
 
 	void setLeatherColor(Color leatherColor);

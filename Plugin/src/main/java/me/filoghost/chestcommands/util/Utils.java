@@ -14,7 +14,11 @@
  */
 package me.filoghost.chestcommands.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Utils {
 
@@ -31,6 +35,22 @@ public final class Utils {
 
 	public static boolean isNullOrEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
+	}
+
+	public static <E> List<E> nullableCopy(List<E> list) {
+		if (isNullOrEmpty(list)) {
+			return null;
+		} else {
+			return new ArrayList<>(list);
+		}
+	}
+	
+	public static <K, V> Map<K, V> nullableCopy(Map<K, V> map) {
+		if (map == null || map.isEmpty()) {
+			return null;
+		} else {
+			return new HashMap<>(map);
+		}
 	}
 
 }

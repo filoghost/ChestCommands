@@ -19,8 +19,6 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import com.google.common.collect.ImmutableList;
-
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
@@ -84,7 +82,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	}
 
 	public void setClickActions(List<Action> clickActions) {
-		this.clickActions = ImmutableList.copyOf(clickActions);
+		this.clickActions = Utils.nullableCopy(clickActions);
 	}
 
 	@Override

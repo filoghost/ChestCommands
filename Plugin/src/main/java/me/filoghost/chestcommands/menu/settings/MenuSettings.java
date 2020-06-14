@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.menu.settings;
 
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.util.Utils;
 
 import java.util.List;
 
@@ -43,10 +42,6 @@ public class MenuSettings {
 
 	public int getRows() {
 		return rows;
-	}
-
-	public boolean hasCommands() {
-		return !Utils.isNullOrEmpty(commands);
 	}
 
 	public void setCommands(List<String> commands) {

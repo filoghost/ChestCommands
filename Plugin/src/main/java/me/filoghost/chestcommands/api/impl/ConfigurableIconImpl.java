@@ -41,6 +41,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
+import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.variable.VariableManager;
 
 public class ConfigurableIconImpl implements ConfigurableIcon {
@@ -67,7 +68,6 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
 	public ConfigurableIconImpl() {
-		enchantments = new HashMap<>();
 		closeOnClick = true;
 		amount = 1;        
 	}
@@ -142,7 +142,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setLore(List<String> lore) {
-		this.lore = lore;
+		this.lore = Utils.nullableCopy(lore);
 		this.loreLinesWithVariables = null;
 
 		if (lore != null) {
@@ -159,7 +159,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public boolean hasLore() {
-		return lore != null && lore.size() > 0;
+		return !Utils.isNullOrEmpty(lore);
 	}
 
 	@Override
@@ -169,16 +169,12 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setEnchantments(Map<Enchantment, Integer> enchantments) {
-		if (enchantments == null) {
-			this.enchantments.clear();
-			return;
-		}
-		this.enchantments = enchantments;
+		this.enchantments = Utils.nullableCopy(enchantments);
 	}
 
 	@Override
 	public Map<Enchantment, Integer> getEnchantments() {
-		return new HashMap<>(enchantments);
+		return enchantments;
 	}
 
 	@Override
@@ -188,17 +184,18 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void addEnchantment(Enchantment ench, Integer level) {
+		if (enchantments == null) {
+			enchantments = new HashMap<>();
+		}
 		enchantments.put(ench, level);
 	}
 
 	@Override
 	public void removeEnchantment(Enchantment ench) {
+		if (enchantments == null) {
+			return;
+		}
 		enchantments.remove(ench);
-	}
-
-	@Override
-	public void clearEnchantments() {
-		enchantments.clear();
 	}
 
 	@Override
@@ -239,7 +236,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setBannerPatterns(List<Pattern> bannerPatterns) {
-		this.bannerPatterns = bannerPatterns;
+		this.bannerPatterns = Utils.nullableCopy(bannerPatterns);
 	}
 
 	@Override
@@ -367,7 +364,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 		itemStack.setItemMeta(itemMeta);
 
-		if (enchantments.size() > 0) {
+		if (enchantments != null) {
 			for (Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());
 			}
