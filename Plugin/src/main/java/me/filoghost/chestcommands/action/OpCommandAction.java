@@ -16,21 +16,23 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
+import me.filoghost.chestcommands.variable.RelativeString;
+
 public class OpCommandAction extends Action {
 
-	public OpCommandAction(String action) {
-		super(action);
+	private RelativeString command;
+
+	public OpCommandAction(String serializedAction) {
+		command = RelativeString.of(serializedAction);
 	}
 
 	@Override
-	public void execute(Player player) {
-
+	protected void executeInner(Player player) {
 		if (player.isOp()) {
-			player.chat("/" + getParsedAction(player));
-
+			player.chat("/" + command.getValue(player));
 		} else {
 			player.setOp(true);
-			player.chat("/" + getParsedAction(player));
+			player.chat("/" + command.getValue(player));
 			player.setOp(false);
 		}
 	}

@@ -17,16 +17,19 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.BungeeCordBridge;
+import me.filoghost.chestcommands.variable.RelativeString;
 
 public class ChangeServerAction extends Action {
 
-	public ChangeServerAction(String action) {
-		super(action);
+	private RelativeString targetServer;
+	
+	public ChangeServerAction(String serializedAction) {
+		targetServer = RelativeString.of(serializedAction);
 	}
 
 	@Override
-	public void execute(Player player) {
-		BungeeCordBridge.connect(player, hasVariables ? getParsedAction(player) : action);
+	protected void executeInner(Player player) {
+		BungeeCordBridge.connect(player, targetServer.getValue(player));
 	}
 
 }

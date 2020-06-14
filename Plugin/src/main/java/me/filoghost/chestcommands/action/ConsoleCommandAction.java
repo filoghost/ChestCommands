@@ -17,15 +17,19 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import me.filoghost.chestcommands.variable.RelativeString;
+
 public class ConsoleCommandAction extends Action {
 
-	public ConsoleCommandAction(String action) {
-		super(action);
+	private RelativeString command;
+
+	public ConsoleCommandAction(String serializedAction) {
+		command = RelativeString.of(serializedAction);
 	}
 
 	@Override
-	public void execute(Player player) {
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getParsedAction(player));
+	protected void executeInner(Player player) {
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getValue(player));
 	}
 
 }

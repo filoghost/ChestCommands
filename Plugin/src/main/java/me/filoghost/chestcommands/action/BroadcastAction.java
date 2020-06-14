@@ -18,16 +18,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.variable.RelativeString;
 
 public class BroadcastAction extends Action {
+	
+	private RelativeString message;
 
 	public BroadcastAction(String action) {
-		super(FormatUtils.addColors(action));
+		message = RelativeString.of(FormatUtils.addColors(action));
 	}
 
 	@Override
-	public void execute(Player player) {
-		Bukkit.broadcastMessage(getParsedAction(player));
+	protected void executeInner(Player player) {
+		Bukkit.broadcastMessage(message.getValue(player));
 	}
 
 }

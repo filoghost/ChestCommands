@@ -14,50 +14,42 @@
  */
 package me.filoghost.chestcommands.action;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
 import me.filoghost.chestcommands.parser.FormatException;
 import me.filoghost.chestcommands.parser.NumberParser;
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.variable.RelativeString;
 
 public class DragonBarAction extends Action {
 
-	private String message;
+	private RelativeString message;
 	private int seconds;
 
-	public DragonBarAction(String action) {
-		super(action);
-		if (!hasVariables) {
-			parseBar(super.action);
-		}
-	}
-
-	private void parseBar(String action) {
+	public DragonBarAction(String serialiazedAction) {
 		seconds = 1;
-		message = action;
-
-		String[] split = action.split("\\|", 2); // Max of 2 pieces
+		String message = serialiazedAction;
+		
+		String[] split = serialiazedAction.split("\\|", 2); // Max of 2 pieces
 		if (split.length > 1) {
 			try {
 				seconds =  NumberParser.getStrictlyPositiveInteger(split[0].trim());
 				message = split[1].trim();
 			} catch (FormatException ex) {
-				// Ignore
-				// TODO: notify with message
+				disable(ChatColor.RED + "Invalid dragon bar time: " + split[0]);
+				return;
 			}
 		}
 
-		message = FormatUtils.addColors(message);
+		this.message = RelativeString.of(FormatUtils.addColors(message));
 	}
 
 	@Override
-	public void execute(Player player) {
-		if (hasVariables) {
-			parseBar(getParsedAction(player));
-		}
+	protected void executeInner(Player player) {
 		if (BarAPIBridge.hasValidPlugin()) {
-			BarAPIBridge.setMessage(player, message, seconds);
+			BarAPIBridge.setMessage(player, message.getValue(player), seconds);
 		}
 	}
 

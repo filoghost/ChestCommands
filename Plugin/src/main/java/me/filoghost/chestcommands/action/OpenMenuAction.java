@@ -20,19 +20,21 @@ import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
+import me.filoghost.chestcommands.variable.RelativeString;
 
 public class OpenMenuAction extends Action {
 
-	public OpenMenuAction(String action) {
-		super(action);
+	private RelativeString targetMenu;
+	
+	public OpenMenuAction(String serializedAction) {
+		targetMenu = RelativeString.of(serializedAction);
 	}
 
 	@Override
-	public void execute(final Player player) {
-		String target = hasVariables ? getParsedAction(player) : action;
-		final AdvancedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(target.toLowerCase());
+	protected void executeInner(final Player player) {
+		final AdvancedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(targetMenu.getValue(player));
+		
 		if (menu != null) {
-
 			/*
 			 * Delay the task, since this action is executed in ClickInventoryEvent
 			 * and opening another inventory in the same moment is not a good idea.

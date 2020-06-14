@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.filoghost.chestcommands.action.*;
+import me.filoghost.chestcommands.config.AsciiPlaceholders;
 
 public class ActionParser {
 
@@ -48,12 +49,12 @@ public class ActionParser {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
 				// Remove the action prefix and trim the spaces
-				String cleanCommand = matcher.replaceFirst("").trim();
-				return entry.getValue().create(cleanCommand);
+				String serializedAction = matcher.replaceFirst("").trim();
+				return entry.getValue().create(AsciiPlaceholders.placeholdersToSymbols(serializedAction));
 			}
 		}
 
-		return new PlayerCommandAction(input); // Default action, no match found
+		return new PlayerCommandAction(AsciiPlaceholders.placeholdersToSymbols(input)); // Default action, no match found
 	}
 	
 	

@@ -16,23 +16,22 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.config.AsciiPlaceholders;
-import me.filoghost.chestcommands.variable.VariableManager;
-
 public abstract class Action {
 
-	protected String action;
-	protected boolean hasVariables;
+	private String errorMessage;
 
-	public Action(String action) {
-		this.action = AsciiPlaceholders.placeholdersToSymbols(action).trim();
-		this.hasVariables = VariableManager.hasVariables(action);
+	protected void disable(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
-	public String getParsedAction(Player executor) {
-		return hasVariables ? VariableManager.setVariables(action, executor) : action;
+	public void execute(Player player) {
+		if (errorMessage != null) {
+			player.sendMessage(errorMessage);
+		} else {
+			executeInner(player);
+		}
 	}
-
-	public abstract void execute(Player player);
+	
+	protected abstract void executeInner(Player player);	
 
 }

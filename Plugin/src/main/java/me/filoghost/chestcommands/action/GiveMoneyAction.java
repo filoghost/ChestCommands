@@ -24,33 +24,17 @@ import me.filoghost.chestcommands.parser.NumberParser;
 public class GiveMoneyAction extends Action {
 
 	private double moneyToGive;
-	private String errorMessage;
 
 	public GiveMoneyAction(String action) {
-		super(action);
-		if (!hasVariables) {
-			parseMoney(super.action);
-		}
-	}
-
-	private void parseMoney(String action) {
 		try {
 			moneyToGive = NumberParser.getStrictlyPositiveDouble(action);
 		} catch (FormatException e) {
-			errorMessage = ChatColor.RED + "Invalid money amount: " + action;
+			disable(ChatColor.RED + "Invalid money amount: " + action);
 		}
 	}
 
 	@Override
-	public void execute(Player player) {
-		if (hasVariables) {
-			parseMoney(getParsedAction(player));
-		}
-		if (errorMessage != null) {
-			player.sendMessage(errorMessage);
-			return;
-		}
-
+	protected void executeInner(Player player) {
 		if (EconomyBridge.hasValidEconomy()) {
 			EconomyBridge.giveMoney(player, moneyToGive);
 		} else {

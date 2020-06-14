@@ -24,35 +24,18 @@ import me.filoghost.chestcommands.parser.ItemStackParser;
 public class GiveItemAction extends Action {
 
 	private ItemStack itemToGive;
-	private String errorMessage;
 
-	public GiveItemAction(String action) {
-		super(action);
-		if (!hasVariables) {
-			parseItem(super.action);
-		}
-	}
-
-	private void parseItem(String action) {
+	public GiveItemAction(String serializedAction) {
 		try {
-			ItemStackParser reader = new ItemStackParser(action, true);
+			ItemStackParser reader = new ItemStackParser(serializedAction, true);
 			itemToGive = reader.createStack();
-			errorMessage = null;
 		} catch (FormatException e) {
-			errorMessage = ChatColor.RED + "Invalid item to give: " + e.getMessage();
+			disable(ChatColor.RED + "Invalid item to give: " + e.getMessage());
 		}
 	}
 
 	@Override
-	public void execute(Player player) {
-		if (hasVariables) {
-			parseItem(getParsedAction(player));
-		}
-		if (errorMessage != null) {
-			player.sendMessage(errorMessage);
-			return;
-		}
-
+	protected void executeInner(Player player) {
 		player.getInventory().addItem(itemToGive.clone());
 	}
 

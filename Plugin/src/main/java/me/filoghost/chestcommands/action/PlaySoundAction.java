@@ -27,25 +27,16 @@ public class PlaySoundAction extends Action {
 	private Sound sound;
 	private float pitch;
 	private float volume;
-	private String errorMessage;
 
-	public PlaySoundAction(String action) {
-		super(action);
-		if (!hasVariables) {
-			parseSound(super.action);
-		}
-	}
-
-	private void parseSound(String action) {
-		errorMessage = null;
+	public PlaySoundAction(String serializedAction) {
 		pitch = 1.0f;
 		volume = 1.0f;
 
-		String[] split = action.split(",");
+		String[] split = serializedAction.split(",");
 
 		sound = SOUNDS_REGISTRY.find(split[0]);
 		if (sound == null) {
-			errorMessage = ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".";
+			disable(ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".");
 			return;
 		}
 
@@ -65,15 +56,7 @@ public class PlaySoundAction extends Action {
 	}
 
 	@Override
-	public void execute(Player player) {
-		if (hasVariables) {
-			parseSound(getParsedAction(player));
-		}
-		if (errorMessage != null) {
-			player.sendMessage(errorMessage);
-			return;
-		}
-
+	protected void executeInner(Player player) {
 		player.playSound(player.getLocation(), sound, volume, pitch);
 	}
 

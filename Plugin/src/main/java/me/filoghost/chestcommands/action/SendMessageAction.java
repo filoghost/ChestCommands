@@ -17,16 +17,19 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.variable.RelativeString;
 
 public class SendMessageAction extends Action {
+	
+	private RelativeString message;
 
 	public SendMessageAction(String action) {
-		super(FormatUtils.addColors(action));
+		message = RelativeString.of(FormatUtils.addColors(action));
 	}
 
 	@Override
-	public void execute(Player player) {
-		player.sendMessage(getParsedAction(player));
+	protected void executeInner(Player player) {
+		player.sendMessage(message.getValue(player));
 	}
 
 }
