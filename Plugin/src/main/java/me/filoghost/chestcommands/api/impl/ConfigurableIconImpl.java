@@ -37,12 +37,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.google.common.base.Preconditions;
-
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
+import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.variable.RelativeString;
 import me.filoghost.chestcommands.variable.RelativeStringList;
@@ -67,9 +66,11 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
-	public ConfigurableIconImpl() {
-		closeOnClick = true;
-		amount = 1;        
+	public ConfigurableIconImpl(Material material) {
+		Preconditions.checkArgumentNotAir(material, "material");
+		this.material = material;
+		this.amount = 1;
+		this.closeOnClick = true;
 	}
 
 	public boolean hasVariables() {
@@ -80,7 +81,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setMaterial(Material material) {
-		if (material == Material.AIR) material = null;
+		Preconditions.checkArgumentNotAir(material, "material");
 		this.material = material;
 	}
 
@@ -275,22 +276,11 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	}
 
 	public List<String> calculateLore(Player viewer) {
-		List<String> output = null;
-
 		if (hasLore()) {
-			output = lore.getValue(viewer);
+			return lore.getValue(viewer);
+		} else {
+			return null;
 		}
-
-		if (material == null) {
-			if (output == null) {
-				output = new ArrayList<>();
-			}
-
-			// Add an error message
-			output.add(ChatColor.RED + "(Invalid material)");
-		}
-
-		return output;
 	}
 
 	@Override

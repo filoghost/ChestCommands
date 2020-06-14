@@ -47,9 +47,7 @@ public class BackendAPIImpl extends BackendAPI {
 
 	@Override
 	public ConfigurableIcon createConfigurableIcon(Material material) {
-		ConfigurableIconImpl icon = new ConfigurableIconImpl();
-		icon.setMaterial(material);
-		return icon;
+		return new ConfigurableIconImpl(material);
 	}
 
 	@Override

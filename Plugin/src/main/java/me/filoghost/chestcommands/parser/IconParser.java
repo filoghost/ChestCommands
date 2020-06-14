@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 
@@ -92,9 +93,8 @@ public class IconParser {
 	public static AdvancedIcon loadIconFromSection(ConfigurationSection section, String iconName, String menuFileName, ErrorCollector errorCollector) {
 		Preconditions.notNull(section, "section");
 
-		// The icon is valid even without a Material
-		AdvancedIcon icon = new AdvancedIcon();
-
+		AdvancedIcon icon = new AdvancedIcon(Material.BEDROCK);
+		
 		String material = ConfigUtil.getAnyString(section, Nodes.MATERIAL);
 		if (material != null) {
 			try {
@@ -103,7 +103,7 @@ public class IconParser {
 				icon.setDurability(itemReader.getDurability());
 				icon.setAmount(itemReader.getAmount());
 			} catch (FormatException e) {
-				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid ID: " + e.getMessage());
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid MATERIAL: " + e.getMessage());
 			}
 		}
 

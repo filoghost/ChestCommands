@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.menu.icon;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -37,6 +38,10 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	private RequiredItems requiredItems;
 	private List<Action> clickActions;
 	
+	public AdvancedIcon(Material material) {
+		super(material);
+	}
+
 	public boolean canViewIcon(Player player) {
 		return viewPermissionChecker == null || viewPermissionChecker.hasPermission(player);
 	}
