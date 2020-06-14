@@ -14,6 +14,8 @@
  */
 package me.filoghost.chestcommands.util;
 
+import java.util.Collection;
+
 import org.bukkit.Material;
 
 public final class Preconditions {
@@ -23,6 +25,13 @@ public final class Preconditions {
 	public static void notNull(Object object, String objectName) {
 		if (object == null) {
 			throw new NullPointerException(objectName + " cannot be null");
+		}
+	}
+	
+	public static void notEmpty(Collection<?> collection, String objectName) {
+		notNull(collection, objectName);
+		if (collection.isEmpty()) {
+			throw new IllegalArgumentException(objectName + " cannot be empty");
 		}
 	}
 	

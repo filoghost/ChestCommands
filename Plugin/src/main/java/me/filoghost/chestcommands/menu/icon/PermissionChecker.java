@@ -16,12 +16,14 @@ package me.filoghost.chestcommands.menu.icon;
 
 import org.bukkit.entity.Player;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.Strings;
 
-public class PermissionChecker {
+public class PermissionChecker implements Requirement {
 	
 	private final String permission;
 	private final boolean negated;
+	private String noPermissionMessage;
 	
 	public PermissionChecker(String permission) {
 		if (permission != null) {
@@ -42,6 +44,26 @@ public class PermissionChecker {
 		}
 	}
 	
+	
+	public void setNoPermissionMessage(String noPermissionMessage) {
+		this.noPermissionMessage = noPermissionMessage;
+	}
+
+
+	@Override
+	public boolean hasRequirement(Player player) {
+		if (hasPermission(player)) {
+			return true;
+		} else {
+			if (noPermissionMessage != null) {
+				player.sendMessage(noPermissionMessage);
+			} else {
+				player.sendMessage(ChestCommands.getLang().default_no_icon_permission);
+			}
+			return false;
+		}
+	}
+	
 	public boolean hasPermission(Player player) {
 		if (isEmpty()) {
 			return true;
@@ -53,11 +75,14 @@ public class PermissionChecker {
 			return player.hasPermission(permission);
 		}
 	}
+	
+	@Override
+	public boolean takeCost(Player player) {
+		return true;
+	}
 
 	public boolean isEmpty() {
 		return this.permission == null;
-	}
-	
-	
+	}	
 
 }

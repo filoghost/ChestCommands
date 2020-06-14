@@ -16,36 +16,26 @@ package me.filoghost.chestcommands.menu.icon;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.action.GiveMoneyAction;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
-import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.BaseIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.MaterialsHelper;
+import me.filoghost.chestcommands.util.Utils;
 
 public class AdvancedIcon extends ConfigurableIconImpl {
 
-	private PermissionChecker clickPermissionChecker;
-	private String clickNoPermissionMessage;
-	
 	private PermissionChecker viewPermissionChecker;
 
-	private double moneyPrice;
-	private int expLevelsPrice;
-	private List<RequiredItem> requiredItems;
+	private PermissionChecker requiredPermission;
+	private RequiredMoney requiredMoney;
+	private RequiredExpLevel requiredExpLevel;
+	private RequiredItems requiredItems;
 	private List<Action> clickActions;
-	
-	private boolean canClickIcon(Player player) {
-		return clickPermissionChecker == null || clickPermissionChecker.hasPermission(player);
-	}
 	
 	public boolean canViewIcon(Player player) {
 		return viewPermissionChecker == null || viewPermissionChecker.hasPermission(player);
@@ -55,48 +45,40 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 		return viewPermissionChecker != null && !viewPermissionChecker.isEmpty();
 	}
 
-	public void setPermission(String permission) {
-		clickPermissionChecker = new PermissionChecker(permission);
+	public void setClickPermission(String permission) {
+		this.requiredPermission = new PermissionChecker(permission);
 	}
-
-	public String getPermissionMessage() {
-		return clickNoPermissionMessage;
-	}
-
-	public void setPermissionMessage(String clickNoPermissionMessage) {
-		this.clickNoPermissionMessage = clickNoPermissionMessage;
+	
+	public void setNoClickPermissionMessage(String clickNoPermissionMessage) {
+		requiredPermission.setNoPermissionMessage(clickNoPermissionMessage);
 	}
 		
 	public void setViewPermission(String viewPermission) {
-		viewPermissionChecker = new PermissionChecker(viewPermission);
+		this.viewPermissionChecker = new PermissionChecker(viewPermission);
 	}
 
-	public double getMoneyPrice() {
-		return moneyPrice;
+	public void setRequiredMoney(double requiredMoney) {
+		if (requiredMoney > 0.0) {
+			this.requiredMoney = new RequiredMoney(requiredMoney);
+		} else {
+			this.requiredMoney = null;
+		}
 	}
 
-	public void setMoneyPrice(double moneyPrice) {
-		this.moneyPrice = moneyPrice;
-	}
-
-	public int getExpLevelsPrice() {
-		return expLevelsPrice;
-	}
-
-	public void setExpLevelsPrice(int expLevelsPrice) {
-		this.expLevelsPrice = expLevelsPrice;
-	}
-
-	public List<RequiredItem> getRequiredItems() {
-		return requiredItems;
+	public void setRequiredExpLevel(int requiredLevels) {
+		if (requiredLevels > 0) {
+			this.requiredExpLevel = new RequiredExpLevel(requiredLevels);
+		} else {
+			this.requiredExpLevel = null;
+		}
 	}
 
 	public void setRequiredItems(List<RequiredItem> requiredItems) {
-		this.requiredItems = requiredItems;
-	}
-
-	public List<Action> getClickActions() {
-		return clickActions;
+		if (!Utils.isNullOrEmpty(requiredItems)) {
+			this.requiredItems = new RequiredItems(requiredItems);
+		} else {
+			this.requiredItems = null;
+		}
 	}
 
 	public void setClickActions(List<Action> clickActions) {
@@ -105,74 +87,16 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 
 	@Override
 	public boolean onClick(Inventory inventory, Player player) {
-
 		// Check all the requirements
-
-		if (!canClickIcon(player)) {
-			if (clickNoPermissionMessage != null) {
-				player.sendMessage(clickNoPermissionMessage);
-			} else {
-				player.sendMessage(ChestCommands.getLang().default_no_icon_permission);
-			}
+		boolean hasAllRequirements = Requirement.checkAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
+		if (!hasAllRequirements) {
 			return closeOnClick;
 		}
 
-		if (moneyPrice > 0) {
-			if (!EconomyBridge.hasValidEconomy()) {
-				player.sendMessage(ChatColor.RED + "This action has a price, but Vault with a compatible economy plugin was not found. For security, the action has been blocked. Please inform the staff.");
-				return closeOnClick;
-			}
-
-			if (!EconomyBridge.hasMoney(player, moneyPrice)) {
-				player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", EconomyBridge.formatMoney(moneyPrice)));
-				return closeOnClick;
-			}
-		}
-
-		if (expLevelsPrice > 0) {
-			if (player.getLevel() < expLevelsPrice) {
-				player.sendMessage(ChestCommands.getLang().no_exp.replace("{levels}", Integer.toString(expLevelsPrice)));
-				return closeOnClick;
-			}
-		}
-
-		if (requiredItems != null) {
-			boolean notHasItem = false;
-			for (RequiredItem item : requiredItems) {
-				if (!item.isItemContainedIn(player.getInventory())) {
-					notHasItem = true;
-					player.sendMessage(ChestCommands.getLang().no_required_item
-							.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
-							.replace("{amount}", Integer.toString(item.getAmount()))
-							.replace("{datavalue}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
-					);
-				}
-			}
-			if (notHasItem) {
-				return closeOnClick;
-			}
-		}
-
-		// Take the money and the required item
-
-		boolean changedVariables = false; // To update the placeholders
-
-		if (moneyPrice > 0) {
-			if (!EconomyBridge.takeMoney(player, moneyPrice)) {
-				player.sendMessage(ChatColor.RED + "Error: the transaction couldn't be executed. Please inform the staff.");
-				return closeOnClick;
-			}
-			changedVariables = true;
-		}
-
-		if (expLevelsPrice > 0) {
-			player.setLevel(player.getLevel() - expLevelsPrice);
-		}
-
-		if (requiredItems != null) {
-			for (RequiredItem item : requiredItems) {
-				item.takeItemFrom(player.getInventory());
-			}
+		// If all requirements are satisfied, take their cost
+		boolean takenAllCosts = Requirement.takeAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
+		if (!takenAllCosts) {
+			return closeOnClick;
 		}
 		
 		boolean hasOpenMenuAction = false;
@@ -183,17 +107,14 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 				
 				if (action instanceof OpenMenuAction) {
 	                hasOpenMenuAction = true;
-	            } else if (action instanceof GiveMoneyAction) {
-	                changedVariables = true;
 	            }
 			}
 		}
 		
-		if (changedVariables) {
-            BaseIconMenu<?> menu = MenuManager.getOpenMenu(inventory);
-            if (menu instanceof AdvancedIconMenu) {
-                ((AdvancedIconMenu) menu).refresh(player, inventory);               
-            }
+		// Update the menu after taking requirement costs and executing all actions
+        BaseIconMenu<?> menu = MenuManager.getOpenMenu(inventory);
+        if (menu instanceof AdvancedIconMenu) {
+            ((AdvancedIconMenu) menu).refresh(player, inventory);               
         }
 		
 		// Force menu to stay open if actions open another menu

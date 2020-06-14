@@ -176,8 +176,8 @@ public class IconParser {
 			}
 		}
 
-		icon.setPermission(section.getString(Nodes.PERMISSION));
-		icon.setPermissionMessage(FormatUtils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
+		icon.setClickPermission(section.getString(Nodes.PERMISSION));
+		icon.setNoClickPermissionMessage(FormatUtils.addColors(section.getString(Nodes.PERMISSION_MESSAGE)));
 		icon.setViewPermission(section.getString(Nodes.VIEW_PERMISSION));
 
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
@@ -201,14 +201,14 @@ public class IconParser {
 
 		double price = section.getDouble(Nodes.PRICE);
 		if (price > 0.0) {
-			icon.setMoneyPrice(price);
+			icon.setRequiredMoney(price);
 		} else if (price < 0.0) {
 			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has a negative PRICE: " + price);
 		}
 
 		int levels = section.getInt(Nodes.EXP_LEVELS);
 		if (levels > 0) {
-			icon.setExpLevelsPrice(levels);
+			icon.setRequiredExpLevel(levels);
 		} else if (levels < 0) {
 			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
 		}
