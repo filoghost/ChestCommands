@@ -31,11 +31,11 @@ public final class ItemMetaParser {
 	private ItemMetaParser() {}
 
 	
-	public static Color parseColor(String input) throws FormatException {
+	public static Color parseColor(String input) throws ParseException {
 		String[] split = input.replace(" ", "").split(",");
 
 		if (split.length != 3) {
-			throw new FormatException("it must be in the format \"red, green, blue\".");
+			throw new ParseException("it must be in the format \"red, green, blue\".");
 		}
 
 		int red, green, blue;
@@ -45,38 +45,38 @@ public final class ItemMetaParser {
 			green = Integer.parseInt(split[1]);
 			blue = Integer.parseInt(split[2]);
 		} catch (NumberFormatException ex) {
-			throw new FormatException("it contains invalid numbers.");
+			throw new ParseException("it contains invalid numbers.");
 		}
 
 		if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-			throw new FormatException("it should only contain numbers between 0 and 255.");
+			throw new ParseException("it should only contain numbers between 0 and 255.");
 		}
 
 		return Color.fromRGB(red, green, blue);
 	}
 
-	public static DyeColor parseDyeColor(String input) throws FormatException {
+	public static DyeColor parseDyeColor(String input) throws ParseException {
 		DyeColor color = DYE_COLORS_REGISTRY.find(input);
 		
 		if (color == null) {
-			throw new FormatException("it must be a valid color.");
+			throw new ParseException("it must be a valid color.");
 		}
 		return color;
 	}
 
-	public static List<Pattern> parseBannerPatternList(List<String> input) throws FormatException {
+	public static List<Pattern> parseBannerPatternList(List<String> input) throws ParseException {
 		List<Pattern> patterns = new ArrayList<Pattern>();
 		for (String str : input) {
 			String[] split = str.split(":");
 			if (split.length != 2) {
-				throw new FormatException("it must be in the format \"pattern:color\".");
+				throw new ParseException("it must be in the format \"pattern:color\".");
 			}
 			
 			PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0]);
 			DyeColor patternColor = parseDyeColor(split[1]);
 			
 			if (patternType == null) {
-				throw new FormatException("it must be a valid pattern type.");
+				throw new ParseException("it must be a valid pattern type.");
 			}
 			
 			patterns.add(new Pattern(patternColor, patternType));

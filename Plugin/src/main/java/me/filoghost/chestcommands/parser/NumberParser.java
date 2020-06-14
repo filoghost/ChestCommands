@@ -16,59 +16,59 @@ package me.filoghost.chestcommands.parser;
 
 public class NumberParser {
 	
-	public static double getStrictlyPositiveDouble(String input) throws FormatException {
+	public static double getStrictlyPositiveDouble(String input) throws ParseException {
 		return getStrictlyPositiveDouble(input, "number must be a valid decimal and greater than 0");
 	}
 
-	public static double getStrictlyPositiveDouble(String input, String errorMessage) throws FormatException {
+	public static double getStrictlyPositiveDouble(String input, String errorMessage) throws ParseException {
 		double value = getDouble(input, errorMessage);
 		check(value > 0.0, errorMessage);
 		return value;
 	}
 
-	private static double getDouble(String input, String errorMessage) throws FormatException {
+	private static double getDouble(String input, String errorMessage) throws ParseException {
 		try {
 			return Double.parseDouble(input);
 		} catch (NumberFormatException ex) {
-			throw new FormatException(errorMessage);
+			throw new ParseException(errorMessage);
 		}
 	}
 	
-	public static short getPositiveShort(String input, String errorMessage) throws FormatException {
+	public static short getPositiveShort(String input, String errorMessage) throws ParseException {
 		short value = getShort(input, errorMessage);
 		check(value >= 0, errorMessage);
 		return value;
 	}
 
-	public static short getShort(String input, String errorMessage) throws FormatException {
+	public static short getShort(String input, String errorMessage) throws ParseException {
 		try {
 			return Short.parseShort(input);
 		} catch (NumberFormatException ex) {
-			throw new FormatException(errorMessage);
+			throw new ParseException(errorMessage);
 		}
 	}
 	
-	public static int getStrictlyPositiveInteger(String input) throws FormatException {
+	public static int getStrictlyPositiveInteger(String input) throws ParseException {
 		return getStrictlyPositiveInteger(input, "number must be a valid integer and greater than 0");
 	}
 
-	public static int getStrictlyPositiveInteger(String input, String errorMessage) throws FormatException {
+	public static int getStrictlyPositiveInteger(String input, String errorMessage) throws ParseException {
 		int value = getInteger(input, errorMessage);
 		check(value > 0, errorMessage);
 		return value;
 	}
 
-	public static int getInteger(String input, String errorMessage) throws FormatException {
+	public static int getInteger(String input, String errorMessage) throws ParseException {
 		try {
 			return Integer.parseInt(input);
 		} catch (NumberFormatException ex) {
-			throw new FormatException(errorMessage);
+			throw new ParseException(errorMessage);
 		}
 	}
 	
-	private static void check(boolean expression, String errorMessage) throws FormatException {
+	private static void check(boolean expression, String errorMessage) throws ParseException {
 		if (!expression) {
-			throw new FormatException(errorMessage);
+			throw new ParseException(errorMessage);
 		}
 	}
 

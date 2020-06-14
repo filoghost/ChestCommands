@@ -102,7 +102,7 @@ public class IconParser {
 				icon.setMaterial(itemReader.getMaterial());
 				icon.setDurability(itemReader.getDurability());
 				icon.setAmount(itemReader.getAmount());
-			} catch (FormatException e) {
+			} catch (ParseException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid MATERIAL: " + e.getMessage());
 			}
 		}
@@ -152,7 +152,7 @@ public class IconParser {
 		if (section.isSet(Nodes.COLOR)) {
 			try {
 				icon.setLeatherColor(ItemMetaParser.parseColor(section.getString(Nodes.COLOR)));
-			} catch (FormatException e) {
+			} catch (ParseException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid COLOR: " + e.getMessage());
 			}
 		}
@@ -163,7 +163,7 @@ public class IconParser {
 		if (bannerColor != null) {
 			try {
 				icon.setBannerColor(ItemMetaParser.parseDyeColor(bannerColor));
-			} catch (FormatException e) {
+			} catch (ParseException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-COLOR: " + e.getMessage());
 			}
 		}
@@ -171,7 +171,7 @@ public class IconParser {
 		if (section.isSet(Nodes.BANNER_PATTERNS)) {
 			try {
 				icon.setBannerPatterns(ItemMetaParser.parseBannerPatternList(section.getStringList(Nodes.BANNER_PATTERNS)));
-			} catch (FormatException e) {
+			} catch (ParseException e) {
 				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid BANNER-PATTERNS: " + e.getMessage());
 			}
 		}
@@ -226,7 +226,7 @@ public class IconParser {
 						requiredItem.setRestrictiveDurability(itemReader.getDurability());
 					}
 					requiredItems.add(requiredItem);
-				} catch (FormatException e) {
+				} catch (ParseException e) {
 					errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has invalid REQUIRED-ITEMS: " + e.getMessage());
 				}
 			}

@@ -32,7 +32,7 @@ public class ItemStackParser {
 	 * id can be either the id of the material or its name.
 	 * for example wool:5, 3 is a valid input.
 	 */
-	public ItemStackParser(String input, boolean parseAmount) throws FormatException {
+	public ItemStackParser(String input, boolean parseAmount) throws ParseException {
 		Preconditions.notNull(input, "input");
 
 		// Remove spaces, they're not needed
@@ -67,7 +67,7 @@ public class ItemStackParser {
 		Material material = MaterialsHelper.matchMaterial(input);
 
 		if (material == null || MaterialsHelper.isAir(material)) {
-			throw new FormatException("invalid material \"" + input + "\"");
+			throw new ParseException("invalid material \"" + input + "\"");
 		}
 		this.material = material;
 	}

@@ -18,7 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.BarAPIBridge;
-import me.filoghost.chestcommands.parser.FormatException;
+import me.filoghost.chestcommands.parser.ParseException;
 import me.filoghost.chestcommands.parser.NumberParser;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.variable.RelativeString;
@@ -37,7 +37,7 @@ public class DragonBarAction extends Action {
 			try {
 				seconds =  NumberParser.getStrictlyPositiveInteger(split[0].trim());
 				message = split[1].trim();
-			} catch (FormatException ex) {
+			} catch (ParseException ex) {
 				disable(ChatColor.RED + "Invalid dragon bar time: " + split[0]);
 				return;
 			}

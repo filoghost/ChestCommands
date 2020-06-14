@@ -14,11 +14,11 @@
  */
 package me.filoghost.chestcommands.parser;
 
-public class FormatException extends Exception {
+public class ParseException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public FormatException(String message) {
+	public ParseException(String message) {
 		super(message);
 	}
 }

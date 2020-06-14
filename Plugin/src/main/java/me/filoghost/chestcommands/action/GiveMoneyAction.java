@@ -18,7 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.parser.FormatException;
+import me.filoghost.chestcommands.parser.ParseException;
 import me.filoghost.chestcommands.parser.NumberParser;
 
 public class GiveMoneyAction extends Action {
@@ -28,7 +28,7 @@ public class GiveMoneyAction extends Action {
 	public GiveMoneyAction(String action) {
 		try {
 			moneyToGive = NumberParser.getStrictlyPositiveDouble(action);
-		} catch (FormatException e) {
+		} catch (ParseException e) {
 			disable(ChatColor.RED + "Invalid money amount: " + action);
 		}
 	}

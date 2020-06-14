@@ -18,7 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.parser.FormatException;
+import me.filoghost.chestcommands.parser.ParseException;
 import me.filoghost.chestcommands.parser.ItemStackParser;
 
 public class GiveItemAction extends Action {
@@ -29,7 +29,7 @@ public class GiveItemAction extends Action {
 		try {
 			ItemStackParser reader = new ItemStackParser(serializedAction, true);
 			itemToGive = reader.createStack();
-		} catch (FormatException e) {
+		} catch (ParseException e) {
 			disable(ChatColor.RED + "Invalid item to give: " + e.getMessage());
 		}
 	}

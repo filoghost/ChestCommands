@@ -158,7 +158,7 @@ public class MenuParser {
 						openTrigger.setRestrictiveDurability(itemReader.getDurability());
 					}
 					
-				} catch (FormatException e) {
+				} catch (ParseException e) {
 					errorCollector.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
 				}
 			}
