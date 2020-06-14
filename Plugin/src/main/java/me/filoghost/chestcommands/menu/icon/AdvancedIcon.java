@@ -94,7 +94,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 		}
 
 		// If all requirements are satisfied, take their cost
-		boolean takenAllCosts = Requirement.takeAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean takenAllCosts = Requirement.takeCostAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!takenAllCosts) {
 			return closeOnClick;
 		}

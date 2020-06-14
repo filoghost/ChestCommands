@@ -31,8 +31,8 @@ import me.filoghost.chestcommands.util.Utils;
 public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
 	private final String fileName;
+	private final String permission;
 	
-	private String permission;
 	private List<Action> openActions;
 	private int refreshTicks;
 
@@ -50,7 +50,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 		this.openActions = Utils.nullableCopy(openAction);
 	}
 
-	public String getPermission() {
+	public String getOpenPermission() {
 		return permission;
 	}
 
@@ -82,7 +82,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 		if (player.hasPermission(permission)) {
 			open(player);
 		} else {
-			sendNoPermissionMessage(player);
+			sendNoOpenPermissionMessage(player);
 		}
 	}
 
@@ -95,28 +95,30 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 			
 			if (icon.hasViewPermission() || icon.hasVariables()) {
 				// Then we have to refresh it
-				if (icon.canViewIcon(player)) {
-
-					if (inventory.getItem(i) == null) {
-						ItemStack newItem = hideAttributes(icon.createItemStack(player));
-						inventory.setItem(i, newItem);
-					} else {
-						// Performance, only update name and lore
-						ItemStack oldItem = hideAttributes(inventory.getItem(i));
-						ItemMeta meta = oldItem.getItemMeta();
-						meta.setDisplayName(icon.calculateName(player));
-						meta.setLore(icon.calculateLore(player));
-						oldItem.setItemMeta(meta);
-					}
-
-				} else {
-					inventory.setItem(i, null);
-				}
+				refreshIcon(player, inventory, icon, i);
 			}
 		}
 	}
 
-	public void sendNoPermissionMessage(CommandSender sender) {
+	private void refreshIcon(Player player, Inventory inventory, AdvancedIcon icon, int inventorySlot) {
+		if (icon.canViewIcon(player)) {
+			if (inventory.getItem(inventorySlot) == null) {
+				ItemStack newItem = hideAttributes(icon.createItemStack(player));
+				inventory.setItem(inventorySlot, newItem);
+			} else {
+				// Performance, only update name and lore
+				ItemStack oldItem = hideAttributes(inventory.getItem(inventorySlot));
+				ItemMeta meta = oldItem.getItemMeta();
+				meta.setDisplayName(icon.calculateName(player));
+				meta.setLore(icon.calculateLore(player));
+				oldItem.setItemMeta(meta);
+			}
+		} else {
+			inventory.setItem(inventorySlot, null);
+		}
+	}
+
+	public void sendNoOpenPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
 		if (noPermMessage != null && !noPermMessage.isEmpty()) {
 			sender.sendMessage(noPermMessage.replace("{permission}", this.permission));

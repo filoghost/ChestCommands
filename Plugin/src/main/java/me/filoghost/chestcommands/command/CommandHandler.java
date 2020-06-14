@@ -107,8 +107,8 @@ public class CommandHandler extends CommandFramework {
 			AdvancedIconMenu menu = menuManager.getMenuByFileName(menuName);
 			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
-			if (!sender.hasPermission(menu.getPermission())) {
-				menu.sendNoPermissionMessage(sender);
+			if (!sender.hasPermission(menu.getOpenPermission())) {
+				menu.sendNoOpenPermissionMessage(sender);
 				return;
 			}
 

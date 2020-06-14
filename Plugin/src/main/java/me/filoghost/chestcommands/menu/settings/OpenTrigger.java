@@ -22,8 +22,8 @@ import me.filoghost.chestcommands.util.Preconditions;
 
 public class OpenTrigger {
 
-	private Material material;
-	private ClickType clickType;
+	private final Material material;
+	private final ClickType clickType;
 	private short durability;
 	private boolean isRestrictiveDurability;
 

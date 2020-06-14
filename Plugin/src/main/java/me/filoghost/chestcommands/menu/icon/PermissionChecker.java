@@ -51,7 +51,7 @@ public class PermissionChecker implements Requirement {
 
 
 	@Override
-	public boolean hasRequirement(Player player) {
+	public boolean check(Player player) {
 		if (hasPermission(player)) {
 			return true;
 		} else {

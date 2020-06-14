@@ -38,7 +38,7 @@ public class RequiredItems implements Requirement {
 	}	
 
 	@Override
-	public boolean hasRequirement(Player player) {
+	public boolean check(Player player) {
 		boolean missingItems = false;
 		
 		for (RequiredItem item : items) {

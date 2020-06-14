@@ -18,13 +18,13 @@ import org.bukkit.entity.Player;
 
 public interface Requirement {
 	
-	boolean hasRequirement(Player player);
+	boolean check(Player player);
 	
 	boolean takeCost(Player player);
 	
 	public static boolean checkAll(Player player, Requirement... requirements) {
 		for (Requirement requirement : requirements) {
-			if (requirement != null && !requirement.hasRequirement(player)) {
+			if (requirement != null && !requirement.check(player)) {
 				return false;
 			}
 		}
@@ -32,7 +32,7 @@ public interface Requirement {
 		return true;
 	}
 	
-	public static boolean takeAll(Player player, Requirement... requirements) {
+	public static boolean takeCostAll(Player player, Requirement... requirements) {
 		for (Requirement requirement : requirements) {
 			if (requirement != null) {
 				boolean success = requirement.takeCost(player);

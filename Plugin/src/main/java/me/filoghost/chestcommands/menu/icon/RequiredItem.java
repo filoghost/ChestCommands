@@ -22,8 +22,8 @@ import me.filoghost.chestcommands.util.Preconditions;
 
 public class RequiredItem {
 
-	private Material material;
-	private int amount;
+	private final Material material;
+	private final int amount;
 	private short durability;
 	private boolean isDurabilityRestrictive = false;
 
@@ -57,16 +57,11 @@ public class RequiredItem {
 		return isDurabilityRestrictive;
 	}
 
-	private boolean isMatchingDurability(short data) {
-		if (!isDurabilityRestrictive) return true;
-		return data == this.durability;
-	}
-
 	public boolean isItemContainedIn(Inventory inventory) {
 		int amountFound = 0;
 
 		for (ItemStack item : inventory.getContents()) {
-			if (item != null && item.getType() == material && isMatchingDurability(item.getDurability())) {
+			if (isMatchingType(item)) {
 				amountFound += item.getAmount();
 			}
 		}
@@ -78,18 +73,14 @@ public class RequiredItem {
 		if (amount <= 0) {
 			return true;
 		}
-
-		int itemsToTake = amount; //start from amount and decrease
-
+		
+		int itemsToTake = amount; // Start from amount and decrease
 		ItemStack[] contents = inventory.getContents();
-		ItemStack current = null;
-
 
 		for (int i = 0; i < contents.length; i++) {
+			ItemStack current = contents[i];
 
-			current = contents[i];
-
-			if (current != null && current.getType() == material && isMatchingDurability(current.getDurability())) {
+			if (isMatchingType(current)) {
 				if (current.getAmount() > itemsToTake) {
 					current.setAmount(current.getAmount() - itemsToTake);
 					return true;
@@ -105,4 +96,16 @@ public class RequiredItem {
 
 		return false;
 	}
+	
+	private boolean isMatchingType(ItemStack item) {
+		return item != null && item.getType() == material && isMatchingDurability(item.getDurability());
+	}
+	
+	private boolean isMatchingDurability(short data) {
+		if (!isDurabilityRestrictive) {
+			return true;
+		}
+		return data == this.durability;
+	}
+	
 }

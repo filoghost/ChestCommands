@@ -37,6 +37,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.google.common.base.Preconditions;
+
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ClickResult;
@@ -89,10 +91,8 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setAmount(int amount) {
-		if (amount < 1) amount = 1;
-		else if (amount > 127) amount = 127;
-
-		this.amount = amount;
+		Preconditions.checkArgument(amount >= 1, "Amount must 1 or greater");
+		this.amount = Math.min(amount, 127);
 	}
 
 	@Override
@@ -102,8 +102,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setDurability(short durability) {
-		if (durability < 0) durability = 0;
-
+		Preconditions.checkArgument(durability >= 0, "Durability must not be negative");
 		this.durability = durability;
 	}
 

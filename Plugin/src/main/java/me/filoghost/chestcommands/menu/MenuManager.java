@@ -31,50 +31,49 @@ import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class MenuManager {
 	
-	private static Map<String, AdvancedIconMenu> fileNameToMenuMap;
-	private static Map<String, AdvancedIconMenu> commandsToMenuMap;
-
-	private static Map<OpenTrigger, AdvancedIconMenu> openTriggers;
+	private static Map<String, AdvancedIconMenu> menusByFile;
+	private static Map<String, AdvancedIconMenu> menusByCommand;
+	private static Map<OpenTrigger, AdvancedIconMenu> menusByOpenTrigger;
 	
 	public MenuManager() {
-		fileNameToMenuMap = CaseInsensitiveMap.create();
-		commandsToMenuMap = CaseInsensitiveMap.create();
-		openTriggers = new HashMap<>();
+		menusByFile = CaseInsensitiveMap.create();
+		menusByCommand = CaseInsensitiveMap.create();
+		menusByOpenTrigger = new HashMap<>();
 	}
 	
 	public void clear() {
-		fileNameToMenuMap.clear();
-		commandsToMenuMap.clear();
-		openTriggers.clear();
+		menusByFile.clear();
+		menusByCommand.clear();
+		menusByOpenTrigger.clear();
 	}
 
 	public AdvancedIconMenu getMenuByFileName(String fileName) {
-		return fileNameToMenuMap.get(fileName);
+		return menusByFile.get(fileName);
 	}
 
 	public void registerMenu(String fileName, Collection<String> triggerCommands, AdvancedIconMenu menu, ErrorCollector errorCollector) {
-		if (fileNameToMenuMap.containsKey(fileName)) {
+		if (menusByFile.containsKey(fileName)) {
 			errorCollector.addError("Two menus have the same file name \"" + fileName + "\" with different cases. There will be problems opening one of these two menus.");
 		}
 		
-		fileNameToMenuMap.put(fileName, menu);
+		menusByFile.put(fileName, menu);
 
 		for (String triggerCommand : triggerCommands) {
 			if (!triggerCommand.isEmpty()) {
-				if (commandsToMenuMap.containsKey(triggerCommand)) {
-					errorCollector.addError("The menus \"" + commandsToMenuMap.get(triggerCommand).getFileName() + "\" and \"" + fileName + "\" have the same command \"" + triggerCommand + "\". Only one will be opened.");
+				if (menusByCommand.containsKey(triggerCommand)) {
+					errorCollector.addError("The menus \"" + menusByCommand.get(triggerCommand).getFileName() + "\" and \"" + fileName + "\" have the same command \"" + triggerCommand + "\". Only one will be opened.");
 				}
-				commandsToMenuMap.put(triggerCommand, menu);
+				menusByCommand.put(triggerCommand, menu);
 			}
 		}		
 	}
 
 	public void registerTriggerItem(OpenTrigger openTrigger, AdvancedIconMenu menu) {
-		openTriggers.put(openTrigger, menu);
+		menusByOpenTrigger.put(openTrigger, menu);
 	}
 
 	public void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {
-		openTriggers.forEach((openTrigger, menu) -> {
+		menusByOpenTrigger.forEach((openTrigger, menu) -> {
 			if (openTrigger.matches(itemInHand, clickAction)) {
 				menu.openCheckingPermission(player);
 			}
@@ -82,11 +81,11 @@ public class MenuManager {
 	}
 
 	public AdvancedIconMenu getMenuByCommand(String command) {
-		return commandsToMenuMap.get(command);
+		return menusByCommand.get(command);
 	}
 
 	public Collection<String> getMenuFileNames() {
-		return Collections.unmodifiableCollection(fileNameToMenuMap.keySet());
+		return Collections.unmodifiableCollection(menusByFile.keySet());
 	}
 	
 	
