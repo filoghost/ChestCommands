@@ -92,6 +92,9 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	public void refresh(Player player, Inventory inventory) {
 		for (int i = 0; i < inventoryGrid.getSize(); i++) {
 			AdvancedIcon icon = inventoryGrid.getElementAtIndex(i);
+			if (icon == null) {
+				continue;
+			}
 			
 			if (icon.hasViewPermission() || icon.hasVariables()) {
 				// Then we have to refresh it
