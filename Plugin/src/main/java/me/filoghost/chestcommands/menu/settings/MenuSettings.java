@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.menu.settings;
 
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.util.Utils;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class MenuSettings {
 	private final int rows;
 
 	// Optional settings
-	private String[] commands;
+	private List<String> commands;
 	private List<Action> openActions;
 	private int refreshTenths;
 
@@ -45,14 +46,14 @@ public class MenuSettings {
 	}
 
 	public boolean hasCommands() {
-		return commands != null && commands.length > 0;
+		return !Utils.isNullOrEmpty(commands);
 	}
 
-	public void setCommands(String[] commands) {
+	public void setCommands(List<String> commands) {
 		this.commands = commands;
 	}
 
-	public String[] getCommands() {
+	public List<String> getCommands() {
 		return commands;
 	}
 

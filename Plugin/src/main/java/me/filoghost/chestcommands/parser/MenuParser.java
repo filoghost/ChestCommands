@@ -123,7 +123,7 @@ public class MenuParser {
 		
 		List<String> triggeringCommands = ConfigUtil.getStringListOrInlineList(config, ";", Nodes.MENU_COMMANDS);
 		if (triggeringCommands != null) {
-			menuSettings.setCommands(triggeringCommands.toArray(new String[0]));
+			menuSettings.setCommands(triggeringCommands);
 		}
 
 		List<String> serializedOpenActions = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);

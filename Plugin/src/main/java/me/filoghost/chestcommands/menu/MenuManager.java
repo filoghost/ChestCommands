@@ -52,7 +52,7 @@ public class MenuManager {
 		return fileNameToMenuMap.get(fileName);
 	}
 
-	public void registerMenu(String fileName, String[] triggerCommands, AdvancedIconMenu menu, ErrorCollector errorCollector) {
+	public void registerMenu(String fileName, Collection<String> triggerCommands, AdvancedIconMenu menu, ErrorCollector errorCollector) {
 		if (fileNameToMenuMap.containsKey(fileName)) {
 			errorCollector.addError("Two menus have the same file name \"" + fileName + "\" with different cases. There will be problems opening one of these two menus.");
 		}
