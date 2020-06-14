@@ -14,11 +14,11 @@
  */
 package me.filoghost.chestcommands.menu.icon;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+
+import com.google.common.collect.ImmutableList;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.MaterialsHelper;
@@ -30,11 +30,11 @@ public class RequiredItems implements Requirement {
 	
 	public RequiredItems(List<RequiredItem> items) {
 		Preconditions.notEmpty(items, "items");
-		this.items = new ArrayList<>(items);
+		this.items = ImmutableList.copyOf(items);
 	}
 	
 	public List<RequiredItem> geItems() {
-		return Collections.unmodifiableList(items);
+		return items;
 	}	
 
 	@Override
