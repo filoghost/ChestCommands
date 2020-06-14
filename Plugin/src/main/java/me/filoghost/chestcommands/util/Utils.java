@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public final class Utils {
 
@@ -51,6 +52,14 @@ public final class Utils {
 		} else {
 			return new HashMap<>(map);
 		}
+	}
+
+	public static <A, B> List<B> transform(List<A> list, Function<A, B> transformFunction) {
+		List<B> result = new ArrayList<>(list.size());
+		for (A element : list) {
+			result.add(transformFunction.apply(element));
+		}
+		return result;
 	}
 
 }

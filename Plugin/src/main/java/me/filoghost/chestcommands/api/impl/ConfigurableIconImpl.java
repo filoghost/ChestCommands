@@ -44,7 +44,8 @@ import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.variable.VariableManager;
+import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.variable.RelativeStringList;
 
 public class ConfigurableIconImpl implements ConfigurableIcon {
 
@@ -53,20 +54,17 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	private short durability;
 
 	private String nbtData;
-	private String name;
-	private List<String> lore;
+	private RelativeString name;
+	private RelativeStringList lore;
 	private Map<Enchantment, Integer> enchantments;
 	private Color leatherColor;
-	private String skullOwner;
+	private RelativeString skullOwner;
 	private DyeColor bannerColor;
 	private List<Pattern> bannerPatterns;
 
 	protected boolean closeOnClick;
 	private ClickHandler clickHandler;
-
-	private boolean nameHasVariables;
-	private boolean[] loreLinesWithVariables;
-	private boolean skullOwnerHasVariables;
+	
 	private ItemStack cachedItem; // When there are no variables, we don't recreate the item
 
 	public ConfigurableIconImpl() {
@@ -75,7 +73,9 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	}
 
 	public boolean hasVariables() {
-		return nameHasVariables || loreLinesWithVariables != null || skullOwnerHasVariables;
+		return (name != null && name.hasVariables())
+				|| (lore != null && lore.hasVariables())
+				|| (skullOwner != null && skullOwner.hasVariables());
 	}
 
 	@Override
@@ -123,13 +123,20 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
-		this.nameHasVariables = VariableManager.hasVariables(name);
+		this.name = RelativeString.of(name);
 	}
 
 	@Override
 	public boolean hasName() {
 		return name != null;
+	}
+	
+	public String getName() {
+		if (name != null) {
+			return name.getRawValue();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -141,29 +148,25 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setLore(List<String> lore) {
-		this.lore = Utils.nullableCopy(lore);
-		this.loreLinesWithVariables = null;
-
-		if (lore != null) {
-			for (int i = 0; i < lore.size(); i++) {
-				if (VariableManager.hasVariables(lore.get(i))) {
-					if (this.loreLinesWithVariables == null) {
-						this.loreLinesWithVariables = new boolean[lore.size()];
-					}
-					loreLinesWithVariables[i] = true;
-				}
-			}
+		if (!Utils.isNullOrEmpty(lore)) {
+			this.lore = new RelativeStringList(lore);
+		} else {
+			this.lore = null;
 		}
 	}
 
 	@Override
 	public boolean hasLore() {
-		return !Utils.isNullOrEmpty(lore);
+		return lore != null;
 	}
 
 	@Override
 	public List<String> getLore() {
-		return lore;
+		if (lore != null) {
+			return new ArrayList<>(lore.getRawValue());
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -173,7 +176,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public Map<Enchantment, Integer> getEnchantments() {
-		return enchantments;
+		return Utils.nullableCopy(enchantments);
 	}
 
 	@Override
@@ -209,13 +212,16 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public String getSkullOwner() {
-		return skullOwner;
+		if (skullOwner != null) {
+			return skullOwner.getRawValue();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void setSkullOwner(String skullOwner) {
-		this.skullOwner = skullOwner;
-		this.skullOwnerHasVariables = VariableManager.hasVariables(skullOwner);
+		this.skullOwner = RelativeString.of(skullOwner);
 	}
 
 	@Override
@@ -230,7 +236,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public List<Pattern> getBannerPatterns() {
-		return bannerPatterns;
+		return Utils.nullableCopy(bannerPatterns);
 	}
 
 	@Override
@@ -254,49 +260,28 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	}
 
 	public String calculateName(Player viewer) {
-		if (hasName()) {
-
-			String name = this.name;
-
-			if (viewer != null && nameHasVariables) {
-				name = VariableManager.setVariables(name, viewer);
-			}
-
-			if (name.isEmpty()) {
-				// Add a color to display the name empty
-				return ChatColor.WHITE.toString();
-			} else {
-				return name;
-			}
+		if (!hasName()) {
+			return null;
 		}
 
-		return null;
+		String name = this.name.getValue(viewer);
+
+		if (name.isEmpty()) {
+			// Add a color to display the name empty
+			return ChatColor.WHITE.toString();
+		} else {
+			return name;
+		}
 	}
 
 	public List<String> calculateLore(Player viewer) {
-
 		List<String> output = null;
 
 		if (hasLore()) {
-
-			output = new ArrayList<>();
-
-			if (viewer != null && loreLinesWithVariables != null) {
-				for (int i = 0; i < lore.size(); i++) {
-					String line = lore.get(i);
-					if (loreLinesWithVariables[i]) {
-						line = VariableManager.setVariables(line, viewer);
-					}
-					output.add(line);
-				}
-			} else {
-				// Otherwise just copy the lines
-				output.addAll(lore);
-			}
+			output = lore.getValue(viewer);
 		}
 
 		if (material == null) {
-
 			if (output == null) {
 				output = new ArrayList<>();
 			}
@@ -346,10 +331,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 		}
 
 		if (skullOwner != null && itemMeta instanceof SkullMeta) {
-			String skullOwner = this.skullOwner;
-			if(skullOwnerHasVariables) {
-				skullOwner = VariableManager.setVariables(skullOwner, viewer);
-			}
+			String skullOwner = this.skullOwner.getValue(viewer);
 			((SkullMeta) itemMeta).setOwner(skullOwner);
 		}
 

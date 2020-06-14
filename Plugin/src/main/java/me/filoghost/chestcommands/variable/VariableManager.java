@@ -22,6 +22,9 @@ public class VariableManager {
 	}
 
 	public static String setVariables(String message, Player executor) {
+		if (message == null) {
+			return null;
+		}
 		for (Variable variable : Variable.values()) {
 			if (message.contains(variable.getText())) {
 				message = message.replace(variable.getText(), variable.getReplacement(executor));

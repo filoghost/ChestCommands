@@ -50,6 +50,8 @@ public interface ConfigurableIcon extends Icon {
 	void setName(String name);
 
 	boolean hasName();
+	
+	String getName();
 
 	void setLore(String... lore);
 
