@@ -25,15 +25,16 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.filoghost.chestcommands.bridge.BarAPIBridge;
-import me.filoghost.chestcommands.bridge.EconomyBridge;
-import me.filoghost.chestcommands.bridge.PlaceholderAPIBridge;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.hook.BarAPIHook;
+import me.filoghost.chestcommands.hook.BungeeCordHook;
+import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
+import me.filoghost.chestcommands.hook.VaultEconomyHook;
 import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
@@ -82,16 +83,21 @@ public class ChestCommands extends JavaPlugin {
 			}
 			return;
 		}
-
-		if (!EconomyBridge.setupEconomy()) {
-			getLogger().warning("Vault with a compatible economy plugin was not found! Icons with a PRICE or commands that give money will not work.");
+		
+		VaultEconomyHook.INSTANCE.setup();
+		BarAPIHook.INSTANCE.setup();
+		PlaceholderAPIHook.INSTANCE.setup();
+		BungeeCordHook.INSTANCE.setup();
+		
+		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
+			getLogger().warning("Couldn't find Vault and a compatible economy plugin! Money-related features will not work.");
 		}
 
-		if (BarAPIBridge.setupPlugin()) {
+		if (BarAPIHook.INSTANCE.isEnabled()) {
 			getLogger().info("Hooked BarAPI");
 		}
 
-		if (PlaceholderAPIBridge.setupPlugin()) {
+		if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
 			getLogger().info("Hooked PlaceholderAPI");
 		}
 

@@ -17,8 +17,8 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.bridge.EconomyBridge;
 import me.filoghost.chestcommands.parser.ParseException;
+import me.filoghost.chestcommands.hook.VaultEconomyHook;
 import me.filoghost.chestcommands.parser.NumberParser;
 
 public class GiveMoneyAction extends Action {
@@ -35,8 +35,8 @@ public class GiveMoneyAction extends Action {
 
 	@Override
 	protected void executeInner(Player player) {
-		if (EconomyBridge.hasValidEconomy()) {
-			EconomyBridge.giveMoney(player, moneyToGive);
+		if (VaultEconomyHook.INSTANCE.isEnabled()) {
+			VaultEconomyHook.giveMoney(player, moneyToGive);
 		} else {
 			player.sendMessage(ChatColor.RED + "Vault with a compatible economy plugin not found. Please inform the staff.");
 		}

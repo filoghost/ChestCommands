@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.variable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.bridge.EconomyBridge;
+import me.filoghost.chestcommands.hook.VaultEconomyHook;
 
 public enum Variable {
 
@@ -41,8 +41,8 @@ public enum Variable {
 
 	MONEY("{money}") {
 		public String getReplacement(Player executor) {
-			if (EconomyBridge.hasValidEconomy()) {
-				return EconomyBridge.formatMoney(EconomyBridge.getMoney(executor));
+			if (VaultEconomyHook.INSTANCE.isEnabled()) {
+				return VaultEconomyHook.formatMoney(VaultEconomyHook.getMoney(executor));
 			} else {
 				return "[ECONOMY PLUGIN NOT FOUND]";
 			}

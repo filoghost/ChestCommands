@@ -12,20 +12,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.bridge;
+package me.filoghost.chestcommands.hook;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.ChestCommands;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+public enum BungeeCordHook implements PluginHook {
+	
+	INSTANCE;
 
-public class BungeeCordBridge {
+	@Override
+	public void setup() {}
 
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
 	public static boolean connect(Player player, String server) {
+		INSTANCE.checkEnabledState();
+		
 		if (server.length() == 0) {
 			player.sendMessage(ChatColor.RED + "Target server was an empty string, cannot connect to it.");
 			return false;

@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 import com.google.common.base.Preconditions;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.bridge.EconomyBridge;
+import me.filoghost.chestcommands.hook.VaultEconomyHook;
 
 public class RequiredMoney implements Requirement {
 
@@ -37,13 +37,13 @@ public class RequiredMoney implements Requirement {
 
 	@Override
 	public boolean check(Player player) {
-		if (!EconomyBridge.hasValidEconomy()) {
+		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
 			player.sendMessage(ChatColor.RED + "This action has a price, but Vault with a compatible economy plugin was not found. For security, the action has been blocked. Please inform the staff.");
 			return false;
 		}
 
-		if (!EconomyBridge.hasMoney(player, moneyAmount)) {
-			player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", EconomyBridge.formatMoney(moneyAmount)));
+		if (!VaultEconomyHook.hasMoney(player, moneyAmount)) {
+			player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", VaultEconomyHook.formatMoney(moneyAmount)));
 			return false;
 		}
 		
@@ -52,7 +52,7 @@ public class RequiredMoney implements Requirement {
 
 	@Override
 	public boolean takeCost(Player player) {
-		boolean success = EconomyBridge.takeMoney(player, moneyAmount);
+		boolean success = VaultEconomyHook.takeMoney(player, moneyAmount);
 		
 		if (!success) {
 			player.sendMessage(ChatColor.RED + "Error: a money transaction couldn't be executed. Please inform the staff.");

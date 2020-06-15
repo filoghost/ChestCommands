@@ -17,8 +17,8 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.bridge.BarAPIBridge;
 import me.filoghost.chestcommands.parser.ParseException;
+import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.parser.NumberParser;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.Strings;
@@ -49,8 +49,8 @@ public class DragonBarAction extends Action {
 
 	@Override
 	protected void executeInner(Player player) {
-		if (BarAPIBridge.hasValidPlugin()) {
-			BarAPIBridge.setMessage(player, message.getValue(player), seconds);
+		if (BarAPIHook.INSTANCE.isEnabled()) {
+			BarAPIHook.setMessage(player, message.getValue(player), seconds);
 		}
 	}
 

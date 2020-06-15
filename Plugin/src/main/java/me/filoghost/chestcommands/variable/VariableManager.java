@@ -2,7 +2,7 @@ package me.filoghost.chestcommands.variable;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.bridge.PlaceholderAPIBridge;
+import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 
 public class VariableManager {
 
@@ -15,7 +15,7 @@ public class VariableManager {
 				return true;
 			}
 		}
-		if (PlaceholderAPIBridge.hasValidPlugin() && PlaceholderAPIBridge.hasPlaceholders(message)) {
+		if (PlaceholderAPIHook.INSTANCE.isEnabled() && PlaceholderAPIHook.hasPlaceholders(message)) {
 			return true;
 		}
 		return false;
@@ -30,8 +30,8 @@ public class VariableManager {
 				message = message.replace(variable.getText(), variable.getReplacement(executor));
 			}
 		}
-		if (PlaceholderAPIBridge.hasValidPlugin()) {
-			message = PlaceholderAPIBridge.setPlaceholders(message, executor);
+		if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
+			message = PlaceholderAPIHook.setPlaceholders(message, executor);
 		}
 		return message;
 	}

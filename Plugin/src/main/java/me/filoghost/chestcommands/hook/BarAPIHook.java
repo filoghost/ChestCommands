@@ -12,37 +12,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.bridge;
+package me.filoghost.chestcommands.hook;
 
 import me.confuser.barapi.BarAPI;
-import me.filoghost.chestcommands.util.Preconditions;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-public class BarAPIBridge {
+public enum BarAPIHook implements PluginHook {
 
-	private static BarAPI barAPI;
+	INSTANCE;
+	
+	private boolean enabled;
 
-	public static boolean setupPlugin() {
-		Plugin barPlugin = Bukkit.getPluginManager().getPlugin("BarAPI");
-
-		if (barPlugin == null) {
-			return false;
-		}
-
-		barAPI = (BarAPI) barPlugin;
-		return true;
+	@Override
+	public void setup() {
+		enabled = Bukkit.getPluginManager().getPlugin("BarAPI") != null;
 	}
-
-	public static boolean hasValidPlugin() {
-		return barAPI != null;
+	
+	@Override
+	public boolean isEnabled() {
+		return enabled;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	public static void setMessage(Player player, String message, int seconds) {
-		Preconditions.checkState(hasValidPlugin(), "BarAPI plugin not found");
+		INSTANCE.checkEnabledState();
 		
 		BarAPI.setMessage(player, message, seconds);
 	}
