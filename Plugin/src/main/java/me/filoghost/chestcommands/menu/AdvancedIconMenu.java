@@ -105,15 +105,14 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	private ItemStack refreshIcon(Player player, AdvancedIcon icon, ItemStack currentItem) {
 		if (icon.canViewIcon(player)) {
 			if (currentItem == null) {
-				return hideAttributes(icon.createItemStack(player));
+				return icon.createItemStack(player);
 			} else {
 				// Performance, only update name and lore
-				ItemStack oldItem = hideAttributes(currentItem);
-				ItemMeta meta = oldItem.getItemMeta();
+				ItemMeta meta = currentItem.getItemMeta();
 				meta.setDisplayName(icon.calculateName(player));
 				meta.setLore(icon.calculateLore(player));
-				oldItem.setItemMeta(meta);
-				return oldItem;
+				currentItem.setItemMeta(meta);
+				return currentItem;
 			}
 		} else {
 			return null;

@@ -17,15 +17,10 @@ package me.filoghost.chestcommands.menu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.menu.inventory.Grid;
 import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.Utils;
 
 public class BaseIconMenu<T extends Icon> {
 
@@ -76,7 +71,7 @@ public class BaseIconMenu<T extends Icon> {
 		for (int i = 0; i < inventoryGrid.getSize(); i++) {
 			T icon = inventoryGrid.getElementAtIndex(i);
 			if (icon != null && canViewIcon(player, icon)) {
-				inventory.setItem(i, hideAttributes(icon.createItemStack(player)));
+				inventory.setItem(i, icon.createItemStack(player));
 			}
 		}
 
@@ -85,20 +80,6 @@ public class BaseIconMenu<T extends Icon> {
 	
 	protected boolean canViewIcon(Player player, T icon) {
 		return true;
-	}
-	
-	protected ItemStack hideAttributes(ItemStack item) {
-		if (item == null) {
-			return null;
-		}
-
-		ItemMeta meta = item.getItemMeta();
-		if (Utils.isNullOrEmpty(meta.getItemFlags())) {
-			// Add them only if no flag was already set
-			meta.addItemFlags(ItemFlag.values());
-			item.setItemMeta(meta);
-		}
-		return item;
 	}
 
 	@Override

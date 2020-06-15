@@ -31,6 +31,7 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -332,6 +333,11 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 				((BannerMeta) itemMeta).setPatterns(bannerPatterns);
 			}
 		}
+		
+		// Hide all text details (damage, enchantments, potions, etc,)
+		if (Utils.isNullOrEmpty(itemMeta.getItemFlags())) {
+			itemMeta.addItemFlags(ItemFlag.values());
+		}
 
 		itemStack.setItemMeta(itemMeta);
 
@@ -340,6 +346,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 				itemStack.addUnsafeEnchantment(entry.getKey(), entry.getValue());
 			}
 		}
+
 
 		if (!this.hasVariables()) {
 			// If there are no variables, cache the item
