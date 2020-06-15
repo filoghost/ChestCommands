@@ -21,6 +21,7 @@ import me.filoghost.chestcommands.bridge.BarAPIBridge;
 import me.filoghost.chestcommands.parser.ParseException;
 import me.filoghost.chestcommands.parser.NumberParser;
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Strings;
 import me.filoghost.chestcommands.variable.RelativeString;
 
 public class DragonBarAction extends Action {
@@ -32,11 +33,11 @@ public class DragonBarAction extends Action {
 		seconds = 1;
 		String message = serialiazedAction;
 		
-		String[] split = serialiazedAction.split("\\|", 2); // Max of 2 pieces
+		String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
 		if (split.length > 1) {
 			try {
-				seconds =  NumberParser.getStrictlyPositiveInteger(split[0].trim());
-				message = split[1].trim();
+				seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
+				message = split[1];
 			} catch (ParseException ex) {
 				disable(ChatColor.RED + "Invalid dragon bar time: " + split[0]);
 				return;

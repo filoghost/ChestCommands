@@ -19,6 +19,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.Strings;
 
 public class PlaySoundAction extends Action {
 	
@@ -32,24 +33,24 @@ public class PlaySoundAction extends Action {
 		pitch = 1.0f;
 		volume = 1.0f;
 
-		String[] split = serializedAction.split(",");
+		String[] split = Strings.trimmedSplit(serializedAction, ",", 3);
 
 		sound = SOUNDS_REGISTRY.find(split[0]);
 		if (sound == null) {
-			disable(ChatColor.RED + "Invalid sound \"" + split[0].trim() + "\".");
+			disable(ChatColor.RED + "Invalid sound \"" + split[0] + "\".");
 			return;
 		}
 
 		if (split.length > 1) {
 			try {
-				pitch = Float.parseFloat(split[1].trim());
+				pitch = Float.parseFloat(split[1]);
 			} catch (NumberFormatException e) {
 			}
 		}
 
 		if (split.length > 2) {
 			try {
-				volume = Float.parseFloat(split[2].trim());
+				volume = Float.parseFloat(split[2]);
 			} catch (NumberFormatException e) {
 			}
 		}

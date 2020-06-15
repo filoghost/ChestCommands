@@ -21,6 +21,8 @@ import java.util.regex.Pattern;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import me.filoghost.chestcommands.util.Strings;
+
 public class ConfigUtil {
 	
 	public static String getAnyString(ConfigurationSection config, String... paths) {
@@ -73,14 +75,12 @@ public class ConfigUtil {
 			separator = ";";
 		}
 
-		String[] splitValues = input.split(Pattern.quote(separator));
+		String[] splitValues = Strings.trimmedSplit(input, Pattern.quote(separator));
 		List<String> values = new ArrayList<>();
 
 		for (String value : splitValues) {
-			String trimmedValue = value.trim();
-
-			if (!trimmedValue.isEmpty()) {
-				values.add(trimmedValue);
+			if (!value.isEmpty()) {
+				values.add(value);
 			}
 		}
 

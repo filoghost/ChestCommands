@@ -20,6 +20,8 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 
 import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public final class ItemMetaParser {
 
 	
 	public static Color parseColor(String input) throws ParseException {
-		String[] split = input.replace(" ", "").split(",");
+		String[] split = Strings.trimmedSplit(input, ",");
 
 		if (split.length != 3) {
 			throw new ParseException("it must be in the format \"red, green, blue\".");
@@ -67,7 +69,7 @@ public final class ItemMetaParser {
 	public static List<Pattern> parseBannerPatternList(List<String> input) throws ParseException {
 		List<Pattern> patterns = new ArrayList<Pattern>();
 		for (String str : input) {
-			String[] split = str.split(":");
+			String[] split = Strings.trimmedSplit(str, ":");
 			if (split.length != 2) {
 				throw new ParseException("it must be in the format \"pattern:color\".");
 			}

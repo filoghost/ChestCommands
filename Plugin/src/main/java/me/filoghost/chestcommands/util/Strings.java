@@ -17,7 +17,21 @@ package me.filoghost.chestcommands.util;
 public final class Strings {
 
 	private Strings() {}
-
+	
+	
+	public static String[] trimmedSplit(String input, String splitPattern) {
+		return trimmedSplit(input, splitPattern, 0);
+	}
+	
+	
+	public static String[] trimmedSplit(String input, String splitPattern, int splitLimit) {
+		String[] output = input.split(splitPattern, splitLimit);
+		for (int i = 0; i < output.length; i++) {
+			output[i] = output[i].trim();
+		}
+		return output;
+	}
+	
 
 	public static String stripChars(String input, char... removed) {
 		if (input == null || input.isEmpty() || removed.length == 0) {

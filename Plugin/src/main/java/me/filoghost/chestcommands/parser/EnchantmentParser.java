@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.parser;
 import org.bukkit.enchantments.Enchantment;
 
 import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.Strings;
 import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class EnchantmentParser {
@@ -57,7 +58,7 @@ public class EnchantmentParser {
 		int level = 1;
 
 		if (input.contains(",")) {
-			String[] levelSplit = input.split(",");
+			String[] levelSplit = Strings.trimmedSplit(input, ",", 2);
 
 			try {
 				level = Integer.parseInt(levelSplit[1].trim());

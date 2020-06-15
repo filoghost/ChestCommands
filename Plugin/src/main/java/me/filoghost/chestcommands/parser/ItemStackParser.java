@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.chestcommands.util.Strings;
 
 public class ItemStackParser {
 
@@ -35,12 +36,9 @@ public class ItemStackParser {
 	public ItemStackParser(String input, boolean parseAmount) throws ParseException {
 		Preconditions.notNull(input, "input");
 
-		// Remove spaces, they're not needed
-		input = input.replace(" ", "");
-
 		if (parseAmount) {
 			// Read the optional amount
-			String[] splitAmount = input.split(",");
+			String[] splitAmount = Strings.trimmedSplit(input, ",", 2);
 
 			if (splitAmount.length > 1) {
 				this.amount = NumberParser.getStrictlyPositiveInteger(splitAmount[1], "invalid amount \"" + splitAmount[1] + "\"");
@@ -52,7 +50,7 @@ public class ItemStackParser {
 
 
 		// Read the optional durability
-		String[] splitByColons = input.split(":");
+		String[] splitByColons = Strings.trimmedSplit(input, ":", 2);
 
 		if (splitByColons.length > 1) {
 			short durability = NumberParser.getPositiveShort(splitByColons[1], "invalid durability \"" + splitByColons[1] + "\"");

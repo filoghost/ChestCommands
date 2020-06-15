@@ -28,6 +28,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Strings;
 
 /**
  * This is not a real YAML file ;)
@@ -59,9 +60,9 @@ public class AsciiPlaceholders {
 				continue;
 			}
 
-			int indexOf = line.indexOf(':');
-			String placeholder = unquote(line.substring(0, indexOf).trim());
-			String replacement = FormatUtils.addColors(StringEscapeUtils.unescapeJava(unquote(line.substring(indexOf + 1, line.length()).trim())));
+			String[] parts = Strings.trimmedSplit(line, ":", 2);
+			String placeholder = unquote(parts[0]);
+			String replacement = FormatUtils.addColors(StringEscapeUtils.unescapeJava(unquote(parts[1])));
 
 			if (placeholder.length() == 0 || replacement.length() == 0) {
 				errorCollector.addError("Unable to parse a line(" + line + ") from placeholders.yml: the placeholder and the replacement must have both at least 1 character.");
