@@ -95,26 +95,28 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 			
 			if (icon.hasViewPermission() || icon.hasVariables()) {
 				// Then we have to refresh it
-				refreshIcon(player, inventory, icon, i);
+				ItemStack currentItem = inventory.getItem(i);
+				ItemStack newItem = refreshIcon(player, icon, currentItem);
+				inventory.setItem(i, newItem);
 			}
 		}
 	}
 
-	private void refreshIcon(Player player, Inventory inventory, AdvancedIcon icon, int inventorySlot) {
+	private ItemStack refreshIcon(Player player, AdvancedIcon icon, ItemStack currentItem) {
 		if (icon.canViewIcon(player)) {
-			if (inventory.getItem(inventorySlot) == null) {
-				ItemStack newItem = hideAttributes(icon.createItemStack(player));
-				inventory.setItem(inventorySlot, newItem);
+			if (currentItem == null) {
+				return hideAttributes(icon.createItemStack(player));
 			} else {
 				// Performance, only update name and lore
-				ItemStack oldItem = hideAttributes(inventory.getItem(inventorySlot));
+				ItemStack oldItem = hideAttributes(currentItem);
 				ItemMeta meta = oldItem.getItemMeta();
 				meta.setDisplayName(icon.calculateName(player));
 				meta.setLore(icon.calculateLore(player));
 				oldItem.setItemMeta(meta);
+				return oldItem;
 			}
 		} else {
-			inventory.setItem(inventorySlot, null);
+			return null;
 		}
 	}
 

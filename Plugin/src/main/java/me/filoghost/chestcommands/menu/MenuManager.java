@@ -89,30 +89,27 @@ public class MenuManager {
 		return Collections.unmodifiableCollection(menusByFile.keySet());
 	}
 	
+	public static boolean isMenuInventory(Inventory inventory) {
+		return getMenuInventoryHolder(inventory) != null;
+	}
 	
 	public static BaseIconMenu<?> getOpenMenu(Player player) {
-		InventoryView view = player.getOpenInventory();
-		if (view == null) {
+		MenuView menuView = getOpenMenuView(player);
+		if (menuView != null) {
+			return menuView.getMenu();
+		} else {
 			return null;
 		}
-		
-		BaseIconMenu<?> openMenu = getOpenMenu(view.getTopInventory());
-		if (openMenu == null) {
-			openMenu = getOpenMenu(view.getBottomInventory());
-		}
-		
-		return openMenu;
 	}
-	
 	
 	public static BaseIconMenu<?> getOpenMenu(Inventory inventory) {
-		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
+		MenuView menuView = getOpenMenuView(inventory);
+		if (menuView != null) {
+			return menuView.getMenu();
+		} else {
 			return null;
 		}
-		
-		return ((MenuInventoryHolder) inventory.getHolder()).getIconMenu();
 	}
-	
 	
 	public static MenuView getOpenMenuView(Player player) {
 		InventoryView view = player.getOpenInventory();
@@ -129,17 +126,21 @@ public class MenuManager {
 	}
 	
 	
-	private static MenuView getOpenMenuView(Inventory inventory) {
-		if (!(inventory.getHolder() instanceof MenuInventoryHolder)) {
+	public static MenuView getOpenMenuView(Inventory inventory) {
+		MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
+		if (inventoryHolder != null) {
+			return new MenuView(inventoryHolder.getIconMenu(), inventory);
+		} else {
 			return null;
 		}
-		
-		MenuInventoryHolder menuInventoryHolder = (MenuInventoryHolder) inventory.getHolder();
-		if (!(menuInventoryHolder.getIconMenu() instanceof AdvancedIconMenu)) {
+	}
+	
+	private static MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
+		if (inventory.getHolder() instanceof MenuInventoryHolder) {
+			return (MenuInventoryHolder) inventory.getHolder();
+		} else {
 			return null;
 		}
-			
-		return new MenuView((AdvancedIconMenu) menuInventoryHolder.getIconMenu(), inventory);		
 	}
 
 }

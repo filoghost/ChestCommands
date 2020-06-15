@@ -53,23 +53,20 @@ public class InventoryListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEarlyInventoryClick(InventoryClickEvent event) {
-		BaseIconMenu<?> menu = MenuManager.getOpenMenu(event.getInventory());
-		if (menu == null) {
-			return;
+		if (MenuManager.isMenuInventory(event.getInventory())) {
+			// Cancel the event as early as possible
+			event.setCancelled(true);
 		}
-		
-		// Cancel the event as early as possible
-		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
 	    Inventory inventory = event.getInventory();
-		BaseIconMenu<? extends Icon> menu = MenuManager.getOpenMenu(inventory);
-		if (menu == null) {
+	    BaseIconMenu<?> menu = MenuManager.getOpenMenu(inventory);
+	    if (menu == null) {
 			return;
 		}
-		
+	    
 		// Make sure the event is still cancelled (in case another plugin wrongly uncancels it)
 		event.setCancelled(true);
 

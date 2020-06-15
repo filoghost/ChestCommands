@@ -19,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import me.filoghost.chestcommands.menu.BaseIconMenu;
+import me.filoghost.chestcommands.util.Preconditions;
 
 /**
  * This class links an IconMenu with an Inventory, via InventoryHolder.
@@ -28,6 +29,7 @@ public class MenuInventoryHolder implements InventoryHolder {
 	private final BaseIconMenu<?> iconMenu;
 
 	public MenuInventoryHolder(BaseIconMenu<?> iconMenu) {
+		Preconditions.notNull(iconMenu, "iconMenu");
 		this.iconMenu = iconMenu;
 	}
 

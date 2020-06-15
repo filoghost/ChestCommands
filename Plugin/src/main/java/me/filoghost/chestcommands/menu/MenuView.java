@@ -18,15 +18,15 @@ import org.bukkit.inventory.Inventory;
 
 public class MenuView {
 	
-	private final AdvancedIconMenu menu;
+	private final BaseIconMenu<?> menu;
 	private final Inventory inventory;
 	
-	public MenuView(AdvancedIconMenu menu, Inventory inventory) {
+	public MenuView(BaseIconMenu<?> menu, Inventory inventory) {
 		this.menu = menu;
 		this.inventory = inventory;
 	}
 
-	public AdvancedIconMenu getMenu() {
+	public BaseIconMenu<?> getMenu() {
 		return menu;
 	}
 

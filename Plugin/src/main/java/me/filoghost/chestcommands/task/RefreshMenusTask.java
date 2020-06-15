@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.task;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.menu.MenuView;
 
@@ -32,8 +33,14 @@ public class RefreshMenusTask implements Runnable {
 				return;
 			}
 			
-			if (elapsedTenths % openMenuView.getMenu().getRefreshTicks() == 0) {
-				openMenuView.getMenu().refresh(player, openMenuView.getInventory());
+			if (!(openMenuView.getMenu() instanceof AdvancedIconMenu)) {
+				return;
+			}
+			
+			AdvancedIconMenu iconMenu = (AdvancedIconMenu) openMenuView.getMenu();
+			
+			if (elapsedTenths % iconMenu.getRefreshTicks() == 0) {
+				iconMenu.refresh(player, openMenuView.getInventory());
 			}
 		}
 
