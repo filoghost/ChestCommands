@@ -289,12 +289,11 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 	public ItemStack createItemStack(Player viewer) {
 
 		if (!this.hasVariables() && cachedItem != null) {
-			// Performance
+			// Performance: return a static item
 			return cachedItem;
 		}
 
-		// If the material is not set, display BEDROCK
-		ItemStack itemStack = (material != null) ? new ItemStack(material, amount, durability) : new ItemStack(Material.BEDROCK, amount);
+		ItemStack itemStack = new ItemStack(material, amount, durability);
 
 		// First try to apply NBT data
 		if (nbtData != null) {
