@@ -22,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.api.Icon;
+import me.filoghost.chestcommands.menu.inventory.Grid;
+import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Utils;
 

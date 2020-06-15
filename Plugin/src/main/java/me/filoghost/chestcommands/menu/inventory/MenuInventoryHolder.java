@@ -12,11 +12,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.menu;
+package me.filoghost.chestcommands.menu.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+
+import me.filoghost.chestcommands.menu.BaseIconMenu;
 
 /**
  * This class links an IconMenu with an Inventory, via InventoryHolder.

@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.ErrorCollector;
