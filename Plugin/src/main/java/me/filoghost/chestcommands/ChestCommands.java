@@ -279,10 +279,6 @@ public class ChestCommands extends JavaPlugin {
 	public static String getNewVersion() {
 		return newVersion;
 	}
-
-	public static void setLastReloadErrors(ErrorCollector lastLoadErrors) {
-		ChestCommands.lastLoadErrors = lastLoadErrors;
-	}
 	
 	public static ErrorCollector getLastLoadErrors() {
 		return lastLoadErrors;
