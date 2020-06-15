@@ -20,7 +20,21 @@ import me.filoghost.chestcommands.api.internal.BackendAPI;
 
 public class ChestCommandsAPI {
 	
+	
 	private ChestCommandsAPI() {}
+	
+	
+	/**
+	 * The API version is increased every time the API is modified.
+	 * You can use it to require a minimum version, as features may
+	 * be added (rarely removed) in future versions.
+	 * 
+	 * @return the API version
+	 */
+	public static int getAPIVersion() {
+		return 1;
+	}
+	
 
 	/**
 	 * Checks if a menu with a given file name was loaded by the plugin.
@@ -30,6 +44,7 @@ public class ChestCommandsAPI {
 	public static boolean isPluginMenu(String yamlFile) {
 		return BackendAPI.getImplementation().isPluginMenu(yamlFile);
 	}
+	
 
 	/**
 	 * Opens a menu loaded by ChestCommands to a player.
