@@ -65,16 +65,13 @@ public class CommandHandler extends CommandFramework {
 
 			ChestCommands.closeAllMenus();
 
-			ErrorCollector errorCollector = new ErrorCollector();
-			ChestCommands.getInstance().load(errorCollector);
+			ErrorCollector errors = ChestCommands.getInstance().load();
 
-			ChestCommands.setLastReloadErrors(errorCollector);
-
-			if (!errorCollector.hasWarningsOrErrors()) {
+			if (!errors.hasWarningsOrErrors()) {
 				sender.sendMessage(ChestCommands.CHAT_PREFIX + "Plugin reloaded.");
 			} else {
-				errorCollector.logToConsole();
-				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errorCollector.getWarningsCount() + " warning(s) and " + errorCollector.getErrorsCount() + " error(s).");
+				errors.logToConsole();
+				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errors.getWarningsCount() + " warning(s) and " + errors.getErrorsCount() + " error(s).");
 				if (!(sender instanceof ConsoleCommandSender)) {
 					sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Please check the console.");
 				}

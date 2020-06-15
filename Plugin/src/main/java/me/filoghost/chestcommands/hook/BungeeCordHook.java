@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,11 @@ public enum BungeeCordHook implements PluginHook {
 	INSTANCE;
 
 	@Override
-	public void setup() {}
+	public void setup() {
+		if (!Bukkit.getMessenger().isOutgoingChannelRegistered(ChestCommands.getInstance(), "BungeeCord")) {
+			Bukkit.getMessenger().registerOutgoingPluginChannel(ChestCommands.getInstance(), "BungeeCord");
+		}
+	}
 
 	@Override
 	public boolean isEnabled() {

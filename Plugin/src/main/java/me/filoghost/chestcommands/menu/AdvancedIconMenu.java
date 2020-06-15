@@ -31,7 +31,7 @@ import me.filoghost.chestcommands.util.Utils;
 public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
 	private final String fileName;
-	private final String permission;
+	private final String openPermission;
 	
 	private List<Action> openActions;
 	private int refreshTicks;
@@ -39,7 +39,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	public AdvancedIconMenu(String title, int rows, String fileName) {
 		super(title, rows);
 		this.fileName = fileName;
-		this.permission = Permissions.OPEN_MENU_BASE + fileName;
+		this.openPermission = Permissions.OPEN_MENU_BASE + fileName;
 	}
 	
 	public String getFileName() {
@@ -51,7 +51,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	}
 
 	public String getOpenPermission() {
-		return permission;
+		return openPermission;
 	}
 
 	public int getRefreshTicks() {
@@ -79,7 +79,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	}
 	
 	public void openCheckingPermission(Player player) {
-		if (player.hasPermission(permission)) {
+		if (player.hasPermission(openPermission)) {
 			open(player);
 		} else {
 			sendNoOpenPermissionMessage(player);
@@ -121,7 +121,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	public void sendNoOpenPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
 		if (noPermMessage != null && !noPermMessage.isEmpty()) {
-			sender.sendMessage(noPermMessage.replace("{permission}", this.permission));
+			sender.sendMessage(noPermMessage.replace("{permission}", this.openPermission));
 		}
 	}
 

@@ -122,10 +122,8 @@ public class ChestCommands extends JavaPlugin {
 
 		CommandFramework.register(this, new CommandHandler(menuManager, "chestcommands"));
 
-		ErrorCollector errorCollector = new ErrorCollector();
-		load(errorCollector);
-
-		lastLoadErrors = errorCollector;
+		ErrorCollector errorCollector = load();
+		
 		if (errorCollector.hasWarningsOrErrors()) {
 			Bukkit.getScheduler().runTaskLater(this, () -> {
 				errorCollector.logToConsole();
@@ -142,7 +140,8 @@ public class ChestCommands extends JavaPlugin {
 	}
 
 
-	public void load(ErrorCollector errorCollector) {
+	public ErrorCollector load() {
+		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
 
 		try {
@@ -172,7 +171,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			AsciiPlaceholders.load(errorCollector);
+			AsciiPlaceholders.load(errors);
 		} catch (IOException e) {
 			e.printStackTrace();
 			getLogger().warning("I/O error while reading the placeholders. They will not work.");
@@ -196,18 +195,18 @@ public class ChestCommands extends JavaPlugin {
 				menuConfig.load();
 			} catch (IOException e) {
 				e.printStackTrace();
-				errorCollector.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
+				errors.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
 				continue;
 			} catch (InvalidConfigurationException e) {
 				e.printStackTrace();
-				errorCollector.addError("Invalid YAML configuration for the menu \"" + menuConfig.getFileName() + "\". Please look at the error above, or use an online YAML parser (google is your friend).");
+				errors.addError("Invalid YAML configuration for the menu \"" + menuConfig.getFileName() + "\". Please look at the error above, or use an online YAML parser (google is your friend).");
 				continue;
 			}
 
-			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errorCollector);
-			AdvancedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errorCollector);
+			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errors);
+			AdvancedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errors);
 
-			menuManager.registerMenu(menuConfig.getFileName(), menuSettings.getCommands(), iconMenu, errorCollector);
+			menuManager.registerMenu(menuConfig.getFileName(), menuSettings.getCommands(), iconMenu, errors);
 
 			iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
 
@@ -224,6 +223,9 @@ public class ChestCommands extends JavaPlugin {
 		if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this, "BungeeCord")) {
 			Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		}
+		
+		ChestCommands.lastLoadErrors = errors;
+		return errors;
 	}
 
 
