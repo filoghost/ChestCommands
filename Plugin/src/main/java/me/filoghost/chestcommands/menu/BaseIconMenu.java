@@ -17,6 +17,8 @@ package me.filoghost.chestcommands.menu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.menu.inventory.Grid;
 import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
@@ -70,16 +72,19 @@ public class BaseIconMenu<T extends Icon> {
 
 		for (int i = 0; i < inventoryGrid.getSize(); i++) {
 			T icon = inventoryGrid.getElementAtIndex(i);
-			if (icon != null && canViewIcon(player, icon)) {
-				inventory.setItem(i, icon.createItemStack(player));
+			if (icon == null) {
+				continue;
 			}
+			
+			ItemStack itemStack = icon.createItemStack(player);
+			if (itemStack == null) {
+				continue;
+			}
+			
+			inventory.setItem(i, itemStack);
 		}
 
 		player.openInventory(inventory);
-	}
-	
-	protected boolean canViewIcon(Player player, T icon) {
-		return true;
 	}
 
 	@Override

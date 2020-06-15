@@ -19,6 +19,8 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
@@ -89,6 +91,42 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	public void setClickActions(List<Action> clickActions) {
 		this.clickActions = Utils.nullableCopy(clickActions);
 	}
+	
+	
+	@Override
+	public ItemStack createItemStack(Player viewer) {
+		if (canViewIcon(viewer)) {
+			return super.createItemStack(viewer);
+		} else {
+			return null;
+		}
+	}
+	
+	
+	public ItemStack refreshItemStack(Player viewer, ItemStack currentItemStack) {
+		if (!hasViewPermission() && !hasVariables()) {
+			// Icon is not dynamic, no need to refresh
+			return currentItemStack;
+		}
+		
+		if (!canViewIcon(viewer)) {
+			// Player can't view the icon
+			return null;
+		}
+		
+		if (currentItemStack == null) {
+			// Create item from scratch
+			return createItemStack(viewer);
+		} else {
+			// Performance: only update name and lore
+			ItemMeta meta = currentItemStack.getItemMeta();
+			meta.setDisplayName(calculateName(viewer));
+			meta.setLore(calculateLore(viewer));
+			currentItemStack.setItemMeta(meta);
+			return currentItemStack;
+		}
+	}
+	
 
 	@Override
 	public boolean onClick(Inventory inventory, Player player) {

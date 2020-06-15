@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
@@ -73,11 +72,6 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 		super.open(player);
 	}
 	
-	@Override
-	protected boolean canViewIcon(Player player, AdvancedIcon icon) {
-		return icon.canViewIcon(player);
-	}
-	
 	public void openCheckingPermission(Player player) {
 		if (player.hasPermission(openPermission)) {
 			open(player);
@@ -93,31 +87,11 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 				continue;
 			}
 			
-			if (icon.hasViewPermission() || icon.hasVariables()) {
-				// Then we have to refresh it
-				ItemStack currentItem = inventory.getItem(i);
-				ItemStack newItem = refreshIcon(player, icon, currentItem);
-				inventory.setItem(i, newItem);
-			}
+			ItemStack newItemStack = icon.refreshItemStack(player, inventory.getItem(i));
+			inventory.setItem(i, newItemStack);
 		}
 	}
 
-	private ItemStack refreshIcon(Player player, AdvancedIcon icon, ItemStack currentItem) {
-		if (icon.canViewIcon(player)) {
-			if (currentItem == null) {
-				return icon.createItemStack(player);
-			} else {
-				// Performance, only update name and lore
-				ItemMeta meta = currentItem.getItemMeta();
-				meta.setDisplayName(icon.calculateName(player));
-				meta.setLore(icon.calculateLore(player));
-				currentItem.setItemMeta(meta);
-				return currentItem;
-			}
-		} else {
-			return null;
-		}
-	}
 
 	public void sendNoOpenPermissionMessage(CommandSender sender) {
 		String noPermMessage = ChestCommands.getLang().no_open_permission;
