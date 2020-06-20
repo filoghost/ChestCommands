@@ -25,19 +25,19 @@ import me.filoghost.chestcommands.config.AsciiPlaceholders;
 
 public class ActionParser {
 
-	private static Map<Pattern, IconCommandFactory> commandTypesMap = new HashMap<>();
+	private static Map<Pattern, IconCommandFactory> actionsByPrefix = new HashMap<>();
 
 	static {
-		commandTypesMap.put(actionPattern("console:"), ConsoleCommandAction::new);
-		commandTypesMap.put(actionPattern("op:"), OpCommandAction::new);
-		commandTypesMap.put(actionPattern("(open|menu):"), OpenMenuAction::new);
-		commandTypesMap.put(actionPattern("server:?"), ChangeServerAction::new); // The colon is optional
-		commandTypesMap.put(actionPattern("tell:"), SendMessageAction::new);
-		commandTypesMap.put(actionPattern("broadcast:"), BroadcastAction::new);
-		commandTypesMap.put(actionPattern("give:"), GiveItemAction::new);
-		commandTypesMap.put(actionPattern("give-?money:"), GiveMoneyAction::new);
-		commandTypesMap.put(actionPattern("sound:"), PlaySoundAction::new);
-		commandTypesMap.put(actionPattern("dragon-?bar:"), DragonBarAction::new);
+		actionsByPrefix.put(actionPattern("console:"), ConsoleCommandAction::new);
+		actionsByPrefix.put(actionPattern("op:"), OpCommandAction::new);
+		actionsByPrefix.put(actionPattern("(open|menu):"), OpenMenuAction::new);
+		actionsByPrefix.put(actionPattern("server:?"), ChangeServerAction::new); // The colon is optional
+		actionsByPrefix.put(actionPattern("tell:"), SendMessageAction::new);
+		actionsByPrefix.put(actionPattern("broadcast:"), BroadcastAction::new);
+		actionsByPrefix.put(actionPattern("give:"), GiveItemAction::new);
+		actionsByPrefix.put(actionPattern("give-?money:"), GiveMoneyAction::new);
+		actionsByPrefix.put(actionPattern("sound:"), PlaySoundAction::new);
+		actionsByPrefix.put(actionPattern("dragon-?bar:"), DragonBarAction::new);
 	}
 
 	private static Pattern actionPattern(String regex) {
@@ -45,7 +45,7 @@ public class ActionParser {
 	}
 
 	public static Action parseAction(String input) {
-		for (Entry<Pattern, IconCommandFactory> entry : commandTypesMap.entrySet()) {
+		for (Entry<Pattern, IconCommandFactory> entry : actionsByPrefix.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
 				// Remove the action prefix and trim the spaces
@@ -58,7 +58,7 @@ public class ActionParser {
 	}
 	
 	
-	private static interface IconCommandFactory {
+	private interface IconCommandFactory {
 		
 		Action create(String actionString);
 		
