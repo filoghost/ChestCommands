@@ -20,9 +20,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
@@ -39,11 +37,11 @@ public class MenuParser {
 
 		public static final String MENU_NAME = "menu-settings.name";
 		public static final String MENU_ROWS = "menu-settings.rows";
-		public static final String[] MENU_COMMANDS = {"menu-settings.command", "menu-settings.commands"};
+		public static final String MENU_COMMANDS = "menu-settings.commands";
 
-		public static final String[] OPEN_ACTIONS = {"menu-settings.open-actions", "menu-settings.open-action"};
+		public static final String OPEN_ACTIONS = "menu-settings.open-actions";
 
-		public static final String[] OPEN_ITEM_MATERIAL = {"menu-settings.open-with-item.id", "menu-settings.open-with-item.material"};
+		public static final String OPEN_ITEM_MATERIAL = "menu-settings.open-with-item.material";
 		public static final String OPEN_ITEM_LEFT_CLICK = "menu-settings.open-with-item.left-click";
 		public static final String OPEN_ITEM_RIGHT_CLICK = "menu-settings.open-with-item.right-click";
 
@@ -121,12 +119,12 @@ public class MenuParser {
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
 		
-		List<String> triggeringCommands = ConfigUtil.getStringListOrInlineList(config, ";", Nodes.MENU_COMMANDS);
+		List<String> triggeringCommands = config.getStringList(Nodes.MENU_COMMANDS);
 		if (triggeringCommands != null) {
 			menuSettings.setCommands(triggeringCommands);
 		}
 
-		List<String> serializedOpenActions = ConfigUtil.getStringListOrInlineList(config, ChestCommands.getSettings().multiple_commands_separator, Nodes.OPEN_ACTIONS);
+		List<String> serializedOpenActions = config.getStringList(Nodes.OPEN_ACTIONS);
 		
 		if (serializedOpenActions != null && !serializedOpenActions.isEmpty()) {
 			List<Action> openActions = new ArrayList<>();
@@ -142,7 +140,7 @@ public class MenuParser {
 			}
 		}
 
-		String openItemMaterial = ConfigUtil.getAnyString(config, Nodes.OPEN_ITEM_MATERIAL);
+		String openItemMaterial = config.getString(Nodes.OPEN_ITEM_MATERIAL);
 		if (openItemMaterial != null) {
 			boolean leftClick = config.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);
 			boolean rightClick = config.getBoolean(Nodes.OPEN_ITEM_RIGHT_CLICK);

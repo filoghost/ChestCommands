@@ -67,7 +67,12 @@ public class PluginConfig extends YamlConfiguration {
 		return plugin;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
 	public String getFileName() {
 		return file.getName();
 	}
+
 }

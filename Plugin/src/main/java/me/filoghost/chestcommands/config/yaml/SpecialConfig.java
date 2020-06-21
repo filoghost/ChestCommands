@@ -14,13 +14,15 @@
  */
 package me.filoghost.chestcommands.config.yaml;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.legacy.ConfigConverter;
 import me.filoghost.chestcommands.util.FormatUtils;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,19 +33,14 @@ import java.util.Map.Entry;
  */
 public class SpecialConfig {
 
-	private transient PluginConfig config;
 	private transient String header;
 	private transient Map<String, Object> defaultValuesMap;
-
-	public SpecialConfig(PluginConfig config) {
-		this.config = config;
-	}
 
 	public void setHeader(String header) {
 		this.header = header;
 	}
 
-	public void load() throws IOException, InvalidConfigurationException, Exception {
+	public void load(PluginConfig config) throws IOException, IllegalAccessException {
 
 		// Check if the configuration was initialized
 		if (defaultValuesMap == null) {
@@ -70,11 +67,9 @@ public class SpecialConfig {
 			}
 		}
 
-		// First of all, try to load the yaml file
-		config.load();
+		boolean needsSave = false;
 
 		// Save default values not set
-		boolean needsSave = false;
 		for (Entry<String, Object> entry : defaultValuesMap.entrySet()) {
 			if (!config.isSet(entry.getKey())) {
 				needsSave = true;

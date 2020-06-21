@@ -19,14 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.filoghost.chestcommands.util.MaterialsHelper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
-import me.filoghost.chestcommands.config.ConfigUtil;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.menu.icon.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
@@ -40,21 +39,21 @@ public class IconParser {
 
 	private static class Nodes {
 
-		public static final String[] MATERIAL = {"MATERIAL", "ID"};
+		public static final String MATERIAL = "MATERIAL";
 		public static final String AMOUNT = "AMOUNT";
-		public static final String[] DURABILITY = {"DURABILITY", "DATA-VALUE"};
-		public static final String[] NBT_DATA = {"NBT-DATA", "NBT"};
+		public static final String DURABILITY = "DURABILITY";
+		public static final String NBT_DATA = "NBT-DATA";
 		public static final String NAME = "NAME";
 		public static final String LORE = "LORE";
-		public static final String[] ENCHANTMENTS = {"ENCHANTMENTS", "ENCHANTMENT"};
+		public static final String ENCHANTMENTS = "ENCHANTMENTS";
 		public static final String COLOR = "COLOR";
 		public static final String SKULL_OWNER = "SKULL-OWNER";
 		public static final String BANNER_COLOR = "BANNER-COLOR";
 		public static final String BANNER_PATTERNS = "BANNER-PATTERNS";
-		public static final String[] ACTIONS = {"ACTIONS", "COMMAND"};
+		public static final String ACTIONS = "ACTIONS";
 		public static final String PRICE = "PRICE";
 		public static final String EXP_LEVELS = "LEVELS";
-		public static final String[] REQUIRED_ITEMS = {"REQUIRED-ITEMS", "REQUIRED-ITEM"};
+		public static final String REQUIRED_ITEMS = "REQUIRED-ITEMS";
 		public static final String PERMISSION = "PERMISSION";
 		public static final String PERMISSION_MESSAGE = "PERMISSION-MESSAGE";
 		public static final String VIEW_PERMISSION = "VIEW-PERMISSION";
@@ -95,28 +94,23 @@ public class IconParser {
 
 		AdvancedIcon icon = new AdvancedIcon(Material.BEDROCK);
 		
-		String material = ConfigUtil.getAnyString(section, Nodes.MATERIAL);
-		if (material != null) {
-			try {
-				ItemStackParser itemReader = new ItemStackParser(material, true);
-				icon.setMaterial(itemReader.getMaterial());
-				icon.setDurability(itemReader.getDurability());
-				icon.setAmount(itemReader.getAmount());
-			} catch (ParseException e) {
-				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid MATERIAL: " + e.getMessage());
+		String serializedMaterial = section.getString(Nodes.MATERIAL);
+		if (serializedMaterial != null) {
+			Material material = MaterialsHelper.matchMaterial(serializedMaterial);
+			if (material != null) {
+				icon.setMaterial(material);
+			} else {
+				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid MATERIAL: " + serializedMaterial);
 			}
 		}
 
 		if (section.isSet(Nodes.AMOUNT)) {
 			icon.setAmount(section.getInt(Nodes.AMOUNT));
 		}
-		
-		Integer durability = ConfigUtil.getAnyInt(section, Nodes.DURABILITY);
-		if (durability != null) {
-			icon.setDurability(durability.shortValue());
-		}
 
-		String nbtData = ConfigUtil.getAnyString(section, Nodes.NBT_DATA);
+		icon.setDurability((short) section.getInt(Nodes.DURABILITY));
+
+		String nbtData = section.getString(Nodes.NBT_DATA);
 		if (nbtData != null) {
 			try {
 				// Check that NBT has valid syntax before applying it to the icon
@@ -130,7 +124,7 @@ public class IconParser {
 		icon.setName(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeName(section.getString(Nodes.NAME))));
 		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeLore(section.getStringList(Nodes.LORE))));
 
-		List<String> serializedEnchantments = ConfigUtil.getStringListOrInlineList(section, ";", Nodes.ENCHANTMENTS);
+		List<String> serializedEnchantments = section.getStringList(Nodes.ENCHANTMENTS);
 		
 		if (serializedEnchantments != null && !serializedEnchantments.isEmpty()) {
 			Map<Enchantment, Integer> enchantments = new HashMap<>();
@@ -159,7 +153,7 @@ public class IconParser {
 
 		icon.setSkullOwner(section.getString(Nodes.SKULL_OWNER));
 
-		String bannerColor = ConfigUtil.getAnyString(section, Nodes.BANNER_COLOR);
+		String bannerColor = section.getString(Nodes.BANNER_COLOR);
 		if (bannerColor != null) {
 			try {
 				icon.setBannerColor(ItemMetaParser.parseDyeColor(bannerColor));
@@ -183,7 +177,7 @@ public class IconParser {
 		boolean closeOnClick = !section.getBoolean(Nodes.KEEP_OPEN);
 		icon.setCloseOnClick(closeOnClick);
 
-		List<String> serializedActions = ConfigUtil.getStringListOrInlineList(section, ChestCommands.getSettings().multiple_commands_separator, Nodes.ACTIONS);
+		List<String> serializedActions = section.getStringList(Nodes.ACTIONS);
 		
 		if (serializedActions != null && !serializedActions.isEmpty()) {
 			List<Action> actions = new ArrayList<>();
@@ -213,7 +207,7 @@ public class IconParser {
 			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has negative LEVELS: " + levels);
 		}
 
-		List<String> serializedRequiredItems = ConfigUtil.getStringListOrSingle(section, Nodes.REQUIRED_ITEMS);
+		List<String> serializedRequiredItems = section.getStringList(Nodes.REQUIRED_ITEMS);
 		
 		if (serializedRequiredItems != null && !serializedRequiredItems.isEmpty()) {
 			List<RequiredItem> requiredItems = new ArrayList<>();

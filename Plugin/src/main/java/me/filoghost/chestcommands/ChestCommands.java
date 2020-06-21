@@ -16,8 +16,18 @@ package me.filoghost.chestcommands;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import me.filoghost.chestcommands.legacy.ConfigConverter;
+import me.filoghost.chestcommands.legacy.LegacyMenuConverter;
+import me.filoghost.chestcommands.legacy.LegacySettingsConverter;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -72,8 +82,8 @@ public class ChestCommands extends JavaPlugin {
 
 		instance = this;
 		menuManager = new MenuManager();
-		settings = new Settings(new PluginConfig(this, "config.yml"));
-		lang = new Lang(new PluginConfig(this, "lang.yml"));
+		settings = new Settings();
+		lang = new Lang();
 		
 		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
 			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
@@ -144,8 +154,17 @@ public class ChestCommands extends JavaPlugin {
 		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
 
+		String legacyCommandSeparator = null;
+
 		try {
-			settings.load();
+			PluginConfig settingsYaml = new PluginConfig(this, "config.yml");
+			settingsYaml.load();
+
+			LegacySettingsConverter legacySettingsConverter = new LegacySettingsConverter();
+			legacyCommandSeparator = legacySettingsConverter.getLegacyCommandSeparator(settingsYaml);
+			convertIfLegacy(settingsYaml, legacySettingsConverter);
+
+			settings.load(settingsYaml);
 		} catch (IOException e) {
 			e.printStackTrace();
 			getLogger().warning("I/O error while using the configuration. Default values will be used.");
@@ -158,7 +177,9 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			lang.load();
+			PluginConfig langYaml = new PluginConfig(this, "lang.yml");
+			langYaml.load();
+			lang.load(langYaml);
 		} catch (IOException e) {
 			e.printStackTrace();
 			getLogger().warning("I/O error while using the language file. Default values will be used.");
@@ -180,6 +201,7 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().warning("Unhandled error while reading the placeholders! Please inform the developer.");
 		}
 
+
 		// Load the menus
 		File menusFolder = new File(getDataFolder(), "menu");
 
@@ -189,10 +211,16 @@ public class ChestCommands extends JavaPlugin {
 			FileUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 
+		if (legacyCommandSeparator == null) {
+			legacyCommandSeparator = ";";
+		}
+		LegacyMenuConverter legacyMenuConverter = new LegacyMenuConverter(legacyCommandSeparator);
+
 		List<PluginConfig> menusList = loadMenus(menusFolder);
 		for (PluginConfig menuConfig : menusList) {
 			try {
 				menuConfig.load();
+				convertIfLegacy(menuConfig, legacyMenuConverter);
 			} catch (IOException e) {
 				e.printStackTrace();
 				errors.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
@@ -226,6 +254,31 @@ public class ChestCommands extends JavaPlugin {
 		
 		ChestCommands.lastLoadErrors = errors;
 		return errors;
+	}
+
+	private void convertIfLegacy(PluginConfig config, ConfigConverter legacyConverter) {
+		boolean modified = legacyConverter.convert(config);
+		if (modified) {
+			Path configPath = config.getFile().toPath();
+			try {
+				String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd_HH.mm"));
+				String backupName = config.getFileName() + "-" + date + ".backup";
+				Files.copy(configPath, configPath.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				getLogger().log(Level.SEVERE, "Couldn't create backup of " + config.getFileName(), e);
+				return;
+			}
+
+			ChestCommands.getInstance().getLogger().info(
+					"Automatically updated configuration file " + config.getFileName() + " with newer configuration nodes. " +
+							"A backup of the old file has been saved (" + config.getFileName() + ".backup).");
+
+			try {
+				config.save();
+			} catch (IOException e) {
+				getLogger().log(Level.SEVERE, "Couldn't save modified file: ", e);
+			}
+		}
 	}
 
 
