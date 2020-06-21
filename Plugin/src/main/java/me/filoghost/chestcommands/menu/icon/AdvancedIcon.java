@@ -32,9 +32,9 @@ import me.filoghost.chestcommands.util.Utils;
 
 public class AdvancedIcon extends ConfigurableIconImpl {
 
-	private PermissionChecker viewPermissionChecker;
+	private PermissionChecker viewPermission;
 
-	private PermissionChecker requiredPermission;
+	private PermissionChecker clickPermission;
 	private RequiredMoney requiredMoney;
 	private RequiredExpLevel requiredExpLevel;
 	private RequiredItems requiredItems;
@@ -45,23 +45,23 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	}
 
 	public boolean canViewIcon(Player player) {
-		return viewPermissionChecker == null || viewPermissionChecker.hasPermission(player);
+		return viewPermission == null || viewPermission.hasPermission(player);
 	}
 	
 	public boolean hasViewPermission() {
-		return viewPermissionChecker != null && !viewPermissionChecker.isEmpty();
+		return viewPermission != null && !viewPermission.isEmpty();
 	}
 
 	public void setClickPermission(String permission) {
-		this.requiredPermission = new PermissionChecker(permission);
+		this.clickPermission = new PermissionChecker(permission);
 	}
 	
 	public void setNoClickPermissionMessage(String clickNoPermissionMessage) {
-		requiredPermission.setNoPermissionMessage(clickNoPermissionMessage);
+		clickPermission.setNoPermissionMessage(clickNoPermissionMessage);
 	}
 		
 	public void setViewPermission(String viewPermission) {
-		this.viewPermissionChecker = new PermissionChecker(viewPermission);
+		this.viewPermission = new PermissionChecker(viewPermission);
 	}
 
 	public void setRequiredMoney(double requiredMoney) {
@@ -131,13 +131,13 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	@Override
 	public boolean onClick(Inventory inventory, Player player) {
 		// Check all the requirements
-		boolean hasAllRequirements = Requirement.checkAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean hasAllRequirements = Requirement.checkAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!hasAllRequirements) {
 			return closeOnClick;
 		}
 
 		// If all requirements are satisfied, take their cost
-		boolean takenAllCosts = Requirement.takeCostAll(player, requiredPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean takenAllCosts = Requirement.takeCostAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!takenAllCosts) {
 			return closeOnClick;
 		}
