@@ -25,7 +25,9 @@ public class Settings extends SpecialConfig {
 	public int anti_click_spam_delay = 200;
 
 	public Settings() {
-		setHeader("ChestCommands configuration file.\nTutorial: http://dev.bukkit.org/bukkit-plugins/chest-commands\n");
+		setHeader(
+				"ChestCommands main configuration file.\n" +
+				"Documentation: https://filoghost.me/docs/chest-commands\n");
 	}
 
 }
