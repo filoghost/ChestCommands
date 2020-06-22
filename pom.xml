@@ -6,7 +6,7 @@
 	<groupId>me.filoghost.chestcommands</groupId>
 	<artifactId>chestcommands-parent</artifactId>
 	<name>ChestCommands Parent</name>
-	<version>4.0-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://dev.bukkit.org/bukkit-plugins/chest-commands</url>
