@@ -22,7 +22,7 @@ public class CaseInsensitiveMap<V> extends HashMap<String, V> {
 	private static final long serialVersionUID = 4712822893326841081L;
 
 	public static <K> CaseInsensitiveMap<K> create() {
-		return new CaseInsensitiveMap<K>();
+		return new CaseInsensitiveMap<>();
 	}
 
 	@Override

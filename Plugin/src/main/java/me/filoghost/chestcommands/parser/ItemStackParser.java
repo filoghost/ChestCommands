@@ -23,7 +23,7 @@ import me.filoghost.chestcommands.util.Strings;
 
 public class ItemStackParser {
 
-	private Material material = Material.STONE; // In the worst case (bad exception handling) we just get stone
+	private final Material material;
 	private int amount = 1;
 	private short durability = 0;
 	private boolean hasExplicitDurability = false;

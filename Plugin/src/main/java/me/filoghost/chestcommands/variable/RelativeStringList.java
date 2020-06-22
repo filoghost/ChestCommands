@@ -18,7 +18,7 @@ public class RelativeStringList {
 		if (list != null) {
 			this.originalList = ImmutableList.copyOf(list);
 			this.relativeList = Utils.transform(list, RelativeString::of);
-			this.hasVariables = this.relativeList.stream().anyMatch(element -> element.hasVariables());
+			this.hasVariables = this.relativeList.stream().anyMatch(RelativeString::hasVariables);
 		} else {
 			this.originalList = null;
 			this.relativeList = null;

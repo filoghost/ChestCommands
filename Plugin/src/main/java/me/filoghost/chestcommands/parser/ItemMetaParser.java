@@ -67,7 +67,7 @@ public final class ItemMetaParser {
 	}
 
 	public static List<Pattern> parseBannerPatternList(List<String> input) throws ParseException {
-		List<Pattern> patterns = new ArrayList<Pattern>();
+		List<Pattern> patterns = new ArrayList<>();
 		for (String str : input) {
 			String[] split = Strings.trimmedSplit(str, ":");
 			if (split.length != 2) {

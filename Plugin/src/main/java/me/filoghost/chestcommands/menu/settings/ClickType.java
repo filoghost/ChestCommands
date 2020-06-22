@@ -25,9 +25,9 @@ public enum ClickType {
 	public static ClickType fromOptions(boolean left, boolean right) {
 		if (left && right) {
 			return BOTH;
-		} else if (left && !right) {
+		} else if (left) {
 			return LEFT;
-		} else if (!left && right) {
+		} else if (right) {
 			return RIGHT;
 		} else {
 			return null;

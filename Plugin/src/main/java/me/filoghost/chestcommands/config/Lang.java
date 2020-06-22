@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.config.yaml.SpecialConfig;
 
 public class Lang extends SpecialConfig {

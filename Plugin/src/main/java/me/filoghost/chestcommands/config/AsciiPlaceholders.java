@@ -41,6 +41,7 @@ public class AsciiPlaceholders {
 	public static void load(ErrorCollector errorCollector) throws IOException, Exception {
 
 		placeholders.clear();
+
 		File file = new File(ChestCommands.getInstance().getDataFolder(), "placeholders.yml");
 
 		if (!file.exists()) {

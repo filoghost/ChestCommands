@@ -14,15 +14,11 @@
  */
 package me.filoghost.chestcommands.config.yaml;
 
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.legacy.ConfigConverter;
 import me.filoghost.chestcommands.util.FormatUtils;
-import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;

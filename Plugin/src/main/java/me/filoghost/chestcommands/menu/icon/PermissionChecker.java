@@ -35,7 +35,7 @@ public class PermissionChecker implements Requirement {
 			negated = false;
 		} else {
 			if (permission.startsWith("-")) {
-				this.permission = permission.substring(1, permission.length());
+				this.permission = permission.substring(1);
 				negated = true;
 			} else {
 				this.permission = permission;

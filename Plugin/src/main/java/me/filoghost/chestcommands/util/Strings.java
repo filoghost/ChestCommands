@@ -66,22 +66,22 @@ public final class Strings {
 		String s = input.toLowerCase();
 
 		int strLen = s.length();
-		StringBuffer buffer = new StringBuffer(strLen);
+		StringBuilder output = new StringBuilder(strLen);
 		boolean capitalizeNext = true;
 		for (int i = 0; i < strLen; i++) {
 			char ch = s.charAt(i);
 
 			if (Character.isWhitespace(ch)) {
-				buffer.append(ch);
+				output.append(ch);
 				capitalizeNext = true;
 			} else if (capitalizeNext) {
-				buffer.append(Character.toTitleCase(ch));
+				output.append(Character.toTitleCase(ch));
 				capitalizeNext = false;
 			} else {
-				buffer.append(ch);
+				output.append(ch);
 			}
 		}
-		return buffer.toString();
+		return output.toString();
 	}
 
 	public static boolean isNullOrEmpty(String s) {

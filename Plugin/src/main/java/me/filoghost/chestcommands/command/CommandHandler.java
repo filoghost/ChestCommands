@@ -84,7 +84,7 @@ public class CommandHandler extends CommandFramework {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open"), "You don't have permission.");
 			CommandValidate.minLength(args, 2, "Usage: /" + label + " open <menu> [player]");
 
-			Player target = null;
+			Player target;
 
 			if (sender instanceof Player) {
 				if (args.length > 2) {
