@@ -128,9 +128,7 @@ public class ChestCommands extends JavaPlugin {
 		ErrorCollector errorCollector = load();
 		
 		if (errorCollector.hasWarningsOrErrors()) {
-			Bukkit.getScheduler().runTaskLater(this, () -> {
-				errorCollector.logToConsole();
-			}, 10L);
+			Bukkit.getScheduler().runTaskLater(this, errorCollector::logToConsole, 10L);
 		}
 
 		Bukkit.getScheduler().runTaskTimer(this, new RefreshMenusTask(), 2L, 2L);
@@ -234,11 +232,6 @@ public class ChestCommands extends JavaPlugin {
 				menuManager.registerTriggerItem(menuSettings.getOpenTrigger(), iconMenu);
 			}
 		}
-
-		// Register the BungeeCord plugin channel
-		if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this, "BungeeCord")) {
-			Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		}
 		
 		ChestCommands.lastLoadErrors = errors;
 		return errors;
@@ -313,21 +306,24 @@ public class ChestCommands extends JavaPlugin {
 
 	private static void criticalShutdown(String... errorMessage) {
 		String separator = "****************************************************************************";
-		StringBuffer output = new StringBuffer("\n ");
-		output.append("\n" + separator);
+
+		List<String> output = new ArrayList<>();
+
+		output.add(" ");
+		output.add(separator);
 		for (String line : errorMessage) {
-			output.append("\n    " + line);
+			output.add("    " + line);
 		}
-		output.append("\n ");
-		output.append("\n    This plugin has been disabled.");
-		output.append("\n" + separator);
-		output.append("\n ");
+		output.add(" ");
+		output.add("    This plugin has been disabled.");
+		output.add(separator);
+		output.add(" ");
 		
-		System.out.println(output);
+		System.out.println("\n" + output);
 		
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException ex) {}
+		} catch (InterruptedException ignored) {}
 		instance.setEnabled(false);
 	}
 
