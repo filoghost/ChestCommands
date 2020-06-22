@@ -20,8 +20,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.*;
-import me.filoghost.chestcommands.config.AsciiPlaceholders;
 
 public class ActionParser {
 
@@ -50,11 +50,11 @@ public class ActionParser {
 			if (matcher.find()) {
 				// Remove the action prefix and trim the spaces
 				String serializedAction = matcher.replaceFirst("").trim();
-				return entry.getValue().create(AsciiPlaceholders.placeholdersToSymbols(serializedAction));
+				return entry.getValue().create(ChestCommands.getCustomPlaceholders().replaceAll(serializedAction));
 			}
 		}
 
-		return new PlayerCommandAction(AsciiPlaceholders.placeholdersToSymbols(input)); // Default action, no match found
+		return new PlayerCommandAction(ChestCommands.getCustomPlaceholders().replaceAll(input)); // Default action, no match found
 	}
 	
 	

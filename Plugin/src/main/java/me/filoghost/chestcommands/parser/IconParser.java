@@ -14,26 +14,25 @@
  */
 package me.filoghost.chestcommands.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import me.filoghost.chestcommands.util.MaterialsHelper;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
-
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.config.AsciiPlaceholders;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.menu.icon.RequiredItem;
 import me.filoghost.chestcommands.parser.EnchantmentParser.EnchantmentDetails;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IconParser {
 
@@ -121,8 +120,8 @@ public class IconParser {
 			}
 		}
 
-		icon.setName(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeName(section.getString(Nodes.NAME))));
-		icon.setLore(AsciiPlaceholders.placeholdersToSymbols(FormatUtils.colorizeLore(section.getStringList(Nodes.LORE))));
+		icon.setName(ChestCommands.getCustomPlaceholders().replaceAll(FormatUtils.colorizeName(section.getString(Nodes.NAME))));
+		icon.setLore(ChestCommands.getCustomPlaceholders().replaceAll(FormatUtils.colorizeLore(section.getStringList(Nodes.LORE))));
 
 		List<String> serializedEnchantments = section.getStringList(Nodes.ENCHANTMENTS);
 		

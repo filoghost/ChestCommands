@@ -16,7 +16,7 @@ package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.config.AsciiPlaceholders;
+import me.filoghost.chestcommands.config.CustomPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
@@ -62,6 +62,7 @@ public class ChestCommands extends JavaPlugin {
 	private MenuManager menuManager;
 	private static Settings settings;
 	private static Lang lang;
+	private static CustomPlaceholders placeholders;
 
 	private static ErrorCollector lastLoadErrors;
 	private static String newVersion;
@@ -77,6 +78,7 @@ public class ChestCommands extends JavaPlugin {
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
+		placeholders = new CustomPlaceholders();
 		
 		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
 			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
@@ -184,13 +186,18 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			AsciiPlaceholders.load(errors);
+			PluginConfig placeholdersYaml = new PluginConfig(this, "custom-placeholders.yml");
+			placeholdersYaml.load();
+			placeholders.load(placeholdersYaml, errors);
 		} catch (IOException e) {
 			e.printStackTrace();
-			getLogger().warning("I/O error while reading the placeholders. They will not work.");
+			getLogger().warning("I/O error while using the placeholders file. Default values will be used.");
+		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
+			getLogger().warning("The lang.yml was not a valid YAML, please look at the error above. Default values will be used.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			getLogger().warning("Unhandled error while reading the placeholders! Please inform the developer.");
+			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");
 		}
 
 
@@ -290,6 +297,10 @@ public class ChestCommands extends JavaPlugin {
 
 	public static Lang getLang() {
 		return lang;
+	}
+
+	public static CustomPlaceholders getCustomPlaceholders() {
+		return placeholders;
 	}
 
 	public static boolean hasNewVersion() {
