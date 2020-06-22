@@ -17,9 +17,10 @@ package me.filoghost.chestcommands.legacy;
 import com.google.common.collect.ImmutableSet;
 import me.filoghost.chestcommands.config.yaml.PluginConfig;
 
+import java.util.Optional;
 import java.util.Set;
 
-public class LegacySettingsConverter implements ConfigConverter {
+public class LegacySettingsConverter extends ConfigConverter {
 
 	private static final Set<String> removedConfigNodes = ImmutableSet.of(
 		"use-only-commands-without-args",
@@ -27,23 +28,25 @@ public class LegacySettingsConverter implements ConfigConverter {
 		"multiple-commands-separator"
 	);
 
-	public String getLegacyCommandSeparator(PluginConfig settingsConfig) {
-		return settingsConfig.getString("multiple-commands-separator");
+	private final PluginConfig settingsConfig;
+
+	public LegacySettingsConverter(PluginConfig settingsConfig) {
+		this.settingsConfig = settingsConfig;
+	}
+
+	public Optional<String> getLegacyCommandSeparator() {
+		return Optional.ofNullable(settingsConfig.getString("multiple-commands-separator"));
 
 	}
 
 	@Override
-	public boolean convert(PluginConfig settingsConfig) {
-		 boolean modified = false;
-
+	protected void convert0() {
 		for (String removedConfigNode : removedConfigNodes) {
 			if (settingsConfig.isSet(removedConfigNode)) {
 				settingsConfig.set(removedConfigNode, null);
-				modified = true;
+				setModified();
 			}
 		}
-
-		return modified;
 	}
 
 }

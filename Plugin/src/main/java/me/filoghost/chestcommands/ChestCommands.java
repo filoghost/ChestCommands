@@ -14,27 +14,6 @@
  */
 package me.filoghost.chestcommands;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-
-import me.filoghost.chestcommands.legacy.ConfigConverter;
-import me.filoghost.chestcommands.legacy.LegacyMenuConverter;
-import me.filoghost.chestcommands.legacy.LegacySettingsConverter;
-import org.bstats.bukkit.MetricsLite;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.config.AsciiPlaceholders;
@@ -45,6 +24,8 @@ import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
+import me.filoghost.chestcommands.legacy.ConversionException;
+import me.filoghost.chestcommands.legacy.LegacyConverter;
 import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
@@ -54,10 +35,22 @@ import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
-import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
+import org.bstats.bukkit.MetricsLite;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public class ChestCommands extends JavaPlugin {
 
@@ -153,17 +146,18 @@ public class ChestCommands extends JavaPlugin {
 	public ErrorCollector load() {
 		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
-
-		String legacyCommandSeparator = null;
+		boolean isFreshInstall = !getDataFolder().isDirectory();
+		getDataFolder().mkdirs();
 
 		try {
-			PluginConfig settingsYaml = new PluginConfig(this, "config.yml");
+			new LegacyConverter(this).run(isFreshInstall);
+		} catch (ConversionException e) {
+			getLogger().log(Level.SEVERE, "Couldn't run automatic configuration upgrades. The plugin may not work correctly.", e);
+		}
+
+		try {
+			PluginConfig settingsYaml = getSettingsConfig();
 			settingsYaml.load();
-
-			LegacySettingsConverter legacySettingsConverter = new LegacySettingsConverter();
-			legacyCommandSeparator = legacySettingsConverter.getLegacyCommandSeparator(settingsYaml);
-			convertIfLegacy(settingsYaml, legacySettingsConverter);
-
 			settings.load(settingsYaml);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -177,7 +171,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			PluginConfig langYaml = new PluginConfig(this, "lang.yml");
+			PluginConfig langYaml = getLangConfig();
 			langYaml.load();
 			lang.load(langYaml);
 		} catch (IOException e) {
@@ -203,7 +197,7 @@ public class ChestCommands extends JavaPlugin {
 
 
 		// Load the menus
-		File menusFolder = new File(getDataFolder(), "menu");
+		File menusFolder = getMenusFolder();
 
 		if (!menusFolder.isDirectory()) {
 			// Create the directory with the default menu
@@ -211,16 +205,10 @@ public class ChestCommands extends JavaPlugin {
 			FileUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 
-		if (legacyCommandSeparator == null) {
-			legacyCommandSeparator = ";";
-		}
-		LegacyMenuConverter legacyMenuConverter = new LegacyMenuConverter(legacyCommandSeparator);
-
 		List<PluginConfig> menusList = loadMenus(menusFolder);
 		for (PluginConfig menuConfig : menusList) {
 			try {
 				menuConfig.load();
-				convertIfLegacy(menuConfig, legacyMenuConverter);
 			} catch (IOException e) {
 				e.printStackTrace();
 				errors.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
@@ -256,36 +244,22 @@ public class ChestCommands extends JavaPlugin {
 		return errors;
 	}
 
-	private void convertIfLegacy(PluginConfig config, ConfigConverter legacyConverter) {
-		boolean modified = legacyConverter.convert(config);
-		if (modified) {
-			Path configPath = config.getFile().toPath();
-			try {
-				String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd_HH.mm"));
-				String backupName = config.getFileName() + "-" + date + ".backup";
-				Files.copy(configPath, configPath.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				getLogger().log(Level.SEVERE, "Couldn't create backup of " + config.getFileName(), e);
-				return;
-			}
-
-			ChestCommands.getInstance().getLogger().info(
-					"Automatically updated configuration file " + config.getFileName() + " with newer configuration nodes. " +
-							"A backup of the old file has been saved (" + config.getFileName() + ".backup).");
-
-			try {
-				config.save();
-			} catch (IOException e) {
-				getLogger().log(Level.SEVERE, "Couldn't save modified file: ", e);
-			}
-		}
+	public PluginConfig getLangConfig() {
+		return new PluginConfig(this, "lang.yml");
 	}
 
+	public PluginConfig getSettingsConfig() {
+		return new PluginConfig(this, "config.yml");
+	}
+
+	public File getMenusFolder() {
+		return new File(getDataFolder(), "menu");
+	}
 
 	/**
 	 * Loads all the configuration files recursively into a list.
 	 */
-	private List<PluginConfig> loadMenus(File file) {
+	public List<PluginConfig> loadMenus(File file) {
 		List<PluginConfig> list = new ArrayList<>();
 		if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
@@ -312,7 +286,7 @@ public class ChestCommands extends JavaPlugin {
 	public static ChestCommands getInstance() {
 		return instance;
 	}
-	
+
 	public MenuManager getMenuManager() {
 		return menuManager;
 	}

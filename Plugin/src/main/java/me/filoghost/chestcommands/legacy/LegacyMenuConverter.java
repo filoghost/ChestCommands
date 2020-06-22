@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class LegacyMenuConverter implements ConfigConverter {
+public class LegacyMenuConverter extends ConfigConverter {
 
 	private static final Map<String, String> menuSettingsReplacements = ImmutableMap.<String, String>builder()
 		.put("command", "commands")
@@ -60,16 +60,16 @@ public class LegacyMenuConverter implements ConfigConverter {
 	);
 
 
+	private final PluginConfig menuConfig;
 	private final String legacyCommandSeparator;
 
-	public LegacyMenuConverter(String legacyCommandSeparator) {
+	public LegacyMenuConverter(PluginConfig menuConfig, String legacyCommandSeparator) {
+		this.menuConfig = menuConfig;
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
 
 	@Override
-	public boolean convert(PluginConfig menuConfig) {
-		boolean modified = false;
-
+	protected void convert0() {
 		for (String key : menuConfig.getKeys(true)) {
 			if (!menuConfig.isConfigurationSection(key)) {
 				continue;
@@ -77,25 +77,22 @@ public class LegacyMenuConverter implements ConfigConverter {
 
 			ConfigurationSection section = menuConfig.getConfigurationSection(key);
 			if (key.equals("menu-settings")) {
-				modified |= renameNodes(section, menuSettingsReplacements);
-				modified |= expandInlineLists(section, menuSettingsInlineLists);
+				renameNodes(section, menuSettingsReplacements);
+				expandInlineLists(section, menuSettingsInlineLists);
 			} else {
-				modified |= renameNodes(section, iconAttributesReplacements);
-				modified |= expandInlineLists(section, iconAttributesInlineLists);
-				modified |= expandSingletonLists(section, iconAttributesSingleStringLists);
+				renameNodes(section, iconAttributesReplacements);
+				expandInlineLists(section, iconAttributesInlineLists);
+				expandSingletonLists(section, iconAttributesSingleStringLists);
 
-				modified |= convertInlineItemstack(section);
+				convertInlineItemstack(section);
 			}
 		}
-
-		return modified;
 	}
 
-	private boolean convertInlineItemstack(ConfigurationSection section) {
-		boolean modified = false;
+	private void convertInlineItemstack(ConfigurationSection section) {
 		String material = section.getString("MATERIAL");
 		if (material == null) {
-			return modified;
+			return;
 		}
 
 		if (material.contains(",")) {
@@ -108,7 +105,8 @@ public class LegacyMenuConverter implements ConfigConverter {
 				}
 			}
 			material = parts[0];
-			modified = true;
+			section.set("MATERIAL", material);
+			setModified();
 		}
 
 		if (material.contains(":")) {
@@ -121,60 +119,39 @@ public class LegacyMenuConverter implements ConfigConverter {
 				}
 			}
 			material = parts[0];
-			modified = true;
-		}
-
-		if (modified) {
 			section.set("MATERIAL", material);
+			setModified();
 		}
-
-		return modified;
 	}
 
-	private boolean renameNodes(ConfigurationSection config, Map<String, String> replacements) {
-		boolean modified = false;
-
-		for (Map.Entry<String, String> entry : replacements.entrySet()) {
-			String oldNode = entry.getKey();
-			String newNode = entry.getValue();
+	private void renameNodes(ConfigurationSection config, Map<String, String> replacements) {
+		replacements.forEach((oldNode, newNode) -> {
 			if (config.isSet(oldNode) && !config.isSet(newNode)) {
 				config.set(newNode, config.get(oldNode));
 				config.set(oldNode, null);
-				modified = true;
+				setModified();
 			}
-		}
-
-		return modified;
+		});
 	}
 
-	private boolean expandInlineLists(ConfigurationSection config, Map<String, String> nodesAndSeparators) {
-		boolean modified = false;
-
-		for (Map.Entry<String, String> entry : nodesAndSeparators.entrySet()) {
-			String inlineListNode = entry.getKey();
-			String separator = entry.getValue();
+	private void expandInlineLists(ConfigurationSection config, Map<String, String> nodesAndSeparators) {
+		nodesAndSeparators.forEach((inlineListNode, separator) -> {
 			if (config.isSet(inlineListNode)) {
 				if (config.isString(inlineListNode)) {
 					config.set(inlineListNode, getSeparatedValues(config.getString(inlineListNode), separator));
-					modified = true;
+					setModified();
 				}
 			}
-		}
-
-		return modified;
+		});
 	}
 
-	private boolean expandSingletonLists(ConfigurationSection config, Set<String> nodes) {
-		boolean modified = false;
-
+	private void expandSingletonLists(ConfigurationSection config, Set<String> nodes) {
 		for (String singleStringListNode : nodes) {
 			if (config.isSet(singleStringListNode)) {
 				config.set(singleStringListNode, Collections.singletonList(config.get(singleStringListNode)));
-				modified = true;
+				setModified();
 			}
 		}
-
-		return modified;
 	}
 
 	private List<String> getSeparatedValues(String input, String separator) {

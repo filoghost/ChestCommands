@@ -14,25 +14,10 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.util.Preconditions;
+public class ConversionException extends Exception {
 
-public abstract class ConfigConverter {
-
-	private boolean hasRun;
-	private boolean modified;
-
-
-	protected void setModified() {
-		this.modified = true;
+	public ConversionException(String message, Throwable cause) {
+		super(message, cause);
 	}
-
-	public boolean convert() {
-		Preconditions.checkState(!hasRun, "Conversion already run");
-		hasRun = true;
-		convert0();
-		return modified;
-	}
-
-	protected abstract void convert0();
 
 }
