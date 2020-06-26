@@ -21,7 +21,6 @@ import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.SettingsUpgrade;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 public class UpgradesExecutor {
 
 	private final ChestCommands plugin;
-	private List<Upgrade> failedUpgrades;
+	private List<Path> failedUpgrades;
 	private UpgradesDoneRegistry upgradesDoneRegistry;
 
 	public UpgradesExecutor(ChestCommands plugin) {
@@ -59,14 +58,19 @@ public class UpgradesExecutor {
 			String legacyCommandSeparator = readLegacyCommandSeparator();
 
 			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(plugin);
-			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(plugin);
-			List<MenuUpgrade> menuUpgrades = getMenuConfigs().stream()
-					.map(menuConfig -> new MenuUpgrade(menuConfig, legacyCommandSeparator))
-					.collect(Collectors.toList());
-
 			runIfNecessary(UpgradeID.V4_CONFIG, settingsUpgrade);
+
+			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(plugin);
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
-			runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
+
+			try {
+				List<MenuUpgrade> menuUpgrades = plugin.getMenusPathList().stream()
+						.map(menuPath -> new MenuUpgrade(new PluginConfig(menuPath), legacyCommandSeparator))
+						.collect(Collectors.toList());
+				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
+			} catch (IOException e) {
+				failedUpgrades.add(plugin.getMenusPath());
+			}
 		}
 
 		try {
@@ -79,7 +83,7 @@ public class UpgradesExecutor {
 		// Success only if no upgrade failed
 		if (!failedUpgrades.isEmpty()) {
 			String failedConversionFiles = failedUpgrades.stream()
-					.map(upgrade -> upgrade.getOriginalFile().getName())
+					.map(Path::toString)
 					.collect(Collectors.joining(", "));
 			throw new UpgradeExecutorException("Failed to automatically upgrade the following files: " + failedConversionFiles);
 		}
@@ -98,11 +102,6 @@ public class UpgradesExecutor {
 		}
 
 		return legacyCommandSeparator;
-	}
-
-	private List<PluginConfig> getMenuConfigs() {
-		File menusFolder = plugin.getMenusFolder();
-		return plugin.getMenuConfigs(menusFolder);
 	}
 
 
@@ -124,12 +123,12 @@ public class UpgradesExecutor {
 				if (modified) {
 					plugin.getLogger().info(
 							"Automatically upgraded configuration file \""
-							+ upgradeTask.getUpgradedFile().getName() + "\" with newer configuration nodes. "
+							+ upgradeTask.getUpgradedFile().getFileName() + "\" with newer configuration nodes. "
 							+ "A backup of the old file has been saved.");
 				}
 			} catch (UpgradeException e) {
 				failedAnyUpgrade = true;
-				failedUpgrades.add(upgradeTask);
+				failedUpgrades.add(upgradeTask.getOriginalFile());
 				logUpgradeException(upgradeTask, e);
 			}
 		}

@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.legacy;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class UpgradesDoneRegistry {
 		this.upgradesDone = new HashSet<>();
 
 		if (Files.isRegularFile(saveFile)) {
-			try (Stream<String> lines = Files.lines(saveFile, StandardCharsets.UTF_8)) {
+			try (Stream<String> lines = Files.lines(saveFile)) {
 				lines.filter(s -> !s.startsWith("#"))
 						.forEach(upgradesDone::add);
 			}
@@ -65,7 +64,8 @@ public class UpgradesDoneRegistry {
 			lines.add("# WARNING: manually editing this file is not recommended");
 			lines.add("#");
 			lines.addAll(upgradesDone);
-			Files.write(saveFile, lines, StandardCharsets.UTF_8);
+			Files.createDirectories(saveFile.getParent());
+			Files.write(saveFile, lines);
 			needSave = false;
 		}
 	}

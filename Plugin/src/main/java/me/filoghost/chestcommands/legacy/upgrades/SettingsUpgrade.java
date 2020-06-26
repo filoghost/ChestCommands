@@ -20,8 +20,8 @@ import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Set;
 
 public class SettingsUpgrade extends Upgrade {
@@ -39,13 +39,13 @@ public class SettingsUpgrade extends Upgrade {
 	}
 
 	@Override
-	public File getOriginalFile() {
-		return settingsConfig.getFile();
+	public Path getOriginalFile() {
+		return settingsConfig.getPath();
 	}
 
 	@Override
-	public File getUpgradedFile() {
-		return settingsConfig.getFile();
+	public Path getUpgradedFile() {
+		return settingsConfig.getPath();
 	}
 
 	@Override

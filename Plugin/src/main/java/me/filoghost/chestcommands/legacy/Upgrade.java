@@ -18,9 +18,9 @@ import me.filoghost.chestcommands.config.yaml.PluginConfig;
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,13 +45,13 @@ public abstract class Upgrade {
 			try {
 				createBackupFile(getOriginalFile());
 			} catch (IOException e) {
-				throw new UpgradeException("couldn't create backup of file \"" + getOriginalFile().getName() + "\"", e);
+				throw new UpgradeException("couldn't create backup of file \"" + getOriginalFile().getFileName() + "\"", e);
 			}
 
 			try {
 				saveChanges();
 			} catch (IOException e) {
-				throw new UpgradeException("couldn't save upgraded file \"" + getUpgradedFile().getName() + "\"", e);
+				throw new UpgradeException("couldn't save upgraded file \"" + getUpgradedFile().getFileName() + "\"", e);
 			}
 		}
 
@@ -68,16 +68,16 @@ public abstract class Upgrade {
 		}
 	}
 
-	private void createBackupFile(File file) throws IOException {
+	private void createBackupFile(Path path) throws IOException {
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm"));
-		String backupName = file.getName() + "_" + date + ".backup";
+		String backupName = path.getFileName() + "_" + date + ".backup";
 
-		Files.copy(file.toPath(), file.toPath().resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(path, path.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
 	}
 
-	public abstract File getOriginalFile();
+	public abstract Path getOriginalFile();
 
-	public abstract File getUpgradedFile();
+	public abstract Path getUpgradedFile();
 
 	protected abstract void computeChanges() throws UpgradeException;
 

@@ -36,7 +36,6 @@ import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.ErrorCollector;
-import me.filoghost.chestcommands.util.FileUtils;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
@@ -46,11 +45,17 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ChestCommands extends JavaPlugin {
 
@@ -148,8 +153,13 @@ public class ChestCommands extends JavaPlugin {
 	public ErrorCollector load() {
 		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
-		boolean isFreshInstall = !getDataFolder().isDirectory();
-		getDataFolder().mkdirs();
+		boolean isFreshInstall = !Files.isDirectory(getDataPath());
+		try {
+			Files.createDirectories(getDataPath());
+		} catch (IOException e) {
+			errors.addError("Plugin failed to load, couldn't create data folder.");
+			return errors;
+		}
 
 		try {
 			new UpgradesExecutor(this).run(isFreshInstall);
@@ -159,6 +169,7 @@ public class ChestCommands extends JavaPlugin {
 
 		PluginConfig settingsYaml = getSettingsConfig();
 		try {
+			settingsYaml.createDefault(this);
 			settingsYaml.load();
 			settings.load(settingsYaml);
 		} catch (Throwable t) {
@@ -167,6 +178,7 @@ public class ChestCommands extends JavaPlugin {
 
 		PluginConfig langYaml = getLangConfig();
 		try {
+			langYaml.createDefault(this);
 			langYaml.load();
 			lang.load(langYaml);
 		} catch (Throwable t) {
@@ -175,6 +187,7 @@ public class ChestCommands extends JavaPlugin {
 
 		PluginConfig placeholdersYaml = getPlaceholdersConfig();
 		try {
+			placeholdersYaml.createDefault(this);
 			placeholdersYaml.load();
 			placeholders.load(placeholdersYaml, errors);
 		} catch (Throwable t) {
@@ -182,16 +195,35 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		// Load the menus
-		File menusFolder = getMenusFolder();
+		Path menusPath = getMenusPath();
 
-		if (!menusFolder.isDirectory()) {
-			// Create the directory with the default menu
-			menusFolder.mkdirs();
-			FileUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
+		if (!Files.isDirectory(menusPath)) {
+			// Create the menu folder with the example menu
+			try {
+				Files.createDirectories(menusPath);
+			} catch (IOException e) {
+				getLogger().log(Level.SEVERE, "Couldn't create \"" + menusPath.getFileName() + "\" folder");
+			}
+
+			PluginConfig exampleMenu = new PluginConfig(getDataPath(Paths.get("menu", "example.yml")));
+			try {
+				exampleMenu.createDefault(this);
+			} catch (Throwable t) {
+				logConfigLoadException(exampleMenu, t);
+			}
 		}
 
-		List<PluginConfig> menusList = getMenuConfigs(menusFolder);
-		for (PluginConfig menuConfig : menusList) {
+		List<Path> menuPaths;
+
+		try {
+			menuPaths = getMenusPathList();
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "Couldn't fetch files inside the folder \"" + getMenusPath().getFileName() + "\"", e);
+			menuPaths = Collections.emptyList();
+		}
+
+		for (Path menuFile : menuPaths) {
+			PluginConfig menuConfig = new PluginConfig(menuFile);
 			try {
 				menuConfig.load();
 			} catch (Throwable t) {
@@ -232,36 +264,35 @@ public class ChestCommands extends JavaPlugin {
 	}
 
 	public PluginConfig getLangConfig() {
-		return new PluginConfig(this, "lang.yml");
+		return new PluginConfig(getDataPath("lang.yml"));
 	}
 
 	public PluginConfig getSettingsConfig() {
-		return new PluginConfig(this, "config.yml");
+		return new PluginConfig(getDataPath("config.yml"));
 	}
 
 	public PluginConfig getPlaceholdersConfig() {
-		return new PluginConfig(this, "custom-placeholders.yml");
+		return new PluginConfig(getDataPath("custom-placeholders.yml"));
 	}
 
-	public File getMenusFolder() {
-		return new File(getDataFolder(), "menu");
+	public Path getMenusPath() {
+		return getDataPath("menu");
 	}
 
 	/**
-	 * Loads all the configuration files recursively into a list.
+	 * Returns a list of YML menu files.
 	 */
-	public List<PluginConfig> getMenuConfigs(File file) {
-		List<PluginConfig> list = new ArrayList<>();
-		if (file.isDirectory()) {
-			for (File subFile : file.listFiles()) {
-				list.addAll(getMenuConfigs(subFile));
-			}
-		} else if (file.isFile()) {
-			if (file.getName().endsWith(".yml")) {
-				list.add(new PluginConfig(this, file));
-			}
+	public List<Path> getMenusPathList() throws IOException {
+		try (Stream<Path> paths = Files.walk(getMenusPath(), FileVisitOption.FOLLOW_LINKS)) {
+			return paths.filter(Files::isRegularFile)
+					.filter(this::isYmlPath)
+					.collect(Collectors.toList());
 		}
-		return list;
+	}
+
+
+	private boolean isYmlPath(Path path) {
+		return path.getFileName().toString().toLowerCase().endsWith(".yml");
 	}
 
 
@@ -276,6 +307,18 @@ public class ChestCommands extends JavaPlugin {
 
 	public static ChestCommands getInstance() {
 		return instance;
+	}
+
+	public Path getDataPath() {
+		return getDataFolder().toPath();
+	}
+
+	public Path getDataPath(Path path) {
+		return getDataPath().resolve(path);
+	}
+
+	public Path getDataPath(String path) {
+		return getDataPath().resolve(path);
 	}
 
 	public MenuManager getMenuManager() {

@@ -20,8 +20,8 @@ import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,13 +38,13 @@ public class MenuUpgrade extends Upgrade {
 	}
 
 	@Override
-	public File getOriginalFile() {
-		return menuConfig.getFile();
+	public Path getOriginalFile() {
+		return menuConfig.getPath();
 	}
 
 	@Override
-	public File getUpgradedFile() {
-		return menuConfig.getFile();
+	public Path getUpgradedFile() {
+		return menuConfig.getPath();
 	}
 
 	@Override

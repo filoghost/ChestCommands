@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.config.yaml;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.FormatUtils;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class SpecialConfig {
 					if (defaultValue != null) {
 						defaultValuesMap.put(configKey, defaultValue);
 					} else {
-						config.getPlugin().getLogger().warning("The field " + field.getName() + " was not provided with a default value, please inform the developer.");
+						ChestCommands.getInstance().getLogger().warning("The field " + field.getName() + " was not provided with a default value, please inform the developer.");
 					}
 
 				} catch (Exception ex) {
@@ -104,7 +105,7 @@ public class SpecialConfig {
 					field.set(this, FormatUtils.addColors(config.getString(configKey))); // Always add colors
 
 				} else {
-					config.getPlugin().getLogger().warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");
+					ChestCommands.getInstance().getLogger().warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");
 				}
 
 			} else {

@@ -21,46 +21,43 @@ import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;
 import org.apache.commons.lang.StringEscapeUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class PlaceholdersUpgrade extends Upgrade {
 
 	private final PluginConfig newPlaceholdersConfig;
-	private final File oldPlaceholdersFile;
-
-	private List<String> lines;
+	private final Path oldPlaceholdersFile;
 
 	public PlaceholdersUpgrade(ChestCommands plugin) {
 		this.newPlaceholdersConfig = plugin.getPlaceholdersConfig();
-		this.oldPlaceholdersFile = new File(plugin.getDataFolder(), "placeholders.yml");
+		this.oldPlaceholdersFile = plugin.getDataPath("placeholders.yml");
 	}
 
 	@Override
-	public File getOriginalFile() {
+	public Path getOriginalFile() {
 		return oldPlaceholdersFile;
 	}
 
 	@Override
-	public File getUpgradedFile() {
-		return newPlaceholdersConfig.getFile();
+	public Path getUpgradedFile() {
+		return newPlaceholdersConfig.getPath();
 	}
 
 	@Override
 	protected void computeChanges() throws UpgradeException {
-		if (!oldPlaceholdersFile.isFile()) {
+		if (!Files.isRegularFile(oldPlaceholdersFile)) {
 			return;
 		}
 
 		// Do NOT load the new placeholder configuration from disk, as it should only contain placeholders imported from the old file
-
+		List<String> lines;
 		try {
-			lines = Files.readAllLines(oldPlaceholdersFile.toPath(), StandardCharsets.UTF_8);
+			lines = Files.readAllLines(oldPlaceholdersFile);
 		} catch (IOException e) {
-			throw new UpgradeException("couldn't read file \"" + oldPlaceholdersFile.getName() + "\"", e);
+			throw new UpgradeException("couldn't read file \"" + oldPlaceholdersFile.getFileName() + "\"", e);
 		}
 
 		for (String line : lines) {
@@ -85,7 +82,9 @@ public class PlaceholdersUpgrade extends Upgrade {
 
 	@Override
 	protected void saveChanges() throws IOException {
-		oldPlaceholdersFile.delete();
+		try {
+			Files.deleteIfExists(oldPlaceholdersFile);
+		} catch (IOException ignored) {}
 		newPlaceholdersConfig.save();
 	}
 

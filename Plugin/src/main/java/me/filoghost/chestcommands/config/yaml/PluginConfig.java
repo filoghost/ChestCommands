@@ -14,65 +14,92 @@
  */
 package me.filoghost.chestcommands.config.yaml;
 
+import me.filoghost.chestcommands.ChestCommands;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * A simple utility class to manage configurations with a file associated to them.
  */
 public class PluginConfig extends YamlConfiguration {
 
-	private File file;
-	private Plugin plugin;
+	private final Path path;
 
-	public PluginConfig(Plugin plugin, File file) {
-		super();
-		this.file = file;
-		this.plugin = plugin;
+	public PluginConfig(Path path) {
+		this.path = path;
 	}
 
-	public PluginConfig(Plugin plugin, String name) {
-		this(plugin, new File(plugin.getDataFolder(), name));
+	public Path getPath() {
+		return path;
 	}
 
-	public void load() throws IOException, InvalidConfigurationException {
+	public void createDefault(ChestCommands plugin) throws IOException {
+		if (!path.startsWith(plugin.getDataPath())) {
+			throw new IOException("Config file " + path + " must be inside " + plugin.getDataPath());
+		}
 
-		if (!file.isFile()) {
-			if (plugin.getResource(file.getName()) != null) {
-				plugin.saveResource(file.getName(), false);
-			} else {
-				if (file.getParentFile() != null) {
-					file.getParentFile().mkdirs();
+		if (Files.exists(path)) {
+			return;
+		}
+
+		if (path.getParent() != null) {
+			Files.createDirectories(path.getParent());
+		}
+
+		Path absoluteDataPath = plugin.getDataPath().toAbsolutePath();
+		Path absoluteConfigPath = path.toAbsolutePath();
+
+		if (absoluteConfigPath.startsWith(absoluteDataPath)) {
+			Path relativeConfigPath = absoluteDataPath.relativize(absoluteConfigPath);
+			String defaultConfigURL = StreamSupport.stream(relativeConfigPath.spliterator(), false)
+					.map(Path::toString)
+					.collect(Collectors.joining("/"));
+
+			try (InputStream defaultFile = plugin.getResource(defaultConfigURL)) {
+				if (defaultFile != null) {
+					Files.copy(defaultFile, path);
+					return;
 				}
-				file.createNewFile();
 			}
 		}
 
+		Files.createFile(path);
+	}
+
+	public void load() throws IOException, InvalidConfigurationException {
 		// To reset all the values when loading
 		for (String section : this.getKeys(false)) {
 			set(section, null);
 		}
-		load(file);
+
+		try (BufferedReader reader = Files.newBufferedReader(path)) {
+			load(reader);
+		}
 	}
 
 	public void save() throws IOException {
-		this.save(file);
-	}
+		if (path.getParent() != null) {
+			Files.createDirectories(path.getParent());
+		}
 
-	public Plugin getPlugin() {
-		return plugin;
-	}
+		String data = saveToString();
 
-	public File getFile() {
-		return file;
+		try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+			writer.write(data);
+		}
 	}
 
 	public String getFileName() {
-		return file.getName();
+		return path.getFileName().toString();
 	}
 
 }
