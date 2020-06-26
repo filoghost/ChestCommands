@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UpgradesDoneRegistry {
@@ -32,54 +34,51 @@ public class UpgradesDoneRegistry {
 		this.upgradesDone = new HashSet<>();
 
 		if (Files.isRegularFile(saveFile)) {
-			Files.lines(saveFile, StandardCharsets.UTF_8).forEach(upgradesDone::add);
-		}
-	}
-
-	public void runIfNecessary(Upgrade upgrade, UpgradeTask upgradeTask) throws ConversionException {
-		if (!upgradesDone.contains(upgrade.propertyName)) {
-			upgradeTask.run();
-			setDone(upgrade);
+			Files.lines(saveFile, StandardCharsets.UTF_8)
+					.filter(s -> !s.startsWith("#"))
+					.forEach(upgradesDone::add);
 		}
 	}
 
 	public void setAllDone() {
-		for (Upgrade upgrade : Upgrade.values()) {
+		for (UpgradeID upgrade : UpgradeID.values()) {
 			setDone(upgrade);
 		}
 	}
 
-	private void setDone(Upgrade upgrade) {
-		if (upgradesDone.add(upgrade.propertyName)) {
+	public void setDone(UpgradeID upgrade) {
+		if (upgradesDone.add(upgrade.stringID)) {
 			needSave = true;
 		}
 	}
 
+	public boolean isDone(UpgradeID upgrade) {
+		return upgradesDone.contains(upgrade.stringID);
+	}
 
 	public void save() throws IOException {
 		if (needSave) {
-			Files.write(saveFile, upgradesDone, StandardCharsets.UTF_8);
+			List<String> lines = new ArrayList<>();
+			lines.add("#");
+			lines.add("# WARNING: manually editing this file is not recommended");
+			lines.add("#");
+			lines.addAll(upgradesDone);
+			Files.write(saveFile, lines, StandardCharsets.UTF_8);
 			needSave = false;
 		}
 	}
 
 
-	public interface UpgradeTask {
-
-		void run() throws ConversionException;
-
-	}
-
-
-	public enum Upgrade {
+	public enum UpgradeID {
 
 		V4_MENUS("v4.0-menus"),
-		V4_CONFIG("v4.0-config");
+		V4_CONFIG("v4.0-config"),
+		V4_PLACEHOLDERS("v4.0-placeholders");
 
-		private final String propertyName;
+		private final String stringID;
 
-		Upgrade(String propertyName) {
-			this.propertyName = propertyName;
+		UpgradeID(String stringID) {
+			this.stringID = stringID;
 		}
 	}
 

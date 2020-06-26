@@ -19,13 +19,13 @@ public final class Strings {
 	private Strings() {}
 	
 	
-	public static String[] trimmedSplit(String input, String splitPattern) {
-		return trimmedSplit(input, splitPattern, 0);
+	public static String[] trimmedSplit(String input, String pattern) {
+		return trimmedSplit(input, pattern, 0);
 	}
 	
 	
-	public static String[] trimmedSplit(String input, String splitPattern, int splitLimit) {
-		String[] output = input.split(splitPattern, splitLimit);
+	public static String[] trimmedSplit(String input, String pattern, int limit) {
+		String[] output = input.split(pattern, limit);
 		for (int i = 0; i < output.length; i++) {
 			output[i] = output[i].trim();
 		}

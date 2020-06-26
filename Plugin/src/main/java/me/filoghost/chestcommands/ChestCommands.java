@@ -24,8 +24,8 @@ import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
-import me.filoghost.chestcommands.legacy.ConversionException;
-import me.filoghost.chestcommands.legacy.LegacyConverter;
+import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
+import me.filoghost.chestcommands.legacy.UpgradesExecutor;
 import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
@@ -150,9 +150,9 @@ public class ChestCommands extends JavaPlugin {
 		getDataFolder().mkdirs();
 
 		try {
-			new LegacyConverter(this).run(isFreshInstall);
-		} catch (ConversionException e) {
-			getLogger().log(Level.SEVERE, "Couldn't run automatic configuration upgrades. The plugin may not work correctly.", e);
+			new UpgradesExecutor(this).run(isFreshInstall);
+		} catch (UpgradeExecutorException e) {
+			getLogger().log(Level.SEVERE, "Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
 		}
 
 		try {
@@ -186,7 +186,7 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		try {
-			PluginConfig placeholdersYaml = new PluginConfig(this, "custom-placeholders.yml");
+			PluginConfig placeholdersYaml = getPlaceholdersConfig();
 			placeholdersYaml.load();
 			placeholders.load(placeholdersYaml, errors);
 		} catch (IOException e) {
@@ -210,7 +210,7 @@ public class ChestCommands extends JavaPlugin {
 			FileUtils.saveResourceSafe(this, "menu" + File.separator + "example.yml");
 		}
 
-		List<PluginConfig> menusList = loadMenus(menusFolder);
+		List<PluginConfig> menusList = getMenuConfigs(menusFolder);
 		for (PluginConfig menuConfig : menusList) {
 			try {
 				menuConfig.load();
@@ -252,6 +252,10 @@ public class ChestCommands extends JavaPlugin {
 		return new PluginConfig(this, "config.yml");
 	}
 
+	public PluginConfig getPlaceholdersConfig() {
+		return new PluginConfig(this, "custom-placeholders.yml");
+	}
+
 	public File getMenusFolder() {
 		return new File(getDataFolder(), "menu");
 	}
@@ -259,11 +263,11 @@ public class ChestCommands extends JavaPlugin {
 	/**
 	 * Loads all the configuration files recursively into a list.
 	 */
-	public List<PluginConfig> loadMenus(File file) {
+	public List<PluginConfig> getMenuConfigs(File file) {
 		List<PluginConfig> list = new ArrayList<>();
 		if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
-				list.addAll(loadMenus(subFile));
+				list.addAll(getMenuConfigs(subFile));
 			}
 		} else if (file.isFile()) {
 			if (file.getName().endsWith(".yml")) {

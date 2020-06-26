@@ -14,25 +14,14 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.util.Preconditions;
+public class UpgradeExecutorException extends Throwable {
 
-public abstract class ConfigConverter {
-
-	private boolean hasRun;
-	private boolean modified;
-
-
-	protected void setModified() {
-		this.modified = true;
+	public UpgradeExecutorException(String message) {
+		super(message);
 	}
 
-	public boolean convert() {
-		Preconditions.checkState(!hasRun, "Conversion already run");
-		hasRun = true;
-		convert0();
-		return modified;
+	public UpgradeExecutorException(String message, Throwable cause) {
+		super(message, cause);
 	}
-
-	protected abstract void convert0();
 
 }

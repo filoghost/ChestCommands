@@ -14,9 +14,9 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-public class ConversionException extends Exception {
+public class UpgradeException extends Exception {
 
-	public ConversionException(String message, Throwable cause) {
+	public UpgradeException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
