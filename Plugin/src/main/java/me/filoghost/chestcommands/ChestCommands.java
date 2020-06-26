@@ -155,51 +155,29 @@ public class ChestCommands extends JavaPlugin {
 			getLogger().log(Level.SEVERE, "Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
 		}
 
+		PluginConfig settingsYaml = getSettingsConfig();
 		try {
-			PluginConfig settingsYaml = getSettingsConfig();
 			settingsYaml.load();
 			settings.load(settingsYaml);
-		} catch (IOException e) {
-			e.printStackTrace();
-			getLogger().warning("I/O error while using the configuration. Default values will be used.");
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-			getLogger().warning("The config.yml was not a valid YAML, please look at the error above. Default values will be used.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");
+		} catch (Throwable t) {
+			logConfigLoadException(settingsYaml, t);
 		}
 
+		PluginConfig langYaml = getLangConfig();
 		try {
-			PluginConfig langYaml = getLangConfig();
 			langYaml.load();
 			lang.load(langYaml);
-		} catch (IOException e) {
-			e.printStackTrace();
-			getLogger().warning("I/O error while using the language file. Default values will be used.");
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-			getLogger().warning("The lang.yml was not a valid YAML, please look at the error above. Default values will be used.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");
+		} catch (Throwable t) {
+			logConfigLoadException(langYaml, t);
 		}
 
+		PluginConfig placeholdersYaml = getPlaceholdersConfig();
 		try {
-			PluginConfig placeholdersYaml = getPlaceholdersConfig();
 			placeholdersYaml.load();
 			placeholders.load(placeholdersYaml, errors);
-		} catch (IOException e) {
-			e.printStackTrace();
-			getLogger().warning("I/O error while using the placeholders file. Default values will be used.");
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-			getLogger().warning("The lang.yml was not a valid YAML, please look at the error above. Default values will be used.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			getLogger().warning("Unhandled error while reading the values for the configuration! Please inform the developer.");
+		} catch (Throwable t) {
+			logConfigLoadException(placeholdersYaml, t);
 		}
-
 
 		// Load the menus
 		File menusFolder = getMenusFolder();
@@ -214,13 +192,8 @@ public class ChestCommands extends JavaPlugin {
 		for (PluginConfig menuConfig : menusList) {
 			try {
 				menuConfig.load();
-			} catch (IOException e) {
-				e.printStackTrace();
-				errors.addError("I/O error while loading the menu \"" + menuConfig.getFileName() + "\". Is the file in use?");
-				continue;
-			} catch (InvalidConfigurationException e) {
-				e.printStackTrace();
-				errors.addError("Invalid YAML configuration for the menu \"" + menuConfig.getFileName() + "\". Please look at the error above, or use an online YAML parser (google is your friend).");
+			} catch (Throwable t) {
+				logConfigLoadException(menuConfig, t);
 				continue;
 			}
 
@@ -242,6 +215,18 @@ public class ChestCommands extends JavaPlugin {
 		
 		ChestCommands.lastLoadErrors = errors;
 		return errors;
+	}
+
+	private void logConfigLoadException(PluginConfig config, Throwable t) {
+		t.printStackTrace();
+
+		if (t instanceof IOException) {
+			getLogger().warning("Error while reading the file \"" + config.getFileName() +  "\". Default values will be used.");
+		} else if (t instanceof InvalidConfigurationException) {
+			getLogger().warning("Invalid YAML syntax in the file \"" + config.getFileName() + "\", please look at the error above. Default values will be used.");
+		} else {
+			getLogger().warning("Unhandled error while parsing the file \"" + config.getFileName() + "\". Please inform the developer.");
+		}
 	}
 
 	public PluginConfig getLangConfig() {
