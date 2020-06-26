@@ -69,10 +69,12 @@ public class ChestCommands extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		if (instance != null) {
-			getLogger().warning("Please do not use /reload or plugin reloaders. Do \"/cc reload\" instead.");
+		if (instance != null || System.getProperty("ChestCommandsLoaded") != null) {
+			getLogger().warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
 			return;
 		}
+
+		System.setProperty("ChestCommandsLoaded", "true");
 
 		instance = this;
 		menuManager = new MenuManager();
