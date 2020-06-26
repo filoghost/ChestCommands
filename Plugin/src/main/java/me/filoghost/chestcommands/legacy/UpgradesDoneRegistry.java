@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class UpgradesDoneRegistry {
 
@@ -34,9 +35,10 @@ public class UpgradesDoneRegistry {
 		this.upgradesDone = new HashSet<>();
 
 		if (Files.isRegularFile(saveFile)) {
-			Files.lines(saveFile, StandardCharsets.UTF_8)
-					.filter(s -> !s.startsWith("#"))
-					.forEach(upgradesDone::add);
+			try (Stream<String> lines = Files.lines(saveFile, StandardCharsets.UTF_8)) {
+				lines.filter(s -> !s.startsWith("#"))
+						.forEach(upgradesDone::add);
+			}
 		}
 	}
 
