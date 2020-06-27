@@ -55,6 +55,9 @@ public final class Utils {
 	}
 
 	public static <A, B> List<B> transform(List<A> list, Function<A, B> transformFunction) {
+		if (list == null) {
+			return null;
+		}
 		List<B> result = new ArrayList<>(list.size());
 		for (A element : list) {
 			result.add(transformFunction.apply(element));

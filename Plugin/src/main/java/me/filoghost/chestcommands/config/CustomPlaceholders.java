@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.config;
 import me.filoghost.chestcommands.config.yaml.Config;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,6 @@ import java.util.Map.Entry;
 public class CustomPlaceholders {
 
 	private final Map<String, String> placeholders = new HashMap<>();
-
 
 	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
@@ -50,15 +50,16 @@ public class CustomPlaceholders {
 	}
 
 	public List<String> replaceAll(List<String> input) {
-		if (input == null) return null;
-		for (int i = 0; i < input.size(); i++) {
-			input.set(i, replaceAll(input.get(i)));
+		if (input == null) {
+			return null;
 		}
-		return input;
+		return Utils.transform(input, this::replaceAll);
 	}
 
 	public String replaceAll(String input) {
-		if (input == null) return null;
+		if (input == null) {
+			return null;
+		}
 		for (Entry<String, String> entry : placeholders.entrySet()) {
 			input = input.replace(entry.getKey(), entry.getValue());
 		}
