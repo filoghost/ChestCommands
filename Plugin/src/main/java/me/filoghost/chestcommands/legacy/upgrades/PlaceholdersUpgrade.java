@@ -14,9 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.Config;
-import me.filoghost.chestcommands.config.yaml.ConfigLoader;
+import me.filoghost.chestcommands.config.Config;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;

@@ -14,8 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.config.yaml.Config;
-import me.filoghost.chestcommands.config.yaml.ConfigLoader;
+import me.filoghost.chestcommands.config.Config;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
 

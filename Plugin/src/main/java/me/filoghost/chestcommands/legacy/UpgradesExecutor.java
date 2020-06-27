@@ -14,8 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.ConfigLoader;
+import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
 import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
@@ -32,17 +32,17 @@ import java.util.stream.Collectors;
 
 public class UpgradesExecutor {
 
-	private final ChestCommands plugin;
+	private final ConfigManager configManager;
 	private List<Path> failedUpgrades;
 	private UpgradesDoneRegistry upgradesDoneRegistry;
 
-	public UpgradesExecutor(ChestCommands plugin) {
-		this.plugin = plugin;
+	public UpgradesExecutor(ConfigManager configManager) {
+		this.configManager = configManager;
 	}
 
 	public void run(boolean isFreshInstall) throws UpgradeExecutorException {
 		this.failedUpgrades = new ArrayList<>();
-		Path upgradesDoneFile = plugin.getDataFolder().toPath().resolve(".upgrades-done");
+		Path upgradesDoneFile = configManager.getBaseDataPath().resolve(".upgrades-done");
 
 		try {
 			upgradesDoneRegistry = new UpgradesDoneRegistry(upgradesDoneFile);
@@ -58,19 +58,19 @@ public class UpgradesExecutor {
 		} else {
 			String legacyCommandSeparator = readLegacyCommandSeparator();
 
-			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(plugin.getSettingsConfigLoader());
+			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(configManager.getSettingsConfigLoader());
 			runIfNecessary(UpgradeID.V4_CONFIG, settingsUpgrade);
 
-			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(plugin.getPlaceholdersConfigLoader(), plugin.getDataPath());
+			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(configManager.getPlaceholdersConfigLoader(), configManager.getBaseDataPath());
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
 
 			try {
 				List<MenuUpgrade> menuUpgrades = Utils.transform(
-						plugin.getMenusPathList(),
+						configManager.getMenusPathList(),
 						menuPath -> new MenuUpgrade(new ConfigLoader(menuPath), legacyCommandSeparator));
 				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
 			} catch (IOException e) {
-				failedUpgrades.add(plugin.getMenusPath());
+				failedUpgrades.add(configManager.getMenusPath());
 			}
 		}
 
@@ -92,7 +92,7 @@ public class UpgradesExecutor {
 
 	private String readLegacyCommandSeparator() {
 		String legacyCommandSeparator;
-		ConfigLoader settingsConfigLoader = plugin.getSettingsConfigLoader();
+		ConfigLoader settingsConfigLoader = configManager.getSettingsConfigLoader();
 
 		try {
 			legacyCommandSeparator = settingsConfigLoader.load().getString("multiple-commands-separator", ";");

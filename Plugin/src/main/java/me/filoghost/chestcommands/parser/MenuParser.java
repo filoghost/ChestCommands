@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.parser;
 
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.Config;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.menu.settings.ClickType;

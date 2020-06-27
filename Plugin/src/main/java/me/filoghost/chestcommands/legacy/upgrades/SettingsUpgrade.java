@@ -14,16 +14,13 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import com.google.common.collect.ImmutableSet;
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.Config;
-import me.filoghost.chestcommands.config.yaml.ConfigLoader;
+import me.filoghost.chestcommands.config.Config;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Set;
 
 public class SettingsUpgrade extends Upgrade {
 

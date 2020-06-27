@@ -16,11 +16,12 @@ package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.config.CustomPlaceholders;
-import me.filoghost.chestcommands.config.Lang;
-import me.filoghost.chestcommands.config.Settings;
-import me.filoghost.chestcommands.config.yaml.Config;
-import me.filoghost.chestcommands.config.yaml.ConfigLoader;
+import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.config.files.CustomPlaceholders;
+import me.filoghost.chestcommands.config.files.Lang;
+import me.filoghost.chestcommands.config.files.LoadedMenu;
+import me.filoghost.chestcommands.config.files.Settings;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -31,10 +32,7 @@ import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.menu.settings.MenuSettings;
-import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Log;
@@ -43,20 +41,13 @@ import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ChestCommands extends JavaPlugin {
 
@@ -66,11 +57,7 @@ public class ChestCommands extends JavaPlugin {
 	
 	private static ChestCommands instance;
 
-	private ConfigLoader settingsConfigLoader;
-	private ConfigLoader placeholdersConfigLoader;
-	private ConfigLoader langConfigLoader;
-
-
+	private ConfigManager configManager;
 	private MenuManager menuManager;
 	private static Settings settings;
 	private static Lang lang;
@@ -91,10 +78,7 @@ public class ChestCommands extends JavaPlugin {
 		instance = this;
 		Log.setLogger(getLogger());
 
-		settingsConfigLoader = new ConfigLoader(getDataPath("config.yml"));
-		placeholdersConfigLoader = new ConfigLoader(getDataPath("custom-placeholders.yml"));
-		langConfigLoader = new ConfigLoader(getDataPath("lang.yml"));
-
+		configManager = new ConfigManager(getDataFolder().toPath());
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
@@ -166,145 +150,39 @@ public class ChestCommands extends JavaPlugin {
 	public ErrorCollector load() {
 		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
-		boolean isFreshInstall = !Files.isDirectory(getDataPath());
+		boolean isFreshInstall = !Files.isDirectory(configManager.getBaseDataPath());
 		try {
-			Files.createDirectories(getDataPath());
+			Files.createDirectories(configManager.getBaseDataPath());
 		} catch (IOException e) {
 			errors.addError("Plugin failed to load, couldn't create data folder.");
 			return errors;
 		}
 
 		try {
-			new UpgradesExecutor(this).run(isFreshInstall);
+			new UpgradesExecutor(configManager).run(isFreshInstall);
 		} catch (UpgradeExecutorException e) {
 			Log.severe("Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
 		}
 
-		try {
-			settingsConfigLoader.createDefault(this);
-			settings.load(settingsConfigLoader);
-		} catch (Throwable t) {
-			logConfigLoadException(settingsConfigLoader, t);
+		settings = configManager.tryLoadSettings();
+		lang = configManager.tryLoadLang();
+		placeholders = configManager.tryLoadCustomPlaceholders(errors);
+
+		// Create the menu folder with the example menu
+		if (!Files.isDirectory(configManager.getMenusPath())) {
+			ConfigLoader exampleMenuLoader = new ConfigLoader(configManager.getMenusPath().resolve("example.yml"));
+			configManager.tryCreateDefault(exampleMenuLoader);
 		}
 
-		try {
-			langConfigLoader.createDefault(this);
-			lang.load(langConfigLoader);
-		} catch (Throwable t) {
-			logConfigLoadException(langConfigLoader, t);
+		List<LoadedMenu> loadedMenus = configManager.tryLoadMenus(errors);
+		for (LoadedMenu loadedMenu : loadedMenus) {
+			menuManager.registerMenu(loadedMenu.getFileName(), loadedMenu.getSettings().getCommands(), loadedMenu.getMenu(), errors);
+			menuManager.registerTriggerItem(loadedMenu.getSettings().getOpenTrigger(), loadedMenu.getMenu());
 		}
 
-		try {
-			placeholdersConfigLoader.createDefault(this);
-			Config placeholdersConfig = placeholdersConfigLoader.load();
-			placeholders.load(placeholdersConfig, errors);
-		} catch (Throwable t) {
-			logConfigLoadException(placeholdersConfigLoader, t);
-		}
-
-		// Load the menus
-		Path menusPath = getMenusPath();
-
-		if (!Files.isDirectory(menusPath)) {
-			// Create the menu folder with the example menu
-			try {
-				Files.createDirectories(menusPath);
-			} catch (IOException e) {
-				Log.severe("Couldn't create \"" + menusPath.getFileName() + "\" folder");
-			}
-
-			ConfigLoader exampleMenuLoader = new ConfigLoader(getDataPath(Paths.get("menu", "example.yml")));
-			try {
-				exampleMenuLoader.createDefault(this);
-			} catch (Throwable t) {
-				logConfigLoadException(exampleMenuLoader, t);
-			}
-		}
-
-		List<Path> menuPaths;
-
-		try {
-			menuPaths = getMenusPathList();
-		} catch (IOException e) {
-			Log.severe("Couldn't fetch files inside the folder \"" + getMenusPath().getFileName() + "\"", e);
-			menuPaths = Collections.emptyList();
-		}
-
-		for (Path menuFile : menuPaths) {
-			ConfigLoader menuConfigLoader = new ConfigLoader(menuFile);
-			Config menuConfig;
-
-			try {
-				menuConfig = menuConfigLoader.load();
-			} catch (Throwable t) {
-				logConfigLoadException(menuConfigLoader, t);
-				continue;
-			}
-
-			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errors);
-			AdvancedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errors);
-
-			menuManager.registerMenu(menuConfig.getFileName(), menuSettings.getCommands(), iconMenu, errors);
-
-			iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
-
-			if (menuSettings.getOpenActions() != null) {
-				iconMenu.setOpenActions(menuSettings.getOpenActions());
-			}
-
-			if (menuSettings.getOpenTrigger() != null) {
-				menuManager.registerTriggerItem(menuSettings.getOpenTrigger(), iconMenu);
-			}
-		}
-		
 		ChestCommands.lastLoadErrors = errors;
 		return errors;
 	}
-
-	private void logConfigLoadException(ConfigLoader configLoader, Throwable t) {
-		t.printStackTrace();
-
-		if (t instanceof IOException) {
-			Log.warning("Error while reading the file \"" + configLoader.getFileName() +  "\". Default values will be used.");
-		} else if (t instanceof InvalidConfigurationException) {
-			Log.warning("Invalid YAML syntax in the file \"" + configLoader.getFileName() + "\", please look at the error above. Default values will be used.");
-		} else {
-			Log.warning("Unhandled error while parsing the file \"" + configLoader.getFileName() + "\". Please inform the developer.");
-		}
-	}
-
-	public ConfigLoader getLangConfigLoader() {
-		return langConfigLoader;
-	}
-
-	public ConfigLoader getSettingsConfigLoader() {
-		return settingsConfigLoader;
-	}
-
-	public ConfigLoader getPlaceholdersConfigLoader() {
-		return placeholdersConfigLoader;
-	}
-
-	public Path getMenusPath() {
-		return getDataPath("menu");
-	}
-
-	/**
-	 * Returns a list of YML menu files.
-	 */
-	public List<Path> getMenusPathList() throws IOException {
-		try (Stream<Path> paths = Files.walk(getMenusPath(), FileVisitOption.FOLLOW_LINKS)) {
-			return paths.filter(Files::isRegularFile)
-					.filter(this::isYmlPath)
-					.collect(Collectors.toList());
-		}
-	}
-
-
-	private boolean isYmlPath(Path path) {
-		return path.getFileName().toString().toLowerCase().endsWith(".yml");
-	}
-
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -317,18 +195,6 @@ public class ChestCommands extends JavaPlugin {
 
 	public static ChestCommands getInstance() {
 		return instance;
-	}
-
-	public Path getDataPath() {
-		return getDataFolder().toPath();
-	}
-
-	public Path getDataPath(Path path) {
-		return getDataPath().resolve(path);
-	}
-
-	public Path getDataPath(String path) {
-		return getDataPath().resolve(path);
 	}
 
 	public MenuManager getMenuManager() {

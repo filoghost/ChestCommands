@@ -12,9 +12,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config;
+package me.filoghost.chestcommands.config.files;
 
-import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.Config;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.Utils;

@@ -12,15 +12,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config.yaml;
+package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -38,9 +40,9 @@ public class ConfigLoader {
 		return path;
 	}
 
-	public void createDefault(ChestCommands plugin) throws IOException {
-		if (!path.startsWith(plugin.getDataPath())) {
-			throw new IOException("Config file " + path + " must be inside " + plugin.getDataPath());
+	public void createDefault(Path baseDataPath) throws IOException {
+		if (!path.startsWith(baseDataPath)) {
+			throw new IOException("Config file " + path + " must be inside " + baseDataPath);
 		}
 
 		if (Files.exists(path)) {
@@ -51,16 +53,14 @@ public class ConfigLoader {
 			Files.createDirectories(path.getParent());
 		}
 
-		Path absoluteDataPath = plugin.getDataPath().toAbsolutePath();
+		Path absoluteDataPath = baseDataPath.toAbsolutePath();
 		Path absoluteConfigPath = path.toAbsolutePath();
 
 		if (absoluteConfigPath.startsWith(absoluteDataPath)) {
 			Path relativeConfigPath = absoluteDataPath.relativize(absoluteConfigPath);
-			String defaultConfigURL = StreamSupport.stream(relativeConfigPath.spliterator(), false)
-					.map(Path::toString)
-					.collect(Collectors.joining("/"));
+			String internalJarPath = toInternalJarPath(relativeConfigPath);
 
-			try (InputStream defaultFile = plugin.getResource(defaultConfigURL)) {
+			try (InputStream defaultFile = getResource(internalJarPath)) {
 				if (defaultFile != null) {
 					Files.copy(defaultFile, path);
 					return;
@@ -70,6 +70,27 @@ public class ConfigLoader {
 
 		Files.createFile(path);
 	}
+
+	private String toInternalJarPath(Path path) {
+		return StreamSupport.stream(path.spliterator(), false)
+				.map(Path::toString)
+				.collect(Collectors.joining("/"));
+	}
+
+
+	private InputStream getResource(String internalJarPath) throws IOException {
+		Preconditions.notNull(internalJarPath, "internalJarPath");
+
+		URL resourceURL = getClass().getResource(internalJarPath);
+		if (resourceURL == null) {
+			throw new IOException("Couldn't find resource " + internalJarPath);
+		}
+
+		URLConnection connection = resourceURL.openConnection();
+		connection.setUseCaches(false);
+		return connection.getInputStream();
+	}
+
 
 	public Config load() throws IOException, InvalidConfigurationException {
 		Config config = new Config(path);
