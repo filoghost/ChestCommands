@@ -27,12 +27,6 @@ import java.util.Set;
 
 public class SettingsUpgrade extends Upgrade {
 
-	private static final Set<String> removedConfigNodes = ImmutableSet.of(
-		"use-only-commands-without-args",
-		"use-console-colors",
-		"multiple-commands-separator"
-	);
-
 	private final ConfigLoader settingsConfigLoader;
 	private Config updatedConfig;
 
@@ -54,15 +48,20 @@ public class SettingsUpgrade extends Upgrade {
 	protected void computeChanges() throws UpgradeException {
 		Config settingsConfig = loadConfig(settingsConfigLoader);
 
-		for (String removedConfigNode : removedConfigNodes) {
-			if (settingsConfig.isSet(removedConfigNode)) {
-				settingsConfig.set(removedConfigNode, null);
-				setModified();
-			}
-		}
+		removeNode(settingsConfig, "use-only-commands-without-args");
+		removeNode(settingsConfig, "use-console-colors");
+		removeNode(settingsConfig, "multiple-commands-separator");
 
 		this.updatedConfig = settingsConfig;
 	}
+
+	private void removeNode(Config config, String node) {
+		if (config.isSet(node)) {
+			config.set(node, null);
+			setModified();
+		}
+	}
+
 
 	@Override
 	protected void saveChanges() throws IOException {

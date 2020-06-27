@@ -32,13 +32,13 @@ import java.util.List;
 
 public class MenuParser {
 
-	private static class Nodes {
+	public static class Nodes {
 
 		public static final String MENU_SETTINGS = "menu-settings";
 
-		public static final String MENU_NAME = "name";
-		public static final String MENU_ROWS = "rows";
-		public static final String MENU_COMMANDS = "commands";
+		public static final String NAME = "name";
+		public static final String ROWS = "rows";
+		public static final String COMMANDS = "commands";
 
 		public static final String OPEN_ACTIONS = "open-actions";
 
@@ -95,7 +95,7 @@ public class MenuParser {
 	public static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
 		ConfigurationSection settingsSection = config.getConfigurationSection(Nodes.MENU_SETTINGS);
 
-		String title = FormatUtils.addColors(settingsSection.getString(Nodes.MENU_NAME));
+		String title = FormatUtils.addColors(settingsSection.getString(Nodes.NAME));
 		int rows;
 
 		if (title == null) {
@@ -107,8 +107,8 @@ public class MenuParser {
 			title = title.substring(0, 32);
 		}
 
-		if (settingsSection.isInt(Nodes.MENU_ROWS)) {
-			rows = settingsSection.getInt(Nodes.MENU_ROWS);
+		if (settingsSection.isInt(Nodes.ROWS)) {
+			rows = settingsSection.getInt(Nodes.ROWS);
 
 			if (rows <= 0) {
 				rows = 1;
@@ -121,7 +121,7 @@ public class MenuParser {
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
 		
-		List<String> triggeringCommands = settingsSection.getStringList(Nodes.MENU_COMMANDS);
+		List<String> triggeringCommands = settingsSection.getStringList(Nodes.COMMANDS);
 		if (triggeringCommands != null) {
 			menuSettings.setCommands(triggeringCommands);
 		}

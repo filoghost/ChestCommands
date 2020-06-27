@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class IconParser {
 
-	private static class Nodes {
+	public static class Nodes {
 
 		public static final String MATERIAL = "MATERIAL";
 		public static final String AMOUNT = "AMOUNT";

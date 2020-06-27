@@ -18,6 +18,8 @@ import me.filoghost.chestcommands.config.yaml.Config;
 import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
+import me.filoghost.chestcommands.parser.IconParser;
+import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -61,7 +63,7 @@ public class MenuUpgrade extends Upgrade {
 
 			ConfigurationSection section = menuConfig.getConfigurationSection(key);
 
-			if (key.equals("menu-settings")) {
+			if (key.equals(MenuParser.Nodes.MENU_SETTINGS)) {
 				upgradeMenuSettings(section);
 			} else {
 				upgradeIcon(section);
@@ -78,62 +80,62 @@ public class MenuUpgrade extends Upgrade {
 
 
 	private void upgradeMenuSettings(ConfigurationSection section) {
-		renameNode(section, "command", "commands");
-		renameNode(section, "open-action", "open-actions");
-		renameNode(section, "open-with-item.id", "open-with-item.material");
+		renameNode(section, "command", MenuParser.Nodes.COMMANDS);
+		renameNode(section, "open-action", MenuParser.Nodes.OPEN_ACTIONS);
+		renameNode(section, "open-with-item.id", MenuParser.Nodes.OPEN_ITEM_MATERIAL);
 
-		expandInlineList(section, "commands", ";");
-		expandInlineList(section, "open-actions", legacyCommandSeparator);
+		expandInlineList(section, MenuParser.Nodes.COMMANDS, ";");
+		expandInlineList(section, MenuParser.Nodes.OPEN_ACTIONS, legacyCommandSeparator);
 	}
 
 	private void upgradeIcon(ConfigurationSection section) {
-		renameNode(section, "ID", "MATERIAL");
-		renameNode(section, "DATA-VALUE", "DURABILITY");
-		renameNode(section, "NBT", "NBT-DATA");
-		renameNode(section, "ENCHANTMENT", "ENCHANTMENTS");
-		renameNode(section, "COMMAND", "ACTIONS");
-		renameNode(section, "COMMANDS", "ACTIONS");
-		renameNode(section, "REQUIRED-ITEM", "REQUIRED-ITEMS");
+		renameNode(section, "ID", IconParser.Nodes.MATERIAL);
+		renameNode(section, "DATA-VALUE", IconParser.Nodes.DURABILITY);
+		renameNode(section, "NBT", IconParser.Nodes.NBT_DATA);
+		renameNode(section, "ENCHANTMENT", IconParser.Nodes.ENCHANTMENTS);
+		renameNode(section, "COMMAND", IconParser.Nodes.ACTIONS);
+		renameNode(section, "COMMANDS", IconParser.Nodes.ACTIONS);
+		renameNode(section, "REQUIRED-ITEM", IconParser.Nodes.REQUIRED_ITEMS);
 
-		expandInlineList(section, "ACTIONS", legacyCommandSeparator);
-		expandInlineList(section, "ENCHANTMENTS", ";");
+		expandInlineList(section, IconParser.Nodes.ACTIONS, legacyCommandSeparator);
+		expandInlineList(section, IconParser.Nodes.ENCHANTMENTS, ";");
 
-		expandSingletonList(section, "REQUIRED-ITEMS");
+		expandSingletonList(section, IconParser.Nodes.REQUIRED_ITEMS);
 
 		expandInlineItemstack(section);
 	}
 
 	private void expandInlineItemstack(ConfigurationSection section) {
-		String material = section.getString("MATERIAL");
+		String material = section.getString(IconParser.Nodes.MATERIAL);
 		if (material == null) {
 			return;
 		}
 
 		if (material.contains(",")) {
 			String[] parts = Strings.trimmedSplit(material, ",", 2);
-			if (!section.isSet("AMOUNT")) {
+			if (!section.isSet(IconParser.Nodes.AMOUNT)) {
 				try {
-					section.set("AMOUNT", Integer.parseInt(parts[1]));
+					section.set(IconParser.Nodes.AMOUNT, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set("AMOUNT", parts[1]);
+					section.set(IconParser.Nodes.AMOUNT, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set("MATERIAL", material);
+			section.set(IconParser.Nodes.MATERIAL, material);
 			setModified();
 		}
 
 		if (material.contains(":")) {
 			String[] parts = Strings.trimmedSplit(material, ":", 2);
-			if (!section.isSet("DURABILITY")) {
+			if (!section.isSet(IconParser.Nodes.DURABILITY)) {
 				try {
-					section.set("DURABILITY", Integer.parseInt(parts[1]));
+					section.set(IconParser.Nodes.DURABILITY, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set("DURABILITY", parts[1]);
+					section.set(IconParser.Nodes.DURABILITY, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set("MATERIAL", material);
+			section.set(IconParser.Nodes.MATERIAL, material);
 			setModified();
 		}
 	}
