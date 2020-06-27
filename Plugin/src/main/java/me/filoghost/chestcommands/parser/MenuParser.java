@@ -34,17 +34,19 @@ public class MenuParser {
 
 	private static class Nodes {
 
-		public static final String MENU_NAME = "menu-settings.name";
-		public static final String MENU_ROWS = "menu-settings.rows";
-		public static final String MENU_COMMANDS = "menu-settings.commands";
+		public static final String MENU_SETTINGS = "menu-settings";
 
-		public static final String OPEN_ACTIONS = "menu-settings.open-actions";
+		public static final String MENU_NAME = "name";
+		public static final String MENU_ROWS = "rows";
+		public static final String MENU_COMMANDS = "commands";
 
-		public static final String OPEN_ITEM_MATERIAL = "menu-settings.open-with-item.material";
-		public static final String OPEN_ITEM_LEFT_CLICK = "menu-settings.open-with-item.left-click";
-		public static final String OPEN_ITEM_RIGHT_CLICK = "menu-settings.open-with-item.right-click";
+		public static final String OPEN_ACTIONS = "open-actions";
 
-		public static final String AUTO_REFRESH = "menu-settings.auto-refresh";
+		public static final String OPEN_ITEM_MATERIAL = "open-with-item.material";
+		public static final String OPEN_ITEM_LEFT_CLICK = "open-with-item.left-click";
+		public static final String OPEN_ITEM_RIGHT_CLICK = "open-with-item.right-click";
+
+		public static final String AUTO_REFRESH = "auto-refresh";
 
 	}
 
@@ -52,7 +54,7 @@ public class MenuParser {
 		AdvancedIconMenu iconMenu = new AdvancedIconMenu(title, rows, config.getFileName());
 
 		for (String subSectionName : config.getKeys(false)) {
-			if (subSectionName.equals("menu-settings")) {
+			if (subSectionName.equals(Nodes.MENU_SETTINGS)) {
 				continue;
 			}
 
@@ -91,8 +93,9 @@ public class MenuParser {
 	 * Reads all the settings of a menu. It will never return a null title, even if not set.
 	 */
 	public static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
+		ConfigurationSection settingsSection = config.getConfigurationSection(Nodes.MENU_SETTINGS);
 
-		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
+		String title = FormatUtils.addColors(settingsSection.getString(Nodes.MENU_NAME));
 		int rows;
 
 		if (title == null) {
@@ -104,8 +107,8 @@ public class MenuParser {
 			title = title.substring(0, 32);
 		}
 
-		if (config.isInt(Nodes.MENU_ROWS)) {
-			rows = config.getInt(Nodes.MENU_ROWS);
+		if (settingsSection.isInt(Nodes.MENU_ROWS)) {
+			rows = settingsSection.getInt(Nodes.MENU_ROWS);
 
 			if (rows <= 0) {
 				rows = 1;
@@ -118,12 +121,12 @@ public class MenuParser {
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
 		
-		List<String> triggeringCommands = config.getStringList(Nodes.MENU_COMMANDS);
+		List<String> triggeringCommands = settingsSection.getStringList(Nodes.MENU_COMMANDS);
 		if (triggeringCommands != null) {
 			menuSettings.setCommands(triggeringCommands);
 		}
 
-		List<String> serializedOpenActions = config.getStringList(Nodes.OPEN_ACTIONS);
+		List<String> serializedOpenActions = settingsSection.getStringList(Nodes.OPEN_ACTIONS);
 		
 		if (serializedOpenActions != null && !serializedOpenActions.isEmpty()) {
 			List<Action> openActions = new ArrayList<>();
@@ -139,10 +142,10 @@ public class MenuParser {
 			}
 		}
 
-		String openItemMaterial = config.getString(Nodes.OPEN_ITEM_MATERIAL);
+		String openItemMaterial = settingsSection.getString(Nodes.OPEN_ITEM_MATERIAL);
 		if (openItemMaterial != null) {
-			boolean leftClick = config.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);
-			boolean rightClick = config.getBoolean(Nodes.OPEN_ITEM_RIGHT_CLICK);
+			boolean leftClick = settingsSection.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);
+			boolean rightClick = settingsSection.getBoolean(Nodes.OPEN_ITEM_RIGHT_CLICK);
 			
 			if (leftClick || rightClick) {
 				try {
@@ -161,8 +164,8 @@ public class MenuParser {
 			}
 		}
 
-		if (config.isSet(Nodes.AUTO_REFRESH)) {
-			int tenthsToRefresh = (int) (config.getDouble(Nodes.AUTO_REFRESH) * 10.0);
+		if (settingsSection.isSet(Nodes.AUTO_REFRESH)) {
+			int tenthsToRefresh = (int) (settingsSection.getDouble(Nodes.AUTO_REFRESH) * 10.0);
 			if (tenthsToRefresh < 1) {
 				tenthsToRefresh = 1;
 			}
