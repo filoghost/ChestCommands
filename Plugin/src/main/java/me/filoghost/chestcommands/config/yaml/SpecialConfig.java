@@ -47,10 +47,10 @@ public abstract class SpecialConfig {
 
 			// Put the values in the default values map
 			for (Field field : getClass().getDeclaredFields()) {
-				if (!isValidField(field)) continue;
+				if (skipField(field)) continue;
 
 				field.setAccessible(true);
-				String configKey = formatFieldName(field);
+				String configKey = getConfigNode(field);
 
 				try {
 					Object defaultValue = field.get(this);
@@ -83,46 +83,45 @@ public abstract class SpecialConfig {
 
 		// Now read change the fields
 		for (Field field : getClass().getDeclaredFields()) {
-
-			if (!isValidField(field)) continue;
+			if (skipField(field)) {
+				continue;
+			}
 
 			field.setAccessible(true);
-			String configKey = formatFieldName(field);
+			String configNode = getConfigNode(field);
 
-
-			if (config.isSet(configKey)) {
-
+			if (config.isSet(configNode)) {
 				Class<?> type = field.getType();
 
 				if (type == boolean.class || type == Boolean.class) {
-					field.set(this, config.getBoolean(configKey));
+					field.set(this, config.getBoolean(configNode));
 
 				} else if (type == int.class || type == Integer.class) {
-					field.set(this, config.getInt(configKey));
+					field.set(this, config.getInt(configNode));
 
 				} else if (type == double.class || type == Double.class) {
-					field.set(this, config.getDouble(configKey));
+					field.set(this, config.getDouble(configNode));
 
 				} else if (type == String.class) {
-					field.set(this, FormatUtils.addColors(config.getString(configKey))); // Always add colors
+					field.set(this, FormatUtils.addColors(config.getString(configNode))); // Always add colors
 
 				} else {
 					Log.warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");
 				}
 
 			} else {
-				field.set(this, defaultValuesMap.get(configKey));
+				field.set(this, defaultValuesMap.get(configNode));
 			}
 		}
 	}
 
 
-	private boolean isValidField(Field field) {
+	private boolean skipField(Field field) {
 		int modifiers = field.getModifiers();
-		return !Modifier.isTransient(modifiers) && !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers);
+		return Modifier.isTransient(modifiers) || Modifier.isStatic(modifiers) || Modifier.isFinal(modifiers);
 	}
 
-	private String formatFieldName(Field field) {
+	private String getConfigNode(Field field) {
 		return field.getName().replace("__", ".").replace("_", "-");
 	}
 
