@@ -14,21 +14,20 @@
  */
 package me.filoghost.chestcommands.menu;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
+import me.filoghost.chestcommands.menu.settings.OpenTrigger;
+import me.filoghost.chestcommands.util.CaseInsensitiveMap;
+import me.filoghost.chestcommands.util.ErrorCollector;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
-import me.filoghost.chestcommands.menu.settings.OpenTrigger;
-import me.filoghost.chestcommands.util.CaseInsensitiveMap;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuManager {
 	
@@ -37,8 +36,8 @@ public class MenuManager {
 	private static Map<OpenTrigger, AdvancedIconMenu> menusByOpenTrigger;
 	
 	public MenuManager() {
-		menusByFile = CaseInsensitiveMap.create();
-		menusByCommand = CaseInsensitiveMap.create();
+		menusByFile = new CaseInsensitiveMap<>();
+		menusByCommand = new CaseInsensitiveMap<>();
 		menusByOpenTrigger = new HashMap<>();
 	}
 	

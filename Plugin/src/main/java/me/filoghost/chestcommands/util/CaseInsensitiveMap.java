@@ -14,50 +14,84 @@
  */
 package me.filoghost.chestcommands.util;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class CaseInsensitiveMap<V> extends HashMap<String, V> {
+public class CaseInsensitiveMap<V> implements Map<String, V> {
 
-	private static final long serialVersionUID = 4712822893326841081L;
+	private final Map<String, V> delegate;
 
-	public static <K> CaseInsensitiveMap<K> create() {
-		return new CaseInsensitiveMap<>();
+	public CaseInsensitiveMap() {
+		this.delegate = new HashMap<>();
 	}
 
 	@Override
 	public V put(String key, V value) {
-		return super.put(key.toLowerCase(), value);
+		return delegate.put(getLowercaseKey(key), value);
 	}
 
 	@Override
 	public V get(Object key) {
-		return super.get(key.getClass() == String.class ? key.toString().toLowerCase() : key);
-	}
-
-	public String getKey(V value) {
-		for (java.util.Map.Entry<String, V> entry : entrySet()) {
-			if (entry.getValue().equals(value)) {
-				return entry.getKey();
-			}
-		}
-
-		return null;
+		return delegate.get(getLowercaseKey(key));
 	}
 
 	@Override
 	public boolean containsKey(Object key) {
-		return super.containsKey(key.getClass() == String.class ? key.toString().toLowerCase() : key);
+		return delegate.containsKey(getLowercaseKey(key));
 	}
 
 	@Override
 	public V remove(Object key) {
-		return super.remove(key.getClass() == String.class ? key.toString().toLowerCase() : key);
+		return delegate.remove(getLowercaseKey(key));
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends V> m) {
-		throw new UnsupportedOperationException("putAll not supported");
+	public int size() {
+		return delegate.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return delegate.isEmpty();
+	}
+
+	@Override
+	public boolean containsValue(Object value) {
+		return delegate.containsValue(value);
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends V> map) {
+		map.forEach(this::put);
+	}
+
+	@Override
+	public void clear() {
+		delegate.clear();
+	}
+
+	@Override
+	public Set<String> keySet() {
+		return Collections.unmodifiableSet(delegate.keySet());
+	}
+
+	@Override
+	public Collection<V> values() {
+		return Collections.unmodifiableCollection(delegate.values());
+	}
+
+	@Override
+	public Set<Entry<String, V>> entrySet() {
+		return Collections.unmodifiableSet(delegate.entrySet());
+	}
+
+	private String getLowercaseKey(Object key) {
+		Preconditions.notNull(key, "key");
+		Preconditions.checkArgument(key instanceof String, "key must be a string");
+		return ((String) key).toLowerCase();
 	}
 
 }
