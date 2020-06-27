@@ -92,13 +92,13 @@ public class UpgradesExecutor {
 
 	private String readLegacyCommandSeparator() {
 		String legacyCommandSeparator;
-		ConfigLoader settingsConfig = plugin.getSettingsConfigLoader();
+		ConfigLoader settingsConfigLoader = plugin.getSettingsConfigLoader();
 
 		try {
-			legacyCommandSeparator = settingsConfig.load().getString("multiple-commands-separator", ";");
+			legacyCommandSeparator = settingsConfigLoader.load().getString("multiple-commands-separator", ";");
 		} catch (Exception e) {
 			legacyCommandSeparator = ";";
-			Log.severe("Failed to load " + settingsConfig.getFileName()
+			Log.severe("Failed to load " + settingsConfigLoader.getFileName()
 					+ ", assuming default command separator \"" + legacyCommandSeparator + "\".");
 		}
 
