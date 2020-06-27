@@ -30,8 +30,8 @@ public class SettingsUpgrade extends Upgrade {
 	private final ConfigLoader settingsConfigLoader;
 	private Config updatedConfig;
 
-	public SettingsUpgrade(ChestCommands plugin) {
-		this.settingsConfigLoader = plugin.getSettingsConfigLoader();
+	public SettingsUpgrade(ConfigLoader settingsConfigLoader) {
+		this.settingsConfigLoader = settingsConfigLoader;
 	}
 
 	@Override

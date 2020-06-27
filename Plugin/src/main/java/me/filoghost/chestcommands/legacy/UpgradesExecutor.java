@@ -58,10 +58,10 @@ public class UpgradesExecutor {
 		} else {
 			String legacyCommandSeparator = readLegacyCommandSeparator();
 
-			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(plugin);
+			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(plugin.getSettingsConfigLoader());
 			runIfNecessary(UpgradeID.V4_CONFIG, settingsUpgrade);
 
-			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(plugin);
+			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(plugin.getPlaceholdersConfigLoader(), plugin.getDataPath());
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
 
 			try {

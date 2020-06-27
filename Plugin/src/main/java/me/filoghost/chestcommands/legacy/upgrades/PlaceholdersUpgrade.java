@@ -33,9 +33,9 @@ public class PlaceholdersUpgrade extends Upgrade {
 	private final Path oldPlaceholdersFile;
 	private Config updatedConfig;
 
-	public PlaceholdersUpgrade(ChestCommands plugin) {
-		this.newPlaceholdersConfigLoader = plugin.getPlaceholdersConfigLoader();
-		this.oldPlaceholdersFile = plugin.getDataPath("placeholders.yml");
+	public PlaceholdersUpgrade(ConfigLoader placeholdersConfigLoader, Path dataPath) {
+		this.newPlaceholdersConfigLoader = placeholdersConfigLoader;
+		this.oldPlaceholdersFile = dataPath.resolve("placeholders.yml");
 	}
 
 	@Override
