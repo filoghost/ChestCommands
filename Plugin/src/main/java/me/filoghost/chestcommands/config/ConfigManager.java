@@ -69,7 +69,7 @@ public class ConfigManager {
 			langConfigLoader.createDefault(baseDataPath);
 			lang.load(langConfigLoader);
 		} catch (Throwable t) {
-			logConfigLoadException(settingsConfigLoader, t);
+			logConfigLoadException(langConfigLoader, t);
 		}
 
 		return lang;
@@ -83,7 +83,7 @@ public class ConfigManager {
 			Config placeholdersConfig = placeholdersConfigLoader.load();
 			placeholders.load(placeholdersConfig, errorCollector);
 		} catch (Throwable t) {
-			logConfigLoadException(settingsConfigLoader, t);
+			logConfigLoadException(placeholdersConfigLoader, t);
 		}
 
 		return placeholders;
