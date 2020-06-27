@@ -219,6 +219,19 @@ nbt-tags:
   NBT-DATA: '{display: {color: 8910400}}'
 
 
+custom-placeholder:
+  MATERIAL: compass
+  POSITION-X: 6
+  POSITION-Y: 2
+  NAME: '{primary_color}Custom placeholders'
+  LORE:
+    - '{separator}'
+    - '{secondary_color}This item contains custom placeholders,'
+    - '{secondary_color}defined in custom-placeholders.yml.'
+    - ''
+    - '{custom_placeholder}'
+
+
 close-without-actions:
   MATERIAL: redstone lamp
   POSITION-X: 9

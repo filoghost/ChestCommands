@@ -1,21 +1,13 @@
 #
-# This is the configuration file for static placeholders.
+# This is the configuration file for custom placeholders.
 # Dynamic placeholders are {online}, {max_players}, ...
-# Static placeholders are symbols.
 #
-# List of unicode symbols: http://www.fileformat.info/info/unicode/index.htm
+# You can use these to avoid repeating text multiple times,
+# and edit it from a single location.
 #
-<3: \u2764
-[*]: \u2605
-[**]: \u2739
-[p]: \u2022
-[v]: \u2714
-[+]: \u25C6
-[++]: \u2726
-[x]: \u2588
-[/]: \u258C
-[cross]: \u2720
-[arrow_right]: \u27A1
-[arrow_left]: \u2B05
-[arrow_up]: \u2B06
-[arrow_down]:\u2B07
+# Another use would be for defining colors, symbols, or text decorations.
+#
+'{custom_placeholder}': 'This line is a custom placeholder.'
+'{primary_color}': '&b'
+'{secondary_color}': '&7'
+'{separator}': '&8[====|====|====|====|====|====|====|====]'
