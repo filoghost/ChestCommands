@@ -14,7 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;
@@ -29,27 +30,28 @@ import java.util.regex.Pattern;
 
 public class MenuUpgrade extends Upgrade {
 
-	private final PluginConfig menuConfig;
+	private final ConfigLoader menuConfigLoader;
 	private final String legacyCommandSeparator;
+	private Config updatedConfig;
 
-	public MenuUpgrade(PluginConfig menuConfig, String legacyCommandSeparator) {
-		this.menuConfig = menuConfig;
+	public MenuUpgrade(ConfigLoader menuConfigLoader, String legacyCommandSeparator) {
+		this.menuConfigLoader = menuConfigLoader;
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
 
 	@Override
 	public Path getOriginalFile() {
-		return menuConfig.getPath();
+		return menuConfigLoader.getPath();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return menuConfig.getPath();
+		return menuConfigLoader.getPath();
 	}
 
 	@Override
 	protected void computeChanges() throws UpgradeException {
-		loadConfig(menuConfig);
+		Config menuConfig = loadConfig(menuConfigLoader);
 		menuConfig.options().header(null);
 
 		for (String key : menuConfig.getKeys(true)) {
@@ -65,11 +67,13 @@ public class MenuUpgrade extends Upgrade {
 				upgradeIcon(section);
 			}
 		}
+
+		this.updatedConfig = menuConfig;
 	}
 
 	@Override
 	protected void saveChanges() throws IOException {
-		menuConfig.save();
+		menuConfigLoader.save(updatedConfig);
 	}
 
 

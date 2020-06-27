@@ -16,7 +16,8 @@ package me.filoghost.chestcommands.legacy.upgrades;
 
 import com.google.common.collect.ImmutableSet;
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 
@@ -32,35 +33,39 @@ public class SettingsUpgrade extends Upgrade {
 		"multiple-commands-separator"
 	);
 
-	private final PluginConfig settingsConfig;
+	private final ConfigLoader settingsConfigLoader;
+	private Config updatedConfig;
 
 	public SettingsUpgrade(ChestCommands plugin) {
-		this.settingsConfig = plugin.getSettingsConfig();
+		this.settingsConfigLoader = plugin.getSettingsConfigLoader();
 	}
 
 	@Override
 	public Path getOriginalFile() {
-		return settingsConfig.getPath();
+		return settingsConfigLoader.getPath();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return settingsConfig.getPath();
+		return settingsConfigLoader.getPath();
 	}
 
 	@Override
 	protected void computeChanges() throws UpgradeException {
-		loadConfig(settingsConfig);
+		Config settingsConfig = loadConfig(settingsConfigLoader);
+
 		for (String removedConfigNode : removedConfigNodes) {
 			if (settingsConfig.isSet(removedConfigNode)) {
 				settingsConfig.set(removedConfigNode, null);
 				setModified();
 			}
 		}
+
+		this.updatedConfig = settingsConfig;
 	}
 
 	@Override
 	protected void saveChanges() throws IOException {
-		settingsConfig.save();
+		settingsConfigLoader.save(updatedConfig);
 	}
 }

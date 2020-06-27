@@ -14,7 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -58,13 +59,13 @@ public abstract class Upgrade {
 		return modified;
 	}
 
-	protected void loadConfig(PluginConfig config) throws UpgradeException {
+	protected Config loadConfig(ConfigLoader configLoader) throws UpgradeException {
 		try {
-			config.load();
+			return configLoader.load();
 		} catch (IOException e) {
-			throw new UpgradeException("couldn't read configuration file \"" + config.getFileName() + "\"", e);
+			throw new UpgradeException("couldn't read configuration file \"" + configLoader.getFileName() + "\"", e);
 		} catch (InvalidConfigurationException e) {
-			throw new UpgradeException("couldn't parse YAML syntax of file \"" + config.getFileName() + "\"", e);
+			throw new UpgradeException("couldn't parse YAML syntax of file \"" + configLoader.getFileName() + "\"", e);
 		}
 	}
 

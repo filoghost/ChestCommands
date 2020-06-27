@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.config.yaml;
 
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.Log;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -28,7 +29,7 @@ import java.util.Map.Entry;
  * A special configuration wrapper that reads the values using reflection.
  * It will also save default values if not set.
  */
-public class SpecialConfig {
+public abstract class SpecialConfig {
 
 	private transient String header;
 	private transient Map<String, Object> defaultValuesMap;
@@ -37,7 +38,8 @@ public class SpecialConfig {
 		this.header = header;
 	}
 
-	public void load(PluginConfig config) throws IOException, IllegalAccessException {
+	public void load(ConfigLoader loader) throws IOException, IllegalAccessException, InvalidConfigurationException {
+		Config config = loader.load();
 
 		// Check if the configuration was initialized
 		if (defaultValuesMap == null) {
@@ -76,7 +78,7 @@ public class SpecialConfig {
 
 		if (needsSave) {
 			config.options().header(header);
-			config.save();
+			loader.save(config);
 		}
 
 		// Now read change the fields

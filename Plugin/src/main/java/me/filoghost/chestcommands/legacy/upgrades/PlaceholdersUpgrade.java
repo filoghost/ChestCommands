@@ -15,7 +15,8 @@
 package me.filoghost.chestcommands.legacy.upgrades;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;
@@ -28,11 +29,12 @@ import java.util.List;
 
 public class PlaceholdersUpgrade extends Upgrade {
 
-	private final PluginConfig newPlaceholdersConfig;
+	private final ConfigLoader newPlaceholdersConfigLoader;
 	private final Path oldPlaceholdersFile;
+	private Config updatedConfig;
 
 	public PlaceholdersUpgrade(ChestCommands plugin) {
-		this.newPlaceholdersConfig = plugin.getPlaceholdersConfig();
+		this.newPlaceholdersConfigLoader = plugin.getPlaceholdersConfigLoader();
 		this.oldPlaceholdersFile = plugin.getDataPath("placeholders.yml");
 	}
 
@@ -43,7 +45,7 @@ public class PlaceholdersUpgrade extends Upgrade {
 
 	@Override
 	public Path getUpgradedFile() {
-		return newPlaceholdersConfig.getPath();
+		return newPlaceholdersConfigLoader.getPath();
 	}
 
 	@Override
@@ -53,6 +55,7 @@ public class PlaceholdersUpgrade extends Upgrade {
 		}
 
 		// Do NOT load the new placeholder configuration from disk, as it should only contain placeholders imported from the old file
+		Config newPlaceholdersConfig = newPlaceholdersConfigLoader.loadEmpty();
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(oldPlaceholdersFile);
@@ -78,6 +81,8 @@ public class PlaceholdersUpgrade extends Upgrade {
 			newPlaceholdersConfig.set(placeholder, replacement);
 			setModified();
 		}
+
+		this.updatedConfig = newPlaceholdersConfig;
 	}
 
 	@Override
@@ -85,7 +90,7 @@ public class PlaceholdersUpgrade extends Upgrade {
 		try {
 			Files.deleteIfExists(oldPlaceholdersFile);
 		} catch (IOException ignored) {}
-		newPlaceholdersConfig.save();
+		newPlaceholdersConfigLoader.save(updatedConfig);
 	}
 
 	private static String unquote(String input) {

@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.legacy;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
 import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
@@ -65,7 +65,7 @@ public class UpgradesExecutor {
 
 			try {
 				List<MenuUpgrade> menuUpgrades = plugin.getMenusPathList().stream()
-						.map(menuPath -> new MenuUpgrade(new PluginConfig(menuPath), legacyCommandSeparator))
+						.map(menuPath -> new MenuUpgrade(new ConfigLoader(menuPath), legacyCommandSeparator))
 						.collect(Collectors.toList());
 				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
 			} catch (IOException e) {
@@ -91,10 +91,10 @@ public class UpgradesExecutor {
 
 	private String readLegacyCommandSeparator() {
 		String legacyCommandSeparator;
-		PluginConfig settingsConfig = plugin.getSettingsConfig();
+		ConfigLoader settingsConfig = plugin.getSettingsConfigLoader();
 
 		try {
-			legacyCommandSeparator = settingsConfig.getString("multiple-commands-separator", ";");
+			legacyCommandSeparator = settingsConfig.load().getString("multiple-commands-separator", ";");
 		} catch (Exception e) {
 			legacyCommandSeparator = ";";
 			Log.severe("Failed to load " + settingsConfig.getFileName()

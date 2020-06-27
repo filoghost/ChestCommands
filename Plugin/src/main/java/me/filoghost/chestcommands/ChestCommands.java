@@ -19,7 +19,8 @@ import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.config.CustomPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.config.yaml.ConfigLoader;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -64,6 +65,12 @@ public class ChestCommands extends JavaPlugin {
 
 	
 	private static ChestCommands instance;
+
+	private ConfigLoader settingsConfigLoader;
+	private ConfigLoader placeholdersConfigLoader;
+	private ConfigLoader langConfigLoader;
+
+
 	private MenuManager menuManager;
 	private static Settings settings;
 	private static Lang lang;
@@ -83,6 +90,11 @@ public class ChestCommands extends JavaPlugin {
 
 		instance = this;
 		Log.setLogger(getLogger());
+
+		settingsConfigLoader = new ConfigLoader(getDataPath("config.yml"));
+		placeholdersConfigLoader = new ConfigLoader(getDataPath("custom-placeholders.yml"));
+		langConfigLoader = new ConfigLoader(getDataPath("lang.yml"));
+
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
@@ -168,31 +180,26 @@ public class ChestCommands extends JavaPlugin {
 			Log.severe("Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
 		}
 
-		PluginConfig settingsYaml = getSettingsConfig();
 		try {
-			settingsYaml.createDefault(this);
-			settingsYaml.load();
-			settings.load(settingsYaml);
+			settingsConfigLoader.createDefault(this);
+			settings.load(settingsConfigLoader);
 		} catch (Throwable t) {
-			logConfigLoadException(settingsYaml, t);
+			logConfigLoadException(settingsConfigLoader, t);
 		}
 
-		PluginConfig langYaml = getLangConfig();
 		try {
-			langYaml.createDefault(this);
-			langYaml.load();
-			lang.load(langYaml);
+			langConfigLoader.createDefault(this);
+			lang.load(langConfigLoader);
 		} catch (Throwable t) {
-			logConfigLoadException(langYaml, t);
+			logConfigLoadException(langConfigLoader, t);
 		}
 
-		PluginConfig placeholdersYaml = getPlaceholdersConfig();
 		try {
-			placeholdersYaml.createDefault(this);
-			placeholdersYaml.load();
-			placeholders.load(placeholdersYaml, errors);
+			placeholdersConfigLoader.createDefault(this);
+			Config placeholdersConfig = placeholdersConfigLoader.load();
+			placeholders.load(placeholdersConfig, errors);
 		} catch (Throwable t) {
-			logConfigLoadException(placeholdersYaml, t);
+			logConfigLoadException(placeholdersConfigLoader, t);
 		}
 
 		// Load the menus
@@ -206,11 +213,11 @@ public class ChestCommands extends JavaPlugin {
 				Log.severe("Couldn't create \"" + menusPath.getFileName() + "\" folder");
 			}
 
-			PluginConfig exampleMenu = new PluginConfig(getDataPath(Paths.get("menu", "example.yml")));
+			ConfigLoader exampleMenuLoader = new ConfigLoader(getDataPath(Paths.get("menu", "example.yml")));
 			try {
-				exampleMenu.createDefault(this);
+				exampleMenuLoader.createDefault(this);
 			} catch (Throwable t) {
-				logConfigLoadException(exampleMenu, t);
+				logConfigLoadException(exampleMenuLoader, t);
 			}
 		}
 
@@ -224,11 +231,13 @@ public class ChestCommands extends JavaPlugin {
 		}
 
 		for (Path menuFile : menuPaths) {
-			PluginConfig menuConfig = new PluginConfig(menuFile);
+			ConfigLoader menuConfigLoader = new ConfigLoader(menuFile);
+			Config menuConfig;
+
 			try {
-				menuConfig.load();
+				menuConfig = menuConfigLoader.load();
 			} catch (Throwable t) {
-				logConfigLoadException(menuConfig, t);
+				logConfigLoadException(menuConfigLoader, t);
 				continue;
 			}
 
@@ -252,28 +261,28 @@ public class ChestCommands extends JavaPlugin {
 		return errors;
 	}
 
-	private void logConfigLoadException(PluginConfig config, Throwable t) {
+	private void logConfigLoadException(ConfigLoader configLoader, Throwable t) {
 		t.printStackTrace();
 
 		if (t instanceof IOException) {
-			Log.warning("Error while reading the file \"" + config.getFileName() +  "\". Default values will be used.");
+			Log.warning("Error while reading the file \"" + configLoader.getFileName() +  "\". Default values will be used.");
 		} else if (t instanceof InvalidConfigurationException) {
-			Log.warning("Invalid YAML syntax in the file \"" + config.getFileName() + "\", please look at the error above. Default values will be used.");
+			Log.warning("Invalid YAML syntax in the file \"" + configLoader.getFileName() + "\", please look at the error above. Default values will be used.");
 		} else {
-			Log.warning("Unhandled error while parsing the file \"" + config.getFileName() + "\". Please inform the developer.");
+			Log.warning("Unhandled error while parsing the file \"" + configLoader.getFileName() + "\". Please inform the developer.");
 		}
 	}
 
-	public PluginConfig getLangConfig() {
-		return new PluginConfig(getDataPath("lang.yml"));
+	public ConfigLoader getLangConfigLoader() {
+		return langConfigLoader;
 	}
 
-	public PluginConfig getSettingsConfig() {
-		return new PluginConfig(getDataPath("config.yml"));
+	public ConfigLoader getSettingsConfigLoader() {
+		return settingsConfigLoader;
 	}
 
-	public PluginConfig getPlaceholdersConfig() {
-		return new PluginConfig(getDataPath("custom-placeholders.yml"));
+	public ConfigLoader getPlaceholdersConfigLoader() {
+		return placeholdersConfigLoader;
 	}
 
 	public Path getMenusPath() {

@@ -14,14 +14,8 @@
  */
 package me.filoghost.chestcommands.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
+import me.filoghost.chestcommands.config.yaml.Config;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.menu.settings.ClickType;
@@ -30,6 +24,11 @@ import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 import me.filoghost.chestcommands.parser.IconParser.Coords;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuParser {
 
@@ -49,7 +48,7 @@ public class MenuParser {
 
 	}
 
-	public static AdvancedIconMenu loadMenu(PluginConfig config, String title, int rows, ErrorCollector errorCollector) {
+	public static AdvancedIconMenu loadMenu(Config config, String title, int rows, ErrorCollector errorCollector) {
 		AdvancedIconMenu iconMenu = new AdvancedIconMenu(title, rows, config.getFileName());
 
 		for (String subSectionName : config.getKeys(false)) {
@@ -91,7 +90,7 @@ public class MenuParser {
 	/**
 	 * Reads all the settings of a menu. It will never return a null title, even if not set.
 	 */
-	public static MenuSettings loadMenuSettings(PluginConfig config, ErrorCollector errorCollector) {
+	public static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
 
 		String title = FormatUtils.addColors(config.getString(Nodes.MENU_NAME));
 		int rows;

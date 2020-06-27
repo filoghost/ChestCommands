@@ -14,35 +14,34 @@
  */
 package me.filoghost.chestcommands.config;
 
+import me.filoghost.chestcommands.config.yaml.Config;
+import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.FormatUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import me.filoghost.chestcommands.config.yaml.PluginConfig;
-
-import me.filoghost.chestcommands.util.ErrorCollector;
-import me.filoghost.chestcommands.util.FormatUtils;
 
 public class CustomPlaceholders {
 
 	private final Map<String, String> placeholders = new HashMap<>();
 
 
-	public void load(PluginConfig pluginConfig, ErrorCollector errorCollector) {
+	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
 
-		for (String key : pluginConfig.getKeys(false)) {
+		for (String key : config.getKeys(false)) {
 			String placeholder = key;
-			String replacement = FormatUtils.addColors(pluginConfig.getString(key));
+			String replacement = FormatUtils.addColors(config.getString(key));
 
 			if (placeholder.length() == 0) {
-				errorCollector.addError("Error in " + pluginConfig.getFileName() + ": placeholder cannot be empty (skipped).");
+				errorCollector.addError("Error in " + config.getFileName() + ": placeholder cannot be empty (skipped).");
 				continue;
 			}
 
 			if (placeholder.length() > 100) {
-				errorCollector.addError("Error in " + pluginConfig.getFileName() + ": placeholder cannot be longer than 100 character (" + placeholder + ").");
+				errorCollector.addError("Error in " + config.getFileName() + ": placeholder cannot be longer than 100 character (" + placeholder + ").");
 				continue;
 			}
 
