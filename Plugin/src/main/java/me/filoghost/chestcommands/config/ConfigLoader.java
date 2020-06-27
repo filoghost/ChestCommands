@@ -83,7 +83,7 @@ public class ConfigLoader {
 
 		URL resourceURL = getClass().getResource(internalJarPath);
 		if (resourceURL == null) {
-			throw new IOException("Couldn't find resource " + internalJarPath);
+			return null;
 		}
 
 		URLConnection connection = resourceURL.openConnection();
