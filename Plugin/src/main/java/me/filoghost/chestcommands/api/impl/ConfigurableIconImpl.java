@@ -14,14 +14,14 @@
  */
 package me.filoghost.chestcommands.api.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-
+import me.filoghost.chestcommands.api.ClickHandler;
+import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.api.ConfigurableIcon;
+import me.filoghost.chestcommands.util.Log;
+import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.variable.RelativeStringList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -38,14 +38,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.api.ClickHandler;
-import me.filoghost.chestcommands.api.ClickResult;
-import me.filoghost.chestcommands.api.ConfigurableIcon;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.variable.RelativeString;
-import me.filoghost.chestcommands.variable.RelativeStringList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ConfigurableIconImpl implements ConfigurableIcon {
 
@@ -302,7 +300,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 				Bukkit.getUnsafe().modifyItemStack(itemStack, nbtData);
 			} catch (Throwable t) {
 				this.nbtData = null;
-				ChestCommands.getInstance().getLogger().log(Level.WARNING, "Could not apply NBT-DATA to an item.", t);
+				Log.warning("Could not apply NBT-DATA to an item.", t);
 			}
 		}
 

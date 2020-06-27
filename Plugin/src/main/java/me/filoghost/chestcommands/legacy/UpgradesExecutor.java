@@ -20,13 +20,13 @@ import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
 import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.SettingsUpgrade;
+import me.filoghost.chestcommands.util.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class UpgradesExecutor {
@@ -97,7 +97,7 @@ public class UpgradesExecutor {
 			legacyCommandSeparator = settingsConfig.getString("multiple-commands-separator", ";");
 		} catch (Exception e) {
 			legacyCommandSeparator = ";";
-			plugin.getLogger().log(Level.SEVERE, "Failed to load " + settingsConfig.getFileName()
+			Log.severe("Failed to load " + settingsConfig.getFileName()
 					+ ", assuming default command separator \"" + legacyCommandSeparator + "\".");
 		}
 
@@ -121,7 +121,7 @@ public class UpgradesExecutor {
 			try {
 				boolean modified = upgradeTask.backupAndUpgradeIfNecessary();
 				if (modified) {
-					plugin.getLogger().info(
+					Log.info(
 							"Automatically upgraded configuration file \""
 							+ upgradeTask.getUpgradedFile().getFileName() + "\" with newer configuration nodes. "
 							+ "A backup of the old file has been saved.");
@@ -141,9 +141,9 @@ public class UpgradesExecutor {
 
 
 	private void logUpgradeException(Upgrade upgrade, UpgradeException upgradeException) {
-		plugin.getLogger().log(Level.SEVERE,
-				"Error while trying to automatically upgrade "	+ upgrade.getOriginalFile() + ": "
-				+ upgradeException.getMessage(),
+		Log.severe(
+				"Error while trying to automatically upgrade "
+				+ upgrade.getOriginalFile() + ": " + upgradeException.getMessage(),
 				upgradeException.getCause());
 	}
 

@@ -36,6 +36,7 @@ import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
 import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
@@ -53,7 +54,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,13 +75,14 @@ public class ChestCommands extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (instance != null || System.getProperty("ChestCommandsLoaded") != null) {
-			getLogger().warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
+			Log.warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
 			return;
 		}
 
 		System.setProperty("ChestCommandsLoaded", "true");
 
 		instance = this;
+		Log.setLogger(getLogger());
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
@@ -102,24 +103,24 @@ public class ChestCommands extends JavaPlugin {
 		BungeeCordHook.INSTANCE.setup();
 		
 		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
-			getLogger().warning("Couldn't find Vault and a compatible economy plugin! Money-related features will not work.");
+			Log.warning("Couldn't find Vault and a compatible economy plugin! Money-related features will not work.");
 		}
 
 		if (BarAPIHook.INSTANCE.isEnabled()) {
-			getLogger().info("Hooked BarAPI");
+			Log.info("Hooked BarAPI");
 		}
 
 		if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
-			getLogger().info("Hooked PlaceholderAPI");
+			Log.info("Hooked PlaceholderAPI");
 		}
 
 		if (settings.update_notifications) {
 			UpdateChecker.run(this, 56919, (String newVersion) -> {
 				ChestCommands.newVersion = newVersion;
-				
-				getLogger().info("Found a new version: " + newVersion + " (yours: v" + getDescription().getVersion() + ")");
-				getLogger().info("Download the update on Bukkit Dev:");
-				getLogger().info("https://dev.bukkit.org/projects/chest-commands");
+
+				Log.info("Found a new version: " + newVersion + " (yours: v" + getDescription().getVersion() + ")");
+				Log.info("Download the update on Bukkit Dev:");
+				Log.info("https://dev.bukkit.org/projects/chest-commands");
 			});
 		}
 
@@ -164,7 +165,7 @@ public class ChestCommands extends JavaPlugin {
 		try {
 			new UpgradesExecutor(this).run(isFreshInstall);
 		} catch (UpgradeExecutorException e) {
-			getLogger().log(Level.SEVERE, "Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
+			Log.severe("Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
 		}
 
 		PluginConfig settingsYaml = getSettingsConfig();
@@ -202,7 +203,7 @@ public class ChestCommands extends JavaPlugin {
 			try {
 				Files.createDirectories(menusPath);
 			} catch (IOException e) {
-				getLogger().log(Level.SEVERE, "Couldn't create \"" + menusPath.getFileName() + "\" folder");
+				Log.severe("Couldn't create \"" + menusPath.getFileName() + "\" folder");
 			}
 
 			PluginConfig exampleMenu = new PluginConfig(getDataPath(Paths.get("menu", "example.yml")));
@@ -218,7 +219,7 @@ public class ChestCommands extends JavaPlugin {
 		try {
 			menuPaths = getMenusPathList();
 		} catch (IOException e) {
-			getLogger().log(Level.SEVERE, "Couldn't fetch files inside the folder \"" + getMenusPath().getFileName() + "\"", e);
+			Log.severe("Couldn't fetch files inside the folder \"" + getMenusPath().getFileName() + "\"", e);
 			menuPaths = Collections.emptyList();
 		}
 
@@ -255,11 +256,11 @@ public class ChestCommands extends JavaPlugin {
 		t.printStackTrace();
 
 		if (t instanceof IOException) {
-			getLogger().warning("Error while reading the file \"" + config.getFileName() +  "\". Default values will be used.");
+			Log.warning("Error while reading the file \"" + config.getFileName() +  "\". Default values will be used.");
 		} else if (t instanceof InvalidConfigurationException) {
-			getLogger().warning("Invalid YAML syntax in the file \"" + config.getFileName() + "\", please look at the error above. Default values will be used.");
+			Log.warning("Invalid YAML syntax in the file \"" + config.getFileName() + "\", please look at the error above. Default values will be used.");
 		} else {
-			getLogger().warning("Unhandled error while parsing the file \"" + config.getFileName() + "\". Please inform the developer.");
+			Log.warning("Unhandled error while parsing the file \"" + config.getFileName() + "\". Please inform the developer.");
 		}
 	}
 
