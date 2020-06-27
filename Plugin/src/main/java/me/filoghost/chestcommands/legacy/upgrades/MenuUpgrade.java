@@ -50,6 +50,7 @@ public class MenuUpgrade extends Upgrade {
 	@Override
 	protected void computeChanges() throws UpgradeException {
 		loadConfig(menuConfig);
+		menuConfig.options().header(null);
 
 		for (String key : menuConfig.getKeys(true)) {
 			if (!menuConfig.isConfigurationSection(key)) {
