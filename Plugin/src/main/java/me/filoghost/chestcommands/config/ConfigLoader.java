@@ -74,7 +74,7 @@ public class ConfigLoader {
 	private String toInternalJarPath(Path path) {
 		return StreamSupport.stream(path.spliterator(), false)
 				.map(Path::toString)
-				.collect(Collectors.joining("/"));
+				.collect(Collectors.joining("/", "/", ""));
 	}
 
 
