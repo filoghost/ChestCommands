@@ -48,12 +48,8 @@ public final class ItemMetaParser {
 	}
 
 	public static DyeColor parseDyeColor(String input) throws ParseException {
-		DyeColor color = DYE_COLORS_REGISTRY.find(input);
-		
-		if (color == null) {
-			throw new ParseException("it must be a valid color");
-		}
-		return color;
+		return DYE_COLORS_REGISTRY.find(input)
+				.orElseThrow(() -> new ParseException("it must be a valid color"));
 	}
 
 	public static Pattern parseBannerPattern(String input) throws ParseException {
@@ -62,12 +58,9 @@ public final class ItemMetaParser {
 			throw new ParseException("it must be in the format \"pattern:color\"");
 		}
 
-		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0]);
+		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
+				.orElseThrow(() -> new ParseException("it must be a valid pattern type"));
 		DyeColor patternColor = parseDyeColor(split[1]);
-
-		if (patternType == null) {
-			throw new ParseException("it must be a valid pattern type");
-		}
 
 		return new Pattern(patternColor, patternType);
 	}

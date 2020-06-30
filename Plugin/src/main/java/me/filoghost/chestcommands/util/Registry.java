@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class Registry<T> {
@@ -47,11 +48,11 @@ public class Registry<T> {
 		this.valuesMap = new HashMap<>();
 	}
 	
-	public T find(String key) {
+	public Optional<T> find(String key) {
 		if (key == null) {
-			return null;
+			return Optional.empty();
 		}
-		return valuesMap.get(toKeyFormat(key));
+		return Optional.ofNullable(valuesMap.get(toKeyFormat(key)));
 	}
 	
 	public void putIfEnumExists(String key, String enumValueName) {

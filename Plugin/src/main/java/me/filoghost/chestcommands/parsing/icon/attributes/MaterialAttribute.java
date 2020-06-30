@@ -21,18 +21,20 @@ import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import org.bukkit.Material;
 
+import java.util.Optional;
+
 public class MaterialAttribute implements ApplicableIconAttribute {
 	
 	private final Material material;
 
 	public MaterialAttribute(String serializedMaterial, AttributeErrorCollector attributeErrorCollector) throws ParseException {
-		Material material = MaterialsHelper.matchMaterial(serializedMaterial);
+		Optional<Material> material = MaterialsHelper.matchMaterial(serializedMaterial);
 
-		if (material == null || MaterialsHelper.isAir(material)) {
+		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
 			throw new ParseException("invalid material \"" + serializedMaterial + "\"");
 		}
 
-		this.material = material;
+		this.material = material.get();
 	}
 	
 	@Override

@@ -18,6 +18,8 @@ import me.filoghost.chestcommands.util.Registry;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.enchantments.Enchantment;
 
+import java.util.Optional;
+
 public class EnchantmentParser {
 
 	private static final Registry<Enchantment> ENCHANTMENTS_REGISTRY;
@@ -66,12 +68,12 @@ public class EnchantmentParser {
 			input = levelSplit[0];
 		}
 
-		Enchantment enchantment = ENCHANTMENTS_REGISTRY.find(input);
+		Optional<Enchantment> enchantment = ENCHANTMENTS_REGISTRY.find(input);
 
-		if (enchantment == null) {
-			throw new ParseException("invalid enchantment type \"" + input + "\"");
+		if (enchantment.isPresent()) {
+			return new EnchantmentDetails(enchantment.get(), level);
 		} else {
-			return new EnchantmentDetails(enchantment, level);
+			throw new ParseException("invalid enchantment type \"" + input + "\"");
 		}
 	}
 	

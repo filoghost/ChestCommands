@@ -21,11 +21,13 @@ import org.bukkit.entity.Player;
 import me.filoghost.chestcommands.util.Registry;
 import me.filoghost.chestcommands.util.Strings;
 
+import java.util.Optional;
+
 public class PlaySoundAction extends Action {
 	
 	private static final Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
 
-	private final Sound sound;
+	private Sound sound;
 	private float pitch;
 	private float volume;
 
@@ -35,11 +37,12 @@ public class PlaySoundAction extends Action {
 
 		String[] split = Strings.trimmedSplit(serializedAction, ",", 3);
 
-		sound = SOUNDS_REGISTRY.find(split[0]);
-		if (sound == null) {
+		Optional<Sound> sound = SOUNDS_REGISTRY.find(split[0]);
+		if (!sound.isPresent()) {
 			disable(ChatColor.RED + "Invalid sound \"" + split[0] + "\".");
 			return;
 		}
+		this.sound = sound.get();
 
 		if (split.length > 1) {
 			try {

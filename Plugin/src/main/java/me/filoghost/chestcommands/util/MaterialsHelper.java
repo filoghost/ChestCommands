@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.util;
 import org.bukkit.Material;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 
 public final class MaterialsHelper {
 
@@ -98,7 +99,7 @@ public final class MaterialsHelper {
 		return materialsRegistry;
 	}
 
-	public static Material matchMaterial(String materialName) {
+	public static Optional<Material> matchMaterial(String materialName) {
 		return MATERIALS_REGISTRY.find(materialName);
 	}
 

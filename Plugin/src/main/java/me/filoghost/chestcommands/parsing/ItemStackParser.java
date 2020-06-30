@@ -21,6 +21,8 @@ import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Strings;
 
+import java.util.Optional;
+
 public class ItemStackParser {
 
 	private final Material material;
@@ -62,12 +64,12 @@ public class ItemStackParser {
 			input = splitByColons[0];
 		}
 
-		Material material = MaterialsHelper.matchMaterial(input);
+		Optional<Material> material = MaterialsHelper.matchMaterial(input);
 
-		if (material == null || MaterialsHelper.isAir(material)) {
+		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
 			throw new ParseException("invalid material \"" + input + "\"");
 		}
-		this.material = material;
+		this.material = material.get();
 	}
 
 	public Material getMaterial() {
