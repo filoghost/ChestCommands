@@ -26,7 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class CommandFramework implements CommandExecutor {
 
-	private String label;
+	private final String label;
 
 
 	public CommandFramework(String label) {

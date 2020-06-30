@@ -23,8 +23,8 @@ import org.bukkit.block.banner.PatternType;
 
 public final class ItemMetaParser {
 	
-	private static Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
-	private static Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
+	private static final Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
+	private static final Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
 
 	private ItemMetaParser() {}
 

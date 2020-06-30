@@ -24,7 +24,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class OpenMenuAction extends Action {
 
-	private RelativeString targetMenu;
+	private final RelativeString targetMenu;
 	
 	public OpenMenuAction(String serializedAction) {
 		targetMenu = RelativeString.of(serializedAction);

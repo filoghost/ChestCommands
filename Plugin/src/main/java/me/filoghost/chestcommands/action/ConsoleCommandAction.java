@@ -21,7 +21,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class ConsoleCommandAction extends Action {
 
-	private RelativeString command;
+	private final RelativeString command;
 
 	public ConsoleCommandAction(String serializedAction) {
 		command = RelativeString.of(serializedAction);

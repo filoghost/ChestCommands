@@ -18,10 +18,10 @@ import me.filoghost.chestcommands.config.SpecialConfig;
 
 public class Settings extends SpecialConfig {
 
-	public String default_color__name = "&f";
-	public String default_color__lore = "&7";
-	public boolean update_notifications = true;
-	public int anti_click_spam_delay = 200;
+	public final String default_color__name = "&f";
+	public final String default_color__lore = "&7";
+	public final boolean update_notifications = true;
+	public final int anti_click_spam_delay = 200;
 
 	public Settings() {
 		setHeader(

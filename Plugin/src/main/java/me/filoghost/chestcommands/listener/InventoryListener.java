@@ -35,9 +35,9 @@ import me.filoghost.chestcommands.menu.MenuManager;
 
 public class InventoryListener implements Listener {
 	
-	private static Map<Player, Long> antiClickSpam = new HashMap<>();
+	private static final Map<Player, Long> antiClickSpam = new HashMap<>();
 	
-	private MenuManager menuManager;
+	private final MenuManager menuManager;
 	
 	public InventoryListener(MenuManager menuManager) {
 		this.menuManager = menuManager;

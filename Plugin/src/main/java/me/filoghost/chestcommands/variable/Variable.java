@@ -55,7 +55,7 @@ public enum Variable {
 		}
 	};
 
-	private String text;
+	private final String text;
 
 	private Variable(String text) {
 		this.text = text;

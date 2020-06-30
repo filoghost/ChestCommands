@@ -21,7 +21,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class SendMessageAction extends Action {
 	
-	private RelativeString message;
+	private final RelativeString message;
 
 	public SendMessageAction(String action) {
 		message = RelativeString.of(FormatUtils.addColors(action));

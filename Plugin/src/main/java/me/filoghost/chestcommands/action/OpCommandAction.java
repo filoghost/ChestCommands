@@ -20,7 +20,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class OpCommandAction extends Action {
 
-	private RelativeString command;
+	private final RelativeString command;
 
 	public OpCommandAction(String serializedAction) {
 		command = RelativeString.of(serializedAction);

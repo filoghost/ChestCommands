@@ -30,7 +30,7 @@ import me.filoghost.chestcommands.util.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
 	
-	private MenuManager menuManager;
+	private final MenuManager menuManager;
 	
 	public CommandHandler(MenuManager menuManager, String label) {
 		super(label);

@@ -25,8 +25,8 @@ import org.bukkit.ChatColor;
  */
 public class ErrorCollector {
 
-	private List<String> errors = new ArrayList<>();
-	private List<String> warnings = new ArrayList<>();
+	private final List<String> errors = new ArrayList<>();
+	private final List<String> warnings = new ArrayList<>();
 	
 	public void addError(String error) {
 		errors.add(error);

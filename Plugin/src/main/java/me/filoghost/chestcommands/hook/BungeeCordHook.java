@@ -40,12 +40,12 @@ public enum BungeeCordHook implements PluginHook {
 		return true;
 	}
 	
-	public static boolean connect(Player player, String server) {
+	public static void connect(Player player, String server) {
 		INSTANCE.checkEnabledState();
 		
 		if (server.length() == 0) {
 			player.sendMessage(ChatColor.RED + "Target server was an empty string, cannot connect to it.");
-			return false;
+			return;
 		}
 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -59,7 +59,6 @@ public enum BungeeCordHook implements PluginHook {
 		}
 
 		player.sendPluginMessage(ChestCommands.getInstance(), "BungeeCord", byteArrayOutputStream.toByteArray());
-		return true;
 	}
 
 }

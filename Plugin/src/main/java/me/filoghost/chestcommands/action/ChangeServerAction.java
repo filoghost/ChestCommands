@@ -21,7 +21,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class ChangeServerAction extends Action {
 
-	private RelativeString targetServer;
+	private final RelativeString targetServer;
 	
 	public ChangeServerAction(String serializedAction) {
 		targetServer = RelativeString.of(serializedAction);

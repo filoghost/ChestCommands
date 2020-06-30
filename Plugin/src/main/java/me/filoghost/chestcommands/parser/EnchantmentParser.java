@@ -20,7 +20,7 @@ import org.bukkit.enchantments.Enchantment;
 
 public class EnchantmentParser {
 
-	private static Registry<Enchantment> ENCHANTMENTS_REGISTRY;
+	private static final Registry<Enchantment> ENCHANTMENTS_REGISTRY;
 
 	static {
 		ENCHANTMENTS_REGISTRY = Registry.fromValues(Enchantment.values(), Enchantment::getName);

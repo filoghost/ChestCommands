@@ -25,7 +25,7 @@ import me.filoghost.chestcommands.action.*;
 
 public class ActionParser {
 
-	private static Map<Pattern, IconCommandFactory> actionsByPrefix = new HashMap<>();
+	private static final Map<Pattern, IconCommandFactory> actionsByPrefix = new HashMap<>();
 
 	static {
 		actionsByPrefix.put(actionPattern("console:"), ConsoleCommandAction::new);

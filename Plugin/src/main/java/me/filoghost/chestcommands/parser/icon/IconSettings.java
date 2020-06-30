@@ -56,7 +56,7 @@ public class IconSettings {
 	private MaterialAttribute materialAttribute;
 	private final List<ApplicableIconAttribute> applicableAttributes;
 
-	public static Map<String, IconNodeHandler> iconNodeHandlers = new HashMap<>();
+	public static final Map<String, IconNodeHandler> iconNodeHandlers = new HashMap<>();
 	static {
 		addIconNodeHandler(IconNode.POSITION_X, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionX);
 		addIconNodeHandler(IconNode.POSITION_Y, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionY);

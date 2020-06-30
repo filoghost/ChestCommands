@@ -23,9 +23,9 @@ import me.filoghost.chestcommands.util.Strings;
 
 public class PlaySoundAction extends Action {
 	
-	private static Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
+	private static final Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
 
-	private Sound sound;
+	private final Sound sound;
 	private float pitch;
 	private float volume;
 

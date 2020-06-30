@@ -40,7 +40,7 @@ public class SignListener implements Listener {
 	private static final ChatColor VALID_SIGN_COLOR = ChatColor.DARK_BLUE;
 	private static final String VALID_SIGN_HEADER = VALID_SIGN_COLOR + SIGN_CREATION_TRIGGER;
 	
-	private MenuManager menuManager;
+	private final MenuManager menuManager;
 	
 	public SignListener(MenuManager menuManager) {
 		this.menuManager = menuManager;

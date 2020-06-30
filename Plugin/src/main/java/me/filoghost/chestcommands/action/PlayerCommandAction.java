@@ -20,7 +20,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class PlayerCommandAction extends Action {
 	
-	private RelativeString command;
+	private final RelativeString command;
 
 	public PlayerCommandAction(String serializedAction) {
 		command = RelativeString.of(serializedAction);

@@ -22,7 +22,7 @@ import me.filoghost.chestcommands.variable.RelativeString;
 
 public class BroadcastAction extends Action {
 	
-	private RelativeString message;
+	private final RelativeString message;
 
 	public BroadcastAction(String action) {
 		message = RelativeString.of(FormatUtils.addColors(action));

@@ -24,7 +24,7 @@ import me.filoghost.chestcommands.menu.MenuManager;
 
 public class CommandListener implements Listener {
 	
-	private MenuManager menuManager;
+	private final MenuManager menuManager;
 	
 	public CommandListener(MenuManager menuManager) {
 		this.menuManager = menuManager;
