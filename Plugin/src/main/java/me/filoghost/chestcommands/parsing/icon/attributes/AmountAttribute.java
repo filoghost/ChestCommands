@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 
@@ -22,7 +23,10 @@ public class AmountAttribute implements ApplicableIconAttribute {
 
 	private final int amount;
 
-	public AmountAttribute(int amount, AttributeErrorCollector attributeErrorCollector) {
+	public AmountAttribute(int amount, AttributeErrorCollector attributeErrorCollector) throws ParseException {
+		if (amount < 0) {
+			throw new ParseException("negative value");
+		}
 		this.amount = amount;
 	}
 	
