@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.menu;
 
+import me.filoghost.chestcommands.config.files.LoadedMenu;
 import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 import me.filoghost.chestcommands.util.CaseInsensitiveMap;
@@ -51,25 +52,30 @@ public class MenuManager {
 		return menusByFile.get(fileName);
 	}
 
-	public void registerMenu(String fileName, Collection<String> triggerCommands, AdvancedIconMenu menu, ErrorCollector errorCollector) {
-		if (menusByFile.containsKey(fileName)) {
-			errorCollector.addError("Two menus have the same file name \"" + fileName + "\" with different cases. There will be problems opening one of these two menus.");
+	public void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
+		AdvancedIconMenu menu = loadedMenu.getMenu();
+
+		if (menusByFile.containsKey(loadedMenu.getFileName())) {
+			errorCollector.addError("Two menus have the same file name \"" + loadedMenu.getFileName() + "\". "
+					+ "One of them will not work.");
 		}
 		
-		menusByFile.put(fileName, menu);
+		menusByFile.put(loadedMenu.getFileName(), menu);
 
-		for (String triggerCommand : triggerCommands) {
+		for (String triggerCommand : loadedMenu.getTriggerCommands()) {
 			if (!triggerCommand.isEmpty()) {
 				if (menusByCommand.containsKey(triggerCommand)) {
-					errorCollector.addError("The menus \"" + menusByCommand.get(triggerCommand).getFileName() + "\" and \"" + fileName + "\" have the same command \"" + triggerCommand + "\". Only one will be opened.");
+					errorCollector.addError("The menus \"" + menusByCommand.get(triggerCommand).getFileName() + "\" "
+							+ "and \"" + loadedMenu.getFileName() + "\" have the same command \"" + triggerCommand + "\". "
+							+ "Only one will be opened.");
 				}
 				menusByCommand.put(triggerCommand, menu);
 			}
-		}		
-	}
+		}
 
-	public void registerTriggerItem(OpenTrigger openTrigger, AdvancedIconMenu menu) {
-		menusByOpenTrigger.put(openTrigger, menu);
+		if (loadedMenu.getOpenTrigger() != null) {
+			menusByOpenTrigger.put(loadedMenu.getOpenTrigger(), menu);
+		}
 	}
 
 	public void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {

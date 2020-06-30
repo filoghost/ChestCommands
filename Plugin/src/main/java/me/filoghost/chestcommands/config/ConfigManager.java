@@ -18,8 +18,6 @@ import me.filoghost.chestcommands.config.files.CustomPlaceholders;
 import me.filoghost.chestcommands.config.files.Lang;
 import me.filoghost.chestcommands.config.files.LoadedMenu;
 import me.filoghost.chestcommands.config.files.Settings;
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.parser.MenuParser;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Log;
@@ -158,25 +156,13 @@ public class ConfigManager {
 
 		for (Path menuFile : menuPaths) {
 			ConfigLoader menuConfigLoader = new ConfigLoader(menuFile);
-			Config menuConfig;
 
 			try {
-				menuConfig = menuConfigLoader.load();
+				Config menuConfig = menuConfigLoader.load();
+				loadedMenus.add(MenuParser.loadMenu(menuConfig, errorCollector));
 			} catch (Throwable t) {
 				logConfigLoadException(menuConfigLoader, t);
-				continue;
 			}
-
-			MenuSettings menuSettings = MenuParser.loadMenuSettings(menuConfig, errorCollector);
-			AdvancedIconMenu iconMenu = MenuParser.loadMenu(menuConfig, menuSettings.getTitle(), menuSettings.getRows(), errorCollector);
-
-			iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
-
-			if (menuSettings.getOpenActions() != null) {
-				iconMenu.setOpenActions(menuSettings.getOpenActions());
-			}
-
-			loadedMenus.add(new LoadedMenu(menuConfig.getFileName(), menuSettings, iconMenu));
 		}
 
 		return loadedMenus;

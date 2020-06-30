@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.config;
 
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -93,17 +94,17 @@ public class ConfigLoader {
 
 
 	public Config load() throws IOException, InvalidConfigurationException {
-		Config config = new Config(path);
+		YamlConfiguration yaml = new YamlConfiguration();
 
 		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			config.load(reader);
+			yaml.load(reader);
 		}
 
-		return config;
+		return new Config(yaml, path);
 	}
 
 	public Config loadEmpty() {
-		return new Config(path);
+		return new Config(new YamlConfiguration(), path);
 	}
 
 	public void save(Config config) throws IOException {

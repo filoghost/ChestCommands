@@ -16,12 +16,12 @@ package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
+import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.files.CustomPlaceholders;
 import me.filoghost.chestcommands.config.files.Lang;
 import me.filoghost.chestcommands.config.files.LoadedMenu;
 import me.filoghost.chestcommands.config.files.Settings;
-import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -176,8 +176,7 @@ public class ChestCommands extends JavaPlugin {
 
 		List<LoadedMenu> loadedMenus = configManager.tryLoadMenus(errors);
 		for (LoadedMenu loadedMenu : loadedMenus) {
-			menuManager.registerMenu(loadedMenu.getFileName(), loadedMenu.getSettings().getCommands(), loadedMenu.getMenu(), errors);
-			menuManager.registerTriggerItem(loadedMenu.getSettings().getOpenTrigger(), loadedMenu.getMenu());
+			menuManager.registerMenu(loadedMenu, errors);
 		}
 
 		ChestCommands.lastLoadErrors = errors;

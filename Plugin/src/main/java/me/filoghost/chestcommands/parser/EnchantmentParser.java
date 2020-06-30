@@ -14,11 +14,9 @@
  */
 package me.filoghost.chestcommands.parser;
 
-import org.bukkit.enchantments.Enchantment;
-
 import me.filoghost.chestcommands.util.Registry;
 import me.filoghost.chestcommands.util.Strings;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import org.bukkit.enchantments.Enchantment;
 
 public class EnchantmentParser {
 
@@ -54,7 +52,7 @@ public class EnchantmentParser {
 		ENCHANTMENTS_REGISTRY.put("Luck Of The Sea", Enchantment.LUCK);
 	}
 
-	public static EnchantmentDetails parseEnchantment(String input, String iconName, String menuFileName, ErrorCollector errorCollector) {
+	public static EnchantmentDetails parseEnchantment(String input) throws ParseException {
 		int level = 1;
 
 		if (input.contains(",")) {
@@ -63,20 +61,18 @@ public class EnchantmentParser {
 			try {
 				level = Integer.parseInt(levelSplit[1].trim());
 			} catch (NumberFormatException ex) {
-				errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment level: " + levelSplit[1]);
+				throw new ParseException("invalid enchantment level \"" + levelSplit[1] + "\"");
 			}
 			input = levelSplit[0];
 		}
 
-		Enchantment ench = ENCHANTMENTS_REGISTRY.find(input);
+		Enchantment enchantment = ENCHANTMENTS_REGISTRY.find(input);
 
-		if (ench == null) {
-			errorCollector.addError("The icon \"" + iconName + "\" in the menu \"" + menuFileName + "\" has an invalid enchantment: " + input);
+		if (enchantment == null) {
+			throw new ParseException("invalid enchantment type \"" + input + "\"");
 		} else {
-			return new EnchantmentDetails(ench, level);
+			return new EnchantmentDetails(enchantment, level);
 		}
-
-		return null;
 	}
 	
 	

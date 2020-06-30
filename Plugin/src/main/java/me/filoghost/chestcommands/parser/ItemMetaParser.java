@@ -14,16 +14,12 @@
  */
 package me.filoghost.chestcommands.parser;
 
+import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-
-import me.filoghost.chestcommands.util.Registry;
-import me.filoghost.chestcommands.util.Strings;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class ItemMetaParser {
 	
@@ -33,25 +29,19 @@ public final class ItemMetaParser {
 	private ItemMetaParser() {}
 
 	
-	public static Color parseColor(String input) throws ParseException {
+	public static Color parseRGBColor(String input) throws ParseException {
 		String[] split = Strings.trimmedSplit(input, ",");
 
 		if (split.length != 3) {
-			throw new ParseException("it must be in the format \"red, green, blue\".");
+			throw new ParseException("it must be in the format \"red, green, blue\"");
 		}
 
-		int red, green, blue;
-
-		try {
-			red = Integer.parseInt(split[0]);
-			green = Integer.parseInt(split[1]);
-			blue = Integer.parseInt(split[2]);
-		} catch (NumberFormatException ex) {
-			throw new ParseException("it contains invalid numbers.");
-		}
+		int red = NumberParser.getInteger(split[0], "red is not a number");
+		int green = NumberParser.getInteger(split[1], "green is not a number");
+		int blue = NumberParser.getInteger(split[2], "blue is not a number");
 
 		if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-			throw new ParseException("it should only contain numbers between 0 and 255.");
+			throw new ParseException("it should only contain numbers between 0 and 255");
 		}
 
 		return Color.fromRGB(red, green, blue);
@@ -61,28 +51,24 @@ public final class ItemMetaParser {
 		DyeColor color = DYE_COLORS_REGISTRY.find(input);
 		
 		if (color == null) {
-			throw new ParseException("it must be a valid color.");
+			throw new ParseException("it must be a valid color");
 		}
 		return color;
 	}
 
-	public static List<Pattern> parseBannerPatternList(List<String> input) throws ParseException {
-		List<Pattern> patterns = new ArrayList<>();
-		for (String str : input) {
-			String[] split = Strings.trimmedSplit(str, ":");
-			if (split.length != 2) {
-				throw new ParseException("it must be in the format \"pattern:color\".");
-			}
-			
-			PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0]);
-			DyeColor patternColor = parseDyeColor(split[1]);
-			
-			if (patternType == null) {
-				throw new ParseException("it must be a valid pattern type.");
-			}
-			
-			patterns.add(new Pattern(patternColor, patternType));
+	public static Pattern parseBannerPattern(String input) throws ParseException {
+		String[] split = Strings.trimmedSplit(input, ":");
+		if (split.length != 2) {
+			throw new ParseException("it must be in the format \"pattern:color\"");
 		}
-		return patterns;
+
+		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0]);
+		DyeColor patternColor = parseDyeColor(split[1]);
+
+		if (patternType == null) {
+			throw new ParseException("it must be a valid pattern type");
+		}
+
+		return new Pattern(patternColor, patternType);
 	}
 }

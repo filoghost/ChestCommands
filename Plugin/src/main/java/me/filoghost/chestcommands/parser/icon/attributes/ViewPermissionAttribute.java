@@ -3,42 +3,32 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *
+ *  
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
- *
+ *  
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config;
+package me.filoghost.chestcommands.parser.icon.attributes;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.parser.icon.ApplicableIconAttribute;
+import me.filoghost.chestcommands.parser.icon.AttributeErrorCollector;
 
-import java.nio.file.Path;
+public class ViewPermissionAttribute implements ApplicableIconAttribute {
 
-public class Config extends ConfigSection {
+	private final String viewPermission;
 
-	private final YamlConfiguration yaml;
-	private final Path filePath;
-
-	public Config(YamlConfiguration yaml, Path filePath) {
-		super(yaml);
-		this.yaml = yaml;
-		this.filePath = filePath;
+	public ViewPermissionAttribute(String viewPermission, AttributeErrorCollector attributeErrorCollector) {
+		this.viewPermission = viewPermission;
 	}
-
-	public String getFileName() {
-		return filePath.getFileName().toString();
-	}
-
-	public String saveToString() {
-		return yaml.saveToString();
-	}
-
-	public void setHeader(String value) {
-		yaml.options().header(value);
+	
+	@Override
+	public void apply(AdvancedIcon icon) {
+		icon.setViewPermission(viewPermission);
 	}
 
 }

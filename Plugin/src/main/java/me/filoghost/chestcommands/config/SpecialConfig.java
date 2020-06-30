@@ -14,8 +14,6 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.util.FormatUtils;
 import me.filoghost.chestcommands.util.Log;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -79,7 +77,7 @@ public abstract class SpecialConfig {
 		}
 
 		if (needsSave) {
-			config.options().header(header);
+			config.setHeader(header);
 			loader.save(config);
 		}
 

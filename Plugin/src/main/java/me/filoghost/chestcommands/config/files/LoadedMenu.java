@@ -1,30 +1,38 @@
 package me.filoghost.chestcommands.config.files;
 
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.settings.MenuSettings;
+import me.filoghost.chestcommands.menu.settings.OpenTrigger;
+
+import java.util.List;
 
 public class LoadedMenu {
 
-	private final String fileName;
-	private final MenuSettings settings;
 	private final AdvancedIconMenu menu;
+	private final String fileName;
+	private final List<String> triggerCommands;
+	private final OpenTrigger openTrigger;
 
-	public LoadedMenu(String fileName, MenuSettings settings, AdvancedIconMenu menu) {
-		this.fileName = fileName;
-		this.settings = settings;
+	public LoadedMenu(AdvancedIconMenu menu, String fileName, List<String> triggerCommands, OpenTrigger openTrigger) {
 		this.menu = menu;
+		this.fileName = fileName;
+		this.triggerCommands = triggerCommands;
+		this.openTrigger = openTrigger;
+	}
+
+	public AdvancedIconMenu getMenu() {
+		return menu;
 	}
 
 	public String getFileName() {
 		return fileName;
 	}
 
-	public MenuSettings getSettings() {
-		return settings;
+	public List<String> getTriggerCommands() {
+		return triggerCommands;
 	}
 
-	public AdvancedIconMenu getMenu() {
-		return menu;
+	public OpenTrigger getOpenTrigger() {
+		return openTrigger;
 	}
 
 }

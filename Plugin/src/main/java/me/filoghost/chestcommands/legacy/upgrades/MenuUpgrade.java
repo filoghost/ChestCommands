@@ -16,12 +16,12 @@ package me.filoghost.chestcommands.legacy.upgrades;
 
 import me.filoghost.chestcommands.config.Config;
 import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.ConfigSection;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
-import me.filoghost.chestcommands.parser.IconParser;
 import me.filoghost.chestcommands.parser.MenuParser;
+import me.filoghost.chestcommands.parser.icon.IconNode;
 import me.filoghost.chestcommands.util.Strings;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -54,14 +54,14 @@ public class MenuUpgrade extends Upgrade {
 	@Override
 	protected void computeChanges() throws UpgradeException {
 		Config menuConfig = loadConfig(menuConfigLoader);
-		menuConfig.options().header(null);
+		menuConfig.setHeader(null);
 
 		for (String key : menuConfig.getKeys(true)) {
-			if (!menuConfig.isConfigurationSection(key)) {
+			if (!menuConfig.isConfigSection(key)) {
 				continue;
 			}
 
-			ConfigurationSection section = menuConfig.getConfigurationSection(key);
+			ConfigSection section = menuConfig.getConfigSection(key);
 
 			if (key.equals(MenuParser.Nodes.MENU_SETTINGS)) {
 				upgradeMenuSettings(section);
@@ -79,7 +79,7 @@ public class MenuUpgrade extends Upgrade {
 	}
 
 
-	private void upgradeMenuSettings(ConfigurationSection section) {
+	private void upgradeMenuSettings(ConfigSection section) {
 		renameNode(section, "command", MenuParser.Nodes.COMMANDS);
 		renameNode(section, "open-action", MenuParser.Nodes.OPEN_ACTIONS);
 		renameNode(section, "open-with-item.id", MenuParser.Nodes.OPEN_ITEM_MATERIAL);
@@ -88,59 +88,59 @@ public class MenuUpgrade extends Upgrade {
 		expandInlineList(section, MenuParser.Nodes.OPEN_ACTIONS, legacyCommandSeparator);
 	}
 
-	private void upgradeIcon(ConfigurationSection section) {
-		renameNode(section, "ID", IconParser.Nodes.MATERIAL);
-		renameNode(section, "DATA-VALUE", IconParser.Nodes.DURABILITY);
-		renameNode(section, "NBT", IconParser.Nodes.NBT_DATA);
-		renameNode(section, "ENCHANTMENT", IconParser.Nodes.ENCHANTMENTS);
-		renameNode(section, "COMMAND", IconParser.Nodes.ACTIONS);
-		renameNode(section, "COMMANDS", IconParser.Nodes.ACTIONS);
-		renameNode(section, "REQUIRED-ITEM", IconParser.Nodes.REQUIRED_ITEMS);
+	private void upgradeIcon(ConfigSection section) {
+		renameNode(section, "ID", IconNode.MATERIAL);
+		renameNode(section, "DATA-VALUE", IconNode.DURABILITY);
+		renameNode(section, "NBT", IconNode.NBT_DATA);
+		renameNode(section, "ENCHANTMENT", IconNode.ENCHANTMENTS);
+		renameNode(section, "COMMAND", IconNode.ACTIONS);
+		renameNode(section, "COMMANDS", IconNode.ACTIONS);
+		renameNode(section, "REQUIRED-ITEM", IconNode.REQUIRED_ITEMS);
 
-		expandInlineList(section, IconParser.Nodes.ACTIONS, legacyCommandSeparator);
-		expandInlineList(section, IconParser.Nodes.ENCHANTMENTS, ";");
+		expandInlineList(section, IconNode.ACTIONS, legacyCommandSeparator);
+		expandInlineList(section, IconNode.ENCHANTMENTS, ";");
 
-		expandSingletonList(section, IconParser.Nodes.REQUIRED_ITEMS);
+		expandSingletonList(section, IconNode.REQUIRED_ITEMS);
 
 		expandInlineItemstack(section);
 	}
 
-	private void expandInlineItemstack(ConfigurationSection section) {
-		String material = section.getString(IconParser.Nodes.MATERIAL);
+	private void expandInlineItemstack(ConfigSection section) {
+		String material = section.getString(IconNode.MATERIAL);
 		if (material == null) {
 			return;
 		}
 
 		if (material.contains(",")) {
 			String[] parts = Strings.trimmedSplit(material, ",", 2);
-			if (!section.isSet(IconParser.Nodes.AMOUNT)) {
+			if (!section.isSet(IconNode.AMOUNT)) {
 				try {
-					section.set(IconParser.Nodes.AMOUNT, Integer.parseInt(parts[1]));
+					section.set(IconNode.AMOUNT, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconParser.Nodes.AMOUNT, parts[1]);
+					section.set(IconNode.AMOUNT, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconParser.Nodes.MATERIAL, material);
+			section.set(IconNode.MATERIAL, material);
 			setModified();
 		}
 
 		if (material.contains(":")) {
 			String[] parts = Strings.trimmedSplit(material, ":", 2);
-			if (!section.isSet(IconParser.Nodes.DURABILITY)) {
+			if (!section.isSet(IconNode.DURABILITY)) {
 				try {
-					section.set(IconParser.Nodes.DURABILITY, Integer.parseInt(parts[1]));
+					section.set(IconNode.DURABILITY, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconParser.Nodes.DURABILITY, parts[1]);
+					section.set(IconNode.DURABILITY, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconParser.Nodes.MATERIAL, material);
+			section.set(IconNode.MATERIAL, material);
 			setModified();
 		}
 	}
 
-	private void renameNode(ConfigurationSection config, String oldNode, String newNode) {
+	private void renameNode(ConfigSection config, String oldNode, String newNode) {
 		if (config.isSet(oldNode) && !config.isSet(newNode)) {
 			config.set(newNode, config.get(oldNode));
 			config.set(oldNode, null);
@@ -148,7 +148,7 @@ public class MenuUpgrade extends Upgrade {
 		}
 	}
 
-	private void expandInlineList(ConfigurationSection config, String node, String separator) {
+	private void expandInlineList(ConfigSection config, String node, String separator) {
 		if (config.isSet(node)) {
 			if (config.isString(node)) {
 				config.set(node, getSeparatedValues(config.getString(node), separator));
@@ -157,7 +157,7 @@ public class MenuUpgrade extends Upgrade {
 		}
 	}
 
-	private void expandSingletonList(ConfigurationSection config, String node) {
+	private void expandSingletonList(ConfigSection config, String node) {
 		if (config.isSet(node)) {
 			config.set(node, Collections.singletonList(config.get(node)));
 			setModified();

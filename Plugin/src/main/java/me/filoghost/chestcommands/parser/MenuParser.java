@@ -16,16 +16,20 @@ package me.filoghost.chestcommands.parser;
 
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.Config;
+import me.filoghost.chestcommands.config.ConfigSection;
+import me.filoghost.chestcommands.config.ConfigValueException;
+import me.filoghost.chestcommands.config.files.LoadedMenu;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.menu.settings.ClickType;
 import me.filoghost.chestcommands.menu.settings.MenuSettings;
 import me.filoghost.chestcommands.menu.settings.OpenTrigger;
-import me.filoghost.chestcommands.parser.IconParser.Coords;
+import me.filoghost.chestcommands.parser.icon.IconNode;
+import me.filoghost.chestcommands.parser.icon.IconSettings;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.FormatUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,116 +54,128 @@ public class MenuParser {
 
 	}
 
-	public static AdvancedIconMenu loadMenu(Config config, String title, int rows, ErrorCollector errorCollector) {
-		AdvancedIconMenu iconMenu = new AdvancedIconMenu(title, rows, config.getFileName());
 
-		for (String subSectionName : config.getKeys(false)) {
-			if (subSectionName.equals(Nodes.MENU_SETTINGS)) {
-				continue;
+	public static LoadedMenu loadMenu(Config menuConfig, ErrorCollector errorCollector) {
+		MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
+		List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
+
+		AdvancedIconMenu iconMenu = new AdvancedIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getFileName());
+
+		for (IconSettings iconSettings : iconSettingsList) {
+			try {
+				addIconToMenu(iconMenu, iconSettings, errorCollector);
+			} catch (IconAddException e) {
+				errorCollector.addError(e.getMessage());
 			}
-
-			ConfigurationSection iconSection = config.getConfigurationSection(subSectionName);
-
-			AdvancedIcon icon = IconParser.loadIconFromSection(iconSection, subSectionName, config.getFileName(), errorCollector);
-			Coords coords = IconParser.loadCoordsFromSection(iconSection);
-			
-			int actualX = coords.getX() - 1;
-			int actualY = coords.getY() - 1;
-
-			if (!coords.isSetX() || !coords.isSetY()) {
-				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is missing POSITION-X and/or POSITION-Y.");
-				continue;
-			}			
-			if (actualX < 0 || actualX >= iconMenu.getColumnCount()) {
-				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " has an invalid POSITION-X: it must be between 1 and " + iconMenu.getColumnCount() + " (was " + coords.getX() + ").");
-				continue;
-			}
-			if (actualY < 0 || actualY >= iconMenu.getRowCount()) {
-				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " has an invalid POSITION-Y: it must be between 1 and " + iconMenu.getRowCount() + " (was " + coords.getY() + ").");
-				continue;
-			}
-			
-			if (iconMenu.getIcon(actualX, actualY) != null) {
-				errorCollector.addError("The icon \"" + subSectionName + "\" in the menu \"" + config.getFileName() + " is overriding another icon with the same position.");
-			}
-
-			iconMenu.setIcon(actualX, actualY, icon);
 		}
 
-		return iconMenu;
+		iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
+		iconMenu.setOpenActions(menuSettings.getOpenActions());
+
+		return new LoadedMenu(iconMenu, menuConfig.getFileName(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
 	}
 
-	/**
-	 * Reads all the settings of a menu. It will never return a null title, even if not set.
-	 */
-	public static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
-		ConfigurationSection settingsSection = config.getConfigurationSection(Nodes.MENU_SETTINGS);
 
-		String title = FormatUtils.addColors(settingsSection.getString(Nodes.NAME));
+	private static void addIconToMenu(AdvancedIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) throws IconAddException {
+		if (iconSettings.getPositionX() == null) {
+			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconNode.POSITION_X));
+		}
+
+		if (iconSettings.getPositionY() == null) {
+			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconNode.POSITION_Y));
+		}
+
+		int actualX = iconSettings.getPositionX().getPosition() - 1;
+		int actualY = iconSettings.getPositionY().getPosition() - 1;
+
+		if (actualX < 0 || actualX >= iconMenu.getColumnCount()) {
+			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconNode.POSITION_X,
+					"it must be between 1 and " + iconMenu.getColumnCount()));
+		}
+		if (actualY < 0 || actualY >= iconMenu.getRowCount()) {
+			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconNode.POSITION_Y,
+					"it must be between 1 and " + iconMenu.getRowCount()));
+		}
+
+		if (iconMenu.getIcon(actualX, actualY) != null) {
+			throw new IconAddException(ErrorFormat.iconError(iconSettings,
+					"is overriding another icon with the same position"));
+		}
+
+		if (iconSettings.getMaterialAttribute() == null) {
+			errorCollector.addError(ErrorFormat.missingAttribute(iconSettings, IconNode.MATERIAL));
+		}
+
+		AdvancedIcon icon = new AdvancedIcon(Material.BEDROCK);
+		iconSettings.applyAttributesTo(icon);
+		iconMenu.setIcon(actualX, actualY, icon);
+	}
+
+
+	private static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
+		ConfigSection settingsSection = config.getConfigSection(Nodes.MENU_SETTINGS);
+
+		String title;
+		try {
+			title = FormatUtils.addColors(settingsSection.getRequiredString(Nodes.NAME));
+			if (title.length() > 32) {
+				title = title.substring(0, 32);
+			}
+		} catch (ConfigValueException e) {
+			title = ChatColor.DARK_RED + "No name set";
+			errorCollector.addError(ErrorFormat.missingMenuSetting(config.getFileName(), Nodes.NAME));
+		}
+
 		int rows;
-
-		if (title == null) {
-			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a name set.");
-			title = ChatColor.DARK_RED + "No title set";
-		}
-
-		if (title.length() > 32) {
-			title = title.substring(0, 32);
-		}
-
-		if (settingsSection.isInt(Nodes.ROWS)) {
-			rows = settingsSection.getInt(Nodes.ROWS);
-
+		try {
+			rows = settingsSection.getRequiredInt(Nodes.ROWS);
 			if (rows <= 0) {
 				rows = 1;
 			}
-
-		} else {
+		} catch (ConfigValueException e) {
 			rows = 6; // Defaults to 6 rows
-			errorCollector.addError("The menu \"" + config.getFileName() + "\" doesn't have a the number of rows set, it will have 6 rows by default.");
+			errorCollector.addError(ErrorFormat.missingMenuSetting(config.getFileName(), Nodes.ROWS));
 		}
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
-		
+
 		List<String> triggeringCommands = settingsSection.getStringList(Nodes.COMMANDS);
-		if (triggeringCommands != null) {
-			menuSettings.setCommands(triggeringCommands);
-		}
+		menuSettings.setCommands(triggeringCommands);
 
 		List<String> serializedOpenActions = settingsSection.getStringList(Nodes.OPEN_ACTIONS);
-		
+
 		if (serializedOpenActions != null && !serializedOpenActions.isEmpty()) {
 			List<Action> openActions = new ArrayList<>();
-			
+
 			for (String serializedAction : serializedOpenActions) {
 				if (serializedAction != null && !serializedAction.isEmpty()) {
 					openActions.add(ActionParser.parseAction(serializedAction));
 				}
 			}
 
-			if (!openActions.isEmpty()) {
-				menuSettings.setOpenActions(openActions);
-			}
+			menuSettings.setOpenActions(openActions);
 		}
 
 		String openItemMaterial = settingsSection.getString(Nodes.OPEN_ITEM_MATERIAL);
 		if (openItemMaterial != null) {
 			boolean leftClick = settingsSection.getBoolean(Nodes.OPEN_ITEM_LEFT_CLICK);
 			boolean rightClick = settingsSection.getBoolean(Nodes.OPEN_ITEM_RIGHT_CLICK);
-			
+
 			if (leftClick || rightClick) {
 				try {
 					ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
 					ClickType clickType = ClickType.fromOptions(leftClick, rightClick);
-					
+
 					OpenTrigger openTrigger = new OpenTrigger(itemReader.getMaterial(), clickType);
-					
+
 					if (itemReader.hasExplicitDurability()) {
 						openTrigger.setRestrictiveDurability(itemReader.getDurability());
 					}
-					
+
+					menuSettings.setOpenTrigger(openTrigger);
+
 				} catch (ParseException e) {
-					errorCollector.addError("The item \"" + openItemMaterial + "\" used to open the menu \"" + config.getFileName() + "\" is invalid: " + e.getMessage());
+					errorCollector.addError(ErrorFormat.invalidMenuSetting(config.getFileName(), Nodes.OPEN_ITEM_MATERIAL, e.getMessage()));
 				}
 			}
 		}
@@ -173,6 +189,33 @@ public class MenuParser {
 		}
 
 		return menuSettings;
+	}
+
+
+	private static List<IconSettings> loadIconSettingsList(Config config, ErrorCollector errorCollector) {
+		List<IconSettings> iconSettingsList = new ArrayList<>();
+
+		for (String iconSectionName : config.getKeys(false)) {
+			if (iconSectionName.equals(Nodes.MENU_SETTINGS)) {
+				continue;
+			}
+
+			ConfigSection iconSection = config.getConfigSection(iconSectionName);
+			IconSettings iconSettings = new IconSettings(config.getFileName(), iconSectionName);
+			iconSettings.loadFrom(iconSection, errorCollector);
+			iconSettingsList.add(iconSettings);
+		}
+
+		return iconSettingsList;
+	}
+
+
+	private static class IconAddException extends Exception {
+
+		public IconAddException(String message) {
+			super(message);
+		}
+
 	}
 
 }
