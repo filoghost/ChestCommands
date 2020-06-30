@@ -19,8 +19,8 @@ import me.filoghost.chestcommands.config.ConfigLoader;
 import me.filoghost.chestcommands.config.ConfigSection;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
-import me.filoghost.chestcommands.parser.MenuParser;
-import me.filoghost.chestcommands.parser.icon.IconNode;
+import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
+import me.filoghost.chestcommands.parsing.icon.IconNode;
 import me.filoghost.chestcommands.util.Strings;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class MenuUpgrade extends Upgrade {
 
 			ConfigSection section = menuConfig.getConfigSection(key);
 
-			if (key.equals(MenuParser.Nodes.MENU_SETTINGS)) {
+			if (key.equals(MenuSettingsNode.ROOT_SECTION)) {
 				upgradeMenuSettings(section);
 			} else {
 				upgradeIcon(section);
@@ -80,12 +80,12 @@ public class MenuUpgrade extends Upgrade {
 
 
 	private void upgradeMenuSettings(ConfigSection section) {
-		renameNode(section, "command", MenuParser.Nodes.COMMANDS);
-		renameNode(section, "open-action", MenuParser.Nodes.OPEN_ACTIONS);
-		renameNode(section, "open-with-item.id", MenuParser.Nodes.OPEN_ITEM_MATERIAL);
+		renameNode(section, "command", MenuSettingsNode.COMMANDS);
+		renameNode(section, "open-action", MenuSettingsNode.OPEN_ACTIONS);
+		renameNode(section, "open-with-item.id", MenuSettingsNode.OPEN_ITEM_MATERIAL);
 
-		expandInlineList(section, MenuParser.Nodes.COMMANDS, ";");
-		expandInlineList(section, MenuParser.Nodes.OPEN_ACTIONS, legacyCommandSeparator);
+		expandInlineList(section, MenuSettingsNode.COMMANDS, ";");
+		expandInlineList(section, MenuSettingsNode.OPEN_ACTIONS, legacyCommandSeparator);
 	}
 
 	private void upgradeIcon(ConfigSection section) {

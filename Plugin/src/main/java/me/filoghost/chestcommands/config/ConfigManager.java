@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.config.files.CustomPlaceholders;
 import me.filoghost.chestcommands.config.files.Lang;
 import me.filoghost.chestcommands.config.files.LoadedMenu;
 import me.filoghost.chestcommands.config.files.Settings;
-import me.filoghost.chestcommands.parser.MenuParser;
+import me.filoghost.chestcommands.parsing.menu.MenuParser;
 import me.filoghost.chestcommands.util.ErrorCollector;
 import me.filoghost.chestcommands.util.Log;
 import org.bukkit.configuration.InvalidConfigurationException;

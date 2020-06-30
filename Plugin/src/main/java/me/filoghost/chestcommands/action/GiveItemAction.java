@@ -18,8 +18,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.parser.ParseException;
-import me.filoghost.chestcommands.parser.ItemStackParser;
+import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.parsing.ItemStackParser;
 
 public class GiveItemAction extends Action {
 

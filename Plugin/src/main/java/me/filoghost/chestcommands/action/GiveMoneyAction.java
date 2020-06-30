@@ -17,9 +17,9 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.parser.ParseException;
+import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
-import me.filoghost.chestcommands.parser.NumberParser;
+import me.filoghost.chestcommands.parsing.NumberParser;
 
 public class GiveMoneyAction extends Action {
 
