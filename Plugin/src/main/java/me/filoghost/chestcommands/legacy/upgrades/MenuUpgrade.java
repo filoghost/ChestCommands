@@ -20,7 +20,7 @@ import me.filoghost.chestcommands.config.ConfigSection;
 import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
-import me.filoghost.chestcommands.parsing.icon.IconNode;
+import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.util.Strings;
 
 import java.io.IOException;
@@ -89,53 +89,53 @@ public class MenuUpgrade extends Upgrade {
 	}
 
 	private void upgradeIcon(ConfigSection section) {
-		renameNode(section, "ID", IconNode.MATERIAL);
-		renameNode(section, "DATA-VALUE", IconNode.DURABILITY);
-		renameNode(section, "NBT", IconNode.NBT_DATA);
-		renameNode(section, "ENCHANTMENT", IconNode.ENCHANTMENTS);
-		renameNode(section, "COMMAND", IconNode.ACTIONS);
-		renameNode(section, "COMMANDS", IconNode.ACTIONS);
-		renameNode(section, "REQUIRED-ITEM", IconNode.REQUIRED_ITEMS);
+		renameNode(section, "ID", IconSettingsNode.MATERIAL);
+		renameNode(section, "DATA-VALUE", IconSettingsNode.DURABILITY);
+		renameNode(section, "NBT", IconSettingsNode.NBT_DATA);
+		renameNode(section, "ENCHANTMENT", IconSettingsNode.ENCHANTMENTS);
+		renameNode(section, "COMMAND", IconSettingsNode.ACTIONS);
+		renameNode(section, "COMMANDS", IconSettingsNode.ACTIONS);
+		renameNode(section, "REQUIRED-ITEM", IconSettingsNode.REQUIRED_ITEMS);
 
-		expandInlineList(section, IconNode.ACTIONS, legacyCommandSeparator);
-		expandInlineList(section, IconNode.ENCHANTMENTS, ";");
+		expandInlineList(section, IconSettingsNode.ACTIONS, legacyCommandSeparator);
+		expandInlineList(section, IconSettingsNode.ENCHANTMENTS, ";");
 
-		expandSingletonList(section, IconNode.REQUIRED_ITEMS);
+		expandSingletonList(section, IconSettingsNode.REQUIRED_ITEMS);
 
 		expandInlineItemstack(section);
 	}
 
 	private void expandInlineItemstack(ConfigSection section) {
-		String material = section.getString(IconNode.MATERIAL);
+		String material = section.getString(IconSettingsNode.MATERIAL);
 		if (material == null) {
 			return;
 		}
 
 		if (material.contains(",")) {
 			String[] parts = Strings.trimmedSplit(material, ",", 2);
-			if (!section.isSet(IconNode.AMOUNT)) {
+			if (!section.isSet(IconSettingsNode.AMOUNT)) {
 				try {
-					section.set(IconNode.AMOUNT, Integer.parseInt(parts[1]));
+					section.set(IconSettingsNode.AMOUNT, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconNode.AMOUNT, parts[1]);
+					section.set(IconSettingsNode.AMOUNT, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconNode.MATERIAL, material);
+			section.set(IconSettingsNode.MATERIAL, material);
 			setModified();
 		}
 
 		if (material.contains(":")) {
 			String[] parts = Strings.trimmedSplit(material, ":", 2);
-			if (!section.isSet(IconNode.DURABILITY)) {
+			if (!section.isSet(IconSettingsNode.DURABILITY)) {
 				try {
-					section.set(IconNode.DURABILITY, Integer.parseInt(parts[1]));
+					section.set(IconSettingsNode.DURABILITY, Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconNode.DURABILITY, parts[1]);
+					section.set(IconSettingsNode.DURABILITY, parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconNode.MATERIAL, material);
+			section.set(IconSettingsNode.MATERIAL, material);
 			setModified();
 		}
 	}

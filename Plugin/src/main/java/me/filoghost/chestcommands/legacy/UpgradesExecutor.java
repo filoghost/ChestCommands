@@ -21,7 +21,7 @@ import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.SettingsUpgrade;
 import me.filoghost.chestcommands.util.Log;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -65,7 +65,7 @@ public class UpgradesExecutor {
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
 
 			try {
-				List<MenuUpgrade> menuUpgrades = Utils.transform(
+				List<MenuUpgrade> menuUpgrades = CollectionUtils.transform(
 						configManager.getMenusPathList(),
 						menuPath -> new MenuUpgrade(new ConfigLoader(menuPath), legacyCommandSeparator));
 				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);

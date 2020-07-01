@@ -38,7 +38,7 @@ import me.filoghost.chestcommands.parsing.icon.attributes.PriceAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.RequiredItemsAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.SkullOwnerAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.ViewPermissionAttribute;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import me.filoghost.chestcommands.util.Preconditions;
 
 import java.util.ArrayList;
@@ -58,28 +58,28 @@ public class IconSettings {
 
 	public static final Map<String, IconNodeHandler> iconNodeHandlers = new HashMap<>();
 	static {
-		addIconNodeHandler(IconNode.POSITION_X, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionX);
-		addIconNodeHandler(IconNode.POSITION_Y, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionY);
-		addIconNodeHandler(IconNode.MATERIAL, ValueExtractor.STRING, MaterialAttribute::new, IconSettings::setMaterialAttribute);
+		addIconNodeHandler(IconSettingsNode.POSITION_X, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionX);
+		addIconNodeHandler(IconSettingsNode.POSITION_Y, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionY);
+		addIconNodeHandler(IconSettingsNode.MATERIAL, ValueExtractor.STRING, MaterialAttribute::new, IconSettings::setMaterialAttribute);
 
-		addApplicableIconNodeHandler(IconNode.DURABILITY, ValueExtractor.SHORT, DurabilityAttribute::new);
-		addApplicableIconNodeHandler(IconNode.AMOUNT, ValueExtractor.INT, AmountAttribute::new);
-		addApplicableIconNodeHandler(IconNode.NAME, ValueExtractor.STRING, NameAttribute::new);
-		addApplicableIconNodeHandler(IconNode.LORE, ValueExtractor.STRING_LIST, LoreAttribute::new);
-		addApplicableIconNodeHandler(IconNode.NBT_DATA, ValueExtractor.STRING, NBTDataAttribute::new);
-		addApplicableIconNodeHandler(IconNode.LEATHER_COLOR, ValueExtractor.STRING, LeatherColorAttribute::new);
-		addApplicableIconNodeHandler(IconNode.SKULL_OWNER, ValueExtractor.STRING, SkullOwnerAttribute::new);
-		addApplicableIconNodeHandler(IconNode.BANNER_COLOR, ValueExtractor.STRING, BannerColorAttribute::new);
-		addApplicableIconNodeHandler(IconNode.BANNER_PATTERNS, ValueExtractor.STRING_LIST, BannerPatternsAttribute::new);
-		addApplicableIconNodeHandler(IconNode.PRICE, ValueExtractor.DOUBLE, PriceAttribute::new);
-		addApplicableIconNodeHandler(IconNode.EXP_LEVELS, ValueExtractor.INT, ExpLevelsAttribute::new);
-		addApplicableIconNodeHandler(IconNode.CLICK_PERMISSION, ValueExtractor.STRING, ClickPermissionAttribute::new);
-		addApplicableIconNodeHandler(IconNode.CLICK_PERMISSION_MESSAGE, ValueExtractor.STRING, ClickPermissionMessageAttribute::new);
-		addApplicableIconNodeHandler(IconNode.VIEW_PERMISSION, ValueExtractor.STRING, ViewPermissionAttribute::new);
-		addApplicableIconNodeHandler(IconNode.KEEP_OPEN, ValueExtractor.BOOLEAN, KeepOpenAttribute::new);
-		addApplicableIconNodeHandler(IconNode.ACTIONS, ValueExtractor.STRING_LIST, ActionsAttribute::new);
-		addApplicableIconNodeHandler(IconNode.ENCHANTMENTS, ValueExtractor.STRING_LIST, EnchantmentsAttribute::new);
-		addApplicableIconNodeHandler(IconNode.REQUIRED_ITEMS, ValueExtractor.STRING_LIST, RequiredItemsAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.DURABILITY, ValueExtractor.SHORT, DurabilityAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.AMOUNT, ValueExtractor.INT, AmountAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.NAME, ValueExtractor.STRING, NameAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.LORE, ValueExtractor.STRING_LIST, LoreAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.NBT_DATA, ValueExtractor.STRING, NBTDataAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.LEATHER_COLOR, ValueExtractor.STRING, LeatherColorAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.SKULL_OWNER, ValueExtractor.STRING, SkullOwnerAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.BANNER_COLOR, ValueExtractor.STRING, BannerColorAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.BANNER_PATTERNS, ValueExtractor.STRING_LIST, BannerPatternsAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.PRICE, ValueExtractor.DOUBLE, PriceAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.EXP_LEVELS, ValueExtractor.INT, ExpLevelsAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.CLICK_PERMISSION, ValueExtractor.STRING, ClickPermissionAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.CLICK_PERMISSION_MESSAGE, ValueExtractor.STRING, ClickPermissionMessageAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.VIEW_PERMISSION, ValueExtractor.STRING, ViewPermissionAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.KEEP_OPEN, ValueExtractor.BOOLEAN, KeepOpenAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.ACTIONS, ValueExtractor.STRING_LIST, ActionsAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.ENCHANTMENTS, ValueExtractor.STRING_LIST, EnchantmentsAttribute::new);
+		addApplicableIconNodeHandler(IconSettingsNode.REQUIRED_ITEMS, ValueExtractor.STRING_LIST, RequiredItemsAttribute::new);
 	}
 
 	public String getMenuName() {

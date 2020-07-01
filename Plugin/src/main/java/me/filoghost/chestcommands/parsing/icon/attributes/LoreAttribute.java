@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Colors;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class LoreAttribute implements ApplicableIconAttribute {
 	private final List<String> lore;
 	
 	public LoreAttribute(List<String> lore, AttributeErrorCollector attributeErrorCollector) {
-		this.lore = ChestCommands.getCustomPlaceholders().replaceAll(FormatUtils.colorizeLore(lore));
+		this.lore = ChestCommands.getCustomPlaceholders().replaceAll(Colors.colorLore(lore));
 	}
 	
 	@Override

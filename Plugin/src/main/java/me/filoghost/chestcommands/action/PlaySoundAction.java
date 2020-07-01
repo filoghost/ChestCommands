@@ -18,7 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.collection.Registry;
 import me.filoghost.chestcommands.util.Strings;
 
 import java.util.Optional;

@@ -25,7 +25,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 
@@ -46,7 +46,7 @@ public class AdvancedIconMenu extends BaseIconMenu<AdvancedIcon> {
 	}
 
 	public void setOpenActions(List<Action> openAction) {
-		this.openActions = Utils.nullableCopy(openAction);
+		this.openActions = CollectionUtils.nullableCopy(openAction);
 	}
 
 	public String getOpenPermission() {

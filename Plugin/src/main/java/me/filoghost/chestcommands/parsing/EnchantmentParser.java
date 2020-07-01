@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.util.Registry;
+import me.filoghost.chestcommands.util.collection.Registry;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.enchantments.Enchantment;
 

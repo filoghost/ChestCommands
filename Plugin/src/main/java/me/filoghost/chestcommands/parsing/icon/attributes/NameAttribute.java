@@ -18,14 +18,14 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Colors;
 
 public class NameAttribute implements ApplicableIconAttribute {
 
 	private final String name;
 
 	public NameAttribute(String name, AttributeErrorCollector attributeErrorCollector) {
-		this.name = ChestCommands.getCustomPlaceholders().replaceAll(FormatUtils.colorizeName(name));
+		this.name = ChestCommands.getCustomPlaceholders().replaceAll(Colors.colorName(name));
 	}
 	
 	@Override

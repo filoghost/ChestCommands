@@ -16,12 +16,12 @@ package me.filoghost.chestcommands.menu.icon;
 
 import java.util.List;
 
+import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.ImmutableList;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Preconditions;
 
 public class RequiredItems implements Requirement {
@@ -45,7 +45,7 @@ public class RequiredItems implements Requirement {
 			if (!item.isItemContainedIn(player.getInventory())) {
 				missingItems = true;
 				player.sendMessage(ChestCommands.getLang().no_required_item
-						.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
+						.replace("{material}", Utils.formatEnum(item.getMaterial()))
 						.replace("{amount}", Integer.toString(item.getAmount()))
 						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
 				);

@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.util;
 
+import me.filoghost.chestcommands.util.collection.Registry;
 import org.bukkit.Material;
 import java.util.Collection;
 import java.util.HashSet;
@@ -101,10 +102,6 @@ public final class MaterialsHelper {
 
 	public static Optional<Material> matchMaterial(String materialName) {
 		return MATERIALS_REGISTRY.find(materialName);
-	}
-
-	public static String formatMaterial(Material material) {
-		return Strings.capitalizeFully(material.toString().replace("_", " "));
 	}
 
 	private static Collection<Material> getExistingMaterials(String... materialEnumNames) {

@@ -28,7 +28,7 @@ import me.filoghost.chestcommands.api.impl.ConfigurableIconImpl;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.BaseIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 public class AdvancedIcon extends ConfigurableIconImpl {
 
@@ -81,7 +81,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	}
 
 	public void setRequiredItems(List<RequiredItem> requiredItems) {
-		if (!Utils.isNullOrEmpty(requiredItems)) {
+		if (!CollectionUtils.isNullOrEmpty(requiredItems)) {
 			this.requiredItems = new RequiredItems(requiredItems);
 		} else {
 			this.requiredItems = null;
@@ -89,7 +89,7 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	}
 
 	public void setClickActions(List<Action> clickActions) {
-		this.clickActions = Utils.nullableCopy(clickActions);
+		this.clickActions = CollectionUtils.nullableCopy(clickActions);
 	}
 	
 	

@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.Log;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -103,7 +103,7 @@ public abstract class SpecialConfig {
 					field.set(this, config.getDouble(configNode));
 
 				} else if (type == String.class) {
-					field.set(this, FormatUtils.addColors(config.getString(configNode))); // Always add colors
+					field.set(this, Colors.addColors(config.getString(configNode))); // Always add colors
 
 				} else {
 					Log.warning("Unknown field type: " + field.getType().getName() + " (" + field.getName() + "). Please inform the developer.");

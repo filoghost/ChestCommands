@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-public class IconNode {
+public class IconSettingsNode {
 
 	public static final String
 			POSITION_X = "POSITION-X",

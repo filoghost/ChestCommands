@@ -14,11 +14,11 @@
  */
 package me.filoghost.chestcommands.menu;
 
-import me.filoghost.chestcommands.config.files.LoadedMenu;
+import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
-import me.filoghost.chestcommands.menu.settings.OpenTrigger;
-import me.filoghost.chestcommands.util.CaseInsensitiveMap;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.parsing.menu.OpenTrigger;
+import me.filoghost.chestcommands.util.collection.CaseInsensitiveMap;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;

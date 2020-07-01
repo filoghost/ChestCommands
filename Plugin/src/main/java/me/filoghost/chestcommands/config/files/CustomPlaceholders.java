@@ -15,9 +15,9 @@
 package me.filoghost.chestcommands.config.files;
 
 import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.util.ErrorCollector;
-import me.filoghost.chestcommands.util.FormatUtils;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.Colors;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ public class CustomPlaceholders {
 
 		for (String key : config.getKeys(false)) {
 			String placeholder = key;
-			String replacement = FormatUtils.addColors(config.getString(key));
+			String replacement = Colors.addColors(config.getString(key));
 
 			if (placeholder.length() == 0) {
 				errorCollector.addError("Error in " + config.getFileName() + ": placeholder cannot be empty (skipped).");
@@ -53,7 +53,7 @@ public class CustomPlaceholders {
 		if (input == null) {
 			return null;
 		}
-		return Utils.transform(input, this::replaceAll);
+		return CollectionUtils.transform(input, this::replaceAll);
 	}
 
 	public String replaceAll(String input) {

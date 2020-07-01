@@ -1,7 +1,6 @@
-package me.filoghost.chestcommands.config.files;
+package me.filoghost.chestcommands.parsing.menu;
 
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.settings.OpenTrigger;
 
 import java.util.List;
 

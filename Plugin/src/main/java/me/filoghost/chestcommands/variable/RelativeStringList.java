@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.google.common.collect.ImmutableList;
 
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 public class RelativeStringList {
 
@@ -17,7 +17,7 @@ public class RelativeStringList {
 	public RelativeStringList(List<String> list) {
 		if (list != null) {
 			this.originalList = ImmutableList.copyOf(list);
-			this.relativeList = Utils.transform(list, RelativeString::of);
+			this.relativeList = CollectionUtils.transform(list, RelativeString::of);
 			this.hasVariables = this.relativeList.stream().anyMatch(RelativeString::hasVariables);
 		} else {
 			this.originalList = null;
@@ -32,7 +32,7 @@ public class RelativeStringList {
 	
 	public List<String> getValue(Player player) {
 		if (hasVariables) {
-			return Utils.transform(relativeList, element -> element.getValue(player));
+			return CollectionUtils.transform(relativeList, element -> element.getValue(player));
 		} else {
 			return originalList;
 		}

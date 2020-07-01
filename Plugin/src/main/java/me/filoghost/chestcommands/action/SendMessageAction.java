@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.variable.RelativeString;
 
 public class SendMessageAction extends Action {
@@ -24,7 +24,7 @@ public class SendMessageAction extends Action {
 	private final RelativeString message;
 
 	public SendMessageAction(String action) {
-		message = RelativeString.of(FormatUtils.addColors(action));
+		message = RelativeString.of(Colors.addColors(action));
 	}
 
 	@Override

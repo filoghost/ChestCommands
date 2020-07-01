@@ -1,7 +1,7 @@
 package me.filoghost.chestcommands.parsing.icon;
 
 import me.filoghost.chestcommands.parsing.ErrorFormat;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 public class AttributeErrorCollector {
 

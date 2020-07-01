@@ -19,7 +19,7 @@ import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.Utils;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import me.filoghost.chestcommands.variable.RelativeString;
 import me.filoghost.chestcommands.variable.RelativeStringList;
 import org.bukkit.Bukkit;
@@ -148,7 +148,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setLore(List<String> lore) {
-		if (!Utils.isNullOrEmpty(lore)) {
+		if (!CollectionUtils.isNullOrEmpty(lore)) {
 			this.lore = new RelativeStringList(lore);
 		} else {
 			this.lore = null;
@@ -171,12 +171,12 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public void setEnchantments(Map<Enchantment, Integer> enchantments) {
-		this.enchantments = Utils.nullableCopy(enchantments);
+		this.enchantments = CollectionUtils.nullableCopy(enchantments);
 	}
 
 	@Override
 	public Map<Enchantment, Integer> getEnchantments() {
-		return Utils.nullableCopy(enchantments);
+		return CollectionUtils.nullableCopy(enchantments);
 	}
 
 	@Override
@@ -236,12 +236,12 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 
 	@Override
 	public List<Pattern> getBannerPatterns() {
-		return Utils.nullableCopy(bannerPatterns);
+		return CollectionUtils.nullableCopy(bannerPatterns);
 	}
 
 	@Override
 	public void setBannerPatterns(List<Pattern> bannerPatterns) {
-		this.bannerPatterns = Utils.nullableCopy(bannerPatterns);
+		this.bannerPatterns = CollectionUtils.nullableCopy(bannerPatterns);
 	}
 
 	@Override
@@ -332,7 +332,7 @@ public class ConfigurableIconImpl implements ConfigurableIcon {
 		}
 		
 		// Hide all text details (damage, enchantments, potions, etc,)
-		if (Utils.isNullOrEmpty(itemMeta.getItemFlags())) {
+		if (CollectionUtils.isNullOrEmpty(itemMeta.getItemFlags())) {
 			itemMeta.addItemFlags(ItemFlag.values());
 		}
 

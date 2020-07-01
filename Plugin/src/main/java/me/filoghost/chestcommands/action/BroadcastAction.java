@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.util.FormatUtils;
+import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.variable.RelativeString;
 
 public class BroadcastAction extends Action {
@@ -25,7 +25,7 @@ public class BroadcastAction extends Action {
 	private final RelativeString message;
 
 	public BroadcastAction(String action) {
-		message = RelativeString.of(FormatUtils.addColors(action));
+		message = RelativeString.of(Colors.addColors(action));
 	}
 
 	@Override

@@ -26,7 +26,7 @@ import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.command.framework.CommandValidate;
 import me.filoghost.chestcommands.menu.AdvancedIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.ErrorCollector;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
 	
