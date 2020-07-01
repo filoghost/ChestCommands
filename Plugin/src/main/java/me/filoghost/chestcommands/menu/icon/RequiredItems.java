@@ -47,7 +47,7 @@ public class RequiredItems implements Requirement {
 				player.sendMessage(ChestCommands.getLang().no_required_item
 						.replace("{material}", MaterialsHelper.formatMaterial(item.getMaterial()))
 						.replace("{amount}", Integer.toString(item.getAmount()))
-						.replace("{datavalue}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
+						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
 				);
 			}
 		}
