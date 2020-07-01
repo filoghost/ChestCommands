@@ -131,13 +131,13 @@ public class AdvancedIcon extends ConfigurableIconImpl {
 	@Override
 	public boolean onClick(Inventory inventory, Player player) {
 		// Check all the requirements
-		boolean hasAllRequirements = Requirement.checkAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean hasAllRequirements = Requirement.hasAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!hasAllRequirements) {
 			return closeOnClick;
 		}
 
 		// If all requirements are satisfied, take their cost
-		boolean takenAllCosts = Requirement.takeCostAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean takenAllCosts = Requirement.takeAllCosts(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!takenAllCosts) {
 			return closeOnClick;
 		}

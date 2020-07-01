@@ -36,7 +36,7 @@ public class RequiredMoney implements Requirement {
 	}
 
 	@Override
-	public boolean check(Player player) {
+	public boolean hasCost(Player player) {
 		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
 			player.sendMessage(ChatColor.RED + "This action has a price, but Vault with a compatible economy plugin was not found. For security, the action has been blocked. Please inform the staff.");
 			return false;

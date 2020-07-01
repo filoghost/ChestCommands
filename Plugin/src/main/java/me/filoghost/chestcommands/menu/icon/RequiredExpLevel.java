@@ -34,7 +34,7 @@ public class RequiredExpLevel implements Requirement {
 	}
 
 	@Override
-	public boolean check(Player player) {
+	public boolean hasCost(Player player) {
 		if (player.getLevel() < levels) {
 			player.sendMessage(ChestCommands.getLang().no_exp.replace("{levels}", Integer.toString(levels)));
 			return false;
