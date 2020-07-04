@@ -14,10 +14,10 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public interface ApplicableIconAttribute extends IconAttribute {
 	
-	void apply(AdvancedIcon icon);
+	void apply(InternalConfigurableIcon icon);
 
 }

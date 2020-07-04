@@ -14,6 +14,8 @@
  */
 package me.filoghost.chestcommands;
 
+import me.filoghost.chestcommands.api.impl.DefaultBackendAPI;
+import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.config.ConfigLoader;
@@ -77,6 +79,7 @@ public class ChestCommands extends JavaPlugin {
 
 		instance = this;
 		Log.setLogger(getLogger());
+		BackendAPI.setImplementation(new DefaultBackendAPI());
 
 		configManager = new ConfigManager(getDataFolder().toPath());
 		menuManager = new MenuManager();
@@ -185,7 +188,7 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (MenuManager.getOpenMenu(player) != null) {
+			if (MenuManager.getOpenMenuInventory(player) != null) {
 				player.closeInventory();
 			}
 		}

@@ -27,7 +27,7 @@ public class PlayerCommandAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		player.chat('/' + command.getValue(player));
 	}
 

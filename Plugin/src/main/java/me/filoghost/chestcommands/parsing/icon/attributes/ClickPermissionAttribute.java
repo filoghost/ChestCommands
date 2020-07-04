@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 
@@ -27,7 +27,7 @@ public class ClickPermissionAttribute implements ApplicableIconAttribute {
 	}
 	
 	@Override
-	public void apply(AdvancedIcon icon) {
+	public void apply(InternalConfigurableIcon icon) {
 		icon.setClickPermission(clickPermission);
 	}
 

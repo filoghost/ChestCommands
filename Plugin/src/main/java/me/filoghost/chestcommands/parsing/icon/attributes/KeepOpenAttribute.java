@@ -14,21 +14,26 @@
  */
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 
 public class KeepOpenAttribute implements ApplicableIconAttribute {
 
-	private final boolean keepOpen;
+	private final ClickResult clickResult;
 
 	public KeepOpenAttribute(boolean keepOpen, AttributeErrorCollector attributeErrorCollector) {
-		this.keepOpen = keepOpen;
+		if (keepOpen) {
+			this.clickResult = ClickResult.KEEP_OPEN;
+		} else {
+			this.clickResult = ClickResult.CLOSE;
+		}
 	}
 	
 	@Override
-	public void apply(AdvancedIcon icon) {
-		icon.setCloseOnClick(!keepOpen);
+	public void apply(InternalConfigurableIcon icon) {
+		icon.setClickResult(clickResult);
 	}
 
 }

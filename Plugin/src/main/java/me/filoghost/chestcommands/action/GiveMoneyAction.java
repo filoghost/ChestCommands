@@ -34,7 +34,7 @@ public class GiveMoneyAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		if (VaultEconomyHook.INSTANCE.isEnabled()) {
 			VaultEconomyHook.giveMoney(player, moneyToGive);
 		} else {

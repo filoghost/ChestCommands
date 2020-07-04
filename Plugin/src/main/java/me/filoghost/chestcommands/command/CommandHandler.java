@@ -14,19 +14,18 @@
  */
 package me.filoghost.chestcommands.command;
 
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.Permissions;
+import me.filoghost.chestcommands.command.framework.CommandFramework;
+import me.filoghost.chestcommands.command.framework.CommandValidate;
+import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.Permissions;
-import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.command.framework.CommandValidate;
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 public class CommandHandler extends CommandFramework {
 	
@@ -101,7 +100,7 @@ public class CommandHandler extends CommandFramework {
 			CommandValidate.notNull(target, "That player is not online.");
 
 			String menuName = args[1].toLowerCase().endsWith(".yml") ? args[1] : args[1] + ".yml";
-			AdvancedIconMenu menu = menuManager.getMenuByFileName(menuName);
+			InternalIconMenu menu = menuManager.getMenuByFileName(menuName);
 			CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
 			if (!sender.hasPermission(menu.getOpenPermission())) {

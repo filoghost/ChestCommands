@@ -14,8 +14,9 @@
  */
 package me.filoghost.chestcommands.menu;
 
+import me.filoghost.chestcommands.inventory.DefaultItemInventory;
+import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
-import me.filoghost.chestcommands.menu.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.parsing.menu.OpenTrigger;
 import me.filoghost.chestcommands.util.collection.CaseInsensitiveMap;
 import me.filoghost.chestcommands.util.collection.ErrorCollector;
@@ -32,9 +33,9 @@ import java.util.Map;
 
 public class MenuManager {
 	
-	private static Map<String, AdvancedIconMenu> menusByFile;
-	private static Map<String, AdvancedIconMenu> menusByCommand;
-	private static Map<OpenTrigger, AdvancedIconMenu> menusByOpenTrigger;
+	private static Map<String, InternalIconMenu> menusByFile;
+	private static Map<String, InternalIconMenu> menusByCommand;
+	private static Map<OpenTrigger, InternalIconMenu> menusByOpenTrigger;
 	
 	public MenuManager() {
 		menusByFile = new CaseInsensitiveMap<>();
@@ -48,12 +49,12 @@ public class MenuManager {
 		menusByOpenTrigger.clear();
 	}
 
-	public AdvancedIconMenu getMenuByFileName(String fileName) {
+	public InternalIconMenu getMenuByFileName(String fileName) {
 		return menusByFile.get(fileName);
 	}
 
 	public void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
-		AdvancedIconMenu menu = loadedMenu.getMenu();
+		InternalIconMenu menu = loadedMenu.getMenu();
 
 		if (menusByFile.containsKey(loadedMenu.getFileName())) {
 			errorCollector.addError("Two menus have the same file name \"" + loadedMenu.getFileName() + "\". "
@@ -86,7 +87,7 @@ public class MenuManager {
 		});
 	}
 
-	public AdvancedIconMenu getMenuByCommand(String command) {
+	public InternalIconMenu getMenuByCommand(String command) {
 		return menusByCommand.get(command);
 	}
 
@@ -97,44 +98,26 @@ public class MenuManager {
 	public static boolean isMenuInventory(Inventory inventory) {
 		return getMenuInventoryHolder(inventory) != null;
 	}
-	
-	public static BaseIconMenu<?> getOpenMenu(Player player) {
-		MenuView menuView = getOpenMenuView(player);
-		if (menuView != null) {
-			return menuView.getMenu();
-		} else {
-			return null;
-		}
-	}
-	
-	public static BaseIconMenu<?> getOpenMenu(Inventory inventory) {
-		MenuView menuView = getOpenMenuView(inventory);
-		if (menuView != null) {
-			return menuView.getMenu();
-		} else {
-			return null;
-		}
-	}
-	
-	public static MenuView getOpenMenuView(Player player) {
+
+	public static DefaultItemInventory getOpenMenuInventory(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {
 			return null;
 		}
-		
-		MenuView openMenuView = getOpenMenuView(view.getTopInventory());
-		if (openMenuView == null) {
-			openMenuView = getOpenMenuView(view.getBottomInventory());
+
+		DefaultItemInventory menuInventory = getOpenMenuInventory(view.getTopInventory());
+		if (menuInventory == null) {
+			menuInventory = getOpenMenuInventory(view.getBottomInventory());
 		}
 		
-		return openMenuView;
+		return menuInventory;
 	}
 	
 	
-	public static MenuView getOpenMenuView(Inventory inventory) {
+	public static DefaultItemInventory getOpenMenuInventory(Inventory inventory) {
 		MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
 		if (inventoryHolder != null) {
-			return new MenuView(inventoryHolder.getIconMenu(), inventory);
+			return inventoryHolder.getMenuInventory();
 		} else {
 			return null;
 		}

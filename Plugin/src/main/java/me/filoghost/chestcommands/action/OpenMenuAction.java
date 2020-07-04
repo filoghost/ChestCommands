@@ -14,13 +14,12 @@
  */
 package me.filoghost.chestcommands.action;
 
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.variable.RelativeString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.variable.RelativeString;
 
 public class OpenMenuAction extends Action {
 
@@ -31,8 +30,8 @@ public class OpenMenuAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(final Player player) {
-		final AdvancedIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(targetMenu.getValue(player));
+	protected void execute0(final Player player) {
+		final InternalIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(targetMenu.getValue(player));
 		
 		if (menu != null) {
 			/*

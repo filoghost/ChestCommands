@@ -14,9 +14,11 @@
  */
 package me.filoghost.chestcommands.listener;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.inventory.DefaultItemInventory.SlotClickHandler;
+import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.inventory.DefaultItemInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,22 +27,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.menu.BaseIconMenu;
-import me.filoghost.chestcommands.menu.MenuManager;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class InventoryListener implements Listener {
-	
-	private static final Map<Player, Long> antiClickSpam = new HashMap<>();
-	
+
 	private final MenuManager menuManager;
-	
+	private final Map<Player, Long> antiClickSpam;
+
 	public InventoryListener(MenuManager menuManager) {
 		this.menuManager = menuManager;
+		this.antiClickSpam = new WeakHashMap<>();
 	}
 	
 
@@ -62,25 +61,20 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
 	    Inventory inventory = event.getInventory();
-	    BaseIconMenu<?> menu = MenuManager.getOpenMenu(inventory);
-	    if (menu == null) {
+	    DefaultItemInventory menuInventory = MenuManager.getOpenMenuInventory(inventory);
+	    if (menuInventory == null) {
 			return;
 		}
-	    
-		// Make sure the event is still cancelled (in case another plugin wrongly uncancels it)
-		event.setCancelled(true);
+
+	    // Cancel the event again just in case a plugin un-cancels it
+	    event.setCancelled(true);
 
 		int slot = event.getRawSlot();
-		if (slot < 0 || slot >= menu.getSize()) {
-			return;
-		}
-
-		Icon icon = menu.getIconAtSlot(slot);
-		if (icon == null || event.getInventory().getItem(slot) == null) {
-			return;
-		}
-
 		Player clicker = (Player) event.getWhoClicked();
+		SlotClickHandler slotClickHandler = menuInventory.getSlotClickHandler(slot, clicker);
+		if (slotClickHandler == null) {
+			return;
+		}
 
 		Long cooldownUntil = antiClickSpam.get(clicker);
 		long now = System.currentTimeMillis();
@@ -96,17 +90,12 @@ public class InventoryListener implements Listener {
 
 		// Only handle the click AFTER the event has finished
 		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
-			boolean close = icon.onClick(inventory, clicker);
+			ClickResult result = slotClickHandler.onClick();
 
-			if (close) {
+			if (result == ClickResult.CLOSE) {
 				clicker.closeInventory();
 			}
 		});
-	}
-
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		antiClickSpam.remove(event.getPlayer());
 	}
 
 }

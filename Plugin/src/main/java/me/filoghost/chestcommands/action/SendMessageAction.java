@@ -28,7 +28,7 @@ public class SendMessageAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		player.sendMessage(message.getValue(player));
 	}
 

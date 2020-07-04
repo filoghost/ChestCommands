@@ -28,7 +28,7 @@ public class ChangeServerAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		BungeeCordHook.connect(player, targetServer.getValue(player));
 	}
 

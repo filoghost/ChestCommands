@@ -14,19 +14,19 @@
  */
 package me.filoghost.chestcommands.api;
 
-import org.bukkit.entity.Player;
-
 import me.filoghost.chestcommands.api.internal.BackendAPI;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public interface IconMenu {
 	
-	public static IconMenu create(String title, int rowCount) {
-		return BackendAPI.getImplementation().createIconMenu(title, rowCount);
+	static IconMenu create(Plugin owner, String title, int rowCount) {
+		return BackendAPI.getImplementation().createIconMenu(owner, title, rowCount);
 	}
 
-	void setIcon(int x, int y, Icon icon);
+	void setIcon(int row, int column, Icon icon);
 
-	Icon getIcon(int x, int y);
+	Icon getIcon(int row, int column);
 
 	String getTitle();
 	
@@ -34,6 +34,12 @@ public interface IconMenu {
 	
 	int getColumnCount();
 
-	void open(Player player);
+	/**
+	 * Opens a view of the current menu configuration.
+	 * Updating the menu doesn't automatically update all the views.
+	 *
+	 * @param player the player to which the menu will be displayed
+	 */
+	ItemInventory open(Player player);
 
 }

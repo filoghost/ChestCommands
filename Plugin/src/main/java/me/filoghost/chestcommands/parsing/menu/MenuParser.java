@@ -18,16 +18,16 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.Config;
 import me.filoghost.chestcommands.config.ConfigSection;
 import me.filoghost.chestcommands.config.ConfigValueException;
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ErrorFormat;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.util.Colors;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -41,7 +41,7 @@ public class MenuParser {
 		MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
 		List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
 
-		AdvancedIconMenu iconMenu = new AdvancedIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getFileName());
+		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getFileName());
 
 		for (IconSettings iconSettings : iconSettingsList) {
 			try {
@@ -58,7 +58,7 @@ public class MenuParser {
 	}
 
 
-	private static void addIconToMenu(AdvancedIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) throws IconAddException {
+	private static void addIconToMenu(InternalIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) throws IconAddException {
 		if (iconSettings.getPositionX() == null) {
 			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.POSITION_X));
 		}
@@ -67,19 +67,19 @@ public class MenuParser {
 			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.POSITION_Y));
 		}
 
-		int actualX = iconSettings.getPositionX().getPosition() - 1;
-		int actualY = iconSettings.getPositionY().getPosition() - 1;
+		int row = iconSettings.getPositionY().getPosition() - 1;
+		int column = iconSettings.getPositionX().getPosition() - 1;
 
-		if (actualX < 0 || actualX >= iconMenu.getColumnCount()) {
-			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconSettingsNode.POSITION_X,
-					"it must be between 1 and " + iconMenu.getColumnCount()));
-		}
-		if (actualY < 0 || actualY >= iconMenu.getRowCount()) {
+		if (row < 0 || row >= iconMenu.getRowCount()) {
 			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconSettingsNode.POSITION_Y,
 					"it must be between 1 and " + iconMenu.getRowCount()));
 		}
+		if (column < 0 || column >= iconMenu.getColumnCount()) {
+			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconSettingsNode.POSITION_X,
+					"it must be between 1 and " + iconMenu.getColumnCount()));
+		}
 
-		if (iconMenu.getIcon(actualX, actualY) != null) {
+		if (iconMenu.getIcon(row, column) != null) {
 			throw new IconAddException(ErrorFormat.iconError(iconSettings,
 					"is overriding another icon with the same position"));
 		}
@@ -88,9 +88,9 @@ public class MenuParser {
 			errorCollector.addError(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.MATERIAL));
 		}
 
-		AdvancedIcon icon = new AdvancedIcon(Material.BEDROCK);
+		InternalConfigurableIcon icon = new InternalConfigurableIcon(Material.BEDROCK);
 		iconSettings.applyAttributesTo(icon);
-		iconMenu.setIcon(actualX, actualY, icon);
+		iconMenu.setIcon(row, column, icon);
 	}
 
 

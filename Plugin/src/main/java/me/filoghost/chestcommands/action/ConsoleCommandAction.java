@@ -28,7 +28,7 @@ public class ConsoleCommandAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getValue(player));
 	}
 

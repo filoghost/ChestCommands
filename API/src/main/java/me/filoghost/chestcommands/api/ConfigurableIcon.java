@@ -14,20 +14,19 @@
  */
 package me.filoghost.chestcommands.api;
 
-import java.util.List;
-import java.util.Map;
-
+import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 
-import me.filoghost.chestcommands.api.internal.BackendAPI;
+import java.util.List;
+import java.util.Map;
 
-public interface ConfigurableIcon extends Icon {
+public interface ConfigurableIcon extends ClickableIcon {
 	
-	public static ConfigurableIcon create(Material material) {
+	static ConfigurableIcon create(Material material) {
 		return BackendAPI.getImplementation().createConfigurableIcon(material);
 	}
 	
@@ -65,11 +64,11 @@ public interface ConfigurableIcon extends Icon {
 
 	Map<Enchantment, Integer> getEnchantments();
 
-	void addEnchantment(Enchantment ench);
+	void addEnchantment(Enchantment enchantment);
 
-	void addEnchantment(Enchantment ench, Integer level);
+	void addEnchantment(Enchantment enchantment, Integer level);
 
-	void removeEnchantment(Enchantment ench);
+	void removeEnchantment(Enchantment enchantment);
 
 	Color getLeatherColor();
 
@@ -87,10 +86,6 @@ public interface ConfigurableIcon extends Icon {
 
 	void setBannerPatterns(List<Pattern> bannerPatterns);
 
-	void setCloseOnClick(boolean closeOnClick);
-	
-	void setClickHandler(ClickHandler clickHandler);
-
-	ClickHandler getClickHandler();
+	void setPlaceholdersEnabled(boolean enabled);
 
 }

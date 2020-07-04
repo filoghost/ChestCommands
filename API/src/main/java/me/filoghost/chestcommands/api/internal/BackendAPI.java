@@ -14,13 +14,13 @@
  */
 package me.filoghost.chestcommands.api.internal;
 
+import me.filoghost.chestcommands.api.ConfigurableIcon;
+import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.StaticIcon;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.api.StaticIcon;
-import me.filoghost.chestcommands.api.ConfigurableIcon;
+import org.bukkit.plugin.Plugin;
 
 public abstract class BackendAPI {
 	
@@ -42,12 +42,10 @@ public abstract class BackendAPI {
 
 	public abstract boolean openPluginMenu(Player player, String yamlFile);
 
-	public abstract IconMenu createIconMenu(String title, int rows);
+	public abstract IconMenu createIconMenu(Plugin owner, String title, int rows);
 	
 	public abstract ConfigurableIcon createConfigurableIcon(Material material);
 
-	public abstract StaticIcon createStaticIcon(ItemStack itemStack, boolean closeOnClick);
-
-	
+	public abstract StaticIcon createStaticIcon(ItemStack itemStack);
 
 }

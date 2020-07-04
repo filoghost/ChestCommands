@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.EnchantmentParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
@@ -47,7 +47,7 @@ public class EnchantmentsAttribute implements ApplicableIconAttribute {
 	}
 	
 	@Override
-	public void apply(AdvancedIcon icon) {
+	public void apply(InternalConfigurableIcon icon) {
 		icon.setEnchantments(enchantments);
 	}
 

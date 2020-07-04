@@ -62,7 +62,7 @@ public class PlaySoundAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		player.playSound(player.getLocation(), sound, volume, pitch);
 	}
 

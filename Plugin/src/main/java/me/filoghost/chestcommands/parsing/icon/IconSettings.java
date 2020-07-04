@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.parsing.icon;
 
 import me.filoghost.chestcommands.config.ConfigSection;
 import me.filoghost.chestcommands.config.ConfigValueException;
-import me.filoghost.chestcommands.menu.icon.AdvancedIcon;
+import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.attributes.ActionsAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.AmountAttribute;
@@ -38,8 +38,8 @@ import me.filoghost.chestcommands.parsing.icon.attributes.PriceAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.RequiredItemsAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.SkullOwnerAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.ViewPermissionAttribute;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +118,7 @@ public class IconSettings {
 		applicableAttributes.add(iconAttribute);
 	}
 
-	public void applyAttributesTo(AdvancedIcon icon) {
+	public void applyAttributesTo(InternalConfigurableIcon icon) {
 		if (materialAttribute != null) {
 			materialAttribute.apply(icon);
 		}

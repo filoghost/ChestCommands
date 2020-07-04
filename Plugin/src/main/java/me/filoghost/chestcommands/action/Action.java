@@ -24,14 +24,14 @@ public abstract class Action {
 		this.errorMessage = errorMessage;
 	}
 
-	public void execute(Player player) {
+	public final void execute(Player player) {
 		if (errorMessage != null) {
 			player.sendMessage(errorMessage);
 		} else {
-			executeInner(player);
+			execute0(player);
 		}
 	}
 	
-	protected abstract void executeInner(Player player);	
+	protected abstract void execute0(Player player);
 
 }

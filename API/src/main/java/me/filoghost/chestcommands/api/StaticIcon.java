@@ -14,14 +14,17 @@
  */
 package me.filoghost.chestcommands.api;
 
+import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.api.internal.BackendAPI;
-
-public interface StaticIcon extends Icon {
+public interface StaticIcon extends ClickableIcon {
 	
-	public static StaticIcon create(ItemStack itemStack, boolean closeOnClick) {
-		return BackendAPI.getImplementation().createStaticIcon(itemStack, closeOnClick);
+	static StaticIcon create(ItemStack itemStack) {
+		return BackendAPI.getImplementation().createStaticIcon(itemStack);
 	}
+
+	ItemStack getItemStack();
+
+	void setItemStack(ItemStack itemStack);
 
 }

@@ -14,12 +14,11 @@
  */
 package me.filoghost.chestcommands.task;
 
+import me.filoghost.chestcommands.inventory.DefaultItemInventory;
+import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.menu.MenuView;
 
 public class RefreshMenusTask implements Runnable {
 
@@ -28,19 +27,16 @@ public class RefreshMenusTask implements Runnable {
 	@Override
 	public void run() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			MenuView openMenuView = MenuManager.getOpenMenuView(player);
-			if (openMenuView == null) {
-				return;
+			DefaultItemInventory itemInventory = MenuManager.getOpenMenuInventory(player);
+
+			if (itemInventory == null || !(itemInventory.getMenu() instanceof InternalIconMenu)) {
+				continue;
 			}
-			
-			if (!(openMenuView.getMenu() instanceof AdvancedIconMenu)) {
-				return;
-			}
-			
-			AdvancedIconMenu iconMenu = (AdvancedIconMenu) openMenuView.getMenu();
-			
-			if (elapsedTenths % iconMenu.getRefreshTicks() == 0) {
-				iconMenu.refresh(player, openMenuView.getInventory());
+
+			int refreshTicks = ((InternalIconMenu) itemInventory.getMenu()).getRefreshTicks();
+
+			if (refreshTicks > 0 && elapsedTenths % refreshTicks == 0) {
+				itemInventory.refresh();
 			}
 		}
 

@@ -1,7 +1,5 @@
 package me.filoghost.chestcommands.util;
 
-import org.bukkit.Material;
-
 public class Utils {
 
 	public static boolean isClassLoaded(String name) {

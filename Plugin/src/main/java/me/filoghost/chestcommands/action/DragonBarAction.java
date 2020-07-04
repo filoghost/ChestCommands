@@ -48,7 +48,7 @@ public class DragonBarAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		if (BarAPIHook.INSTANCE.isEnabled()) {
 			BarAPIHook.setMessage(player, message.getValue(player), seconds);
 		}

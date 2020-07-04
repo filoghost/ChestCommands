@@ -14,13 +14,12 @@
  */
 package me.filoghost.chestcommands.listener;
 
+import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
-import me.filoghost.chestcommands.menu.AdvancedIconMenu;
-import me.filoghost.chestcommands.menu.MenuManager;
 
 public class CommandListener implements Listener {
 	
@@ -38,7 +37,7 @@ public class CommandListener implements Listener {
 			return;
 		}
 
-		AdvancedIconMenu menu = menuManager.getMenuByCommand(command);
+		InternalIconMenu menu = menuManager.getMenuByCommand(command);
 		
 		if (menu == null) {
 			return;

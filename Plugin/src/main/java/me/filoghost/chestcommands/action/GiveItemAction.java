@@ -35,7 +35,7 @@ public class GiveItemAction extends Action {
 	}
 
 	@Override
-	protected void executeInner(Player player) {
+	protected void execute0(Player player) {
 		player.getInventory().addItem(itemToGive.clone());
 	}
 
