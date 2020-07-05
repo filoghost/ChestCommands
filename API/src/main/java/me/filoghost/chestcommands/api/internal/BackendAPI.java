@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.api.internal;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.api.StaticIcon;
+import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,13 +28,14 @@ public abstract class BackendAPI {
 	private static BackendAPI implementation;
 	
 	public static void setImplementation(BackendAPI implementation) {
+		Preconditions.notNull(implementation, "implementation");
+		Preconditions.checkState(implementation == null, "implementation already set");
+
 		BackendAPI.implementation = implementation;
 	}
 	
 	public static BackendAPI getImplementation() {
-		if (implementation == null) {
-			throw new IllegalStateException("no implementation set");
-		}
+		Preconditions.checkState(implementation != null, "no implementation set");
 		
 		return implementation;
 	}
