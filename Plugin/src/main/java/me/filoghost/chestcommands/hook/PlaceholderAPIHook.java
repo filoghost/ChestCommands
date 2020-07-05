@@ -26,10 +26,10 @@ public enum PlaceholderAPIHook implements PluginHook {
 		return PlaceholderAPI.containsPlaceholders(message);
 	}
 
-	public static String setPlaceholders(String message, Player executor) {
+	public static String setPlaceholders(String message, Player viewer) {
 		INSTANCE.checkEnabledState();
 
-		return PlaceholderAPI.setPlaceholders(executor, message);
+		return PlaceholderAPI.setPlaceholders(viewer, message);
 	}
 
 }

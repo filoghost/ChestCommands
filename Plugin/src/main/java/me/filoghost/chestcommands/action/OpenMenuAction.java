@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
-import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

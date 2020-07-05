@@ -22,7 +22,7 @@ import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.Strings;
-import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeString;
 
 public class DragonBarAction extends Action {
 

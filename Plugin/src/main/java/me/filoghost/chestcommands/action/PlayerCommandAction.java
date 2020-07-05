@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeString;
 
 public class PlayerCommandAction extends Action {
 	

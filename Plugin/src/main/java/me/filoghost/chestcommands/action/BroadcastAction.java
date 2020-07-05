@@ -18,7 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeString;
 
 public class BroadcastAction extends Action {
 	

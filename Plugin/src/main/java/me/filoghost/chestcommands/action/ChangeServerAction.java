@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.action;
 import org.bukkit.entity.Player;
 
 import me.filoghost.chestcommands.hook.BungeeCordHook;
-import me.filoghost.chestcommands.variable.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeString;
 
 public class ChangeServerAction extends Action {
 

@@ -1,4 +1,4 @@
-package me.filoghost.chestcommands.variable;
+package me.filoghost.chestcommands.placeholder;
 
 import java.util.List;
 
@@ -12,17 +12,17 @@ public class RelativeStringList {
 
 	private final ImmutableList<String> originalList;
 	private final List<RelativeString> relativeList;
-	private final boolean hasVariables;
+	private final boolean hasPlaceholders;
 	
 	public RelativeStringList(List<String> list) {
 		if (list != null) {
 			this.originalList = ImmutableList.copyOf(list);
 			this.relativeList = CollectionUtils.transform(list, RelativeString::of);
-			this.hasVariables = this.relativeList.stream().anyMatch(RelativeString::hasVariables);
+			this.hasPlaceholders = this.relativeList.stream().anyMatch(RelativeString::hasPlaceholders);
 		} else {
 			this.originalList = null;
 			this.relativeList = null;
-			this.hasVariables = false;
+			this.hasPlaceholders = false;
 		}
 	}
 	
@@ -31,15 +31,15 @@ public class RelativeStringList {
 	}
 	
 	public List<String> getValue(Player player) {
-		if (hasVariables) {
+		if (hasPlaceholders) {
 			return CollectionUtils.transform(relativeList, element -> element.getValue(player));
 		} else {
 			return originalList;
 		}
 	}
 	
-	public boolean hasVariables() {
-		return hasVariables;
+	public boolean hasPlaceholders() {
+		return hasPlaceholders;
 	}
 
 }

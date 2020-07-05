@@ -18,8 +18,8 @@ import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
-import me.filoghost.chestcommands.variable.RelativeString;
-import me.filoghost.chestcommands.variable.RelativeStringList;
+import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.RelativeStringList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -57,7 +57,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	private List<Pattern> bannerPatterns;
 	private boolean placeholdersEnabled;
 	
-	protected ItemStack cachedRendering; // Cache the rendered item when there are no variables and values haven't changed
+	protected ItemStack cachedRendering; // Cache the rendered item when possible and if state hasn't changed
 
 	public BaseConfigurableIcon(Material material) {
 		Preconditions.checkArgumentNotAir(material, "material");
@@ -70,9 +70,9 @@ public abstract class BaseConfigurableIcon implements Icon {
 			return false;
 		}
 
-		return (name == null || !name.hasVariables())
-				&& (lore == null || !lore.hasVariables())
-				&& (skullOwner == null || !skullOwner.hasVariables());
+		return (name == null || !name.hasPlaceholders())
+				&& (lore == null || !lore.hasPlaceholders())
+				&& (skullOwner == null || !skullOwner.hasPlaceholders());
 	}
 
 	public void setMaterial(Material material) {
@@ -324,7 +324,6 @@ public abstract class BaseConfigurableIcon implements Icon {
 
 
 		if (shouldCacheRendering()) {
-			// If there are no variables, cache the item
 			cachedRendering = itemStack;
 		}
 

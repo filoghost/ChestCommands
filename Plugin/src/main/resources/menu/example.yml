@@ -21,7 +21,7 @@ menu-settings:
 
   # OPTIONAL
   # How frequently the menu will be refreshed, in seconds.
-  # Useful if you have variables in icon descriptions.
+  # Useful if you have placeholders in icon descriptions.
   auto-refresh: 5
 
   # OPTIONAL

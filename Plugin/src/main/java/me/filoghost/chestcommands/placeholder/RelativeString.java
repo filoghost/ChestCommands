@@ -1,11 +1,11 @@
-package me.filoghost.chestcommands.variable;
+package me.filoghost.chestcommands.placeholder;
 
 import org.bukkit.entity.Player;
 
 public class RelativeString {
 
 	private final String string;
-	private final boolean hasVariables;
+	private final boolean hasPlaceholders;
 
 	public static RelativeString of(String string) {
 		if (string != null) {
@@ -17,7 +17,7 @@ public class RelativeString {
 	
 	private RelativeString(String string) {
 		this.string = string;
-		this.hasVariables = VariableManager.hasVariables(string);
+		this.hasPlaceholders = PlaceholderManager.hasPlaceholders(string);
 	}
 	
 	public String getRawValue() {
@@ -25,15 +25,15 @@ public class RelativeString {
 	}
 	
 	public String getValue(Player player) {
-		if (hasVariables) {
-			return VariableManager.setVariables(string, player);
+		if (hasPlaceholders) {
+			return PlaceholderManager.replacePlaceholders(string, player);
 		} else {
 			return string;
 		}
 	}
 	
-	public boolean hasVariables() {
-		return hasVariables;
+	public boolean hasPlaceholders() {
+		return hasPlaceholders;
 	}
 
 }
