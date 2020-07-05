@@ -12,7 +12,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.api.impl;
+package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.menu.BaseIconMenu;
 import org.bukkit.plugin.Plugin;

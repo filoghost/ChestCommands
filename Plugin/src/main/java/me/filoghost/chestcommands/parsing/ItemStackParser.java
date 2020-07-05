@@ -31,9 +31,7 @@ public class ItemStackParser {
 	private boolean hasExplicitDurability = false;
 
 	/**
-	 * Reads item in the format "id:data, amount"
-	 * id can be either the id of the material or its name.
-	 * for example wool:5, 3 is a valid input.
+	 * Reads item in the format "material:durability, amount".
 	 */
 	public ItemStackParser(String input, boolean parseAmount) throws ParseException {
 		Preconditions.notNull(input, "input");

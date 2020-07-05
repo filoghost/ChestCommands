@@ -68,9 +68,9 @@ public abstract class BaseIconMenu implements IconMenu {
 	public ItemInventory open(Player player) {
 		Preconditions.notNull(player, "player");
 
-		DefaultItemInventory menuInventory = new DefaultItemInventory(this, player);
-		menuInventory.open(player);
-		return menuInventory;
+		DefaultItemInventory itemInventory = new DefaultItemInventory(this, player);
+		itemInventory.open(player);
+		return itemInventory;
 	}
 
 }

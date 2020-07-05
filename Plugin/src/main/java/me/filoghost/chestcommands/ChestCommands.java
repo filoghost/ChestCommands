@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands;
 
-import me.filoghost.chestcommands.api.impl.DefaultBackendAPI;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
@@ -172,8 +171,8 @@ public class ChestCommands extends JavaPlugin {
 		placeholders = configManager.tryLoadCustomPlaceholders(errors);
 
 		// Create the menu folder with the example menu
-		if (!Files.isDirectory(configManager.getMenusPath())) {
-			ConfigLoader exampleMenuLoader = new ConfigLoader(configManager.getMenusPath().resolve("example.yml"));
+		if (!Files.isDirectory(configManager.getMenusFolder())) {
+			ConfigLoader exampleMenuLoader = new ConfigLoader(configManager.getMenusFolder().resolve("example.yml"));
 			configManager.tryCreateDefault(exampleMenuLoader);
 		}
 
@@ -188,7 +187,7 @@ public class ChestCommands extends JavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (MenuManager.getOpenMenuInventory(player) != null) {
+			if (MenuManager.getOpenItemInventory(player) != null) {
 				player.closeInventory();
 			}
 		}

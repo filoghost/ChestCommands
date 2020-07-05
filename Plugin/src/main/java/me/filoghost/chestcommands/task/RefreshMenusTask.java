@@ -27,7 +27,7 @@ public class RefreshMenusTask implements Runnable {
 	@Override
 	public void run() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultItemInventory itemInventory = MenuManager.getOpenMenuInventory(player);
+			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
 
 			if (itemInventory == null || !(itemInventory.getMenu() instanceof InternalIconMenu)) {
 				continue;

@@ -20,7 +20,7 @@ public class DefaultItemInventory implements ItemInventory {
 	public DefaultItemInventory(BaseIconMenu menu, Player viewer) {
 		this.menu = menu;
 		this.viewer = viewer;
-		this.bukkitInventory = new InventoryGrid(new MenuInventoryHolder(this), menu.getRowCount(), menu.getTitle());
+		this.bukkitInventory = new InventoryGrid(new ItemInventoryHolder(this), menu.getRowCount(), menu.getTitle());
 		refresh();
 	}
 

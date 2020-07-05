@@ -101,11 +101,11 @@ public class RequiredItem {
 		return item != null && item.getType() == material && isMatchingDurability(item.getDurability());
 	}
 	
-	private boolean isMatchingDurability(short data) {
+	private boolean isMatchingDurability(short durability) {
 		if (!isDurabilityRestrictive) {
 			return true;
 		}
-		return data == this.durability;
+		return this.durability == durability;
 	}
 	
 }

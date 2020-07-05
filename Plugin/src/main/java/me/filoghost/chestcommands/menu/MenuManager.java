@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.inventory.DefaultItemInventory;
-import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
+import me.filoghost.chestcommands.inventory.ItemInventoryHolder;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.OpenTrigger;
 import me.filoghost.chestcommands.util.collection.CaseInsensitiveMap;
@@ -95,37 +95,37 @@ public class MenuManager {
 		return Collections.unmodifiableCollection(menusByFile.keySet());
 	}
 	
-	public static boolean isMenuInventory(Inventory inventory) {
-		return getMenuInventoryHolder(inventory) != null;
+	public static boolean isItemInventory(Inventory inventory) {
+		return getItemInventoryHolder(inventory) != null;
 	}
 
-	public static DefaultItemInventory getOpenMenuInventory(Player player) {
+	public static DefaultItemInventory getOpenItemInventory(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {
 			return null;
 		}
 
-		DefaultItemInventory menuInventory = getOpenMenuInventory(view.getTopInventory());
-		if (menuInventory == null) {
-			menuInventory = getOpenMenuInventory(view.getBottomInventory());
+		DefaultItemInventory itemInventory = getOpenItemInventory(view.getTopInventory());
+		if (itemInventory == null) {
+			itemInventory = getOpenItemInventory(view.getBottomInventory());
 		}
 		
-		return menuInventory;
+		return itemInventory;
 	}
 	
 	
-	public static DefaultItemInventory getOpenMenuInventory(Inventory inventory) {
-		MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
+	public static DefaultItemInventory getOpenItemInventory(Inventory inventory) {
+		ItemInventoryHolder inventoryHolder = getItemInventoryHolder(inventory);
 		if (inventoryHolder != null) {
-			return inventoryHolder.getMenuInventory();
+			return inventoryHolder.getItemInventory();
 		} else {
 			return null;
 		}
 	}
 	
-	private static MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
-		if (inventory.getHolder() instanceof MenuInventoryHolder) {
-			return (MenuInventoryHolder) inventory.getHolder();
+	private static ItemInventoryHolder getItemInventoryHolder(Inventory inventory) {
+		if (inventory.getHolder() instanceof ItemInventoryHolder) {
+			return (ItemInventoryHolder) inventory.getHolder();
 		} else {
 			return null;
 		}

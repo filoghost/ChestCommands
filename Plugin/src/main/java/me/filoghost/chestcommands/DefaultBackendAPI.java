@@ -12,13 +12,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.api.impl;
+package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
+import me.filoghost.chestcommands.icon.APIConfigurableIcon;
+import me.filoghost.chestcommands.icon.APIStaticIcon;
+import me.filoghost.chestcommands.menu.APIIconMenu;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

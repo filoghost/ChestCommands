@@ -19,13 +19,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class MenuInventoryHolder implements InventoryHolder {
+public class ItemInventoryHolder implements InventoryHolder {
 
-	private final DefaultItemInventory menuInventory;
+	private final DefaultItemInventory itemInventory;
 
-	public MenuInventoryHolder(DefaultItemInventory menuInventory) {
-		Preconditions.notNull(menuInventory, "menuInventory");
-		this.menuInventory = menuInventory;
+	public ItemInventoryHolder(DefaultItemInventory itemInventory) {
+		Preconditions.notNull(itemInventory, "itemInventory");
+		this.itemInventory = itemInventory;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class MenuInventoryHolder implements InventoryHolder {
 		return Bukkit.createInventory(null, 9);
 	}
 
-	public DefaultItemInventory getMenuInventory() {
-		return menuInventory;
+	public DefaultItemInventory getItemInventory() {
+		return itemInventory;
 	}
 }

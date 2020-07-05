@@ -1,4 +1,4 @@
-package me.filoghost.chestcommands.api.impl;
+package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.StaticIcon;

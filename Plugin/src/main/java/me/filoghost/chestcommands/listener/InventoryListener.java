@@ -52,7 +52,7 @@ public class InventoryListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEarlyInventoryClick(InventoryClickEvent event) {
-		if (MenuManager.isMenuInventory(event.getInventory())) {
+		if (MenuManager.isItemInventory(event.getInventory())) {
 			// Cancel the event as early as possible
 			event.setCancelled(true);
 		}
@@ -61,8 +61,8 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
 	    Inventory inventory = event.getInventory();
-	    DefaultItemInventory menuInventory = MenuManager.getOpenMenuInventory(inventory);
-	    if (menuInventory == null) {
+	    DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(inventory);
+	    if (itemInventory == null) {
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class InventoryListener implements Listener {
 
 		int slot = event.getRawSlot();
 		Player clicker = (Player) event.getWhoClicked();
-		SlotClickHandler slotClickHandler = menuInventory.getSlotClickHandler(slot, clicker);
+		SlotClickHandler slotClickHandler = itemInventory.getSlotClickHandler(slot, clicker);
 		if (slotClickHandler == null) {
 			return;
 		}

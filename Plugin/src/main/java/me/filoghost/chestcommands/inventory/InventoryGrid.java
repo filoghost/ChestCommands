@@ -9,7 +9,7 @@ public class InventoryGrid extends Grid<ItemStack> {
 
 	private final Inventory inventory;
 
-	public InventoryGrid(MenuInventoryHolder inventoryHolder, int rows, String title) {
+	public InventoryGrid(ItemInventoryHolder inventoryHolder, int rows, String title) {
 		super(rows, 9);
 		this.inventory = Bukkit.createInventory(inventoryHolder, getSize(), title);
 	}

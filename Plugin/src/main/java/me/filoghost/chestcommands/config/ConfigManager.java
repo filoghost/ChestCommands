@@ -95,15 +95,15 @@ public class ConfigManager {
 		}
 	}
 
-	public Path getMenusPath() {
+	public Path getMenusFolder() {
 		return baseDataPath.resolve("menu");
 	}
 
 	/**
 	 * Returns a list of YML menu files.
 	 */
-	public List<Path> getMenusPathList() throws IOException {
-		try (Stream<Path> paths = Files.walk(getMenusPath(), FileVisitOption.FOLLOW_LINKS)) {
+	public List<Path> getMenuPaths() throws IOException {
+		try (Stream<Path> paths = Files.walk(getMenusFolder(), FileVisitOption.FOLLOW_LINKS)) {
 			return paths.filter(Files::isRegularFile)
 					.filter(this::isYmlPath)
 					.collect(Collectors.toList());
@@ -148,9 +148,9 @@ public class ConfigManager {
 		List<Path> menuPaths;
 
 		try {
-			menuPaths = getMenusPathList();
+			menuPaths = getMenuPaths();
 		} catch (IOException e) {
-			Log.severe("Couldn't fetch files inside the folder \"" + getMenusPath().getFileName() + "\"", e);
+			Log.severe("Couldn't fetch files inside the folder \"" + getMenusFolder().getFileName() + "\"", e);
 			return Collections.emptyList();
 		}
 

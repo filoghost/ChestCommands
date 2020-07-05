@@ -66,11 +66,11 @@ public class UpgradesExecutor {
 
 			try {
 				List<MenuUpgrade> menuUpgrades = CollectionUtils.transform(
-						configManager.getMenusPathList(),
+						configManager.getMenuPaths(),
 						menuPath -> new MenuUpgrade(new ConfigLoader(menuPath), legacyCommandSeparator));
 				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
 			} catch (IOException e) {
-				failedUpgrades.add(configManager.getMenusPath());
+				failedUpgrades.add(configManager.getMenusFolder());
 			}
 		}
 
