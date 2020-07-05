@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 
 public class RefreshMenusTask implements Runnable {
 
-	private long elapsedTenths;
+	private long currentTick;
 
 	@Override
 	public void run() {
@@ -35,12 +35,12 @@ public class RefreshMenusTask implements Runnable {
 
 			int refreshTicks = ((InternalIconMenu) itemInventory.getMenu()).getRefreshTicks();
 
-			if (refreshTicks > 0 && elapsedTenths % refreshTicks == 0) {
+			if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
 				itemInventory.refresh();
 			}
 		}
 
-		elapsedTenths++;
+		currentTick++;
 	}
 
 }

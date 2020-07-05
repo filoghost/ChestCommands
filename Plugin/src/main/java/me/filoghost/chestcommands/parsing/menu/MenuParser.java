@@ -51,7 +51,7 @@ public class MenuParser {
 			}
 		}
 
-		iconMenu.setRefreshTicks(menuSettings.getRefreshTenths());
+		iconMenu.setRefreshTicks(menuSettings.getRefreshTicks());
 		iconMenu.setOpenActions(menuSettings.getOpenActions());
 
 		return new LoadedMenu(iconMenu, menuConfig.getFileName(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
@@ -163,11 +163,11 @@ public class MenuParser {
 		}
 
 		if (settingsSection.isSet(MenuSettingsNode.AUTO_REFRESH)) {
-			int tenthsToRefresh = (int) (settingsSection.getDouble(MenuSettingsNode.AUTO_REFRESH) * 10.0);
-			if (tenthsToRefresh < 1) {
-				tenthsToRefresh = 1;
+			int refreshTicks = (int) (settingsSection.getDouble(MenuSettingsNode.AUTO_REFRESH) * 20.0);
+			if (refreshTicks < 1) {
+				refreshTicks = 1;
 			}
-			menuSettings.setRefreshTenths(tenthsToRefresh);
+			menuSettings.setRefreshTicks(refreshTicks);
 		}
 
 		return menuSettings;

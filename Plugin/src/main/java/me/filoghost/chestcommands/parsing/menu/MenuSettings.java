@@ -27,7 +27,7 @@ public class MenuSettings {
 	// Optional settings
 	private List<String> commands;
 	private List<Action> openActions;
-	private int refreshTenths;
+	private int refreshTicks;
 
 	private OpenTrigger openTrigger;
 	
@@ -60,12 +60,12 @@ public class MenuSettings {
 		this.openActions = openAction;
 	}
 
-	public int getRefreshTenths() {
-		return refreshTenths;
+	public int getRefreshTicks() {
+		return refreshTicks;
 	}
 
-	public void setRefreshTenths(int refreshTenths) {
-		this.refreshTenths = refreshTenths;
+	public void setRefreshTicks(int refreshTicks) {
+		this.refreshTicks = refreshTicks;
 	}
 	
 	public OpenTrigger getOpenTrigger() {

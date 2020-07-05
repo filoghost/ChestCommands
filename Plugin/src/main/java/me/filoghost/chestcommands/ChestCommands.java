@@ -139,7 +139,7 @@ public class ChestCommands extends JavaPlugin {
 			Bukkit.getScheduler().runTaskLater(this, errorCollector::logToConsole, 10L);
 		}
 
-		Bukkit.getScheduler().runTaskTimer(this, new RefreshMenusTask(), 2L, 2L);
+		Bukkit.getScheduler().runTaskTimer(this, new RefreshMenusTask(), 1L, 1L);
 	}
 
 
