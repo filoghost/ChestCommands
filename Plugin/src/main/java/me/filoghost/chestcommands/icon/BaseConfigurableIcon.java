@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;

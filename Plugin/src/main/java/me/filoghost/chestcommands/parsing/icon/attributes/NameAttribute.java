@@ -19,15 +19,28 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 import me.filoghost.chestcommands.util.Colors;
+import org.bukkit.ChatColor;
 
 public class NameAttribute implements ApplicableIconAttribute {
 
 	private final String name;
 
 	public NameAttribute(String name, AttributeErrorCollector attributeErrorCollector) {
-		this.name = ChestCommands.getCustomPlaceholders().replaceAll(Colors.colorName(name));
+		this.name = ChestCommands.getCustomPlaceholders().replaceAll(colorName(name));
 	}
-	
+
+	private String colorName(String input) {
+		if (input == null || input.isEmpty()) {
+			return input;
+		}
+
+		if (input.charAt(0) != ChatColor.COLOR_CHAR) {
+			return ChestCommands.getSettings().default_color__name + Colors.addColors(input);
+		} else {
+			return Colors.addColors(input);
+		}
+	}
+
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
 		icon.setName(name);

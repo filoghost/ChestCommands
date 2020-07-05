@@ -28,7 +28,8 @@
 	<modules>
 		<module>API</module>
 		<module>Plugin</module>
-	</modules>
+        <module>Utils</module>
+    </modules>
 
 	<build>
 		<pluginManagement>

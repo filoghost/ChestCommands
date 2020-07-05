@@ -19,6 +19,8 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 import me.filoghost.chestcommands.util.Colors;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import org.bukkit.ChatColor;
 
 import java.util.List;
 
@@ -27,9 +29,21 @@ public class LoreAttribute implements ApplicableIconAttribute {
 	private final List<String> lore;
 	
 	public LoreAttribute(List<String> lore, AttributeErrorCollector attributeErrorCollector) {
-		this.lore = ChestCommands.getCustomPlaceholders().replaceAll(Colors.colorLore(lore));
+		this.lore = ChestCommands.getCustomPlaceholders().replaceAll(colorLore(lore));
 	}
-	
+
+	private List<String> colorLore(List<String> input) {
+		return CollectionUtils.transform(input, line -> {
+			if (line.isEmpty()) {
+				return line;
+			} else if (line.charAt(0) != ChatColor.COLOR_CHAR) {
+				return ChestCommands.getSettings().default_color__lore + Colors.addColors(line);
+			} else {
+				return Colors.addColors(line);
+			}
+		});
+	}
+
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
 		icon.setLore(lore);
