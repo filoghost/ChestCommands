@@ -29,7 +29,7 @@ public abstract class BackendAPI {
 	
 	public static void setImplementation(BackendAPI implementation) {
 		Preconditions.notNull(implementation, "implementation");
-		Preconditions.checkState(implementation == null, "implementation already set");
+		Preconditions.checkState(BackendAPI.implementation == null, "implementation already set");
 
 		BackendAPI.implementation = implementation;
 	}
