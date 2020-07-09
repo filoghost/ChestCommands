@@ -14,16 +14,16 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigLoader;
-import me.filoghost.chestcommands.config.ConfigSection;
+import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
+import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.Upgrade;
-import me.filoghost.chestcommands.legacy.UpgradeException;
-import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
+import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 import me.filoghost.chestcommands.util.Strings;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,17 +43,17 @@ public class MenuUpgrade extends Upgrade {
 
 	@Override
 	public Path getOriginalFile() {
-		return menuConfigLoader.getPath();
+		return menuConfigLoader.getConfigPath();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return menuConfigLoader.getPath();
+		return menuConfigLoader.getConfigPath();
 	}
 
 	@Override
-	protected void computeChanges() throws UpgradeException {
-		Config menuConfig = loadConfig(menuConfigLoader);
+	protected void computeChanges() throws ConfigLoadException {
+		Config menuConfig = menuConfigLoader.load();
 		menuConfig.setHeader(null);
 
 		for (String key : menuConfig.getKeys(true)) {
@@ -74,7 +74,7 @@ public class MenuUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void saveChanges() throws IOException {
+	protected void saveChanges() throws ConfigSaveException {
 		menuConfigLoader.save(updatedConfig);
 	}
 

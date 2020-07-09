@@ -14,10 +14,12 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
+import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.Upgrade;
-import me.filoghost.chestcommands.legacy.UpgradeException;
 import me.filoghost.chestcommands.util.Strings;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -28,13 +30,13 @@ import java.util.List;
 
 public class PlaceholdersUpgrade extends Upgrade {
 
-	private final ConfigLoader newPlaceholdersConfigLoader;
 	private final Path oldPlaceholdersFile;
+	private final ConfigLoader newPlaceholdersConfigLoader;
 	private Config updatedConfig;
 
-	public PlaceholdersUpgrade(ConfigLoader placeholdersConfigLoader, Path dataPath) {
-		this.newPlaceholdersConfigLoader = placeholdersConfigLoader;
-		this.oldPlaceholdersFile = dataPath.resolve("placeholders.yml");
+	public PlaceholdersUpgrade(ConfigManager configManager) {
+		this.oldPlaceholdersFile = configManager.getRootDataFolder().resolve("placeholders.yml");
+		this.newPlaceholdersConfigLoader = configManager.getConfigLoader("custom-placeholders.yml");
 	}
 
 	@Override
@@ -44,22 +46,22 @@ public class PlaceholdersUpgrade extends Upgrade {
 
 	@Override
 	public Path getUpgradedFile() {
-		return newPlaceholdersConfigLoader.getPath();
+		return newPlaceholdersConfigLoader.getConfigPath();
 	}
 
 	@Override
-	protected void computeChanges() throws UpgradeException {
+	protected void computeChanges() throws ConfigLoadException {
 		if (!Files.isRegularFile(oldPlaceholdersFile)) {
 			return;
 		}
 
 		// Do NOT load the new placeholder configuration from disk, as it should only contain placeholders imported from the old file
-		Config newPlaceholdersConfig = newPlaceholdersConfigLoader.loadEmpty();
+		Config newPlaceholdersConfig = new Config(newPlaceholdersConfigLoader.getConfigPath());
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(oldPlaceholdersFile);
 		} catch (IOException e) {
-			throw new UpgradeException("couldn't read file \"" + oldPlaceholdersFile.getFileName() + "\"", e);
+			throw new ConfigLoadException("couldn't read file \"" + oldPlaceholdersFile.getFileName() + "\"", e);
 		}
 
 		for (String line : lines) {
@@ -85,7 +87,7 @@ public class PlaceholdersUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void saveChanges() throws IOException {
+	protected void saveChanges() throws ConfigSaveException {
 		try {
 			Files.deleteIfExists(oldPlaceholdersFile);
 		} catch (IOException ignored) {}

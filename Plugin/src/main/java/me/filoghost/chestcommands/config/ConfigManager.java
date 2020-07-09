@@ -14,14 +14,17 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.files.CustomPlaceholders;
-import me.filoghost.chestcommands.config.files.Lang;
+import me.filoghost.chestcommands.config.framework.BaseConfigManager;
+import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.exception.ConfigException;
+import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
+import me.filoghost.chestcommands.config.framework.mapped.MappedConfigLoader;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
-import me.filoghost.chestcommands.config.files.Settings;
 import me.filoghost.chestcommands.parsing.menu.MenuParser;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
 import me.filoghost.chestcommands.util.Log;
-import org.bukkit.configuration.InvalidConfigurationException;
+import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -33,55 +36,46 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConfigManager {
+public class ConfigManager extends BaseConfigManager {
 
-	private final Path baseDataPath;
-	private final ConfigLoader settingsConfigLoader;
+	private final MappedConfigLoader<Settings> settingsConfigLoader;
 	private final ConfigLoader placeholdersConfigLoader;
-	private final ConfigLoader langConfigLoader;
+	private final MappedConfigLoader<Lang> langConfigLoader;
 
-	public ConfigManager(Path baseDataPath) {
-		this.baseDataPath = baseDataPath;
-		settingsConfigLoader = new ConfigLoader(baseDataPath.resolve("config.yml"));
-		placeholdersConfigLoader = new ConfigLoader(baseDataPath.resolve("custom-placeholders.yml"));
-		langConfigLoader = new ConfigLoader(baseDataPath.resolve("lang.yml"));
+	public ConfigManager(Path rootDataFolder) {
+		super(rootDataFolder);
+
+		settingsConfigLoader = getMappedConfigLoader("config.yml", Settings::new);
+		placeholdersConfigLoader = getConfigLoader("custom-placeholders.yml");
+		langConfigLoader = getMappedConfigLoader("lang.yml", Lang::new);
 	}
 
 	public Settings tryLoadSettings() {
-		Settings settings = new Settings();
-
 		try {
-			settingsConfigLoader.createDefault(baseDataPath);
-			settings.load(settingsConfigLoader);
-		} catch (Throwable t) {
-			logConfigLoadException(settingsConfigLoader, t);
+			return settingsConfigLoader.init();
+		} catch (ConfigException e) {
+			logConfigInitException(settingsConfigLoader.getFileName(), e);
+			return new Settings();
 		}
-
-		return settings;
 	}
 
 	public Lang tryLoadLang() {
-		Lang lang = new Lang();
-
 		try {
-			langConfigLoader.createDefault(baseDataPath);
-			lang.load(langConfigLoader);
-		} catch (Throwable t) {
-			logConfigLoadException(langConfigLoader, t);
+			return langConfigLoader.init();
+		} catch (ConfigException e) {
+			logConfigInitException(langConfigLoader.getFileName(), e);
+			return new Lang();
 		}
-
-		return lang;
 	}
 
 	public CustomPlaceholders tryLoadCustomPlaceholders(ErrorCollector errorCollector) {
 		CustomPlaceholders placeholders = new CustomPlaceholders();
 
 		try {
-			placeholdersConfigLoader.createDefault(baseDataPath);
-			Config placeholdersConfig = placeholdersConfigLoader.load();
+			Config placeholdersConfig = placeholdersConfigLoader.init();
 			placeholders.load(placeholdersConfig, errorCollector);
-		} catch (Throwable t) {
-			logConfigLoadException(placeholdersConfigLoader, t);
+		} catch (ConfigException t) {
+			logConfigInitException(placeholdersConfigLoader.getFileName(), t);
 		}
 
 		return placeholders;
@@ -89,20 +83,22 @@ public class ConfigManager {
 
 	public void tryCreateDefault(ConfigLoader configLoader) {
 		try {
-			configLoader.createDefault(baseDataPath);
-		} catch (Throwable t) {
-			logConfigLoadException(configLoader, t);
+			configLoader.createDefault();
+		} catch (ConfigException e) {
+			logConfigInitException(configLoader.getFileName(), e);
 		}
 	}
 
 	public Path getMenusFolder() {
-		return baseDataPath.resolve("menu");
+		return rootDataFolder.resolve("menu");
 	}
 
 	/**
 	 * Returns a list of YML menu files.
 	 */
 	public List<Path> getMenuPaths() throws IOException {
+		Preconditions.checkState(Files.isDirectory(getMenusFolder()), "menus folder doesn't exist");
+
 		try (Stream<Path> paths = Files.walk(getMenusFolder(), FileVisitOption.FOLLOW_LINKS)) {
 			return paths.filter(Files::isRegularFile)
 					.filter(this::isYmlPath)
@@ -110,37 +106,13 @@ public class ConfigManager {
 		}
 	}
 
-
-	private boolean isYmlPath(Path path) {
-		return path.getFileName().toString().toLowerCase().endsWith(".yml");
-	}
-
-	private void logConfigLoadException(ConfigLoader configLoader, Throwable t) {
-		t.printStackTrace();
-
-		if (t instanceof IOException) {
-			Log.warning("Error while reading the file \"" + configLoader.getFileName() +  "\". Default values will be used.");
-		} else if (t instanceof InvalidConfigurationException) {
-			Log.warning("Invalid YAML syntax in the file \"" + configLoader.getFileName() + "\", please look at the error above. Default values will be used.");
+	private void logConfigInitException(String fileName, ConfigException e) {
+		if (e instanceof ConfigSyntaxException) {
+			Log.warning("Invalid YAML syntax in config file \"" + fileName + "\": " + e.getMessage());
 		} else {
-			Log.warning("Unhandled error while parsing the file \"" + configLoader.getFileName() + "\". Please inform the developer.");
+			e.printStackTrace();
+			Log.warning("Error while reading config file \"" + fileName +  "\": " + e.getMessage());
 		}
-	}
-
-	public Path getBaseDataPath() {
-		return baseDataPath;
-	}
-
-	public ConfigLoader getSettingsConfigLoader() {
-		return settingsConfigLoader;
-	}
-
-	public ConfigLoader getPlaceholdersConfigLoader() {
-		return placeholdersConfigLoader;
-	}
-
-	public ConfigLoader getLangConfigLoader() {
-		return langConfigLoader;
 	}
 
 	public List<LoadedMenu> tryLoadMenus(ErrorCollector errorCollector) {
@@ -155,16 +127,21 @@ public class ConfigManager {
 		}
 
 		for (Path menuFile : menuPaths) {
-			ConfigLoader menuConfigLoader = new ConfigLoader(menuFile);
+			ConfigLoader menuConfigLoader = new ConfigLoader(rootDataFolder, menuFile);
 
 			try {
 				Config menuConfig = menuConfigLoader.load();
 				loadedMenus.add(MenuParser.loadMenu(menuConfig, errorCollector));
-			} catch (Throwable t) {
-				logConfigLoadException(menuConfigLoader, t);
+			} catch (ConfigException e) {
+				logConfigInitException(menuConfigLoader.getFileName(), e);
 			}
 		}
 
 		return loadedMenus;
 	}
+
+	private boolean isYmlPath(Path path) {
+		return path.getFileName().toString().toLowerCase().endsWith(".yml");
+	}
+
 }

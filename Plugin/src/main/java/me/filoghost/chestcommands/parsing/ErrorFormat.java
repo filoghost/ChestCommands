@@ -1,19 +1,20 @@
 package me.filoghost.chestcommands.parsing;
 
+import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 
 public class ErrorFormat {
 
-	public static String invalidMenuSetting(String menuName, String invalidSetting, String errorMessage) {
-		return menuError(menuName, "has an invalid menu setting \"" + invalidSetting + "\": " + errorMessage);
+	public static String invalidMenuSetting(Config menuConfig, String invalidSetting, String errorMessage) {
+		return menuError(menuConfig, "has an invalid menu setting \"" + invalidSetting + "\": " + errorMessage);
 	}
 
-	public static String missingMenuSetting(String menuName, String missingSetting) {
-		return menuError(menuName, "is missing the menu setting \"" + missingSetting + "\"");
+	public static String missingMenuSetting(Config menuConfig, String missingSetting) {
+		return menuError(menuConfig, "is missing the menu setting \"" + missingSetting + "\"");
 	}
 
-	private static String menuError(String menuName, String errorMessage) {
-		return "The menu \"" + menuName + "\" " + errorMessage + ".";
+	private static String menuError(Config menuConfig, String errorMessage) {
+		return "The menu \"" + menuConfig.getSourceFileName() + "\" " + errorMessage + ".";
 	}
 
 	public static String invalidAttribute(IconSettings iconSettings, String attributeName, String errorMessage) {

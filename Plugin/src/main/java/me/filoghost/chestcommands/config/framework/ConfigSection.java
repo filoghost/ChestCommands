@@ -1,5 +1,6 @@
-package me.filoghost.chestcommands.config;
+package me.filoghost.chestcommands.config.framework;
 
+import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -75,10 +76,6 @@ public class ConfigSection {
 		return yamlSection.getKeys(deep);
 	}
 
-	public boolean contains(String path) {
-		return yamlSection.contains(path);
-	}
-
 	public boolean isSet(String path) {
 		return yamlSection.isSet(path);
 	}
@@ -91,10 +88,6 @@ public class ConfigSection {
 		return yamlSection.getString(path);
 	}
 
-	public String getString(String path, String def) {
-		return yamlSection.getString(path, def);
-	}
-
 	public int getInt(String path) {
 		return yamlSection.getInt(path);
 	}
@@ -105,10 +98,6 @@ public class ConfigSection {
 
 	public double getDouble(String path) {
 		return yamlSection.getDouble(path);
-	}
-
-	public long getLong(String path) {
-		return yamlSection.getLong(path);
 	}
 
 	public List<String> getStringList(String path) {

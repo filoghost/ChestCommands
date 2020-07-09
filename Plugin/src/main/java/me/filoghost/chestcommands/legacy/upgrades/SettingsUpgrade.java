@@ -14,12 +14,13 @@
  */
 package me.filoghost.chestcommands.legacy.upgrades;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
+import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.Upgrade;
-import me.filoghost.chestcommands.legacy.UpgradeException;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class SettingsUpgrade extends Upgrade {
@@ -27,23 +28,23 @@ public class SettingsUpgrade extends Upgrade {
 	private final ConfigLoader settingsConfigLoader;
 	private Config updatedConfig;
 
-	public SettingsUpgrade(ConfigLoader settingsConfigLoader) {
-		this.settingsConfigLoader = settingsConfigLoader;
+	public SettingsUpgrade(ConfigManager configManager) {
+		this.settingsConfigLoader = configManager.getConfigLoader("config.yml");
 	}
 
 	@Override
 	public Path getOriginalFile() {
-		return settingsConfigLoader.getPath();
+		return settingsConfigLoader.getConfigPath();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return settingsConfigLoader.getPath();
+		return settingsConfigLoader.getConfigPath();
 	}
 
 	@Override
-	protected void computeChanges() throws UpgradeException {
-		Config settingsConfig = loadConfig(settingsConfigLoader);
+	protected void computeChanges() throws ConfigLoadException {
+		Config settingsConfig = settingsConfigLoader.load();
 
 		removeNode(settingsConfig, "use-only-commands-without-args");
 		removeNode(settingsConfig, "use-console-colors");
@@ -61,7 +62,7 @@ public class SettingsUpgrade extends Upgrade {
 
 
 	@Override
-	protected void saveChanges() throws IOException {
+	protected void saveChanges() throws ConfigSaveException {
 		settingsConfigLoader.save(updatedConfig);
 	}
 }

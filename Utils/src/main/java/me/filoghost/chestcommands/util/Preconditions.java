@@ -14,9 +14,9 @@
  */
 package me.filoghost.chestcommands.util;
 
-import java.util.Collection;
-
 import org.bukkit.Material;
+
+import java.util.Collection;
 
 public final class Preconditions {
 

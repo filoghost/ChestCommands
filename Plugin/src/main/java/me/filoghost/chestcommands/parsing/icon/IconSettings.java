@@ -14,8 +14,8 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-import me.filoghost.chestcommands.config.ConfigSection;
-import me.filoghost.chestcommands.config.ConfigValueException;
+import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.attributes.ActionsAttribute;

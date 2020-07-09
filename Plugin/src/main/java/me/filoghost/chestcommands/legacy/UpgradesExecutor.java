@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.legacy;
 
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
 import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
@@ -42,7 +42,7 @@ public class UpgradesExecutor {
 
 	public void run(boolean isFreshInstall) throws UpgradeExecutorException {
 		this.failedUpgrades = new ArrayList<>();
-		Path upgradesDoneFile = configManager.getBaseDataPath().resolve(".upgrades-done");
+		Path upgradesDoneFile = configManager.getRootDataFolder().resolve(".upgrades-done");
 
 		try {
 			upgradesDoneRegistry = new UpgradesDoneRegistry(upgradesDoneFile);
@@ -56,18 +56,23 @@ public class UpgradesExecutor {
 			upgradesDoneRegistry.setAllDone();
 
 		} else {
-			String legacyCommandSeparator = readLegacyCommandSeparator();
+			String legacyCommandSeparator;
+			if (!upgradesDoneRegistry.isDone(UpgradeID.V4_MENUS)) {
+				legacyCommandSeparator = readLegacyCommandSeparator();
+			} else {
+				legacyCommandSeparator = null;
+			}
 
-			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(configManager.getSettingsConfigLoader());
+			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(configManager);
 			runIfNecessary(UpgradeID.V4_CONFIG, settingsUpgrade);
 
-			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(configManager.getPlaceholdersConfigLoader(), configManager.getBaseDataPath());
+			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(configManager);
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
 
 			try {
 				List<MenuUpgrade> menuUpgrades = CollectionUtils.transform(
 						configManager.getMenuPaths(),
-						menuPath -> new MenuUpgrade(new ConfigLoader(menuPath), legacyCommandSeparator));
+						menuPath -> new MenuUpgrade(configManager.getConfigLoader(menuPath), legacyCommandSeparator));
 				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
 			} catch (IOException e) {
 				failedUpgrades.add(configManager.getMenusFolder());
@@ -91,18 +96,18 @@ public class UpgradesExecutor {
 	}
 
 	private String readLegacyCommandSeparator() {
-		String legacyCommandSeparator;
-		ConfigLoader settingsConfigLoader = configManager.getSettingsConfigLoader();
+		ConfigLoader settingsConfigLoader = configManager.getConfigLoader("config.yml");
 
-		try {
-			legacyCommandSeparator = settingsConfigLoader.load().getString("multiple-commands-separator", ";");
-		} catch (Exception e) {
-			legacyCommandSeparator = ";";
-			Log.severe("Failed to load " + settingsConfigLoader.getFileName()
-					+ ", assuming default command separator \"" + legacyCommandSeparator + "\".");
+		if (!settingsConfigLoader.fileExists()) {
+			return null;
 		}
 
-		return legacyCommandSeparator;
+		try {
+			return settingsConfigLoader.load().getString("multiple-commands-separator");
+		} catch (Throwable t) {
+			Log.severe("Failed to load " + settingsConfigLoader.getFileName() + ", assuming default command separator \";\".");
+			return null;
+		}
 	}
 
 
@@ -143,8 +148,7 @@ public class UpgradesExecutor {
 
 	private void logUpgradeException(Upgrade upgrade, UpgradeException upgradeException) {
 		Log.severe(
-				"Error while trying to automatically upgrade "
-				+ upgrade.getOriginalFile() + ": " + upgradeException.getMessage(),
+				"Error while trying to automatically upgrade "	+ upgrade.getOriginalFile() + ": " + upgradeException.getMessage(),
 				upgradeException.getCause());
 	}
 

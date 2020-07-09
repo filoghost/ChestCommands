@@ -12,12 +12,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config.files;
+package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.chestcommands.util.collection.ErrorCollector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,12 +36,12 @@ public class CustomPlaceholders {
 			String replacement = Colors.addColors(config.getString(key));
 
 			if (placeholder.length() == 0) {
-				errorCollector.addError("Error in " + config.getFileName() + ": placeholder cannot be empty (skipped).");
+				errorCollector.addError("Error in " + config.getSourceFileName() + ": placeholder cannot be empty (skipped).");
 				continue;
 			}
 
 			if (placeholder.length() > 100) {
-				errorCollector.addError("Error in " + config.getFileName() + ": placeholder cannot be longer than 100 character (" + placeholder + ").");
+				errorCollector.addError("Error in " + config.getSourceFileName() + ": placeholder cannot be longer than 100 character (" + placeholder + ").");
 				continue;
 			}
 

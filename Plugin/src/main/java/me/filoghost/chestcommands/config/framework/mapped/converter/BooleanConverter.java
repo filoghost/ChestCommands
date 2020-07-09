@@ -12,33 +12,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config;
+package me.filoghost.chestcommands.config.framework.mapped.converter;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.filoghost.chestcommands.config.framework.ConfigSection;
 
-import java.nio.file.Path;
+import java.lang.reflect.Type;
 
-public class Config extends ConfigSection {
+public class BooleanConverter implements Converter {
 
-	private final YamlConfiguration yaml;
-	private final Path filePath;
-
-	public Config(YamlConfiguration yaml, Path filePath) {
-		super(yaml);
-		this.yaml = yaml;
-		this.filePath = filePath;
+	@Override
+	public void setConfigValue(ConfigSection config, String path, Object value) {
+		config.set(path, value);
 	}
 
-	public String getFileName() {
-		return filePath.getFileName().toString();
+	@Override
+	public Boolean getFieldValue(ConfigSection config, String path, Type[] parameterizedTypes) {
+		return config.getBoolean(path);
 	}
 
-	public String saveToString() {
-		return yaml.saveToString();
-	}
-
-	public void setHeader(String value) {
-		yaml.options().header(value);
+	@Override
+	public boolean matches(Class<?> type) {
+		return type == Boolean.class || type == boolean.class;
 	}
 
 }

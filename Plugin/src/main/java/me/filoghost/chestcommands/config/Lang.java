@@ -12,11 +12,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config.files;
+package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.SpecialConfig;
+import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
+import me.filoghost.chestcommands.config.framework.mapped.modifier.ChatColors;
 
-public class Lang extends SpecialConfig {
+@ChatColors
+public class Lang extends MappedConfig {
 
 	public String no_open_permission = "&cYou don't have permission &e{permission} &cto use this menu.";
 	public String default_no_icon_permission = "&cYou don't have permission for this icon.";

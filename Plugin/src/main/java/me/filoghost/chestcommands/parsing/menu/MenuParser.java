@@ -15,11 +15,11 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigSection;
-import me.filoghost.chestcommands.config.ConfigValueException;
-import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ErrorFormat;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
@@ -41,7 +41,7 @@ public class MenuParser {
 		MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
 		List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
 
-		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getFileName());
+		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFileName());
 
 		for (IconSettings iconSettings : iconSettingsList) {
 			try {
@@ -54,7 +54,7 @@ public class MenuParser {
 		iconMenu.setRefreshTicks(menuSettings.getRefreshTicks());
 		iconMenu.setOpenActions(menuSettings.getOpenActions());
 
-		return new LoadedMenu(iconMenu, menuConfig.getFileName(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
+		return new LoadedMenu(iconMenu, menuConfig.getSourceFileName(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
 	}
 
 
@@ -105,7 +105,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			title = ChatColor.DARK_RED + "No name set";
-			errorCollector.addError(ErrorFormat.missingMenuSetting(config.getFileName(), MenuSettingsNode.NAME));
+			errorCollector.addError(ErrorFormat.missingMenuSetting(config, MenuSettingsNode.NAME));
 		}
 
 		int rows;
@@ -116,7 +116,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			rows = 6; // Defaults to 6 rows
-			errorCollector.addError(ErrorFormat.missingMenuSetting(config.getFileName(), MenuSettingsNode.ROWS));
+			errorCollector.addError(ErrorFormat.missingMenuSetting(config, MenuSettingsNode.ROWS));
 		}
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
@@ -157,7 +157,7 @@ public class MenuParser {
 					menuSettings.setOpenTrigger(openTrigger);
 
 				} catch (ParseException e) {
-					errorCollector.addError(ErrorFormat.invalidMenuSetting(config.getFileName(), MenuSettingsNode.OPEN_ITEM_MATERIAL, e.getMessage()));
+					errorCollector.addError(ErrorFormat.invalidMenuSetting(config, MenuSettingsNode.OPEN_ITEM_MATERIAL, e.getMessage()));
 				}
 			}
 		}
@@ -183,7 +183,7 @@ public class MenuParser {
 			}
 
 			ConfigSection iconSection = config.getConfigSection(iconSectionName);
-			IconSettings iconSettings = new IconSettings(config.getFileName(), iconSectionName);
+			IconSettings iconSettings = new IconSettings(config.getSourceFileName(), iconSectionName);
 			iconSettings.loadFrom(iconSection, errorCollector);
 			iconSettingsList.add(iconSettings);
 		}

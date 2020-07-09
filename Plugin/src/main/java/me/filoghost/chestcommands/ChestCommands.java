@@ -17,12 +17,11 @@ package me.filoghost.chestcommands;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.files.CustomPlaceholders;
-import me.filoghost.chestcommands.config.files.Lang;
-import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
-import me.filoghost.chestcommands.config.files.Settings;
+import me.filoghost.chestcommands.config.CustomPlaceholders;
+import me.filoghost.chestcommands.config.Lang;
+import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -34,10 +33,11 @@ import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.task.RefreshMenusTask;
+import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.collection.ErrorCollector;
-import me.filoghost.chestcommands.util.Log;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -152,9 +152,9 @@ public class ChestCommands extends JavaPlugin {
 	public ErrorCollector load() {
 		ErrorCollector errors = new ErrorCollector();
 		menuManager.clear();
-		boolean isFreshInstall = !Files.isDirectory(configManager.getBaseDataPath());
+		boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
 		try {
-			Files.createDirectories(configManager.getBaseDataPath());
+			Files.createDirectories(configManager.getRootDataFolder());
 		} catch (IOException e) {
 			errors.addError("Plugin failed to load, couldn't create data folder.");
 			return errors;
@@ -172,7 +172,7 @@ public class ChestCommands extends JavaPlugin {
 
 		// Create the menu folder with the example menu
 		if (!Files.isDirectory(configManager.getMenusFolder())) {
-			ConfigLoader exampleMenuLoader = new ConfigLoader(configManager.getMenusFolder().resolve("example.yml"));
+			ConfigLoader exampleMenuLoader = configManager.getConfigLoader(configManager.getMenusFolder().resolve("example.yml"));
 			configManager.tryCreateDefault(exampleMenuLoader);
 		}
 

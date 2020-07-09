@@ -14,10 +14,9 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.config.Config;
-import me.filoghost.chestcommands.config.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
+import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.util.Preconditions;
-import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +39,11 @@ public abstract class Upgrade {
 		Preconditions.checkState(!hasRun, "Upgrade can only be run once");
 		hasRun = true;
 
-		computeChanges();
+		try {
+			computeChanges();
+		} catch (ConfigLoadException e) {
+			throw new UpgradeException("couldn't load file to upgrade \"" + getOriginalFile().getFileName() + "\"", e);
+		}
 
 		if (modified) {
 			try {
@@ -51,22 +54,12 @@ public abstract class Upgrade {
 
 			try {
 				saveChanges();
-			} catch (IOException e) {
+			} catch (ConfigSaveException e) {
 				throw new UpgradeException("couldn't save upgraded file \"" + getUpgradedFile().getFileName() + "\"", e);
 			}
 		}
 
 		return modified;
-	}
-
-	protected Config loadConfig(ConfigLoader configLoader) throws UpgradeException {
-		try {
-			return configLoader.load();
-		} catch (IOException e) {
-			throw new UpgradeException("couldn't read configuration file \"" + configLoader.getFileName() + "\"", e);
-		} catch (InvalidConfigurationException e) {
-			throw new UpgradeException("couldn't parse YAML syntax of file \"" + configLoader.getFileName() + "\"", e);
-		}
 	}
 
 	private void createBackupFile(Path path) throws IOException {
@@ -80,8 +73,8 @@ public abstract class Upgrade {
 
 	public abstract Path getUpgradedFile();
 
-	protected abstract void computeChanges() throws UpgradeException;
+	protected abstract void computeChanges() throws ConfigLoadException;
 
-	protected abstract void saveChanges() throws IOException;
+	protected abstract void saveChanges() throws ConfigSaveException;
 
 }

@@ -12,21 +12,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config.files;
+package me.filoghost.chestcommands.config.framework.mapped.modifier;
 
-import me.filoghost.chestcommands.config.SpecialConfig;
+import me.filoghost.chestcommands.util.Colors;
 
-public class Settings extends SpecialConfig {
+public class ChatColorsModifier implements ValueModifier<String, ChatColors> {
 
-	public String default_color__name = "&f";
-	public String default_color__lore = "&7";
-	public boolean update_notifications = true;
-	public int anti_click_spam_delay = 200;
+	@Override
+	public String transformChecked(ChatColors annotation, String value) {
+		return Colors.addColors(value);
+	}
 
-	public Settings() {
-		setHeader(
-				"ChestCommands main configuration file.\n" +
-				"Documentation: https://filoghost.me/docs/chest-commands\n");
+	@Override
+	public Class<ChatColors> getAnnotationType() {
+		return ChatColors.class;
+	}
+
+	@Override
+	public Class<String> getValueType() {
+		return String.class;
 	}
 
 }
