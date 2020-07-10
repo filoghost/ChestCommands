@@ -23,6 +23,6 @@ public interface ClickHandler {
 	 * @param player the player that clicked on the inventory
 	 * @return true if the inventory should be closed, false otherwise
 	 */
-	ClickResult onClick(Player player);
+	ClickResult onClick(ItemInventory itemInventory, Player player);
 
 }
