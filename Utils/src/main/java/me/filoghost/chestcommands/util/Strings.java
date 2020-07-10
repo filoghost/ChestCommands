@@ -16,8 +16,6 @@ package me.filoghost.chestcommands.util;
 
 public final class Strings {
 
-	private Strings() {}
-	
 	
 	public static String[] trimmedSplit(String input, String pattern) {
 		return trimmedSplit(input, pattern, 0);

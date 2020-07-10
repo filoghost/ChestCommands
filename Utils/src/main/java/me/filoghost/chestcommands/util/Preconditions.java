@@ -20,7 +20,6 @@ import java.util.Collection;
 
 public final class Preconditions {
 
-	private Preconditions() {}
 
 	public static void notNull(Object object, String objectName) {
 		if (object == null) {

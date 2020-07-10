@@ -23,7 +23,6 @@ import java.util.function.Function;
 
 public final class CollectionUtils {
 
-	private CollectionUtils() {}
 
 	public static boolean isNullOrEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();

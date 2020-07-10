@@ -31,8 +31,7 @@ public final class MaterialsHelper {
 	// Materials that are considered air (with 1.13+ compatibility)
 	private static final Collection<Material> AIR_MATERIALS = getExistingMaterials("AIR", "CAVE_AIR", "VOID_AIR");
 
-	private MaterialsHelper() {}
-	
+
 	@SuppressWarnings("deprecation")
 	private static Registry<Material> initMaterialsRegistry() {
 		Registry<Material> materialsRegistry = Registry.fromEnumValues(Material.class);
