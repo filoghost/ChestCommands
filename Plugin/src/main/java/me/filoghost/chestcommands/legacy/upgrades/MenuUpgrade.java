@@ -56,7 +56,7 @@ public class MenuUpgrade extends Upgrade {
 		Config menuConfig = menuConfigLoader.load();
 		menuConfig.setHeader(null);
 
-		for (String key : menuConfig.getKeys(true)) {
+		for (String key : menuConfig.getKeys(false)) {
 			if (!menuConfig.isConfigSection(key)) {
 				continue;
 			}
