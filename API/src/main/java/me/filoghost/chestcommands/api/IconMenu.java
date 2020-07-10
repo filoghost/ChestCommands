@@ -42,4 +42,6 @@ public interface IconMenu {
 	 */
 	ItemInventory open(Player player);
 
+	void refreshOpenInventories();
+
 }

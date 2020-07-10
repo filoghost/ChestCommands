@@ -21,6 +21,7 @@ import me.filoghost.chestcommands.inventory.DefaultItemInventory;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.ArrayGrid;
 import me.filoghost.chestcommands.util.collection.Grid;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public abstract class BaseIconMenu implements IconMenu {
@@ -73,4 +74,13 @@ public abstract class BaseIconMenu implements IconMenu {
 		return itemInventory;
 	}
 
+	@Override
+	public void refreshOpenInventories() {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
+			if (itemInventory.getIconMenu() == this) {
+				itemInventory.refresh();
+			}
+		}
+	}
 }
