@@ -29,11 +29,11 @@ public class RefreshMenusTask implements Runnable {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
 
-			if (itemInventory == null || !(itemInventory.getMenu() instanceof InternalIconMenu)) {
+			if (itemInventory == null || !(itemInventory.getIconMenu() instanceof InternalIconMenu)) {
 				continue;
 			}
 
-			int refreshTicks = ((InternalIconMenu) itemInventory.getMenu()).getRefreshTicks();
+			int refreshTicks = ((InternalIconMenu) itemInventory.getIconMenu()).getRefreshTicks();
 
 			if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
 				itemInventory.refresh();

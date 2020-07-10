@@ -24,10 +24,6 @@ public class DefaultItemInventory implements ItemInventory {
 		refresh();
 	}
 
-	public BaseIconMenu getMenu() {
-		return menu;
-	}
-
 	@Override
 	public void refresh() {
 		for (int i = 0; i < menu.getIcons().getSize(); i++) {
@@ -59,6 +55,16 @@ public class DefaultItemInventory implements ItemInventory {
 		}
 
 		return () -> icon.onClick(this, clicker);
+	}
+
+	@Override
+	public BaseIconMenu getIconMenu() {
+		return menu;
+	}
+
+	@Override
+	public Player getViewer() {
+		return viewer;
 	}
 
 
