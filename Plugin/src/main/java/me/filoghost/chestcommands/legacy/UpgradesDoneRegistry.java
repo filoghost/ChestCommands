@@ -75,7 +75,8 @@ public class UpgradesDoneRegistry {
 
 		V4_MENUS("v4.0-menus"),
 		V4_CONFIG("v4.0-config"),
-		V4_PLACEHOLDERS("v4.0-placeholders");
+		V4_PLACEHOLDERS("v4.0-placeholders"),
+		V4_LANG("v4.0-lang");
 
 		private final String stringID;
 

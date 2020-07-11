@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.legacy;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
+import me.filoghost.chestcommands.legacy.upgrades.LangUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
 import me.filoghost.chestcommands.legacy.upgrades.SettingsUpgrade;
@@ -68,6 +69,9 @@ public class UpgradesExecutor {
 
 			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(configManager);
 			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
+
+			LangUpgrade langUpgrade = new LangUpgrade(configManager);
+			runIfNecessary(UpgradeID.V4_LANG, langUpgrade);
 
 			try {
 				List<MenuUpgrade> menuUpgrades = CollectionUtils.transform(
