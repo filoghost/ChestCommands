@@ -78,7 +78,7 @@ public abstract class BaseIconMenu implements IconMenu {
 	public void refreshOpenInventories() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
-			if (itemInventory.getIconMenu() == this) {
+			if (itemInventory != null && itemInventory.getIconMenu() == this) {
 				itemInventory.refresh();
 			}
 		}
