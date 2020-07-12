@@ -14,61 +14,12 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.filoghost.chestcommands.hook.VaultEconomyHook;
+public interface Placeholder {
 
-public enum Placeholder {
+	String getPlaceholderText();
 
-	PLAYER("{player}") {
-		@Override
-		public String getReplacement(Player executor) {
-			return executor.getName();
-		}
-	},
+	String getReplacementText(Player player);
 
-	ONLINE("{online}") {
-		@Override
-		public String getReplacement(Player executor) {
-			return String.valueOf(CachedGetters.getOnlinePlayers());
-		}
-	},
-
-	MAX_PLAYERS("{max_players}") {
-		@Override
-		public String getReplacement(Player executor) {
-			return String.valueOf(Bukkit.getMaxPlayers());
-		}
-	},
-
-	MONEY("{money}") {
-		@Override
-		public String getReplacement(Player executor) {
-			if (VaultEconomyHook.INSTANCE.isEnabled()) {
-				return VaultEconomyHook.formatMoney(VaultEconomyHook.getMoney(executor));
-			} else {
-				return "[ECONOMY PLUGIN NOT FOUND]";
-			}
-		}
-	},
-
-	WORLD("{world}") {
-		@Override
-		public String getReplacement(Player executor) {
-			return executor.getWorld().getName();
-		}
-	};
-
-	private final String text;
-
-	Placeholder(String text) {
-		this.text = text;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public abstract String getReplacement(Player executor);
 }

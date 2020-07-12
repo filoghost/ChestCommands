@@ -17,11 +17,11 @@ package me.filoghost.chestcommands;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.CustomPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
+import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -34,7 +34,7 @@ import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
-import me.filoghost.chestcommands.task.RefreshMenusTask;
+import me.filoghost.chestcommands.task.TickingTask;
 import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.collection.ErrorCollector;
@@ -139,7 +139,7 @@ public class ChestCommands extends JavaPlugin {
 			Bukkit.getScheduler().runTaskLater(this, errorCollector::logToConsole, 10L);
 		}
 
-		Bukkit.getScheduler().runTaskTimer(this, new RefreshMenusTask(), 1L, 1L);
+		Bukkit.getScheduler().runTaskTimer(this, new TickingTask(), 1L, 1L);
 	}
 
 
