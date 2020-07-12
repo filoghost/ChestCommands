@@ -12,14 +12,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy.upgrades;
+package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
-import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.util.Strings;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -28,13 +27,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class PlaceholdersUpgrade extends Upgrade {
+public class PlaceholdersYamlUpgrade extends Upgrade {
 
 	private final Path oldPlaceholdersFile;
 	private final ConfigLoader newPlaceholdersConfigLoader;
 	private Config updatedConfig;
 
-	public PlaceholdersUpgrade(ConfigManager configManager) {
+	public PlaceholdersYamlUpgrade(ConfigManager configManager) {
 		this.oldPlaceholdersFile = configManager.getRootDataFolder().resolve("placeholders.yml");
 		this.newPlaceholdersConfigLoader = configManager.getConfigLoader("custom-placeholders.yml");
 	}

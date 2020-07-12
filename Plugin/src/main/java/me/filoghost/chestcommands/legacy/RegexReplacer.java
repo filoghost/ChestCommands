@@ -14,27 +14,22 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-public class RegexFileReplacer {
+public class RegexReplacer implements Function<String, String> {
 
 	private final Pattern regex;
 	private final Function<Matcher, String> replaceCallback;
 
-	public RegexFileReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
+	public RegexReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
 		this.regex = regex;
 		this.replaceCallback = replaceCallback;
 	}
 
-	public List<String> replace(List<String> lines) {
-		return lines.stream().map(this::replace).collect(Collectors.toList());
-	}
-
-	private String replace(String line) {
+	@Override
+	public String apply(String line) {
 		Matcher matcher = regex.matcher(line);
 		StringBuffer output = new StringBuffer();
 
@@ -45,5 +40,4 @@ public class RegexFileReplacer {
 
 		return output.toString();
 	}
-
 }

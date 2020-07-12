@@ -12,14 +12,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy.upgrades;
+package me.filoghost.chestcommands.legacy.upgrade;
 
+import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
-import me.filoghost.chestcommands.legacy.Upgrade;
 import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 import me.filoghost.chestcommands.util.Strings;
@@ -30,14 +30,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class MenuUpgrade extends Upgrade {
+public class MenuNodeExpandUpgrade extends Upgrade {
 
 	private final ConfigLoader menuConfigLoader;
 	private final String legacyCommandSeparator;
 	private Config updatedConfig;
 
-	public MenuUpgrade(ConfigLoader menuConfigLoader, String legacyCommandSeparator) {
-		this.menuConfigLoader = menuConfigLoader;
+	public MenuNodeExpandUpgrade(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+		this.menuConfigLoader = configManager.getConfigLoader(menuFile);
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
 
@@ -80,23 +80,11 @@ public class MenuUpgrade extends Upgrade {
 
 
 	private void upgradeMenuSettings(ConfigSection section) {
-		renameNode(section, "command", MenuSettingsNode.COMMANDS);
-		renameNode(section, "open-action", MenuSettingsNode.OPEN_ACTIONS);
-		renameNode(section, "open-with-item.id", MenuSettingsNode.OPEN_ITEM_MATERIAL);
-
 		expandInlineList(section, MenuSettingsNode.COMMANDS, ";");
 		expandInlineList(section, MenuSettingsNode.OPEN_ACTIONS, legacyCommandSeparator);
 	}
 
 	private void upgradeIcon(ConfigSection section) {
-		renameNode(section, "ID", IconSettingsNode.MATERIAL);
-		renameNode(section, "DATA-VALUE", IconSettingsNode.DURABILITY);
-		renameNode(section, "NBT", IconSettingsNode.NBT_DATA);
-		renameNode(section, "ENCHANTMENT", IconSettingsNode.ENCHANTMENTS);
-		renameNode(section, "COMMAND", IconSettingsNode.ACTIONS);
-		renameNode(section, "COMMANDS", IconSettingsNode.ACTIONS);
-		renameNode(section, "REQUIRED-ITEM", IconSettingsNode.REQUIRED_ITEMS);
-
 		expandInlineList(section, IconSettingsNode.ACTIONS, legacyCommandSeparator);
 		expandInlineList(section, IconSettingsNode.ENCHANTMENTS, ";");
 
@@ -136,14 +124,6 @@ public class MenuUpgrade extends Upgrade {
 			}
 			material = parts[0];
 			section.set(IconSettingsNode.MATERIAL, material);
-			setModified();
-		}
-	}
-
-	private void renameNode(ConfigSection config, String oldNode, String newNode) {
-		if (config.isSet(oldNode) && !config.isSet(newNode)) {
-			config.set(newNode, config.get(oldNode));
-			config.set(oldNode, null);
 			setModified();
 		}
 	}

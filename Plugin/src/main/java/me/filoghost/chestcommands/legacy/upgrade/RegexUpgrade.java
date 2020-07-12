@@ -12,12 +12,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy.upgrades;
+package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
-import me.filoghost.chestcommands.legacy.RegexFileReplacer;
-import me.filoghost.chestcommands.legacy.Upgrade;
+import me.filoghost.chestcommands.legacy.RegexReplacer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,12 +26,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RegexUpgrade extends Upgrade {
 
 	private final Path file;
+	private final List<RegexReplacer> replacers;
 	private List<String> newContents;
-	private List<RegexFileReplacer> replacers;
 
 	public RegexUpgrade(Path file) {
 		this.file = file;
@@ -40,7 +41,7 @@ public class RegexUpgrade extends Upgrade {
 	}
 
 	protected void addRegexReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
-		replacers.add(new RegexFileReplacer(regex, replaceCallback));
+		replacers.add(new RegexReplacer(regex, replaceCallback));
 	}
 
 	@Override
@@ -66,9 +67,12 @@ public class RegexUpgrade extends Upgrade {
 			throw new ConfigLoadException("couldn't read file \"" + file.getFileName() + "\"", e);
 		}
 
-		for (RegexFileReplacer replacer : replacers) {
-			newContents = replacer.replace(lines);
+		Stream<String> linesStream = lines.stream();
+		for (RegexReplacer replacer : replacers) {
+			linesStream = linesStream.map(replacer);
 		}
+
+		newContents = linesStream.collect(Collectors.toList());
 
 		if (!newContents.equals(lines)) {
 			setModified();

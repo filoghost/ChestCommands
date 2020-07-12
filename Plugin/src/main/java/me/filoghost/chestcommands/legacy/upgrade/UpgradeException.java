@@ -12,18 +12,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy.upgrades;
+package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.config.ConfigManager;
+public class UpgradeException extends Exception {
 
-import java.util.regex.Pattern;
-
-public class LangUpgrade extends RegexUpgrade {
-
-	public LangUpgrade(ConfigManager configManager) {
-		super(configManager.getRootDataFolder().resolve("lang.yml"));
-
-		addRegexReplacer(Pattern.compile(Pattern.quote("{datavalue}")), matcher -> "{durability}");
+	public UpgradeException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

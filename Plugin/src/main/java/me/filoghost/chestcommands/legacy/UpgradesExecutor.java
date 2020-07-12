@@ -17,10 +17,13 @@ package me.filoghost.chestcommands.legacy;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
-import me.filoghost.chestcommands.legacy.upgrades.LangUpgrade;
-import me.filoghost.chestcommands.legacy.upgrades.MenuUpgrade;
-import me.filoghost.chestcommands.legacy.upgrades.PlaceholdersUpgrade;
-import me.filoghost.chestcommands.legacy.upgrades.SettingsUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.LangUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.MenuNodeExpandUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.MenuNodeRenameUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.PlaceholdersYamlUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.SettingsUpgrade;
+import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
+import me.filoghost.chestcommands.legacy.upgrade.UpgradeException;
 import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
@@ -29,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class UpgradesExecutor {
@@ -58,27 +62,31 @@ public class UpgradesExecutor {
 
 		} else {
 			String legacyCommandSeparator;
-			if (!upgradesDoneRegistry.isDone(UpgradeID.V4_MENUS)) {
+			if (!upgradesDoneRegistry.isDone(UpgradeID.V4_MENUS_REFORMAT)) {
 				legacyCommandSeparator = readLegacyCommandSeparator();
 			} else {
 				legacyCommandSeparator = null;
 			}
 
-			SettingsUpgrade settingsUpgrade = new SettingsUpgrade(configManager);
-			runIfNecessary(UpgradeID.V4_CONFIG, settingsUpgrade);
-
-			PlaceholdersUpgrade placeholdersUpgrade = new PlaceholdersUpgrade(configManager);
-			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, placeholdersUpgrade);
-
-			LangUpgrade langUpgrade = new LangUpgrade(configManager);
-			runIfNecessary(UpgradeID.V4_LANG, langUpgrade);
+			runIfNecessary(UpgradeID.V4_CONFIG, () -> new SettingsUpgrade(configManager));
+			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, () -> new PlaceholdersYamlUpgrade(configManager));
+			runIfNecessary(UpgradeID.V4_LANG, () -> new LangUpgrade(configManager));
 
 			try {
-				List<MenuUpgrade> menuUpgrades = CollectionUtils.transform(
-						configManager.getMenuPaths(),
-						menuPath -> new MenuUpgrade(configManager.getConfigLoader(menuPath), legacyCommandSeparator));
-				runIfNecessary(UpgradeID.V4_MENUS, menuUpgrades);
+				List<Path> menuFiles = configManager.getMenuPaths();
+
+				runIfNecessaryMultiple(UpgradeID.V4_MENU_REPLACE, () -> {
+					return CollectionUtils.transform(menuFiles,
+							MenuNodeRenameUpgrade::new);
+				});
+
+				runIfNecessaryMultiple(UpgradeID.V4_MENUS_REFORMAT, () -> {
+					return CollectionUtils.transform(menuFiles,
+							file -> new MenuNodeExpandUpgrade(configManager, file, legacyCommandSeparator));
+				});
+
 			} catch (IOException e) {
+				Log.severe("Couldn't obtain a list of menu files. Some automatic upgrades were skipped.", e);
 				failedUpgrades.add(configManager.getMenusFolder());
 			}
 		}
@@ -115,19 +123,19 @@ public class UpgradesExecutor {
 	}
 
 
-	private void runIfNecessary(UpgradeID upgradeID, Upgrade upgradeTask) {
-		runIfNecessary(upgradeID, Collections.singletonList(upgradeTask));
+	private void runIfNecessary(UpgradeID upgradeID, Supplier<Upgrade> upgradeTask) {
+		runIfNecessaryMultiple(upgradeID, () -> Collections.singletonList(upgradeTask.get()));
 	}
 
 
-	private void runIfNecessary(UpgradeID upgradeID, List<? extends Upgrade> upgradeTasks) {
+	private void runIfNecessaryMultiple(UpgradeID upgradeID, Supplier<List<? extends Upgrade>> upgradeTasks) {
 		if (upgradesDoneRegistry.isDone(upgradeID)) {
 			return;
 		}
 
 		boolean failedAnyUpgrade = false;
 
-		for (Upgrade upgradeTask : upgradeTasks) {
+		for (Upgrade upgradeTask : upgradeTasks.get()) {
 			try {
 				boolean modified = upgradeTask.backupAndUpgradeIfNecessary();
 				if (modified) {
