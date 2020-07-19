@@ -14,13 +14,12 @@
  */
 package me.filoghost.chestcommands.hook;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
-
 import me.filoghost.chestcommands.util.Preconditions;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public enum VaultEconomyHook implements PluginHook {
 
@@ -59,12 +58,7 @@ public enum VaultEconomyHook implements PluginHook {
 		checkPositiveAmount(minimum);
 
 		double balance = INSTANCE.economy.getBalance(player, player.getWorld().getName());
-
-		if (balance < minimum) {
-			return false;
-		} else {
-			return true;
-		}
+		return balance >= minimum;
 	}
 
 	/**
@@ -75,9 +69,7 @@ public enum VaultEconomyHook implements PluginHook {
 		checkPositiveAmount(amount);
 
 		EconomyResponse response = INSTANCE.economy.withdrawPlayer(player, player.getWorld().getName(), amount);
-		boolean result = response.transactionSuccess();
-
-		return result;
+		return response.transactionSuccess();
 	}
 
 	public static boolean giveMoney(Player player, double amount) {
@@ -85,9 +77,7 @@ public enum VaultEconomyHook implements PluginHook {
 		checkPositiveAmount(amount);
 
 		EconomyResponse response = INSTANCE.economy.depositPlayer(player, player.getWorld().getName(), amount);
-		boolean result = response.transactionSuccess();
-
-		return result;
+		return response.transactionSuccess();
 	}
 	
 	private static void checkPositiveAmount(double amount) {

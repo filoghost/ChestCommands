@@ -23,7 +23,7 @@ public interface PluginHook {
 	
 	boolean isEnabled();
 	
-	public default void checkEnabledState() {
+	default void checkEnabledState() {
 		Preconditions.checkState(isEnabled(), "Plugin hook " + getClass().getSimpleName() + " is not enabled");
 	}
 	

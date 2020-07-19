@@ -25,16 +25,16 @@ public class ErrorMessages {
 
 	public static class Config {
 
-		public static String readIOException = "I/O exception while reading file";
-		public static String createDefaultIOException = "I/O exception while creating default file";
-		public static String writeDataIOException = "I/O exception while writing data to file";
-		public static String createDataFolderIOException = "Plugin failed to load, couldn't create data folder";
-		public static String invalidYamlSyntax = "invalid YAML syntax";
+		public static final String readIOException = "I/O exception while reading file";
+		public static final String createDefaultIOException = "I/O exception while creating default file";
+		public static final String writeDataIOException = "I/O exception while writing data to file";
+		public static final String createDataFolderIOException = "Plugin failed to load, couldn't create data folder";
+		public static final String invalidYamlSyntax = "invalid YAML syntax";
 
-		public static String valueNotSet = "value is not set";
-		public static String valueNotList = "value is not a list";
-		public static String valueNotBoolean = "value is not a boolean";
-		public static String valueNotNumber = "value is not a number";
+		public static final String valueNotSet = "value is not set";
+		public static final String valueNotList = "value is not a list";
+		public static final String valueNotBoolean = "value is not a boolean";
+		public static final String valueNotNumber = "value is not a number";
 
 		public static String menuListIOException(Path menuFolder) {
 			return "couldn't fetch menu files inside the folder \"" + menuFolder + "\"";
@@ -72,9 +72,9 @@ public class ErrorMessages {
 
 	public static class Upgrade {
 
-		public static String genericExecutorError = "encountered errors while running run automatic configuration upgrades, "
+		public static final String genericExecutorError = "encountered errors while running run automatic configuration upgrades, "
 				+ "some configuration files or menus may require manual updates.";
-		public static String menuListIOException = "couldn't obtain a list of menu files, some automatic upgrades were skipped";
+		public static final String menuListIOException = "couldn't obtain a list of menu files, some automatic upgrades were skipped";
 
 		public static String metadataReadError(Path metadataFile) {
 			return "couldn't read upgrades metadata file \"" + formatPath(metadataFile) + "\"";
@@ -111,17 +111,17 @@ public class ErrorMessages {
 
 	public static class Parsing {
 
-		public static String invalidDouble = "value is not a valid decimal";
-		public static String invalidShort = "value is not a valid short integer";
-		public static String invalidInteger = "value not a valid integer";
+		public static final String invalidDouble = "value is not a valid decimal";
+		public static final String invalidShort = "value is not a valid short integer";
+		public static final String invalidInteger = "value not a valid integer";
 
-		public static String strictlyPositive = "value must be greater than zero";
-		public static String zeroOrPositive = "value must be zero or greater";
+		public static final String strictlyPositive = "value must be greater than zero";
+		public static final String zeroOrPositive = "value must be zero or greater";
 
-		public static String invalidColorFormat = "value must match the format \"red, green, blue\"";
-		public static String invalidPatternFormat = "value must match the format \"pattern:color\"";
+		public static final String invalidColorFormat = "value must match the format \"red, green, blue\"";
+		public static final String invalidPatternFormat = "value must match the format \"pattern:color\"";
 
-		public static String unknownAttribute = "unknown attribute";
+		public static final String unknownAttribute = "unknown attribute";
 
 		public static String unknownMaterial(String materialString) {
 			return "unknown material \"" + materialString + "\"";
