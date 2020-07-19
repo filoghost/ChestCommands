@@ -45,14 +45,12 @@ import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ChestCommands extends JavaPlugin {
+public class ChestCommands extends BaseJavaPlugin {
 
 
 	public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
@@ -70,7 +68,15 @@ public class ChestCommands extends JavaPlugin {
 	private static String newVersion;
 
 	@Override
-	public void onEnable() {
+	protected void onCheckedEnable() throws PluginEnableException {
+		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
+			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
+				throw new PluginEnableException("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
+			} else {
+				throw new PluginEnableException("ChestCommands requires at least Bukkit 1.8 to run.");
+			}
+		}
+
 		if (instance != null || System.getProperty("ChestCommandsLoaded") != null) {
 			Log.warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
 			return;
@@ -87,22 +93,15 @@ public class ChestCommands extends JavaPlugin {
 		settings = new Settings();
 		lang = new Lang();
 		placeholders = new CustomPlaceholders();
-		
-		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
-			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
-				criticalShutdown("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
-			} else {
-				criticalShutdown("ChestCommands requires at least Bukkit 1.8 to run.");
-			}
-			return;
-		}
-		
+
 		VaultEconomyHook.INSTANCE.setup();
 		BarAPIHook.INSTANCE.setup();
 		PlaceholderAPIHook.INSTANCE.setup();
 		BungeeCordHook.INSTANCE.setup();
 		
-		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
+		if (VaultEconomyHook.INSTANCE.isEnabled()) {
+			Log.info("Hooked Vault");
+		} else {
 			Log.warning("Couldn't find Vault and a compatible economy plugin! Money-related features will not work.");
 		}
 
@@ -231,29 +230,6 @@ public class ChestCommands extends JavaPlugin {
 	
 	public static ErrorCollector getLastLoadErrors() {
 		return lastLoadErrors;
-	}
-
-	private static void criticalShutdown(String... errorMessage) {
-		String separator = "****************************************************************************";
-
-		List<String> output = new ArrayList<>();
-
-		output.add(" ");
-		output.add(separator);
-		for (String line : errorMessage) {
-			output.add("    " + line);
-		}
-		output.add(" ");
-		output.add("    This plugin has been disabled.");
-		output.add(separator);
-		output.add(" ");
-		
-		System.out.println("\n" + output);
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException ignored) {}
-		instance.setEnabled(false);
 	}
 
 }
