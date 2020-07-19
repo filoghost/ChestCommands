@@ -43,12 +43,12 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 
 	@Override
 	public Path getOriginalFile() {
-		return menuConfigLoader.getConfigPath();
+		return menuConfigLoader.getFile();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return menuConfigLoader.getConfigPath();
+		return menuConfigLoader.getFile();
 	}
 
 	@Override

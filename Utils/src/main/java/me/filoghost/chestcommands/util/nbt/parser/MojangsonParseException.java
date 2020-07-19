@@ -1,7 +1,5 @@
 package me.filoghost.chestcommands.util.nbt.parser;
 
-import org.bukkit.ChatColor;
-
 import java.io.IOException;
 
 public class MojangsonParseException extends IOException {
@@ -18,8 +16,8 @@ public class MojangsonParseException extends IOException {
 		if (i > 35) {
 			builder.append("...");
 		}
-		builder.append(content.substring(Math.max(0, i - 35), i));
-		builder.append(ChatColor.GOLD + "<--[HERE]");
+		builder.append(content, Math.max(0, i - 35), i);
+		builder.append("<--[HERE]");
 
 		return builder.toString();
 	}

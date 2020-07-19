@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.parsing.icon;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.attributes.ActionsAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.AmountAttribute;
@@ -39,8 +40,9 @@ import me.filoghost.chestcommands.parsing.icon.attributes.RequiredItemsAttribute
 import me.filoghost.chestcommands.parsing.icon.attributes.SkullOwnerAttribute;
 import me.filoghost.chestcommands.parsing.icon.attributes.ViewPermissionAttribute;
 import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +50,7 @@ import java.util.Map;
 
 public class IconSettings {
 
-	private final String menuName;
+	private final Path menuFile;
 	private final String iconName;
 
 	private PositionAttribute positionX;
@@ -82,8 +84,8 @@ public class IconSettings {
 		addApplicableIconNodeHandler(IconSettingsNode.REQUIRED_ITEMS, ValueExtractor.STRING_LIST, RequiredItemsAttribute::new);
 	}
 
-	public String getMenuName() {
-		return menuName;
+	public Path getMenuFile() {
+		return menuFile;
 	}
 
 	public String getIconName() {
@@ -152,26 +154,25 @@ public class IconSettings {
 		iconNodeHandlers.put(node, iconNodeHandler);
 	}
 
-	public IconSettings(String menuName, String iconName) {
-		this.menuName = menuName;
+	public IconSettings(Path menuFile, String iconName) {
+		this.menuFile = menuFile;
 		this.iconName = iconName;
 		this.applicableAttributes = new ArrayList<>();
 	}
 
 	public void loadFrom(ConfigSection config, ErrorCollector errorCollector) {
 		for (String attributeKey : config.getKeys(false)) {
-			AttributeErrorCollector attributeErrorCollector = new AttributeErrorCollector(errorCollector, this, attributeKey);
-
 			try {
 				IconNodeHandler nodeHandler = iconNodeHandlers.get(attributeKey);
 				if (nodeHandler == null) {
-					throw new ParseException("unknown attribute");
+					throw new ParseException(ErrorMessages.Parsing.unknownAttribute);
 				}
 
+				AttributeErrorCollector attributeErrorCollector = new AttributeErrorCollector(errorCollector, this, attributeKey);
 				nodeHandler.handle(this, config, attributeKey, attributeErrorCollector);
 
 			} catch (ParseException | ConfigValueException e) {
-				attributeErrorCollector.addAttributeError(e);
+				errorCollector.add(ErrorMessages.Menu.invalidAttribute(this, attributeKey), e);
 			}
 		}
 	}

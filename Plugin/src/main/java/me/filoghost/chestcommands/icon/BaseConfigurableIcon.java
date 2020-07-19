@@ -15,11 +15,11 @@
 package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.util.Log;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import me.filoghost.chestcommands.placeholder.RelativeString;
 import me.filoghost.chestcommands.placeholder.RelativeStringList;
+import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.chestcommands.util.logging.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;

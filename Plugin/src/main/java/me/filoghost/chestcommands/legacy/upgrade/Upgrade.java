@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Preconditions;
 
 import java.io.IOException;
@@ -42,20 +43,20 @@ public abstract class Upgrade {
 		try {
 			computeChanges();
 		} catch (ConfigLoadException e) {
-			throw new UpgradeException("couldn't load file to upgrade \"" + getOriginalFile().getFileName() + "\"", e);
+			throw new UpgradeException(ErrorMessages.Upgrade.loadError(getOriginalFile()), e);
 		}
 
 		if (modified) {
 			try {
 				createBackupFile(getOriginalFile());
 			} catch (IOException e) {
-				throw new UpgradeException("couldn't create backup of file \"" + getOriginalFile().getFileName() + "\"", e);
+				throw new UpgradeException(ErrorMessages.Upgrade.backupError(getOriginalFile()), e);
 			}
 
 			try {
 				saveChanges();
 			} catch (ConfigSaveException e) {
-				throw new UpgradeException("couldn't save upgraded file \"" + getUpgradedFile().getFileName() + "\"", e);
+				throw new UpgradeException(ErrorMessages.Upgrade.saveError(getUpgradedFile()), e);
 			}
 		}
 

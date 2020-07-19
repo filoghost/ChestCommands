@@ -18,13 +18,12 @@ import me.filoghost.chestcommands.config.framework.BaseConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.exception.ConfigException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
 import me.filoghost.chestcommands.config.framework.mapped.MappedConfigLoader;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuParser;
-import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -50,20 +49,20 @@ public class ConfigManager extends BaseConfigManager {
 		langConfigLoader = getMappedConfigLoader("lang.yml", Lang::new);
 	}
 
-	public Settings tryLoadSettings() {
+	public Settings tryLoadSettings(ErrorCollector errorCollector) {
 		try {
 			return settingsConfigLoader.init();
 		} catch (ConfigException e) {
-			logConfigInitException(settingsConfigLoader.getFileName(), e);
+			logConfigInitException(errorCollector, settingsConfigLoader.getFile(), e);
 			return new Settings();
 		}
 	}
 
-	public Lang tryLoadLang() {
+	public Lang tryLoadLang(ErrorCollector errorCollector) {
 		try {
 			return langConfigLoader.init();
 		} catch (ConfigException e) {
-			logConfigInitException(langConfigLoader.getFileName(), e);
+			logConfigInitException(errorCollector, langConfigLoader.getFile(), e);
 			return new Lang();
 		}
 	}
@@ -75,17 +74,17 @@ public class ConfigManager extends BaseConfigManager {
 			Config placeholdersConfig = placeholdersConfigLoader.init();
 			placeholders.load(placeholdersConfig, errorCollector);
 		} catch (ConfigException t) {
-			logConfigInitException(placeholdersConfigLoader.getFileName(), t);
+			logConfigInitException(errorCollector, placeholdersConfigLoader.getFile(), t);
 		}
 
 		return placeholders;
 	}
 
-	public void tryCreateDefault(ConfigLoader configLoader) {
+	public void tryCreateDefault(ErrorCollector errorCollector, ConfigLoader configLoader) {
 		try {
 			configLoader.createDefault();
 		} catch (ConfigException e) {
-			logConfigInitException(configLoader.getFileName(), e);
+			logConfigInitException(errorCollector, configLoader.getFile(), e);
 		}
 	}
 
@@ -106,13 +105,8 @@ public class ConfigManager extends BaseConfigManager {
 		}
 	}
 
-	private void logConfigInitException(String fileName, ConfigException e) {
-		if (e instanceof ConfigSyntaxException) {
-			Log.warning("Invalid YAML syntax in config file \"" + fileName + "\": " + e.getMessage());
-		} else {
-			e.printStackTrace();
-			Log.warning("Error while reading config file \"" + fileName +  "\": " + e.getMessage());
-		}
+	private void logConfigInitException(ErrorCollector errorCollector, Path file, ConfigException e) {
+		errorCollector.add(ErrorMessages.Config.initException(file), e);
 	}
 
 	public List<LoadedMenu> tryLoadMenus(ErrorCollector errorCollector) {
@@ -122,7 +116,7 @@ public class ConfigManager extends BaseConfigManager {
 		try {
 			menuPaths = getMenuPaths();
 		} catch (IOException e) {
-			Log.severe("Couldn't fetch files inside the folder \"" + getMenusFolder().getFileName() + "\"", e);
+			errorCollector.add(ErrorMessages.Config.menuListIOException(getMenusFolder()), e);
 			return Collections.emptyList();
 		}
 
@@ -133,7 +127,7 @@ public class ConfigManager extends BaseConfigManager {
 				Config menuConfig = menuConfigLoader.load();
 				loadedMenus.add(MenuParser.loadMenu(menuConfig, errorCollector));
 			} catch (ConfigException e) {
-				logConfigInitException(menuConfigLoader.getFileName(), e);
+				logConfigInitException(errorCollector, menuConfigLoader.getFile(), e);
 			}
 		}
 

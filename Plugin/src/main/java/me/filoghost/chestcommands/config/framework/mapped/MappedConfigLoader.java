@@ -18,6 +18,7 @@ import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class MappedConfigLoader<T extends MappedConfig> {
 		try {
 			mapper = new ConfigMapper(mappedObject, config);
 		} catch (ReflectiveOperationException e) {
-			throw new ConfigLoadException("couldn't initialize config mapper for class " + mappedObject.getClass(), e);
+			throw new ConfigLoadException(ErrorMessages.Config.mapperInitError(mappedObject), e);
 		}
 
 		// Extract default values from fields
@@ -50,7 +51,7 @@ public class MappedConfigLoader<T extends MappedConfig> {
 			try {
 				defaultValues = mapper.getFieldValues();
 			} catch (ReflectiveOperationException e) {
-				throw new ConfigLoadException("couldn't read field values in class " + mappedObject.getClass(), e);
+				throw new ConfigLoadException(ErrorMessages.Config.fieldReadError(mappedObject), e);
 			}
 		}
 
@@ -65,14 +66,14 @@ public class MappedConfigLoader<T extends MappedConfig> {
 		try {
 			mapper.injectObjectFields();
 		} catch (ReflectiveOperationException e) {
-			throw new ConfigLoadException("couldn't inject fields values in class " + mappedObject.getClass(), e);
+			throw new ConfigLoadException(ErrorMessages.Config.fieldInjectError(mappedObject), e);
 		}
 		mappedObject.postLoad();
 		return mappedObject;
 	}
 
-	public String getFileName() {
-		return configLoader.getFileName();
+	public Path getFile() {
+		return configLoader.getFile();
 	}
 
 }

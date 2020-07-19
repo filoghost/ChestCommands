@@ -2,18 +2,19 @@ package me.filoghost.chestcommands.parsing.menu;
 
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class LoadedMenu {
 
 	private final InternalIconMenu menu;
-	private final String fileName;
+	private final Path sourceFile;
 	private final List<String> triggerCommands;
 	private final OpenTrigger openTrigger;
 
-	public LoadedMenu(InternalIconMenu menu, String fileName, List<String> triggerCommands, OpenTrigger openTrigger) {
+	public LoadedMenu(InternalIconMenu menu, Path menuFile, List<String> triggerCommands, OpenTrigger openTrigger) {
 		this.menu = menu;
-		this.fileName = fileName;
+		this.sourceFile = menuFile;
 		this.triggerCommands = triggerCommands;
 		this.openTrigger = openTrigger;
 	}
@@ -22,8 +23,8 @@ public class LoadedMenu {
 		return menu;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public Path getSourceFile() {
+		return sourceFile;
 	}
 
 	public List<String> getTriggerCommands() {

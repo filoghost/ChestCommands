@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
@@ -31,7 +32,7 @@ public class MaterialAttribute implements ApplicableIconAttribute {
 		Optional<Material> material = MaterialsHelper.matchMaterial(serializedMaterial);
 
 		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
-			throw new ParseException("invalid material \"" + serializedMaterial + "\"");
+			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(serializedMaterial));
 		}
 
 		this.material = material.get();

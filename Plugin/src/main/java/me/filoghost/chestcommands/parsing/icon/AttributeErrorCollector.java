@@ -1,7 +1,8 @@
 package me.filoghost.chestcommands.parsing.icon;
 
-import me.filoghost.chestcommands.parsing.ErrorFormat;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
 public class AttributeErrorCollector {
 
@@ -15,12 +16,8 @@ public class AttributeErrorCollector {
 		this.attributeName = attributeName;
 	}
 
-	public void addAttributeError(Exception e) {
-		errorCollector.addError(ErrorFormat.invalidAttribute(iconSettings, attributeName, e.getMessage()));
-	}
-
-	public void addListElementError(String listElement, Exception e) {
-		errorCollector.addError(ErrorFormat.invalidListElement(iconSettings, attributeName, listElement, e.getMessage()));
+	public void addListElementError(String listElement, ParseException e) {
+		errorCollector.add(ErrorMessages.Menu.invalidAttributeListElement(iconSettings, attributeName, listElement), e);
 	}
 
 }

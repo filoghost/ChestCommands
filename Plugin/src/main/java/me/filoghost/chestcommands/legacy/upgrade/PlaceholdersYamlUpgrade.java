@@ -19,6 +19,7 @@ import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Strings;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -45,7 +46,7 @@ public class PlaceholdersYamlUpgrade extends Upgrade {
 
 	@Override
 	public Path getUpgradedFile() {
-		return newPlaceholdersConfigLoader.getConfigPath();
+		return newPlaceholdersConfigLoader.getFile();
 	}
 
 	@Override
@@ -55,12 +56,12 @@ public class PlaceholdersYamlUpgrade extends Upgrade {
 		}
 
 		// Do NOT load the new placeholder configuration from disk, as it should only contain placeholders imported from the old file
-		Config newPlaceholdersConfig = new Config(newPlaceholdersConfigLoader.getConfigPath());
+		Config newPlaceholdersConfig = new Config(newPlaceholdersConfigLoader.getFile());
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(oldPlaceholdersFile);
 		} catch (IOException e) {
-			throw new ConfigLoadException("couldn't read file \"" + oldPlaceholdersFile.getFileName() + "\"", e);
+			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
 		}
 
 		for (String line : lines) {

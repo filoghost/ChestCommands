@@ -18,11 +18,12 @@ public class Permissions {
 
 	public static final String
 
-			UPDATE_NOTIFICATIONS = "chestcommands.update",
-			SEE_ERRORS = "chestcommands.errors",
-			SIGN_CREATE = "chestcommands.sign",
+			BASE_PREFIX = "chestcommands.",
+			COMMAND_PREFIX = BASE_PREFIX + "command.",
+			OPEN_MENU_PREFIX = BASE_PREFIX + "open.",
 
-			COMMAND_BASE = "chestcommands.command.",
-			OPEN_MENU_BASE = "chestcommands.open.";
+			UPDATE_NOTIFICATIONS = BASE_PREFIX + "update",
+			SEE_ERRORS = BASE_PREFIX + "errors",
+			SIGN_CREATE = BASE_PREFIX + "sign";
 
 }

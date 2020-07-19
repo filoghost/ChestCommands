@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.config.framework;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,13 +36,13 @@ import java.util.stream.StreamSupport;
 public class ConfigLoader {
 
 	private final Path rootDataFolder;
-	private final Path configPath;
+	private final Path filePath;
 
-	public ConfigLoader(Path rootDataFolder, Path configPath) {
-		Preconditions.checkArgument(configPath.startsWith(rootDataFolder), "config file " + configPath + " cannot be outside " + rootDataFolder);
+	public ConfigLoader(Path rootDataFolder, Path filePath) {
+		Preconditions.checkArgument(filePath.startsWith(rootDataFolder), "file \"" + filePath + "\" must be inside \"" + rootDataFolder + "\"");
 
 		this.rootDataFolder = rootDataFolder;
-		this.configPath = configPath;
+		this.filePath = filePath;
 	}
 
 	public Config init() throws ConfigSaveException, ConfigLoadException {
@@ -56,17 +57,17 @@ public class ConfigLoader {
 
 		createParentDirectory();
 
-		Path relativeConfigPath = rootDataFolder.relativize(configPath);
+		Path relativeConfigPath = rootDataFolder.relativize(filePath);
 		String internalJarPath = toInternalJarPath(relativeConfigPath);
 
 		try (InputStream defaultFile = getInternalResource(internalJarPath)) {
 			if (defaultFile != null) {
-				Files.copy(defaultFile, configPath);
+				Files.copy(defaultFile, filePath);
 			} else {
-				Files.createFile(configPath);
+				Files.createFile(filePath);
 			}
 		} catch (IOException e) {
-			throw new ConfigSaveException("couldn't create default config file " + configPath, e);
+			throw new ConfigSaveException(ErrorMessages.Config.createDefaultIOException, e);
 		}
 	}
 
@@ -91,23 +92,23 @@ public class ConfigLoader {
 	}
 
 	public boolean fileExists() {
-		return (Files.isRegularFile(configPath));
+		return Files.isRegularFile(filePath);
 	}
 
 	public Config load() throws ConfigLoadException {
-		Preconditions.checkState(fileExists(), configPath.getFileName() + " doesn't exist or is not a regular file");
+		Preconditions.checkState(fileExists(), "\"" + filePath + "\" doesn't exist or is not a regular file");
 
 		YamlConfiguration yaml = new YamlConfiguration();
 
-		try (BufferedReader reader = Files.newBufferedReader(configPath)) {
+		try (BufferedReader reader = Files.newBufferedReader(filePath)) {
 			yaml.load(reader);
 		} catch (IOException e) {
-			throw new ConfigLoadException("couldn't read config file " + configPath, e);
+			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
 		} catch (InvalidConfigurationException e) {
-			throw new ConfigSyntaxException(e.getMessage(), e);
+			throw new ConfigSyntaxException(ErrorMessages.Config.invalidYamlSyntax, e);
 		}
 
-		return new Config(yaml, configPath);
+		return new Config(yaml, filePath);
 	}
 
 	public void save(Config config) throws ConfigSaveException {
@@ -115,29 +116,25 @@ public class ConfigLoader {
 
 		String data = config.saveToString();
 
-		try (BufferedWriter writer = Files.newBufferedWriter(configPath)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
 			writer.write(data);
 		} catch (IOException e) {
-			throw new ConfigSaveException("couldn't write config data to " + configPath, e);
+			throw new ConfigSaveException(ErrorMessages.Config.writeDataIOException, e);
 		}
 	}
 
 	private void createParentDirectory() throws ConfigSaveException {
-		if (configPath.getParent() != null) {
+		if (filePath.getParent() != null) {
 			try {
-				Files.createDirectories(configPath.getParent());
+				Files.createDirectories(filePath.getParent());
 			} catch (IOException e) {
-				throw new ConfigSaveException("couldn't create directory " + configPath.getParent(), e);
+				throw new ConfigSaveException(ErrorMessages.Config.createParentFolderIOException(filePath.getParent()), e);
 			}
 		}
 	}
 
-	public Path getConfigPath() {
-		return configPath;
-	}
-
-	public String getFileName() {
-		return configPath.getFileName().toString();
+	public Path getFile() {
+		return filePath;
 	}
 
 }

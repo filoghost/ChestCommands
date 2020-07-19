@@ -22,24 +22,25 @@ import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class InternalIconMenu extends BaseIconMenu {
 
-	private final String fileName;
+	private final Path sourceFile;
 	private final String openPermission;
 	
 	private List<Action> openActions;
 	private int refreshTicks;
 
-	public InternalIconMenu(String title, int rows, String fileName) {
+	public InternalIconMenu(String title, int rows, Path sourceFile) {
 		super(title, rows);
-		this.fileName = fileName;
-		this.openPermission = Permissions.OPEN_MENU_BASE + fileName;
+		this.sourceFile = sourceFile;
+		this.openPermission = Permissions.OPEN_MENU_PREFIX + sourceFile.getFileName();
 	}
 
-	public String getFileName() {
-		return fileName;
+	public Path getSourceFile() {
+		return sourceFile;
 	}
 
 	public void setOpenActions(List<Action> openAction) {

@@ -29,7 +29,7 @@ public class GiveMoneyAction extends Action {
 		try {
 			moneyToGive = NumberParser.getStrictlyPositiveDouble(action);
 		} catch (ParseException e) {
-			disable(ChatColor.RED + "Invalid money amount: " + action);
+			disable(ChatColor.RED + "Invalid money amount \"" + action + "\": " + e.getMessage());
 		}
 	}
 

@@ -20,7 +20,7 @@ import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.command.framework.CommandValidate;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -50,7 +50,7 @@ public class CommandHandler extends CommandFramework {
 
 
 		if (args[0].equalsIgnoreCase("help")) {
-			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "help"), "You don't have permission.");
+			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "help"), "You don't have permission.");
 			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Commands:");
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " reload" + ChatColor.GRAY + " - Reloads the plugin.");
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " list" + ChatColor.GRAY + " - Lists the loaded menus.");
@@ -60,17 +60,17 @@ public class CommandHandler extends CommandFramework {
 
 
 		if (args[0].equalsIgnoreCase("reload")) {
-			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "reload"), "You don't have permission.");
+			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "reload"), "You don't have permission.");
 
 			ChestCommands.closeAllMenus();
 
-			ErrorCollector errors = ChestCommands.getInstance().load();
+			ErrorCollector errorCollector = ChestCommands.getInstance().load();
 
-			if (!errors.hasWarningsOrErrors()) {
+			if (!errorCollector.hasErrors()) {
 				sender.sendMessage(ChestCommands.CHAT_PREFIX + "Plugin reloaded.");
 			} else {
-				errors.logToConsole();
-				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errors.getWarningsCount() + " warning(s) and " + errors.getErrorsCount() + " error(s).");
+				errorCollector.logToConsole();
+				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Plugin reloaded with " + errorCollector.getErrorsCount() + " error(s).");
 				if (!(sender instanceof ConsoleCommandSender)) {
 					sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Please check the console.");
 				}
@@ -80,14 +80,14 @@ public class CommandHandler extends CommandFramework {
 
 
 		if (args[0].equalsIgnoreCase("open")) {
-			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open"), "You don't have permission.");
+			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "open"), "You don't have permission.");
 			CommandValidate.minLength(args, 2, "Usage: /" + label + " open <menu> [player]");
 
 			Player target;
 
 			if (sender instanceof Player) {
 				if (args.length > 2) {
-					CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "open.others"), "You don't have permission to open menus for others.");
+					CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "open.others"), "You don't have permission to open menus for others.");
 					target = Bukkit.getPlayerExact(args[2]);
 				} else {
 					target = (Player) sender;
@@ -124,7 +124,7 @@ public class CommandHandler extends CommandFramework {
 
 
 		if (args[0].equalsIgnoreCase("list")) {
-			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_BASE + "list"), "You don't have permission.");
+			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "list"), "You don't have permission.");
 			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Loaded menus:");
 			for (String file : menuManager.getMenuFileNames()) {
 				sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);

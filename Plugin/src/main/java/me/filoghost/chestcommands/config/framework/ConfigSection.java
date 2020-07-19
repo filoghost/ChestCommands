@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.config.framework;
 
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -39,22 +40,22 @@ public class ConfigSection {
 	}
 
 	public int getRequiredInt(String path) throws ConfigValueException {
-		Number value = cast(getRequired(path), Number.class, "value is not a number");
+		Number value = cast(getRequired(path), Number.class, ErrorMessages.Config.valueNotNumber);
 		return value.intValue();
 	}
 
 	public double getRequiredDouble(String path) throws ConfigValueException {
-		Number value = cast(getRequired(path), Number.class, "value is not a number");
+		Number value = cast(getRequired(path), Number.class, ErrorMessages.Config.valueNotNumber);
 		return value.doubleValue();
 	}
 
 	public boolean getRequiredBoolean(String path) throws ConfigValueException {
-		Boolean value = cast(getRequired(path), Boolean.class, "value is not a boolean");
+		Boolean value = cast(getRequired(path), Boolean.class, ErrorMessages.Config.valueNotBoolean);
 		return value;
 	}
 
 	public List<String> getRequiredStringList(String path) throws ConfigValueException {
-		List<?> value = cast(getRequired(path), List.class, "value is not a list");
+		List<?> value = cast(getRequired(path), List.class, ErrorMessages.Config.valueNotList);
 		List<String> result = new ArrayList<>();
 
 		for (Object object : value) {
@@ -69,7 +70,7 @@ public class ConfigSection {
 	private Object getRequired(String path) throws ConfigValueException {
 		Object value = yamlSection.get(path, null);
 		if (value == null) {
-			throw new ConfigValueException("value is not set");
+			throw new ConfigValueException(ErrorMessages.Config.valueNotSet);
 		}
 		return value;
 	}

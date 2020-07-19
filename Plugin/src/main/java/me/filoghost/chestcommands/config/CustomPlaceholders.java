@@ -15,9 +15,10 @@
 package me.filoghost.chestcommands.config;
 
 import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,12 +37,12 @@ public class CustomPlaceholders {
 			String replacement = Colors.addColors(config.getString(key));
 
 			if (placeholder.length() == 0) {
-				errorCollector.addError("Error in " + config.getSourceFileName() + ": placeholder cannot be empty (skipped).");
+				errorCollector.add(ErrorMessages.Config.emptyPlaceholder(config.getSourceFile()));
 				continue;
 			}
 
 			if (placeholder.length() > 100) {
-				errorCollector.addError("Error in " + config.getSourceFileName() + ": placeholder cannot be longer than 100 character (" + placeholder + ").");
+				errorCollector.add(ErrorMessages.Config.tooLongPlaceholder(config.getSourceFile(), placeholder));
 				continue;
 			}
 

@@ -32,12 +32,14 @@ import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.PrintableErrorCollector;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.task.TickingTask;
-import me.filoghost.chestcommands.util.Log;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.Log;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -135,7 +137,7 @@ public class ChestCommands extends JavaPlugin {
 
 		ErrorCollector errorCollector = load();
 		
-		if (errorCollector.hasWarningsOrErrors()) {
+		if (errorCollector.hasErrors()) {
 			Bukkit.getScheduler().runTaskLater(this, errorCollector::logToConsole, 10L);
 		}
 
@@ -150,39 +152,39 @@ public class ChestCommands extends JavaPlugin {
 
 
 	public ErrorCollector load() {
-		ErrorCollector errors = new ErrorCollector();
+		ErrorCollector errorCollector = new PrintableErrorCollector();
 		menuManager.clear();
 		boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
 		try {
 			Files.createDirectories(configManager.getRootDataFolder());
 		} catch (IOException e) {
-			errors.addError("Plugin failed to load, couldn't create data folder.");
-			return errors;
+			errorCollector.add(ErrorMessages.Config.createDataFolderIOException, e);
+			return errorCollector;
 		}
 
 		try {
-			new UpgradesExecutor(configManager).run(isFreshInstall);
+			new UpgradesExecutor(configManager).run(isFreshInstall, errorCollector);
 		} catch (UpgradeExecutorException e) {
-			Log.severe("Encountered errors while running run automatic configuration upgrades. Some configuration files or menus may require manual updates.", e);
+			errorCollector.add(ErrorMessages.Upgrade.genericExecutorError, e);
 		}
 
-		settings = configManager.tryLoadSettings();
-		lang = configManager.tryLoadLang();
-		placeholders = configManager.tryLoadCustomPlaceholders(errors);
+		settings = configManager.tryLoadSettings(errorCollector);
+		lang = configManager.tryLoadLang(errorCollector);
+		placeholders = configManager.tryLoadCustomPlaceholders(errorCollector);
 
 		// Create the menu folder with the example menu
 		if (!Files.isDirectory(configManager.getMenusFolder())) {
 			ConfigLoader exampleMenuLoader = configManager.getConfigLoader(configManager.getMenusFolder().resolve("example.yml"));
-			configManager.tryCreateDefault(exampleMenuLoader);
+			configManager.tryCreateDefault(errorCollector, exampleMenuLoader);
 		}
 
-		List<LoadedMenu> loadedMenus = configManager.tryLoadMenus(errors);
+		List<LoadedMenu> loadedMenus = configManager.tryLoadMenus(errorCollector);
 		for (LoadedMenu loadedMenu : loadedMenus) {
-			menuManager.registerMenu(loadedMenu, errors);
+			menuManager.registerMenu(loadedMenu, errorCollector);
 		}
 
-		ChestCommands.lastLoadErrors = errors;
-		return errors;
+		ChestCommands.lastLoadErrors = errorCollector;
+		return errorCollector;
 	}
 
 	public static void closeAllMenus() {

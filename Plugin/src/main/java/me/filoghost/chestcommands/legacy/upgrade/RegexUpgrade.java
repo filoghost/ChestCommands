@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.legacy.upgrade;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.RegexReplacer;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,7 +65,7 @@ public class RegexUpgrade extends Upgrade {
 		try {
 			lines = Files.readAllLines(file);
 		} catch (IOException e) {
-			throw new ConfigLoadException("couldn't read file \"" + file.getFileName() + "\"", e);
+			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
 		}
 
 		Stream<String> linesStream = lines.stream();
@@ -84,7 +85,7 @@ public class RegexUpgrade extends Upgrade {
 		try {
 			Files.write(file, newContents);
 		} catch (IOException e) {
-			throw new ConfigSaveException("couldn't save file \"" + file.getFileName() + "\"", e);
+			throw new ConfigSaveException(ErrorMessages.Config.writeDataIOException, e);
 		}
 	}
 

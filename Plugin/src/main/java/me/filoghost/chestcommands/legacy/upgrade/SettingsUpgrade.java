@@ -33,16 +33,19 @@ public class SettingsUpgrade extends Upgrade {
 
 	@Override
 	public Path getOriginalFile() {
-		return settingsConfigLoader.getConfigPath();
+		return settingsConfigLoader.getFile();
 	}
 
 	@Override
 	public Path getUpgradedFile() {
-		return settingsConfigLoader.getConfigPath();
+		return settingsConfigLoader.getFile();
 	}
 
 	@Override
 	protected void computeChanges() throws ConfigLoadException {
+		if (!settingsConfigLoader.fileExists()) {
+			return;
+		}
 		Config settingsConfig = settingsConfigLoader.load();
 
 		removeNode(settingsConfig, "use-only-commands-without-args");

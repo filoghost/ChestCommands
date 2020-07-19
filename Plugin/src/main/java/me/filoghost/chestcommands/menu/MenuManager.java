@@ -16,10 +16,11 @@ package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.inventory.DefaultItemInventory;
 import me.filoghost.chestcommands.inventory.ItemInventoryHolder;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.OpenTrigger;
 import me.filoghost.chestcommands.util.collection.CaseInsensitiveMap;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;
@@ -56,19 +57,18 @@ public class MenuManager {
 	public void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
 		InternalIconMenu menu = loadedMenu.getMenu();
 
-		if (menusByFile.containsKey(loadedMenu.getFileName())) {
-			errorCollector.addError("Two menus have the same file name \"" + loadedMenu.getFileName() + "\". "
-					+ "One of them will not work.");
+		String fileName = loadedMenu.getSourceFile().getFileName().toString();
+		InternalIconMenu sameNameMenu = menusByFile.get(fileName);
+		if (sameNameMenu != null) {
+			errorCollector.add(ErrorMessages.Menu.duplicateMenuName(sameNameMenu.getSourceFile(), loadedMenu.getSourceFile()));
 		}
-		
-		menusByFile.put(loadedMenu.getFileName(), menu);
+		menusByFile.put(fileName, menu);
 
 		for (String triggerCommand : loadedMenu.getTriggerCommands()) {
 			if (!triggerCommand.isEmpty()) {
-				if (menusByCommand.containsKey(triggerCommand)) {
-					errorCollector.addError("The menus \"" + menusByCommand.get(triggerCommand).getFileName() + "\" "
-							+ "and \"" + loadedMenu.getFileName() + "\" have the same command \"" + triggerCommand + "\". "
-							+ "Only one will be opened.");
+				InternalIconMenu sameCommandMenu = menusByCommand.get(triggerCommand);
+				if (sameCommandMenu != null) {
+					errorCollector.add(ErrorMessages.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), triggerCommand));
 				}
 				menusByCommand.put(triggerCommand, menu);
 			}

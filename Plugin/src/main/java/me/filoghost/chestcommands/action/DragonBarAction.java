@@ -39,7 +39,7 @@ public class DragonBarAction extends Action {
 				seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
 				message = split[1];
 			} catch (ParseException ex) {
-				disable(ChatColor.RED + "Invalid dragon bar time: " + split[0]);
+				disable(ChatColor.RED + "Invalid dragon bar time \"" + split[0] + "\": " + ex.getMessage());
 				return;
 			}
 		}

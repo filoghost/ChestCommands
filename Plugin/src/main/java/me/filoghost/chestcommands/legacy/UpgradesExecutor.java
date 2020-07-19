@@ -24,36 +24,38 @@ import me.filoghost.chestcommands.legacy.upgrade.PlaceholdersYamlUpgrade;
 import me.filoghost.chestcommands.legacy.upgrade.SettingsUpgrade;
 import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeException;
-import me.filoghost.chestcommands.util.Log;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class UpgradesExecutor {
 
 	private final ConfigManager configManager;
-	private List<Path> failedUpgrades;
+	private Set<Path> failedUpgrades;
 	private UpgradesDoneRegistry upgradesDoneRegistry;
 
 	public UpgradesExecutor(ConfigManager configManager) {
 		this.configManager = configManager;
 	}
 
-	public void run(boolean isFreshInstall) throws UpgradeExecutorException {
-		this.failedUpgrades = new ArrayList<>();
+	public void run(boolean isFreshInstall, ErrorCollector errorCollector) throws UpgradeExecutorException {
+		this.failedUpgrades = new HashSet<>();
 		Path upgradesDoneFile = configManager.getRootDataFolder().resolve(".upgrades-done");
 
 		try {
 			upgradesDoneRegistry = new UpgradesDoneRegistry(upgradesDoneFile);
 		} catch (IOException e) {
 			// Upgrades can't proceed if metadata file is not read correctly
-			throw new UpgradeExecutorException("Couldn't read upgrades metadata file \"" + upgradesDoneFile.getFileName() + "\"", e);
+			throw new UpgradeExecutorException(ErrorMessages.Upgrade.metadataReadError(upgradesDoneFile), e);
 		}
 
 		if (isFreshInstall) {
@@ -68,9 +70,9 @@ public class UpgradesExecutor {
 				legacyCommandSeparator = null;
 			}
 
-			runIfNecessary(UpgradeID.V4_CONFIG, () -> new SettingsUpgrade(configManager));
-			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, () -> new PlaceholdersYamlUpgrade(configManager));
-			runIfNecessary(UpgradeID.V4_LANG, () -> new LangUpgrade(configManager));
+			runIfNecessary(UpgradeID.V4_CONFIG, () -> new SettingsUpgrade(configManager), errorCollector);
+			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, () -> new PlaceholdersYamlUpgrade(configManager), errorCollector);
+			runIfNecessary(UpgradeID.V4_LANG, () -> new LangUpgrade(configManager), errorCollector);
 
 			try {
 				List<Path> menuFiles = configManager.getMenuPaths();
@@ -78,15 +80,15 @@ public class UpgradesExecutor {
 				runIfNecessaryMultiple(UpgradeID.V4_MENU_REPLACE, () -> {
 					return CollectionUtils.transform(menuFiles,
 							MenuNodeRenameUpgrade::new);
-				});
+				}, errorCollector);
 
 				runIfNecessaryMultiple(UpgradeID.V4_MENUS_REFORMAT, () -> {
 					return CollectionUtils.transform(menuFiles,
 							file -> new MenuNodeExpandUpgrade(configManager, file, legacyCommandSeparator));
-				});
+				}, errorCollector);
 
 			} catch (IOException e) {
-				Log.severe("Couldn't obtain a list of menu files. Some automatic upgrades were skipped.", e);
+				errorCollector.add(ErrorMessages.Upgrade.menuListIOException, e);
 				failedUpgrades.add(configManager.getMenusFolder());
 			}
 		}
@@ -95,15 +97,12 @@ public class UpgradesExecutor {
 			upgradesDoneRegistry.save();
 		} catch (IOException e) {
 			// Upgrades can't proceed if metadata file is not read correctly
-			throw new UpgradeExecutorException("Couldn't save upgrades metadata file \"" + upgradesDoneFile.getFileName() + "\"", e);
+			throw new UpgradeExecutorException(ErrorMessages.Upgrade.metadataSaveError(upgradesDoneFile), e);
 		}
 
 		// Success only if no upgrade failed
 		if (!failedUpgrades.isEmpty()) {
-			String failedConversionFiles = failedUpgrades.stream()
-					.map(Path::toString)
-					.collect(Collectors.joining(", "));
-			throw new UpgradeExecutorException("Failed to automatically upgrade the following files: " + failedConversionFiles);
+			throw new UpgradeExecutorException(ErrorMessages.Upgrade.failedUpgradesList(failedUpgrades));
 		}
 	}
 
@@ -117,18 +116,18 @@ public class UpgradesExecutor {
 		try {
 			return settingsConfigLoader.load().getString("multiple-commands-separator");
 		} catch (Throwable t) {
-			Log.severe("Failed to load " + settingsConfigLoader.getFileName() + ", assuming default command separator \";\".");
+			Log.warning("Failed to load \"" + settingsConfigLoader.getFile() + "\", assuming default command separator \";\".");
 			return null;
 		}
 	}
 
 
-	private void runIfNecessary(UpgradeID upgradeID, Supplier<Upgrade> upgradeTask) {
-		runIfNecessaryMultiple(upgradeID, () -> Collections.singletonList(upgradeTask.get()));
+	private void runIfNecessary(UpgradeID upgradeID, Supplier<Upgrade> upgradeTask, ErrorCollector errorCollector) {
+		runIfNecessaryMultiple(upgradeID, () -> Collections.singletonList(upgradeTask.get()), errorCollector);
 	}
 
 
-	private void runIfNecessaryMultiple(UpgradeID upgradeID, Supplier<List<? extends Upgrade>> upgradeTasks) {
+	private void runIfNecessaryMultiple(UpgradeID upgradeID, Supplier<List<? extends Upgrade>> upgradeTasks, ErrorCollector errorCollector) {
 		if (upgradesDoneRegistry.isDone(upgradeID)) {
 			return;
 		}
@@ -141,13 +140,13 @@ public class UpgradesExecutor {
 				if (modified) {
 					Log.info(
 							"Automatically upgraded configuration file \""
-							+ upgradeTask.getUpgradedFile().getFileName() + "\" with newer configuration nodes. "
+							+ upgradeTask.getUpgradedFile() + "\" with newer configuration nodes. "
 							+ "A backup of the old file has been saved.");
 				}
 			} catch (UpgradeException e) {
 				failedAnyUpgrade = true;
 				failedUpgrades.add(upgradeTask.getOriginalFile());
-				logUpgradeException(upgradeTask, e);
+				errorCollector.add(ErrorMessages.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()), e);
 			}
 		}
 
@@ -155,13 +154,6 @@ public class UpgradesExecutor {
 		if (!failedAnyUpgrade) {
 			upgradesDoneRegistry.setDone(upgradeID);
 		}
-	}
-
-
-	private void logUpgradeException(Upgrade upgrade, UpgradeException upgradeException) {
-		Log.severe(
-				"Error while trying to automatically upgrade "	+ upgrade.getOriginalFile() + ": " + upgradeException.getMessage(),
-				upgradeException.getCause());
 	}
 
 }

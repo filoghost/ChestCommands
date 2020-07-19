@@ -14,8 +14,9 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.util.collection.Registry;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.chestcommands.util.collection.Registry;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
@@ -33,33 +34,45 @@ public final class ItemMetaParser {
 		String[] split = Strings.trimmedSplit(input, ",");
 
 		if (split.length != 3) {
-			throw new ParseException("it must be in the format \"red, green, blue\"");
+			throw new ParseException(ErrorMessages.Parsing.invalidColorFormat);
 		}
 
-		int red = NumberParser.getInteger(split[0], "red is not a number");
-		int green = NumberParser.getInteger(split[1], "green is not a number");
-		int blue = NumberParser.getInteger(split[2], "blue is not a number");
-
-		if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-			throw new ParseException("it should only contain numbers between 0 and 255");
-		}
+		int red = parseColor(split[0], "red");
+		int green = parseColor(split[1], "green");
+		int blue = parseColor(split[2], "blue");
 
 		return Color.fromRGB(red, green, blue);
 	}
 
+	private static int parseColor(String valueString, String colorName) throws ParseException {
+		int value;
+
+		try {
+			value = NumberParser.getInteger(valueString);
+		} catch (ParseException e) {
+			throw new ParseException(ErrorMessages.Parsing.invalidColorNumber(valueString, colorName), e);
+		}
+
+		if (value < 0 || value > 255) {
+			throw new ParseException(ErrorMessages.Parsing.invalidColorRange(valueString, colorName));
+		}
+
+		return value;
+	}
+
 	public static DyeColor parseDyeColor(String input) throws ParseException {
 		return DYE_COLORS_REGISTRY.find(input)
-				.orElseThrow(() -> new ParseException("it must be a valid color"));
+				.orElseThrow(() -> new ParseException(ErrorMessages.Parsing.unknownDyeColor(input)));
 	}
 
 	public static Pattern parseBannerPattern(String input) throws ParseException {
 		String[] split = Strings.trimmedSplit(input, ":");
 		if (split.length != 2) {
-			throw new ParseException("it must be in the format \"pattern:color\"");
+			throw new ParseException(ErrorMessages.Parsing.invalidPatternFormat);
 		}
 
 		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
-				.orElseThrow(() -> new ParseException("it must be a valid pattern type"));
+				.orElseThrow(() -> new ParseException(ErrorMessages.Parsing.unknownPatternType(split[0])));
 		DyeColor patternColor = parseDyeColor(split[1]);
 
 		return new Pattern(patternColor, patternType);

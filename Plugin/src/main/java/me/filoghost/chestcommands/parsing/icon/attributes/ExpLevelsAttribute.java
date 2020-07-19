@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.parsing.icon.attributes;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
@@ -25,7 +26,7 @@ public class ExpLevelsAttribute implements ApplicableIconAttribute {
 
 	public ExpLevelsAttribute(int expLevels, AttributeErrorCollector attributeErrorCollector) throws ParseException {
 		if (expLevels < 0) {
-			throw new ParseException("negative value");
+			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
 		}
 		this.expLevels = expLevels;
 	}

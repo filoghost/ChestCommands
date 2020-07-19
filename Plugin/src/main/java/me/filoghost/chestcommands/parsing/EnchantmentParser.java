@@ -14,8 +14,9 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.util.collection.Registry;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.chestcommands.util.collection.Registry;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.Optional;
@@ -61,9 +62,9 @@ public class EnchantmentParser {
 			String[] levelSplit = Strings.trimmedSplit(input, ",", 2);
 
 			try {
-				level = Integer.parseInt(levelSplit[1].trim());
-			} catch (NumberFormatException ex) {
-				throw new ParseException("invalid enchantment level \"" + levelSplit[1] + "\"");
+				level = NumberParser.getStrictlyPositiveInteger(levelSplit[1]);
+			} catch (ParseException e) {
+				throw new ParseException(ErrorMessages.Parsing.invalidEnchantmentLevel(levelSplit[1]), e);
 			}
 			input = levelSplit[0];
 		}
@@ -73,7 +74,7 @@ public class EnchantmentParser {
 		if (enchantment.isPresent()) {
 			return new EnchantmentDetails(enchantment.get(), level);
 		} else {
-			throw new ParseException("invalid enchantment type \"" + input + "\"");
+			throw new ParseException(ErrorMessages.Parsing.unknownEnchantmentType(input));
 		}
 	}
 	

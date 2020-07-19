@@ -59,7 +59,9 @@ public final class Strings {
 	}
 
 	public static String capitalizeFully(String input) {
-		if (input == null) return null;
+		if (input == null) {
+			return null;
+		}
 
 		String s = input.toLowerCase();
 
@@ -82,8 +84,15 @@ public final class Strings {
 		return output.toString();
 	}
 
+	public static String capitalizeFirst(String input) {
+		if (isNullOrEmpty(input)) {
+			return input;
+		}
+
+		return Character.toTitleCase(input.charAt(0)) + input.substring(1);
+	}
+
 	public static boolean isNullOrEmpty(String s) {
 		return s == null || s.isEmpty();
 	}
-	
 }

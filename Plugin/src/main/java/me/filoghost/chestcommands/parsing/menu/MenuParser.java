@@ -19,15 +19,15 @@ import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
-import me.filoghost.chestcommands.parsing.ErrorFormat;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.util.collection.ErrorCollector;
+import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -41,51 +41,50 @@ public class MenuParser {
 		MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
 		List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
 
-		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFileName());
+		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFile());
 
 		for (IconSettings iconSettings : iconSettingsList) {
-			try {
-				addIconToMenu(iconMenu, iconSettings, errorCollector);
-			} catch (IconAddException e) {
-				errorCollector.addError(e.getMessage());
-			}
+			tryAddIconToMenu(iconMenu, iconSettings, errorCollector);
 		}
 
 		iconMenu.setRefreshTicks(menuSettings.getRefreshTicks());
 		iconMenu.setOpenActions(menuSettings.getOpenActions());
 
-		return new LoadedMenu(iconMenu, menuConfig.getSourceFileName(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
+		return new LoadedMenu(iconMenu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
 	}
 
 
-	private static void addIconToMenu(InternalIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) throws IconAddException {
+	private static void tryAddIconToMenu(InternalIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) {
 		if (iconSettings.getPositionX() == null) {
-			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.POSITION_X));
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.POSITION_X));
+			return;
 		}
 
 		if (iconSettings.getPositionY() == null) {
-			throw new IconAddException(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.POSITION_Y));
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.POSITION_Y));
+			return;
 		}
 
 		int row = iconSettings.getPositionY().getPosition() - 1;
 		int column = iconSettings.getPositionX().getPosition() - 1;
 
 		if (row < 0 || row >= iconMenu.getRowCount()) {
-			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconSettingsNode.POSITION_Y,
-					"it must be between 1 and " + iconMenu.getRowCount()));
+			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, IconSettingsNode.POSITION_Y))
+					.appendMessage("it must be between 1 and " + iconMenu.getRowCount());
+			return;
 		}
 		if (column < 0 || column >= iconMenu.getColumnCount()) {
-			throw new IconAddException(ErrorFormat.invalidAttribute(iconSettings, IconSettingsNode.POSITION_X,
-					"it must be between 1 and " + iconMenu.getColumnCount()));
+			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, IconSettingsNode.POSITION_X))
+					.appendMessage(("it must be between 1 and " + iconMenu.getColumnCount()));
+			return;
 		}
 
 		if (iconMenu.getIcon(row, column) != null) {
-			throw new IconAddException(ErrorFormat.iconError(iconSettings,
-					"is overriding another icon with the same position"));
+			errorCollector.add(ErrorMessages.Menu.iconOverridesAnother(iconSettings));
 		}
 
 		if (iconSettings.getMaterialAttribute() == null) {
-			errorCollector.addError(ErrorFormat.missingAttribute(iconSettings, IconSettingsNode.MATERIAL));
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.MATERIAL));
 		}
 
 		InternalConfigurableIcon icon = new InternalConfigurableIcon(Material.BEDROCK);
@@ -105,7 +104,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			title = ChatColor.DARK_RED + "No name set";
-			errorCollector.addError(ErrorFormat.missingMenuSetting(config, MenuSettingsNode.NAME));
+			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), MenuSettingsNode.NAME));
 		}
 
 		int rows;
@@ -116,7 +115,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			rows = 6; // Defaults to 6 rows
-			errorCollector.addError(ErrorFormat.missingMenuSetting(config, MenuSettingsNode.ROWS));
+			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), MenuSettingsNode.ROWS));
 		}
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
@@ -157,7 +156,8 @@ public class MenuParser {
 					menuSettings.setOpenTrigger(openTrigger);
 
 				} catch (ParseException e) {
-					errorCollector.addError(ErrorFormat.invalidMenuSetting(config, MenuSettingsNode.OPEN_ITEM_MATERIAL, e.getMessage()));
+					errorCollector.add(
+							ErrorMessages.Menu.invalidSetting(config.getSourceFile(), MenuSettingsNode.OPEN_ITEM_MATERIAL),	e);
 				}
 			}
 		}
@@ -183,21 +183,12 @@ public class MenuParser {
 			}
 
 			ConfigSection iconSection = config.getConfigSection(iconSectionName);
-			IconSettings iconSettings = new IconSettings(config.getSourceFileName(), iconSectionName);
+			IconSettings iconSettings = new IconSettings(config.getSourceFile(), iconSectionName);
 			iconSettings.loadFrom(iconSection, errorCollector);
 			iconSettingsList.add(iconSettings);
 		}
 
 		return iconSettingsList;
-	}
-
-
-	private static class IconAddException extends Exception {
-
-		public IconAddException(String message) {
-			super(message);
-		}
-
 	}
 
 }

@@ -29,7 +29,7 @@ public class UpgradesDoneRegistry {
 	private final Set<String> upgradesDone;
 	private boolean needSave;
 
-	public UpgradesDoneRegistry(Path saveFile) throws IOException {
+	public 	UpgradesDoneRegistry(Path saveFile) throws IOException {
 		this.saveFile = saveFile;
 		this.upgradesDone = new HashSet<>();
 

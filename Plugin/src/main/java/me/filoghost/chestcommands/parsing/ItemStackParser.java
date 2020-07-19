@@ -14,12 +14,12 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.MaterialsHelper;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Strings;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
@@ -41,7 +41,11 @@ public class ItemStackParser {
 			String[] splitAmount = Strings.trimmedSplit(input, ",", 2);
 
 			if (splitAmount.length > 1) {
-				this.amount = NumberParser.getStrictlyPositiveInteger(splitAmount[1], "invalid amount \"" + splitAmount[1] + "\"");
+				try {
+					this.amount = NumberParser.getStrictlyPositiveInteger(splitAmount[1]);
+				} catch (ParseException e) {
+					throw new ParseException(ErrorMessages.Parsing.invalidAmount(splitAmount[1]), e);
+				}
 
 				// Only keep the first part as input
 				input = splitAmount[0];
@@ -53,10 +57,13 @@ public class ItemStackParser {
 		String[] splitByColons = Strings.trimmedSplit(input, ":", 2);
 
 		if (splitByColons.length > 1) {
-			short durability = NumberParser.getPositiveShort(splitByColons[1], "invalid durability \"" + splitByColons[1] + "\"");
+			try {
+				this.durability = NumberParser.getPositiveShort(splitByColons[1]);
+			} catch (ParseException e) {
+				throw new ParseException(ErrorMessages.Parsing.invalidDurability(splitByColons[1]), e);
+			}
 
 			this.hasExplicitDurability = true;
-			this.durability = durability;
 
 			// Only keep the first part as input
 			input = splitByColons[0];
@@ -65,7 +72,7 @@ public class ItemStackParser {
 		Optional<Material> material = MaterialsHelper.matchMaterial(input);
 
 		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
-			throw new ParseException("invalid material \"" + input + "\"");
+			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(input));
 		}
 		this.material = material.get();
 	}

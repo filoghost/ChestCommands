@@ -14,21 +14,20 @@
  */
 package me.filoghost.chestcommands.listener;
 
+import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.Permissions;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.Permissions;
 
 public class JoinListener implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 
-		if (ChestCommands.getLastLoadErrors().hasWarningsOrErrors() && event.getPlayer().hasPermission(Permissions.SEE_ERRORS)) {
-			event.getPlayer().sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The plugin found " + ChestCommands.getLastLoadErrors().getWarningsCount() + " warning(s) and " + ChestCommands.getLastLoadErrors().getErrorsCount() + " error(s) last time it was loaded. You can see them by doing \"/cc reload\" in the console.");
+		if (ChestCommands.getLastLoadErrors().hasErrors() && event.getPlayer().hasPermission(Permissions.SEE_ERRORS)) {
+			event.getPlayer().sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The plugin found " + ChestCommands.getLastLoadErrors().getErrorsCount() + " error(s) last time it was loaded. You can see them by doing \"/cc reload\" in the console.");
 		}
 
 		if (ChestCommands.hasNewVersion() && ChestCommands.getSettings().update_notifications && event.getPlayer().hasPermission(Permissions.UPDATE_NOTIFICATIONS)) {

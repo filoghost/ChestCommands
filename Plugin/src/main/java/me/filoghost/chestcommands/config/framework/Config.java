@@ -33,8 +33,8 @@ public class Config extends ConfigSection {
 		this.sourceFilePath = sourceFilePath;
 	}
 
-	public String getSourceFileName() {
-		return sourceFilePath.getFileName().toString();
+	public Path getSourceFile() {
+		return sourceFilePath;
 	}
 
 	public String saveToString() {
