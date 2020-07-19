@@ -20,7 +20,6 @@ public class PrintableErrorCollector extends ErrorCollector {
 	@Override
 	public void logToConsole() {
 		StringBuilder output = new StringBuilder();
-		output.append(" \n \n");
 
 		if (errors.size() > 0) {
 			output.append(ChatColor.RED).append("[ChestCommands] Encountered ").append(errors.size()).append(" error(s) on load:\n");

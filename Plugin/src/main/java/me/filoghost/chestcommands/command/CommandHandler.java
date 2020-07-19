@@ -51,10 +51,28 @@ public class CommandHandler extends CommandFramework {
 
 		if (args[0].equalsIgnoreCase("help")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "help"), "You don't have permission.");
-			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Commands:");
+			sender.sendMessage(ChestCommands.CHAT_PREFIX + "Commands:");
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " reload" + ChatColor.GRAY + " - Reloads the plugin.");
+			sender.sendMessage(ChatColor.WHITE + "/" + label + " errors" + ChatColor.GRAY + " - Displays the last load errors on the console.");
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " list" + ChatColor.GRAY + " - Lists the loaded menus.");
 			sender.sendMessage(ChatColor.WHITE + "/" + label + " open <menu> [player]" + ChatColor.GRAY + " - Opens a menu for a player.");
+			return;
+		}
+
+
+		if (args[0].equalsIgnoreCase("errors")) {
+			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "errors"), "You don't have permission.");
+			ErrorCollector errorCollector = ChestCommands.getLastLoadErrors();
+
+			if (errorCollector.hasErrors()) {
+				errorCollector.logToConsole();
+				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Last time the plugin loaded, " + errorCollector.getErrorsCount() + " error(s) were found.");
+				if (!(sender instanceof ConsoleCommandSender)) {
+					sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Errors were printed on the console.");
+				}
+			} else {
+				sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.GREEN + "Last plugin load was successful, no errors logged.");
+			}
 			return;
 		}
 
@@ -125,7 +143,7 @@ public class CommandHandler extends CommandFramework {
 
 		if (args[0].equalsIgnoreCase("list")) {
 			CommandValidate.isTrue(sender.hasPermission(Permissions.COMMAND_PREFIX + "list"), "You don't have permission.");
-			sender.sendMessage(ChestCommands.CHAT_PREFIX + " Loaded menus:");
+			sender.sendMessage(ChestCommands.CHAT_PREFIX + "Loaded menus:");
 			for (String file : menuManager.getMenuFileNames()) {
 				sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
 			}
