@@ -1,5 +1,6 @@
 package me.filoghost.chestcommands.logging;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.config.framework.exception.ConfigException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
@@ -22,7 +23,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 		StringBuilder output = new StringBuilder();
 
 		if (errors.size() > 0) {
-			output.append(ChatColor.RED).append("[ChestCommands] Encountered ").append(errors.size()).append(" error(s) on load:\n");
+			output.append(ChestCommands.CHAT_PREFIX).append(ChatColor.RED).append("Encountered ").append(errors.size()).append(" error(s) on load:\n");
 			output.append(" \n");
 
 			int index = 1;

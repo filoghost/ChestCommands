@@ -15,4 +15,15 @@ public class Utils {
 		return Strings.capitalizeFully(enumValue.name().replace("_", " "));
 	}
 
+	public static String addYamlExtension(String fileName) {
+		if (fileName == null) {
+			return null;
+		}
+		if (fileName.toLowerCase().endsWith(".yml")) {
+			return fileName;
+		} else {
+			return fileName + ".yml";
+		}
+	}
+
 }

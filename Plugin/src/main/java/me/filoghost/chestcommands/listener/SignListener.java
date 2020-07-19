@@ -18,6 +18,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -63,7 +64,7 @@ public class SignListener implements Listener {
 			return;
 		}
 
-		String menuFileName = addYamlExtension(sign.getLine(FILENAME_LINE).trim());
+		String menuFileName = Utils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
 		InternalIconMenu menu = menuManager.getMenuByFileName(menuFileName);
 		
 		if (menu == null) {
@@ -85,7 +86,7 @@ public class SignListener implements Listener {
 				return;
 			}
 			
-			menuFileName = addYamlExtension(menuFileName);
+			menuFileName = Utils.addYamlExtension(menuFileName);
 	
 			InternalIconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
@@ -119,17 +120,6 @@ public class SignListener implements Listener {
 	
 	private boolean canCreateMenuSign(Player player) {
 		return player.hasPermission(Permissions.SIGN_CREATE);
-	}
-	
-	private String addYamlExtension(String fileName) {
-		if (fileName == null) {
-			return null;
-		}
-		if (fileName.toLowerCase().endsWith(".yml")) {
-			return fileName;
-		} else {
-			return fileName + ".yml";
-		}
 	}
 
 }

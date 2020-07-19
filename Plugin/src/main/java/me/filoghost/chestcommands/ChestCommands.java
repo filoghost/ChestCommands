@@ -141,7 +141,7 @@ public class ChestCommands extends JavaPlugin {
 			errorCollector.logToConsole();
 			Bukkit.getScheduler().runTaskLater(this, () -> {
 				Bukkit.getConsoleSender().sendMessage(
-						ChatColor.RED + "[ChestCommands] Encountered " + errorCollector.getErrorsCount() + " on load. "
+						ChestCommands.CHAT_PREFIX + ChatColor.RED + "Encountered " + errorCollector.getErrorsCount() + " error(s) on load. "
 						+ "Check previous console logs or run \"/chestcommands errors\" to see them again.");
 			}, 10L);
 		}
