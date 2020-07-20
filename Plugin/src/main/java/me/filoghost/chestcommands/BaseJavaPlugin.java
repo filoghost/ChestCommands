@@ -22,34 +22,29 @@ public abstract class BaseJavaPlugin extends JavaPlugin {
 
 
 	private void criticalShutdown(String errorMessage) {
-		String separator = "**********";
-
-		List<String> output = new ArrayList<>();
-
-		output.add(ChatColor.DARK_RED + "[" + getDescription().getName()  + "]" + ChatColor.RED + " Fatal error while enabling plugin:");
-		output.add(" ");
-		output.add(separator);
-		output.add(" ");
-		output.add(errorMessage);
-		output.add(" ");
-		output.add("The plugin has been disabled.");
-		output.add(" ");
-		output.add(separator);
-		output.add(" ");
-
-		Bukkit.getConsoleSender().sendMessage(String.join("\n", output));
-
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException ignored) {}
+		Bukkit.getConsoleSender().sendMessage(getFatalErrorPrefix() + " " + errorMessage);
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
-			Bukkit.getConsoleSender().sendMessage(
-					ChatColor.DARK_RED + "[" + getDescription().getName()  + "]"
-					+ ChatColor.RED + " Fatal error while enabling plugin. Check previous console logs to find the cause.");
+			Bukkit.getConsoleSender().sendMessage(getPostStartupMessage(errorMessage));
 		}, 10);
 
 		setEnabled(false);
+	}
+
+	protected String getPostStartupMessage(String errorMessage) {
+		List<String> output = new ArrayList<>();
+
+		output.add(getFatalErrorPrefix());
+		output.add(" ");
+		output.add(errorMessage);
+		output.add("The plugin has been disabled.");
+		output.add(" ");
+
+		return String.join("\n", output);
+	}
+
+	private String getFatalErrorPrefix() {
+		return ChatColor.DARK_RED + "[" + getDescription().getName() + "] " + ChatColor.RED + "Fatal error while enabling plugin:";
 	}
 
 
