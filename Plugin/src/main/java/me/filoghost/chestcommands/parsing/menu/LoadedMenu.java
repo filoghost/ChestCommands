@@ -9,14 +9,14 @@ public class LoadedMenu {
 
 	private final InternalIconMenu menu;
 	private final Path sourceFile;
-	private final List<String> triggerCommands;
-	private final OpenTrigger openTrigger;
+	private final List<String> openCommands;
+	private final MenuOpenItem openItem;
 
-	public LoadedMenu(InternalIconMenu menu, Path menuFile, List<String> triggerCommands, OpenTrigger openTrigger) {
+	public LoadedMenu(InternalIconMenu menu, Path menuFile, List<String> openCommands, MenuOpenItem openItem) {
 		this.menu = menu;
 		this.sourceFile = menuFile;
-		this.triggerCommands = triggerCommands;
-		this.openTrigger = openTrigger;
+		this.openCommands = openCommands;
+		this.openItem = openItem;
 	}
 
 	public InternalIconMenu getMenu() {
@@ -27,12 +27,12 @@ public class LoadedMenu {
 		return sourceFile;
 	}
 
-	public List<String> getTriggerCommands() {
-		return triggerCommands;
+	public List<String> getOpenCommands() {
+		return openCommands;
 	}
 
-	public OpenTrigger getOpenTrigger() {
-		return openTrigger;
+	public MenuOpenItem getOpenItem() {
+		return openItem;
 	}
 
 }

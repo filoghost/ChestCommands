@@ -50,7 +50,7 @@ public class MenuParser {
 		iconMenu.setRefreshTicks(menuSettings.getRefreshTicks());
 		iconMenu.setOpenActions(menuSettings.getOpenActions());
 
-		return new LoadedMenu(iconMenu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenTrigger());
+		return new LoadedMenu(iconMenu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenItem());
 	}
 
 
@@ -120,8 +120,8 @@ public class MenuParser {
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
 
-		List<String> triggeringCommands = settingsSection.getStringList(MenuSettingsNode.COMMANDS);
-		menuSettings.setCommands(triggeringCommands);
+		List<String> openCommands = settingsSection.getStringList(MenuSettingsNode.COMMANDS);
+		menuSettings.setCommands(openCommands);
 
 		List<String> serializedOpenActions = settingsSection.getStringList(MenuSettingsNode.OPEN_ACTIONS);
 
@@ -147,13 +147,13 @@ public class MenuParser {
 					ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
 					ClickType clickType = ClickType.fromOptions(leftClick, rightClick);
 
-					OpenTrigger openTrigger = new OpenTrigger(itemReader.getMaterial(), clickType);
+					MenuOpenItem openItem = new MenuOpenItem(itemReader.getMaterial(), clickType);
 
 					if (itemReader.hasExplicitDurability()) {
-						openTrigger.setRestrictiveDurability(itemReader.getDurability());
+						openItem.setRestrictiveDurability(itemReader.getDurability());
 					}
 
-					menuSettings.setOpenTrigger(openTrigger);
+					menuSettings.setOpenItem(openItem);
 
 				} catch (ParseException e) {
 					errorCollector.add(

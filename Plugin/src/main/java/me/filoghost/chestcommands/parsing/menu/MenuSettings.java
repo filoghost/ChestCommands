@@ -29,7 +29,7 @@ public class MenuSettings {
 	private List<Action> openActions;
 	private int refreshTicks;
 
-	private OpenTrigger openTrigger;
+	private MenuOpenItem openItem;
 	
 	public MenuSettings(String title, int rows) {
 		this.title = title;
@@ -68,12 +68,12 @@ public class MenuSettings {
 		this.refreshTicks = refreshTicks;
 	}
 	
-	public OpenTrigger getOpenTrigger() {
-		return openTrigger;
+	public MenuOpenItem getOpenItem() {
+		return openItem;
 	}
 
-	public void setOpenTrigger(OpenTrigger openTrigger) {
-		this.openTrigger = openTrigger;
+	public void setOpenItem(MenuOpenItem openItem) {
+		this.openItem = openItem;
 	}
 	
 }

@@ -40,7 +40,7 @@ public interface IconMenu {
 	 *
 	 * @param player the player to which the menu will be displayed
 	 */
-	ItemInventory open(Player player);
+	MenuInventory open(Player player);
 
 	void refreshOpenInventories();
 

@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.menu;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.ItemInventory;
+import me.filoghost.chestcommands.api.MenuInventory;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,7 +60,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	}
 
 	@Override
-	public ItemInventory open(Player player) {
+	public MenuInventory open(Player player) {
 		if (openActions != null) {
 			for (Action openAction : openActions) {
 				openAction.execute(player);

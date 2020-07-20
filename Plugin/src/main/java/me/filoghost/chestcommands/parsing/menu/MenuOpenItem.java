@@ -14,20 +14,19 @@
  */
 package me.filoghost.chestcommands.parsing.menu;
 
+import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
-import me.filoghost.chestcommands.util.Preconditions;
-
-public class OpenTrigger {
+public class MenuOpenItem {
 
 	private final Material material;
 	private final ClickType clickType;
 	private short durability;
 	private boolean isRestrictiveDurability;
 
-	public OpenTrigger(Material material, ClickType clickType) {
+	public MenuOpenItem(Material material, ClickType clickType) {
 		Preconditions.checkArgumentNotAir(material, "material");
 		Preconditions.notNull(clickType, "clickType");
 		

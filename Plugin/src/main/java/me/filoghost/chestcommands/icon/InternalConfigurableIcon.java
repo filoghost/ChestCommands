@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.icon;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
-import me.filoghost.chestcommands.api.ItemInventory;
+import me.filoghost.chestcommands.api.MenuInventory;
 import me.filoghost.chestcommands.icon.requirement.PermissionChecker;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
 import me.filoghost.chestcommands.icon.requirement.RequiredItem;
@@ -121,7 +121,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	@Override
-	public ClickResult onClick(ItemInventory itemInventory, Player player) {
+	public ClickResult onClick(MenuInventory menuInventory, Player player) {
 		// Check all the requirements
 		boolean hasAllRequirements = Requirement.hasAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
 		if (!hasAllRequirements) {
@@ -147,7 +147,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 		}
 
 		// Update the menu after taking requirement costs and executing all actions
-		itemInventory.refresh();
+		menuInventory.refresh();
 		
 		// Force menu to stay open if actions open another menu
 		if (hasOpenMenuAction) {

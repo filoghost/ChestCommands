@@ -193,7 +193,7 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (MenuManager.getOpenItemInventory(player) != null) {
+			if (MenuManager.getOpenMenuInventory(player) != null) {
 				player.closeInventory();
 			}
 		}

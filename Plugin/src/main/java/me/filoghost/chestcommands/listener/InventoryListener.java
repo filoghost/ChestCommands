@@ -16,9 +16,9 @@ package me.filoghost.chestcommands.listener;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
-import me.filoghost.chestcommands.inventory.DefaultItemInventory.SlotClickHandler;
+import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
+import me.filoghost.chestcommands.inventory.DefaultMenuInventory.SlotClickHandler;
 import me.filoghost.chestcommands.menu.MenuManager;
-import me.filoghost.chestcommands.inventory.DefaultItemInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +52,7 @@ public class InventoryListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEarlyInventoryClick(InventoryClickEvent event) {
-		if (MenuManager.isItemInventory(event.getInventory())) {
+		if (MenuManager.isMenuInventory(event.getInventory())) {
 			// Cancel the event as early as possible
 			event.setCancelled(true);
 		}
@@ -61,8 +61,8 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
 	    Inventory inventory = event.getInventory();
-	    DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(inventory);
-	    if (itemInventory == null) {
+	    DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(inventory);
+	    if (menuInventory == null) {
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class InventoryListener implements Listener {
 
 		int slot = event.getRawSlot();
 		Player clicker = (Player) event.getWhoClicked();
-		SlotClickHandler slotClickHandler = itemInventory.getSlotClickHandler(slot, clicker);
+		SlotClickHandler slotClickHandler = menuInventory.getSlotClickHandler(slot, clicker);
 		if (slotClickHandler == null) {
 			return;
 		}

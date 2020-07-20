@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.task;
 
-import me.filoghost.chestcommands.inventory.DefaultItemInventory;
+import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
@@ -35,16 +35,16 @@ public class TickingTask implements Runnable {
 
 	private void updateInventories() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
+			DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(player);
 
-			if (itemInventory == null || !(itemInventory.getIconMenu() instanceof InternalIconMenu)) {
+			if (menuInventory == null || !(menuInventory.getIconMenu() instanceof InternalIconMenu)) {
 				continue;
 			}
 
-			int refreshTicks = ((InternalIconMenu) itemInventory.getIconMenu()).getRefreshTicks();
+			int refreshTicks = ((InternalIconMenu) menuInventory.getIconMenu()).getRefreshTicks();
 
 			if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
-				itemInventory.refresh();
+				menuInventory.refresh();
 			}
 		}
 	}

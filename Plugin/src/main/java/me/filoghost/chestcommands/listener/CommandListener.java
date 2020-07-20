@@ -32,13 +32,11 @@ public class CommandListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
 		String command = getCommandName(event.getMessage());
-		
 		if (command == null) {
 			return;
 		}
 
-		InternalIconMenu menu = menuManager.getMenuByCommand(command);
-		
+		InternalIconMenu menu = menuManager.getMenuByOpenCommand(command);
 		if (menu == null) {
 			return;
 		}

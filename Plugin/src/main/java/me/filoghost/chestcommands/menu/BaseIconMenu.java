@@ -16,8 +16,8 @@ package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.api.ItemInventory;
-import me.filoghost.chestcommands.inventory.DefaultItemInventory;
+import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.ArrayGrid;
 import me.filoghost.chestcommands.util.collection.Grid;
@@ -66,20 +66,20 @@ public abstract class BaseIconMenu implements IconMenu {
 	}
 
 	@Override
-	public ItemInventory open(Player player) {
+	public MenuInventory open(Player player) {
 		Preconditions.notNull(player, "player");
 
-		DefaultItemInventory itemInventory = new DefaultItemInventory(this, player);
-		itemInventory.open(player);
-		return itemInventory;
+		DefaultMenuInventory menuInventory = new DefaultMenuInventory(this, player);
+		menuInventory.open(player);
+		return menuInventory;
 	}
 
 	@Override
 	public void refreshOpenInventories() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultItemInventory itemInventory = MenuManager.getOpenItemInventory(player);
-			if (itemInventory != null && itemInventory.getIconMenu() == this) {
-				itemInventory.refresh();
+			DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(player);
+			if (menuInventory != null && menuInventory.getIconMenu() == this) {
+				menuInventory.refresh();
 			}
 		}
 	}
