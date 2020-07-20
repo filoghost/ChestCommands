@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
-import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 
 import java.nio.file.Path;
 import java.util.regex.Pattern;
@@ -25,9 +24,9 @@ public class MenuNodeRenameUpgrade extends RegexUpgrade {
 	public MenuNodeRenameUpgrade(Path menuFile) {
 		super(menuFile);
 
-		addSubNodeReplacer("command", MenuSettingsNode.COMMANDS);
-		addSubNodeReplacer("open-action", MenuSettingsNode.OPEN_ACTIONS);
-		addSubNodeReplacer("open-with-item.id", MenuSettingsNode.OPEN_ITEM_MATERIAL);
+		addSubNodeReplacer("command", "commands");
+		addSubNodeReplacer("open-action", "open-actions");
+		addSubNodeReplacer("id", "material");
 
 		addSubNodeReplacer("ID", IconSettingsNode.MATERIAL);
 		addSubNodeReplacer("DATA-VALUE", IconSettingsNode.DURABILITY);
@@ -38,10 +37,10 @@ public class MenuNodeRenameUpgrade extends RegexUpgrade {
 		addSubNodeReplacer("REQUIRED-ITEM", IconSettingsNode.REQUIRED_ITEMS);
 	}
 
-	private void addSubNodeReplacer(String oldAttribute, String newAttribute) {
+	private void addSubNodeReplacer(String oldNode, String newNode) {
 		addRegexReplacer(
-				Pattern.compile("(^\\s+)" + Pattern.quote(oldAttribute) + "(:)"),
-				matcher -> matcher.group(1) + newAttribute + matcher.group(2));
+				Pattern.compile("(^\\s+)" + Pattern.quote(oldNode) + "(:)"),
+				matcher -> matcher.group(1) + newNode + matcher.group(2));
 	}
 
 }
