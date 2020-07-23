@@ -138,7 +138,7 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 	}
 
 	private void expandSingletonList(ConfigSection config, String node) {
-		if (config.isSet(node)) {
+		if (config.isSet(node) && !config.isList(node)) {
 			config.set(node, Collections.singletonList(config.get(node)));
 			setSaveRequired();
 		}

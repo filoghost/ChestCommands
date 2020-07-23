@@ -139,10 +139,15 @@ public class ConfigSection {
 		return yamlSection.isConfigurationSection(path);
 	}
 
+	public boolean isList(String path) {
+		return yamlSection.isList(path);
+	}
+
 	private boolean isPrimitiveWrapper(Object input) {
 		return input instanceof Integer || input instanceof Boolean ||
 				input instanceof Character || input instanceof Byte ||
 				input instanceof Short || input instanceof Double ||
 				input instanceof Long || input instanceof Float;
 	}
+
 }
