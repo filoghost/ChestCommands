@@ -18,8 +18,6 @@ import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 
 import java.nio.file.Path;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ErrorMessages {
 
@@ -72,9 +70,10 @@ public class ErrorMessages {
 
 	public static class Upgrade {
 
-		public static final String genericExecutorError = "encountered errors while running run automatic configuration upgrades, "
-				+ "some configuration files or menus may require manual updates.";
-		public static final String menuListIOException = "couldn't obtain a list of menu files, some automatic upgrades were skipped";
+		public static final String genericExecutorError = "error while running automatic configuration upgrades";
+		public static final String menuListIOException = "couldn't obtain a list of menu files";
+		public static final String failedSomeUpgrades = "note: one or more automatic upgrades may have not been applied, configuration files or menus may require manual changes";
+		public static final String failedToPrepareUpgradeTasks = "error while trying to prepare an automatic configuration upgrade";
 
 		public static String metadataReadError(Path metadataFile) {
 			return "couldn't read upgrades metadata file \"" + formatPath(metadataFile) + "\"";
@@ -88,13 +87,6 @@ public class ErrorMessages {
 			return "error while trying to automatically upgrade \"" + formatPath(file) + "\"";
 		}
 
-		public static String failedUpgradesList(Set<Path> failedUpgrades) {
-			String failedConversionFiles = failedUpgrades.stream()
-					.map(path -> "\"" + path + "\"")
-					.collect(Collectors.joining(", "));
-			return "failed to automatically upgrade the following files: " + failedConversionFiles;
-		}
-
 		public static String loadError(Path file) {
 			return "couldn't load file to upgrade \"" + formatPath(file) + "\"";
 		}
@@ -106,6 +98,7 @@ public class ErrorMessages {
 		public static String saveError(Path file) {
 			return "couldn't save upgraded file \"" + formatPath(file) + "\"";
 		}
+
 	}
 
 

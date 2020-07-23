@@ -16,58 +16,50 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.chestcommands.legacy.Backup;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Preconditions;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-public abstract class Upgrade {
+public abstract class UpgradeTask {
 
-	private boolean modified;
+	private boolean saveRequired;
 	private boolean hasRun;
 
-	protected void setModified() {
-		this.modified = true;
+	protected void setSaveRequired() {
+		this.saveRequired = true;
 	}
 
-
-	public boolean backupAndUpgradeIfNecessary() throws UpgradeException {
-		Preconditions.checkState(!hasRun, "Upgrade can only be run once");
+	public boolean runAndBackupIfNecessary(Backup backup) throws UpgradeTaskException {
+		Preconditions.checkState(!hasRun, "Upgrade task has already run");
 		hasRun = true;
 
 		try {
 			computeChanges();
 		} catch (ConfigLoadException e) {
-			throw new UpgradeException(ErrorMessages.Upgrade.loadError(getOriginalFile()), e);
+			throw new UpgradeTaskException(ErrorMessages.Upgrade.loadError(getOriginalFile()), e);
 		}
 
-		if (modified) {
+		if (saveRequired) {
 			try {
-				createBackupFile(getOriginalFile());
+				backup.backupFile(getOriginalFile());
 			} catch (IOException e) {
-				throw new UpgradeException(ErrorMessages.Upgrade.backupError(getOriginalFile()), e);
+				throw new UpgradeTaskException(ErrorMessages.Upgrade.backupError(getOriginalFile()), e);
 			}
 
 			try {
 				saveChanges();
 			} catch (ConfigSaveException e) {
-				throw new UpgradeException(ErrorMessages.Upgrade.saveError(getUpgradedFile()), e);
+				throw new UpgradeTaskException(ErrorMessages.Upgrade.saveError(getUpgradedFile()), e);
 			}
+
+			return true;
+
+		} else {
+			return false;
 		}
-
-		return modified;
-	}
-
-	private void createBackupFile(Path path) throws IOException {
-		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm"));
-		String backupName = path.getFileName() + "_" + date + ".backup";
-
-		Files.copy(path, path.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	public abstract Path getOriginalFile();

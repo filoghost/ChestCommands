@@ -30,13 +30,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RegexUpgrade extends Upgrade {
+public class RegexUpgradeTask extends UpgradeTask {
 
 	private final Path file;
 	private final List<RegexReplacer> replacers;
 	private List<String> newContents;
 
-	public RegexUpgrade(Path file) {
+	public RegexUpgradeTask(Path file) {
 		this.file = file;
 		this.replacers = new ArrayList<>();
 	}
@@ -56,7 +56,7 @@ public class RegexUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void computeChanges() throws ConfigLoadException {
+	public void computeChanges() throws ConfigLoadException {
 		if (!Files.isRegularFile(file)) {
 			return;
 		}
@@ -76,12 +76,12 @@ public class RegexUpgrade extends Upgrade {
 		newContents = linesStream.collect(Collectors.toList());
 
 		if (!newContents.equals(lines)) {
-			setModified();
+			setSaveRequired();
 		}
 	}
 
 	@Override
-	protected void saveChanges() throws ConfigSaveException {
+	public void saveChanges() throws ConfigSaveException {
 		try {
 			Files.write(file, newContents);
 		} catch (IOException e) {

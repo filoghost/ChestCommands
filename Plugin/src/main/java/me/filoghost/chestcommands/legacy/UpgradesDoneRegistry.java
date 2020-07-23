@@ -42,19 +42,19 @@ public class UpgradesDoneRegistry {
 	}
 
 	public void setAllDone() {
-		for (UpgradeID upgrade : UpgradeID.values()) {
+		for (Upgrade upgrade : Upgrade.values()) {
 			setDone(upgrade);
 		}
 	}
 
-	public void setDone(UpgradeID upgrade) {
-		if (upgradesDone.add(upgrade.stringID)) {
+	public void setDone(Upgrade upgrade) {
+		if (upgradesDone.add(upgrade.getID())) {
 			needSave = true;
 		}
 	}
 
-	public boolean isDone(UpgradeID upgrade) {
-		return upgradesDone.contains(upgrade.stringID);
+	public boolean isDone(Upgrade upgrade) {
+		return upgradesDone.contains(upgrade.getID());
 	}
 
 	public void save() throws IOException {
@@ -67,22 +67,6 @@ public class UpgradesDoneRegistry {
 			Files.createDirectories(saveFile.getParent());
 			Files.write(saveFile, lines);
 			needSave = false;
-		}
-	}
-
-
-	public enum UpgradeID {
-
-		V4_MENU_REPLACE("v4.0-menus-rename"),
-		V4_MENUS_REFORMAT("v4.0-menus-reformat"),
-		V4_CONFIG("v4.0-config"),
-		V4_PLACEHOLDERS("v4.0-placeholders"),
-		V4_LANG("v4.0-lang");
-
-		private final String stringID;
-
-		UpgradeID(String stringID) {
-			this.stringID = stringID;
 		}
 	}
 

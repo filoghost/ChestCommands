@@ -28,13 +28,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class PlaceholdersYamlUpgrade extends Upgrade {
+public class PlaceholdersYamlUpgradeTask extends UpgradeTask {
 
 	private final Path oldPlaceholdersFile;
 	private final ConfigLoader newPlaceholdersConfigLoader;
 	private Config updatedConfig;
 
-	public PlaceholdersYamlUpgrade(ConfigManager configManager) {
+	public PlaceholdersYamlUpgradeTask(ConfigManager configManager) {
 		this.oldPlaceholdersFile = configManager.getRootDataFolder().resolve("placeholders.yml");
 		this.newPlaceholdersConfigLoader = configManager.getConfigLoader("custom-placeholders.yml");
 	}
@@ -50,7 +50,7 @@ public class PlaceholdersYamlUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void computeChanges() throws ConfigLoadException {
+	public void computeChanges() throws ConfigLoadException {
 		if (!Files.isRegularFile(oldPlaceholdersFile)) {
 			return;
 		}
@@ -80,14 +80,14 @@ public class PlaceholdersYamlUpgrade extends Upgrade {
 			String replacement = StringEscapeUtils.unescapeJava(unquote(parts[1]));
 
 			newPlaceholdersConfig.set(placeholder, replacement);
-			setModified();
+			setSaveRequired();
 		}
 
 		this.updatedConfig = newPlaceholdersConfig;
 	}
 
 	@Override
-	protected void saveChanges() throws ConfigSaveException {
+	public void saveChanges() throws ConfigSaveException {
 		try {
 			Files.deleteIfExists(oldPlaceholdersFile);
 		} catch (IOException ignored) {}

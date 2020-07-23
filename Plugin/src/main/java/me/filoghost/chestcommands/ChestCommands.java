@@ -166,10 +166,16 @@ public class ChestCommands extends BaseJavaPlugin {
 			return errorCollector;
 		}
 
+		UpgradesExecutor upgradeExecutor = new UpgradesExecutor(configManager);
+
 		try {
-			new UpgradesExecutor(configManager).run(isFreshInstall, errorCollector);
+			boolean allUpgradesSuccessful = upgradeExecutor.run(isFreshInstall, errorCollector);
+			if (!allUpgradesSuccessful) {
+				errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
+			}
 		} catch (UpgradeExecutorException e) {
 			errorCollector.add(ErrorMessages.Upgrade.genericExecutorError, e);
+			errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
 		}
 
 		settings = configManager.tryLoadSettings(errorCollector);

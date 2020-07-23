@@ -15,40 +15,28 @@
 package me.filoghost.chestcommands.legacy;
 
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
-import me.filoghost.chestcommands.legacy.UpgradesDoneRegistry.UpgradeID;
-import me.filoghost.chestcommands.legacy.upgrade.LangUpgrade;
-import me.filoghost.chestcommands.legacy.upgrade.MenuNodeExpandUpgrade;
-import me.filoghost.chestcommands.legacy.upgrade.MenuNodeRenameUpgrade;
-import me.filoghost.chestcommands.legacy.upgrade.PlaceholdersYamlUpgrade;
-import me.filoghost.chestcommands.legacy.upgrade.SettingsUpgrade;
-import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
-import me.filoghost.chestcommands.legacy.upgrade.UpgradeException;
+import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
+import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import me.filoghost.chestcommands.util.logging.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
 
 public class UpgradesExecutor {
 
 	private final ConfigManager configManager;
-	private Set<Path> failedUpgrades;
+	private boolean allUpgradesSuccessful;
 	private UpgradesDoneRegistry upgradesDoneRegistry;
 
 	public UpgradesExecutor(ConfigManager configManager) {
 		this.configManager = configManager;
 	}
 
-	public void run(boolean isFreshInstall, ErrorCollector errorCollector) throws UpgradeExecutorException {
-		this.failedUpgrades = new HashSet<>();
+	public boolean run(boolean isFreshInstall, ErrorCollector errorCollector) throws UpgradeExecutorException {
+		this.allUpgradesSuccessful = true;
 		Path upgradesDoneFile = configManager.getRootDataFolder().resolve(".upgrades-done");
 
 		try {
@@ -61,99 +49,64 @@ public class UpgradesExecutor {
 		if (isFreshInstall) {
 			// Mark all currently existing upgrades as already done, assuming default configuration files are up to date
 			upgradesDoneRegistry.setAllDone();
-
 		} else {
-			String legacyCommandSeparator;
-			if (!upgradesDoneRegistry.isDone(UpgradeID.V4_MENUS_REFORMAT)) {
-				legacyCommandSeparator = readLegacyCommandSeparator();
-			} else {
-				legacyCommandSeparator = null;
-			}
-
-			runIfNecessary(UpgradeID.V4_CONFIG, () -> new SettingsUpgrade(configManager), errorCollector);
-			runIfNecessary(UpgradeID.V4_PLACEHOLDERS, () -> new PlaceholdersYamlUpgrade(configManager), errorCollector);
-			runIfNecessary(UpgradeID.V4_LANG, () -> new LangUpgrade(configManager), errorCollector);
-
-			try {
-				List<Path> menuFiles = configManager.getMenuPaths();
-
-				runIfNecessaryMultiple(UpgradeID.V4_MENU_REPLACE, () -> {
-					return CollectionUtils.transform(menuFiles,
-							MenuNodeRenameUpgrade::new);
-				}, errorCollector);
-
-				runIfNecessaryMultiple(UpgradeID.V4_MENUS_REFORMAT, () -> {
-					return CollectionUtils.transform(menuFiles,
-							file -> new MenuNodeExpandUpgrade(configManager, file, legacyCommandSeparator));
-				}, errorCollector);
-
-			} catch (IOException e) {
-				errorCollector.add(ErrorMessages.Upgrade.menuListIOException, e);
-				failedUpgrades.add(configManager.getMenusFolder());
-			}
+			// Run missing upgrades
+			Backup backup = Backup.newTimestampedBackup(configManager.getRootDataFolder());
+			runMissingUpgrades(backup, errorCollector);
 		}
 
 		try {
 			upgradesDoneRegistry.save();
 		} catch (IOException e) {
-			// Upgrades can't proceed if metadata file is not read correctly
+			// Upgrades can't proceed if metadata file is not saved correctly
 			throw new UpgradeExecutorException(ErrorMessages.Upgrade.metadataSaveError(upgradesDoneFile), e);
 		}
 
-		// Success only if no upgrade failed
-		if (!failedUpgrades.isEmpty()) {
-			throw new UpgradeExecutorException(ErrorMessages.Upgrade.failedUpgradesList(failedUpgrades));
+		return allUpgradesSuccessful;
+	}
+
+
+	private void runMissingUpgrades(Backup backup, ErrorCollector errorCollector) {
+		for (Upgrade upgrade : Upgrade.values()) {
+			if (!upgradesDoneRegistry.isDone(upgrade)) {
+				boolean allTasksSuccessful = tryRunUpgradeTasks(upgrade, backup, errorCollector);
+
+				// Consider an upgrade "done" if all its tasks were completed successfully
+				if (allTasksSuccessful) {
+					upgradesDoneRegistry.setDone(upgrade);
+				} else {
+					allUpgradesSuccessful = false;
+				}
+			}
 		}
 	}
 
-	private String readLegacyCommandSeparator() {
-		ConfigLoader settingsConfigLoader = configManager.getConfigLoader("config.yml");
 
-		if (!settingsConfigLoader.fileExists()) {
-			return null;
-		}
+	private boolean tryRunUpgradeTasks(Upgrade upgrade, Backup backup, ErrorCollector errorCollector) {
+		boolean allTasksSuccessful = true;
 
+		List<UpgradeTask> upgradeTasks;
 		try {
-			return settingsConfigLoader.load().getString("multiple-commands-separator");
-		} catch (Throwable t) {
-			Log.warning("Failed to load \"" + settingsConfigLoader.getFile() + "\", assuming default command separator \";\".");
-			return null;
-		}
-	}
-
-
-	private void runIfNecessary(UpgradeID upgradeID, Supplier<Upgrade> upgradeTask, ErrorCollector errorCollector) {
-		runIfNecessaryMultiple(upgradeID, () -> Collections.singletonList(upgradeTask.get()), errorCollector);
-	}
-
-
-	private void runIfNecessaryMultiple(UpgradeID upgradeID, Supplier<List<? extends Upgrade>> upgradeTasks, ErrorCollector errorCollector) {
-		if (upgradesDoneRegistry.isDone(upgradeID)) {
-			return;
+			upgradeTasks = upgrade.createUpgradeTasks(configManager);
+		} catch (UpgradeTaskException e) {
+			errorCollector.add(ErrorMessages.Upgrade.failedToPrepareUpgradeTasks, e);
+			return false;
 		}
 
-		boolean failedAnyUpgrade = false;
-
-		for (Upgrade upgradeTask : upgradeTasks.get()) {
+		for (UpgradeTask upgradeTask : upgradeTasks) {
 			try {
-				boolean modified = upgradeTask.backupAndUpgradeIfNecessary();
+				boolean modified = upgradeTask.runAndBackupIfNecessary(backup);
 				if (modified) {
-					Log.info(
-							"Automatically upgraded configuration file \""
-							+ upgradeTask.getUpgradedFile() + "\" with newer configuration nodes. "
+					Log.info("Automatically upgraded configuration file \"" + upgradeTask.getUpgradedFile() + "\". "
 							+ "A backup of the old file has been saved.");
 				}
-			} catch (UpgradeException e) {
-				failedAnyUpgrade = true;
-				failedUpgrades.add(upgradeTask.getOriginalFile());
+			} catch (UpgradeTaskException e) {
+				allTasksSuccessful = false;
 				errorCollector.add(ErrorMessages.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()), e);
 			}
 		}
 
-		// Upgrade ID is considered complete only if all relative upgrades tasks are successful
-		if (!failedAnyUpgrade) {
-			upgradesDoneRegistry.setDone(upgradeID);
-		}
+		return allTasksSuccessful;
 	}
 
 }

@@ -19,9 +19,9 @@ import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import java.nio.file.Path;
 import java.util.regex.Pattern;
 
-public class MenuNodeRenameUpgrade extends RegexUpgrade {
+public class MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
 
-	public MenuNodeRenameUpgrade(Path menuFile) {
+	public MenuNodeRenameUpgradeTask(Path menuFile) {
 		super(menuFile);
 
 		addSubNodeReplacer("command", "commands");

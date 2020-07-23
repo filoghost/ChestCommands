@@ -14,10 +14,16 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-public class UpgradeException extends Exception {
+import me.filoghost.chestcommands.config.ConfigManager;
 
-	public UpgradeException(String message, Throwable cause) {
-		super(message, cause);
+import java.util.regex.Pattern;
+
+public class LangUpgradeTask extends RegexUpgradeTask {
+
+	public LangUpgradeTask(ConfigManager configManager) {
+		super(configManager.getRootDataFolder().resolve("lang.yml"));
+
+		addRegexReplacer(Pattern.compile(Pattern.quote("{datavalue}")), matcher -> "{durability}");
 	}
 
 }

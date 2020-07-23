@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.config.framework.exception.ConfigException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
-import me.filoghost.chestcommands.legacy.upgrade.UpgradeException;
+import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import me.filoghost.chestcommands.util.logging.ErrorInfo;
@@ -65,7 +65,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 
 			} else if (cause instanceof ConfigException
 					|| cause instanceof ParseException
-					|| cause instanceof UpgradeException
+					|| cause instanceof UpgradeTaskException
 					|| cause instanceof UpgradeExecutorException) {
 				message.add(cause.getMessage());
 				cause = cause.getCause(); // Print the cause (or nothing if null), not our "known" exception

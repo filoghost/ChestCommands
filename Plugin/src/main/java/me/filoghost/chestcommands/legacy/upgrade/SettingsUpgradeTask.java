@@ -22,12 +22,12 @@ import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException
 
 import java.nio.file.Path;
 
-public class SettingsUpgrade extends Upgrade {
+public class SettingsUpgradeTask extends UpgradeTask {
 
 	private final ConfigLoader settingsConfigLoader;
 	private Config updatedConfig;
 
-	public SettingsUpgrade(ConfigManager configManager) {
+	public SettingsUpgradeTask(ConfigManager configManager) {
 		this.settingsConfigLoader = configManager.getConfigLoader("config.yml");
 	}
 
@@ -42,7 +42,7 @@ public class SettingsUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void computeChanges() throws ConfigLoadException {
+	public void computeChanges() throws ConfigLoadException {
 		if (!settingsConfigLoader.fileExists()) {
 			return;
 		}
@@ -58,13 +58,13 @@ public class SettingsUpgrade extends Upgrade {
 	private void removeNode(Config config, String node) {
 		if (config.isSet(node)) {
 			config.set(node, null);
-			setModified();
+			setSaveRequired();
 		}
 	}
 
 
 	@Override
-	protected void saveChanges() throws ConfigSaveException {
+	public void saveChanges() throws ConfigSaveException {
 		settingsConfigLoader.save(updatedConfig);
 	}
 }

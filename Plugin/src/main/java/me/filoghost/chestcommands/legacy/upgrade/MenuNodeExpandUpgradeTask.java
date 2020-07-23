@@ -30,13 +30,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class MenuNodeExpandUpgrade extends Upgrade {
+public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 
 	private final ConfigLoader menuConfigLoader;
 	private final String legacyCommandSeparator;
 	private Config updatedConfig;
 
-	public MenuNodeExpandUpgrade(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+	public MenuNodeExpandUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
 		this.menuConfigLoader = configManager.getConfigLoader(menuFile);
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
@@ -52,7 +52,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void computeChanges() throws ConfigLoadException {
+	public void computeChanges() throws ConfigLoadException {
 		Config menuConfig = menuConfigLoader.load();
 		menuConfig.setHeader(null);
 
@@ -74,7 +74,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 	}
 
 	@Override
-	protected void saveChanges() throws ConfigSaveException {
+	public void saveChanges() throws ConfigSaveException {
 		menuConfigLoader.save(updatedConfig);
 	}
 
@@ -110,7 +110,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 			}
 			material = parts[0];
 			section.set(IconSettingsNode.MATERIAL, material);
-			setModified();
+			setSaveRequired();
 		}
 
 		if (material.contains(":")) {
@@ -124,7 +124,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 			}
 			material = parts[0];
 			section.set(IconSettingsNode.MATERIAL, material);
-			setModified();
+			setSaveRequired();
 		}
 	}
 
@@ -132,7 +132,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 		if (config.isSet(node)) {
 			if (config.isString(node)) {
 				config.set(node, getSeparatedValues(config.getString(node), separator));
-				setModified();
+				setSaveRequired();
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class MenuNodeExpandUpgrade extends Upgrade {
 	private void expandSingletonList(ConfigSection config, String node) {
 		if (config.isSet(node)) {
 			config.set(node, Collections.singletonList(config.get(node)));
-			setModified();
+			setSaveRequired();
 		}
 	}
 
