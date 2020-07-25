@@ -26,10 +26,6 @@ public class RequiredExpLevel implements Requirement {
 		Preconditions.checkArgument(levels > 0, "levels must be positive");
 		this.levels = levels;
 	}
-	
-	public int getLevels() {
-		return levels;
-	}
 
 	@Override
 	public boolean hasCost(Player player) {

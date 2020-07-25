@@ -24,11 +24,11 @@ public class GiveMoneyAction extends Action {
 
 	private double moneyToGive;
 
-	public GiveMoneyAction(String action) {
+	public GiveMoneyAction(String serializedAction) {
 		try {
-			moneyToGive = NumberParser.getStrictlyPositiveDouble(action);
+			moneyToGive = NumberParser.getStrictlyPositiveDouble(serializedAction);
 		} catch (ParseException e) {
-			disable(ChatColor.RED + "Invalid money amount \"" + action + "\": " + e.getMessage());
+			disable(ChatColor.RED + "Invalid money amount \"" + serializedAction + "\": " + e.getMessage());
 		}
 	}
 

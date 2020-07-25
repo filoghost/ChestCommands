@@ -12,28 +12,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
+import me.filoghost.chestcommands.parsing.ItemMetaParser;
+import me.filoghost.chestcommands.parsing.ParseException;
+import org.bukkit.DyeColor;
 
-public class KeepOpenAttribute implements ApplicableIconAttribute {
+public class BannerColorAttribute implements ApplicableIconAttribute {
 
-	private final ClickResult clickResult;
+	private final DyeColor dyeColor;
 
-	public KeepOpenAttribute(boolean keepOpen, AttributeErrorCollector attributeErrorCollector) {
-		if (keepOpen) {
-			this.clickResult = ClickResult.KEEP_OPEN;
-		} else {
-			this.clickResult = ClickResult.CLOSE;
-		}
+	public BannerColorAttribute(String serializedDyeColor, AttributeErrorHandler errorHandler) throws ParseException {
+		this.dyeColor = ItemMetaParser.parseDyeColor(serializedDyeColor);
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setClickResult(clickResult);
+		icon.setBannerColor(dyeColor);
 	}
 
 }

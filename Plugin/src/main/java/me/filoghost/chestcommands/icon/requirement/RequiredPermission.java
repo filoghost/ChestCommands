@@ -18,13 +18,13 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.entity.Player;
 
-public class PermissionChecker implements Requirement {
+public class RequiredPermission implements Requirement {
 	
 	private final String permission;
 	private final boolean negated;
 	private String noPermissionMessage;
 	
-	public PermissionChecker(String permission) {
+	public RequiredPermission(String permission) {
 		if (permission != null) {
 			permission = permission.trim();
 		}

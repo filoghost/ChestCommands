@@ -22,7 +22,7 @@ public interface Requirement {
 	
 	boolean takeCost(Player player);
 	
-	static boolean hasAll(Player player, Requirement... requirements) {
+	static boolean hasAllCosts(Player player, Requirement... requirements) {
 		for (Requirement requirement : requirements) {
 			if (requirement != null && !requirement.hasCost(player)) {
 				return false;

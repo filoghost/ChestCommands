@@ -22,8 +22,8 @@ public class SendMessageAction extends Action {
 	
 	private final RelativeString message;
 
-	public SendMessageAction(String action) {
-		message = RelativeString.of(Colors.addColors(action));
+	public SendMessageAction(String serializedAction) {
+		message = RelativeString.of(Colors.addColors(serializedAction));
 	}
 
 	@Override

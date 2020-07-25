@@ -12,12 +12,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.parsing.ItemMetaParser;
+import me.filoghost.chestcommands.parsing.ParseException;
+import org.bukkit.Color;
 
-public interface ApplicableIconAttribute extends IconAttribute {
+public class LeatherColorAttribute implements ApplicableIconAttribute {
+
+	private final Color color;
+
+	public LeatherColorAttribute(String serializedColor, AttributeErrorHandler errorHandler) throws ParseException {
+		this.color = ItemMetaParser.parseRGBColor(serializedColor);
+	}
 	
-	void apply(InternalConfigurableIcon icon);
+	@Override
+	public void apply(InternalConfigurableIcon icon) {
+		icon.setLeatherColor(color);
+	}
 
 }

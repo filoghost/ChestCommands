@@ -12,12 +12,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
@@ -25,7 +23,7 @@ public class NBTDataAttribute implements ApplicableIconAttribute {
 
 	private final String nbtData;
 
-	public NBTDataAttribute(String nbtData, AttributeErrorCollector attributeErrorCollector) throws ParseException {
+	public NBTDataAttribute(String nbtData, AttributeErrorHandler errorHandler) throws ParseException {
 		try {
 			// Check that NBT syntax is valid before applying it to the icon
 			MojangsonParser.parse(nbtData);

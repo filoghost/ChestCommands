@@ -12,13 +12,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.EnchantmentParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.HashMap;
@@ -29,7 +27,7 @@ public class EnchantmentsAttribute implements ApplicableIconAttribute {
 
 	private final Map<Enchantment, Integer> enchantments;
 
-	public EnchantmentsAttribute(List<String> serializedEnchantments, AttributeErrorCollector attributeErrorCollector) {
+	public EnchantmentsAttribute(List<String> serializedEnchantments, AttributeErrorHandler errorHandler) {
 		enchantments = new HashMap<>();
 
 		for (String serializedEnchantment : serializedEnchantments) {
@@ -41,7 +39,7 @@ public class EnchantmentsAttribute implements ApplicableIconAttribute {
 				EnchantmentParser.EnchantmentDetails enchantment = EnchantmentParser.parseEnchantment(serializedEnchantment);
 				enchantments.put(enchantment.getEnchantment(), enchantment.getLevel());
 			} catch (ParseException e) {
-				attributeErrorCollector.addListElementError(serializedEnchantment, e);
+				errorHandler.onListElementError(serializedEnchantment, e);
 			}
 		}
 	}

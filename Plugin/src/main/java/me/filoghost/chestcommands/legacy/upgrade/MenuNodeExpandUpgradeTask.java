@@ -131,7 +131,7 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 	private void expandInlineList(ConfigSection config, String node, String separator) {
 		if (config.isSet(node)) {
 			if (config.isString(node)) {
-				config.set(node, getSeparatedValues(config.getString(node), separator));
+				config.set(node, splitListElements(config.getString(node), separator));
 				setSaveRequired();
 			}
 		}
@@ -144,7 +144,7 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 		}
 	}
 
-	private List<String> getSeparatedValues(String input, String separator) {
+	private List<String> splitListElements(String input, String separator) {
 		if (separator == null || separator.length() == 0) {
 			separator = ";";
 		}

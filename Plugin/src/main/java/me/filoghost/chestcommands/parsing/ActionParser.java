@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 public class ActionParser {
 
-	private static final Map<Pattern, IconCommandFactory> actionsByPrefix = new HashMap<>();
+	private static final Map<Pattern, ActionFactory> actionsByPrefix = new HashMap<>();
 
 	static {
 		actionsByPrefix.put(actionPattern("console:"), ConsoleCommandAction::new);
@@ -56,20 +56,20 @@ public class ActionParser {
 	}
 
 	public static Action parseAction(String input) {
-		for (Entry<Pattern, IconCommandFactory> entry : actionsByPrefix.entrySet()) {
+		for (Entry<Pattern, ActionFactory> entry : actionsByPrefix.entrySet()) {
 			Matcher matcher = entry.getKey().matcher(input);
 			if (matcher.find()) {
 				// Remove the action prefix and trim the spaces
 				String serializedAction = matcher.replaceFirst("").trim();
-				return entry.getValue().create(ChestCommands.getCustomPlaceholders().replaceAll(serializedAction));
+				return entry.getValue().create(ChestCommands.getCustomPlaceholders().replacePlaceholders(serializedAction));
 			}
 		}
 
-		return new PlayerCommandAction(ChestCommands.getCustomPlaceholders().replaceAll(input)); // Default action, no match found
+		return new PlayerCommandAction(ChestCommands.getCustomPlaceholders().replacePlaceholders(input)); // Default action, no match found
 	}
 	
 	
-	private interface IconCommandFactory {
+	private interface ActionFactory {
 		
 		Action create(String actionString);
 		

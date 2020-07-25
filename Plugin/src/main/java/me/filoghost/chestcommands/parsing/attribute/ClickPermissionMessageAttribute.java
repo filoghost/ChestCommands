@@ -12,17 +12,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
 
 public class ClickPermissionMessageAttribute implements ApplicableIconAttribute {
 
 	private final String clickPermissionMessage;
 
-	public ClickPermissionMessageAttribute(String clickPermissionMessage, AttributeErrorCollector attributeErrorCollector) {
+	public ClickPermissionMessageAttribute(String clickPermissionMessage, AttributeErrorHandler errorHandler) {
 		this.clickPermissionMessage = clickPermissionMessage;
 	}
 	

@@ -12,23 +12,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
-import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
+public class PositionAttribute implements IconAttribute {
+	
+	private final int position;
 
-public class DurabilityAttribute implements ApplicableIconAttribute {
-
-	private final short durability;
-
-	public DurabilityAttribute(short durability, AttributeErrorCollector attributeErrorCollector) {
-		this.durability = durability;
+	public PositionAttribute(int position, AttributeErrorHandler errorHandler) {
+		this.position = position;
 	}
 	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setDurability(durability);
+	public int getPosition() {
+		return position;
 	}
 
 }

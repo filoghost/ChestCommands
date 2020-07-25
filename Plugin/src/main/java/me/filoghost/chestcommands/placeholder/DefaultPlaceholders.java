@@ -39,22 +39,22 @@ public enum DefaultPlaceholders implements Placeholder {
 	});
 
 
-	private final String text;
-	private final Function<Player, String> getReplacementFunction;
+	private final String placeholderText;
+	private final Function<Player, String> placeholderReplacer;
 
-	DefaultPlaceholders(String text, Function<Player, String> getReplacementFunction) {
-		this.text = text;
-		this.getReplacementFunction = getReplacementFunction;
+	DefaultPlaceholders(String placeholderText, Function<Player, String> placeholderReplacer) {
+		this.placeholderText = placeholderText;
+		this.placeholderReplacer = placeholderReplacer;
 	}
 
 	@Override
 	public String getPlaceholderText() {
-		return text;
+		return placeholderText;
 	}
 
 	@Override
 	public String getReplacementText(Player player) {
-		return getReplacementFunction.apply(player);
+		return placeholderReplacer.apply(player);
 	}
 
 }

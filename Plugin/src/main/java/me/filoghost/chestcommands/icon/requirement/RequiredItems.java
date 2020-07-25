@@ -30,10 +30,6 @@ public class RequiredItems implements Requirement {
 		Preconditions.notEmpty(items, "items");
 		this.items = ImmutableList.copyOf(items);
 	}
-	
-	public List<RequiredItem> geItems() {
-		return items;
-	}	
 
 	@Override
 	public boolean hasCost(Player player) {

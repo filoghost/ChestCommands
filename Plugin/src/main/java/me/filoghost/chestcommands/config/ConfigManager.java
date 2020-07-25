@@ -92,16 +92,11 @@ public class ConfigManager extends BaseConfigManager {
 		return rootDataFolder.resolve("menu");
 	}
 
-	/**
-	 * Returns a list of YML menu files.
-	 */
-	public List<Path> getMenuPaths() throws IOException {
+	public List<Path> getMenuFiles() throws IOException {
 		Preconditions.checkState(Files.isDirectory(getMenusFolder()), "menus folder doesn't exist");
 
 		try (Stream<Path> paths = Files.walk(getMenusFolder(), FileVisitOption.FOLLOW_LINKS)) {
-			return paths.filter(Files::isRegularFile)
-					.filter(this::isYmlPath)
-					.collect(Collectors.toList());
+			return paths.filter(this::isYamlFile).collect(Collectors.toList());
 		}
 	}
 
@@ -111,16 +106,16 @@ public class ConfigManager extends BaseConfigManager {
 
 	public List<LoadedMenu> tryLoadMenus(ErrorCollector errorCollector) {
 		List<LoadedMenu> loadedMenus = new ArrayList<>();
-		List<Path> menuPaths;
+		List<Path> menuFiles;
 
 		try {
-			menuPaths = getMenuPaths();
+			menuFiles = getMenuFiles();
 		} catch (IOException e) {
 			errorCollector.add(ErrorMessages.Config.menuListIOException(getMenusFolder()), e);
 			return Collections.emptyList();
 		}
 
-		for (Path menuFile : menuPaths) {
+		for (Path menuFile : menuFiles) {
 			ConfigLoader menuConfigLoader = new ConfigLoader(rootDataFolder, menuFile);
 
 			try {
@@ -134,8 +129,8 @@ public class ConfigManager extends BaseConfigManager {
 		return loadedMenus;
 	}
 
-	private boolean isYmlPath(Path path) {
-		return path.getFileName().toString().toLowerCase().endsWith(".yml");
+	private boolean isYamlFile(Path path) {
+		return Files.isRegularFile(path) && path.getFileName().toString().toLowerCase().endsWith(".yml");
 	}
 
 }

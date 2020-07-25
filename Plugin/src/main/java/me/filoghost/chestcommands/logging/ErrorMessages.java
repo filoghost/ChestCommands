@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.logging;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 
@@ -26,7 +27,7 @@ public class ErrorMessages {
 		public static final String readIOException = "I/O exception while reading file";
 		public static final String createDefaultIOException = "I/O exception while creating default file";
 		public static final String writeDataIOException = "I/O exception while writing data to file";
-		public static final String createDataFolderIOException = "Plugin failed to load, couldn't create data folder";
+		public static final String createDataFolderIOException = "plugin failed to load, couldn't create data folder";
 		public static final String invalidYamlSyntax = "invalid YAML syntax";
 
 		public static final String valueNotSet = "value is not set";
@@ -202,8 +203,14 @@ public class ErrorMessages {
 		}
 	}
 
+
 	private static String formatPath(Path path) {
-		return path.subpath(2, path.getNameCount()).toString(); // Remove "/plugins/ChestCommands" prefix
+		if (path.startsWith(ChestCommands.getDataFolderPath())) {
+			// Remove "/plugins/ChestCommands" prefix
+			return path.subpath(ChestCommands.getDataFolderPath().getNameCount(), path.getNameCount()).toString();
+		} else {
+			return path.toString();
+		}
 	}
 
 }

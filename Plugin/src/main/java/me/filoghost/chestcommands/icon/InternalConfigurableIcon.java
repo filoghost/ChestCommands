@@ -18,11 +18,11 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.MenuInventory;
-import me.filoghost.chestcommands.icon.requirement.PermissionChecker;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
 import me.filoghost.chestcommands.icon.requirement.RequiredItem;
 import me.filoghost.chestcommands.icon.requirement.RequiredItems;
 import me.filoghost.chestcommands.icon.requirement.RequiredMoney;
+import me.filoghost.chestcommands.icon.requirement.RequiredPermission;
 import me.filoghost.chestcommands.icon.requirement.Requirement;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
@@ -35,9 +35,9 @@ import java.util.List;
 
 public class InternalConfigurableIcon extends BaseConfigurableIcon implements RefreshableIcon {
 
-	private PermissionChecker viewPermission;
+	private RequiredPermission viewPermission;
 
-	private PermissionChecker clickPermission;
+	private RequiredPermission clickPermission;
 	private RequiredMoney requiredMoney;
 	private RequiredExpLevel requiredExpLevel;
 	private RequiredItems requiredItems;
@@ -60,7 +60,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public void setClickPermission(String permission) {
-		this.clickPermission = new PermissionChecker(permission);
+		this.clickPermission = new RequiredPermission(permission);
 	}
 	
 	public void setNoClickPermissionMessage(String clickNoPermissionMessage) {
@@ -68,7 +68,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 		
 	public void setViewPermission(String viewPermission) {
-		this.viewPermission = new PermissionChecker(viewPermission);
+		this.viewPermission = new RequiredPermission(viewPermission);
 	}
 
 	public void setRequiredMoney(double requiredMoney) {
@@ -123,13 +123,14 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	@Override
 	public ClickResult onClick(MenuInventory menuInventory, Player player) {
 		// Check all the requirements
-		boolean hasAllRequirements = Requirement.hasAll(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
+		Requirement[] requirements = {clickPermission, requiredMoney, requiredExpLevel, requiredItems};
+		boolean hasAllRequirements = Requirement.hasAllCosts(player, requirements);
 		if (!hasAllRequirements) {
 			return clickResult;
 		}
 
 		// If all requirements are satisfied, take their cost
-		boolean takenAllCosts = Requirement.takeAllCosts(player, clickPermission, requiredMoney, requiredExpLevel, requiredItems);
+		boolean takenAllCosts = Requirement.takeAllCosts(player, requirements);
 		if (!takenAllCosts) {
 			return clickResult;
 		}

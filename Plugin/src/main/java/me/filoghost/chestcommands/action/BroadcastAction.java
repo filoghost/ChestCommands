@@ -23,8 +23,8 @@ public class BroadcastAction extends Action {
 	
 	private final RelativeString message;
 
-	public BroadcastAction(String action) {
-		message = RelativeString.of(Colors.addColors(action));
+	public BroadcastAction(String serializedAction) {
+		message = RelativeString.of(Colors.addColors(serializedAction));
 	}
 
 	@Override

@@ -19,26 +19,29 @@ import me.filoghost.chestcommands.config.framework.exception.ConfigValueExceptio
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.attributes.ActionsAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.AmountAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.BannerColorAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.BannerPatternsAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.ClickPermissionAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.ClickPermissionMessageAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.DurabilityAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.EnchantmentsAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.ExpLevelsAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.KeepOpenAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.LeatherColorAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.LoreAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.MaterialAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.NBTDataAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.NameAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.PositionAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.PriceAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.RequiredItemsAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.SkullOwnerAttribute;
-import me.filoghost.chestcommands.parsing.icon.attributes.ViewPermissionAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ActionsAttribute;
+import me.filoghost.chestcommands.parsing.attribute.AmountAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ApplicableIconAttribute;
+import me.filoghost.chestcommands.parsing.attribute.AttributeErrorHandler;
+import me.filoghost.chestcommands.parsing.attribute.BannerColorAttribute;
+import me.filoghost.chestcommands.parsing.attribute.BannerPatternsAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ClickPermissionAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ClickPermissionMessageAttribute;
+import me.filoghost.chestcommands.parsing.attribute.DurabilityAttribute;
+import me.filoghost.chestcommands.parsing.attribute.EnchantmentsAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ExpLevelsAttribute;
+import me.filoghost.chestcommands.parsing.attribute.IconAttribute;
+import me.filoghost.chestcommands.parsing.attribute.KeepOpenAttribute;
+import me.filoghost.chestcommands.parsing.attribute.LeatherColorAttribute;
+import me.filoghost.chestcommands.parsing.attribute.LoreAttribute;
+import me.filoghost.chestcommands.parsing.attribute.MaterialAttribute;
+import me.filoghost.chestcommands.parsing.attribute.NBTDataAttribute;
+import me.filoghost.chestcommands.parsing.attribute.NameAttribute;
+import me.filoghost.chestcommands.parsing.attribute.PositionAttribute;
+import me.filoghost.chestcommands.parsing.attribute.PriceAttribute;
+import me.filoghost.chestcommands.parsing.attribute.RequiredItemsAttribute;
+import me.filoghost.chestcommands.parsing.attribute.SkullOwnerAttribute;
+import me.filoghost.chestcommands.parsing.attribute.ViewPermissionAttribute;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
@@ -58,7 +61,7 @@ public class IconSettings {
 	private MaterialAttribute materialAttribute;
 	private final List<ApplicableIconAttribute> applicableAttributes;
 
-	public static final Map<String, IconNodeHandler> iconNodeHandlers = new HashMap<>();
+	public static final Map<String, AttributeParser> iconNodeHandlers = new HashMap<>();
 	static {
 		addIconNodeHandler(IconSettingsNode.POSITION_X, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionX);
 		addIconNodeHandler(IconSettingsNode.POSITION_Y, ValueExtractor.INT, PositionAttribute::new, IconSettings::setPositionY);
@@ -141,7 +144,7 @@ public class IconSettings {
 			String node,
 			ValueExtractor<V> valueExtractor,
 			AttributeFactory<V, A> attributeFactory,
-			AttributeCallback<A> callback) {
+			AttributeApplier<A> callback) {
 		addIconNodeHandler(node, (iconSettings, config, configNode, parseContext) -> {
 			V value = valueExtractor.getValue(config, configNode);
 			A iconAttribute = attributeFactory.create(value, parseContext);
@@ -149,7 +152,7 @@ public class IconSettings {
 		});
 	}
 
-	private static void addIconNodeHandler(String node, IconNodeHandler iconNodeHandler) {
+	private static void addIconNodeHandler(String node, AttributeParser iconNodeHandler) {
 		Preconditions.checkState(!iconNodeHandlers.containsKey(node), "Handler already exists for attribute " + node);
 		iconNodeHandlers.put(node, iconNodeHandler);
 	}
@@ -161,21 +164,23 @@ public class IconSettings {
 	}
 
 	public void loadFrom(ConfigSection config, ErrorCollector errorCollector) {
-		for (String attributeKey : config.getKeys(false)) {
+		for (String attributeName : config.getKeys(false)) {
 			try {
-				IconNodeHandler nodeHandler = iconNodeHandlers.get(attributeKey);
-				if (nodeHandler == null) {
+				AttributeParser attributeParser = iconNodeHandlers.get(attributeName);
+				if (attributeParser == null) {
 					throw new ParseException(ErrorMessages.Parsing.unknownAttribute);
 				}
 
-				AttributeErrorCollector attributeErrorCollector = new AttributeErrorCollector(errorCollector, this, attributeKey);
-				nodeHandler.handle(this, config, attributeKey, attributeErrorCollector);
+				attributeParser.parse(this, config, attributeName, (String listElement, ParseException e) -> {
+					errorCollector.add(ErrorMessages.Menu.invalidAttributeListElement(this, attributeName, listElement), e);
+				});
 
 			} catch (ParseException | ConfigValueException e) {
-				errorCollector.add(ErrorMessages.Menu.invalidAttribute(this, attributeKey), e);
+				errorCollector.add(ErrorMessages.Menu.invalidAttribute(this, attributeName), e);
 			}
 		}
 	}
+
 
 	private interface ValueExtractor<V> {
 
@@ -192,21 +197,20 @@ public class IconSettings {
 
 	private interface AttributeFactory<V, A extends IconAttribute> {
 
-		A create(V value, AttributeErrorCollector attributeErrorCollector) throws ParseException;
+		A create(V value, AttributeErrorHandler errorHandler) throws ParseException;
 
 	}
 
-	private interface AttributeCallback<A extends IconAttribute> {
+	private interface AttributeApplier<A extends IconAttribute> {
 
 		void apply(IconSettings iconSettings, A attribute);
 
 	}
 
-	private interface IconNodeHandler {
+	private interface AttributeParser {
 
-		void handle(IconSettings iconSettings, ConfigSection config, String node, AttributeErrorCollector attributeErrorCollector) throws ParseException, ConfigValueException;
+		void parse(IconSettings iconSettings, ConfigSection config, String node, AttributeErrorHandler errorHandler) throws ParseException, ConfigValueException;
 
 	}
-
 
 }

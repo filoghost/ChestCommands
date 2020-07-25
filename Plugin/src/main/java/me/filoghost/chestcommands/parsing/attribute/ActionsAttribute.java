@@ -12,28 +12,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
+import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
+import me.filoghost.chestcommands.parsing.ActionParser;
 
-public class PriceAttribute implements ApplicableIconAttribute {
+import java.util.ArrayList;
+import java.util.List;
 
-	private final double price;
+public class ActionsAttribute implements ApplicableIconAttribute {
 
-	public PriceAttribute(double price, AttributeErrorCollector attributeErrorCollector) throws ParseException {
-		if (price < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+	private final List<Action> actions;
+
+	public ActionsAttribute(List<String> serializedActions, AttributeErrorHandler errorHandler) {
+		actions = new ArrayList<>();
+
+		for (String serializedAction : serializedActions) {
+			if (serializedAction == null || serializedAction.isEmpty()) {
+				continue; // Skip
+			}
+
+			actions.add(ActionParser.parseAction(serializedAction));
 		}
-		this.price = price;
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setRequiredMoney(price);
+		icon.setClickActions(actions);
 	}
 
 }

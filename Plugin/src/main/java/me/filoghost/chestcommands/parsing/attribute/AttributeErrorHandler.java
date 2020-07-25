@@ -12,21 +12,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
-import me.filoghost.chestcommands.parsing.icon.IconAttribute;
+import me.filoghost.chestcommands.parsing.ParseException;
 
-public class PositionAttribute implements IconAttribute {
-	
-	private final int position;
+public interface AttributeErrorHandler {
 
-	public PositionAttribute(int position, AttributeErrorCollector attributeErrorCollector) {
-		this.position = position;
-	}
-	
-	public int getPosition() {
-		return position;
-	}
+	void onListElementError(String listElement, ParseException e);
 
 }

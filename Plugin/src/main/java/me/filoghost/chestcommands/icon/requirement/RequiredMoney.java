@@ -28,10 +28,6 @@ public class RequiredMoney implements Requirement {
 		Preconditions.checkArgument(moneyAmount > 0.0, "money amount must be positive");
 		this.moneyAmount = moneyAmount;
 	}
-	
-	public double getAmount() {
-		return moneyAmount;
-	}
 
 	@Override
 	public boolean hasCost(Player player) {

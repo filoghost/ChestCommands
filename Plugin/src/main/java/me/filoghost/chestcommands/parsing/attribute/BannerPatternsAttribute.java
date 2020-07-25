@@ -12,28 +12,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ItemMetaParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
+import org.bukkit.block.banner.Pattern;
 
-public class AmountAttribute implements ApplicableIconAttribute {
+import java.util.ArrayList;
+import java.util.List;
 
-	private final int amount;
+public class BannerPatternsAttribute implements ApplicableIconAttribute {
 
-	public AmountAttribute(int amount, AttributeErrorCollector attributeErrorCollector) throws ParseException {
-		if (amount < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+	private final List<Pattern> patterns;
+
+	public BannerPatternsAttribute(List<String> serializedPatterns, AttributeErrorHandler errorHandler) {
+		patterns = new ArrayList<>();
+
+		for (String serializedPattern : serializedPatterns) {
+			if (serializedPattern == null || serializedPattern.isEmpty()) {
+				continue; // Skip
+			}
+
+			try {
+				Pattern pattern = ItemMetaParser.parseBannerPattern(serializedPattern);
+				patterns.add(pattern);
+			} catch (ParseException e) {
+				errorHandler.onListElementError(serializedPattern, e);
+			}
 		}
-		this.amount = amount;
+
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setAmount(amount);
+		icon.setBannerPatterns(patterns);
 	}
 
 }

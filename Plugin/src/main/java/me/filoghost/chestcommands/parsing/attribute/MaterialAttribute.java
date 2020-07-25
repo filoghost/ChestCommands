@@ -12,28 +12,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.icon.attributes;
+package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.icon.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.icon.AttributeErrorCollector;
+import me.filoghost.chestcommands.util.MaterialsHelper;
+import org.bukkit.Material;
 
-public class ExpLevelsAttribute implements ApplicableIconAttribute {
+import java.util.Optional;
 
-	private final int expLevels;
+public class MaterialAttribute implements ApplicableIconAttribute {
+	
+	private final Material material;
 
-	public ExpLevelsAttribute(int expLevels, AttributeErrorCollector attributeErrorCollector) throws ParseException {
-		if (expLevels < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+	public MaterialAttribute(String serializedMaterial, AttributeErrorHandler errorHandler) throws ParseException {
+		Optional<Material> material = MaterialsHelper.matchMaterial(serializedMaterial);
+
+		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
+			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(serializedMaterial));
 		}
-		this.expLevels = expLevels;
+
+		this.material = material.get();
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setRequiredExpLevel(expLevels);
+		icon.setMaterial(material);
 	}
 
 }

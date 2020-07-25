@@ -32,9 +32,8 @@ public class CustomPlaceholders {
 	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
 
-		for (String key : config.getKeys(false)) {
-			String placeholder = key;
-			String replacement = Colors.addColors(config.getString(key));
+		for (String placeholder : config.getKeys(false)) {
+			String replacement = Colors.addColors(config.getString(placeholder));
 
 			if (placeholder.length() == 0) {
 				errorCollector.add(ErrorMessages.Config.emptyPlaceholder(config.getSourceFile()));
@@ -50,14 +49,14 @@ public class CustomPlaceholders {
 		}
 	}
 
-	public List<String> replaceAll(List<String> input) {
+	public List<String> replacePlaceholders(List<String> input) {
 		if (input == null) {
 			return null;
 		}
-		return CollectionUtils.transform(input, this::replaceAll);
+		return CollectionUtils.transform(input, this::replacePlaceholders);
 	}
 
-	public String replaceAll(String input) {
+	public String replacePlaceholders(String input) {
 		if (input == null) {
 			return null;
 		}

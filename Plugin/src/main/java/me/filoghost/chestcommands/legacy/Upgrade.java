@@ -80,7 +80,7 @@ public enum Upgrade {
 
 	private static List<Path> getMenuFiles(ConfigManager configManager) throws UpgradeTaskException {
 		try {
-			return configManager.getMenuPaths();
+			return configManager.getMenuFiles();
 		} catch (IOException e) {
 			throw new UpgradeTaskException(ErrorMessages.Upgrade.menuListIOException, e);
 		}

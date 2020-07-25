@@ -48,6 +48,7 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class ChestCommands extends BaseJavaPlugin {
@@ -55,8 +56,8 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
 
-	
 	private static ChestCommands instance;
+	private static Path dataFolderPath;
 
 	private ConfigManager configManager;
 	private MenuManager menuManager;
@@ -85,10 +86,11 @@ public class ChestCommands extends BaseJavaPlugin {
 		System.setProperty("ChestCommandsLoaded", "true");
 
 		instance = this;
+		dataFolderPath = getDataFolder().toPath();
 		Log.setLogger(getLogger());
 		BackendAPI.setImplementation(new DefaultBackendAPI());
 
-		configManager = new ConfigManager(getDataFolder().toPath());
+		configManager = new ConfigManager(getDataFolderPath());
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
@@ -148,12 +150,14 @@ public class ChestCommands extends BaseJavaPlugin {
 		Bukkit.getScheduler().runTaskTimer(this, new TickingTask(), 1L, 1L);
 	}
 
+	public static Path getDataFolderPath() {
+		return dataFolderPath;
+	}
 
 	@Override
 	public void onDisable() {
 		closeAllMenus();
 	}
-
 
 	public ErrorCollector load() {
 		ErrorCollector errorCollector = new PrintableErrorCollector();
