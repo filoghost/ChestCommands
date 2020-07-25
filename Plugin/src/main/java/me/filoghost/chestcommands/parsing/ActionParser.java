@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.BroadcastAction;
 import me.filoghost.chestcommands.action.ChangeServerAction;
@@ -61,11 +60,11 @@ public class ActionParser {
 			if (matcher.find()) {
 				// Remove the action prefix and trim the spaces
 				String serializedAction = matcher.replaceFirst("").trim();
-				return entry.getValue().create(ChestCommands.getCustomPlaceholders().replacePlaceholders(serializedAction));
+				return entry.getValue().create(serializedAction);
 			}
 		}
 
-		return new PlayerCommandAction(ChestCommands.getCustomPlaceholders().replacePlaceholders(input)); // Default action, no match found
+		return new PlayerCommandAction(input); // Default action, no match found
 	}
 	
 	

@@ -14,6 +14,8 @@
  */
 package me.filoghost.chestcommands.util.collection;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,7 +24,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 public final class CollectionUtils {
-
 
 	public static boolean isNullOrEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
@@ -53,6 +54,31 @@ public final class CollectionUtils {
 			result.add(transformFunction.apply(element));
 		}
 		return result;
+	}
+
+	public static <A, B> ImmutableList<B> transformImmutable(List<A> list, Function<A, B> transformFunction) {
+		if (list == null) {
+			return null;
+		}
+		ImmutableList.Builder<B> builder = ImmutableList.builder();
+		for (A element : list) {
+			builder.add(transformFunction.apply(element));
+		}
+		return builder.build();
+	}
+
+	public static <E> ImmutableList<E> replaceNulls(List<E> list, E replacement) {
+		ImmutableList.Builder<E> builder = ImmutableList.builder();
+
+		for (E element : list) {
+			if (element != null) {
+				builder.add(element);
+			} else {
+				builder.add(replacement);
+			}
+		}
+
+		return builder.build();
 	}
 
 }

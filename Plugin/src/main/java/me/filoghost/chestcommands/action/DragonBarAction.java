@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.action;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.Strings;
 import org.bukkit.ChatColor;
@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 
 public class DragonBarAction extends Action {
 
-	private RelativeString message;
+	private PlaceholderString message;
 	private int seconds;
 
 	public DragonBarAction(String serialiazedAction) {
@@ -43,7 +43,7 @@ public class DragonBarAction extends Action {
 			}
 		}
 
-		this.message = RelativeString.of(Colors.addColors(message));
+		this.message = PlaceholderString.of(Colors.addColors(message));
 	}
 
 	@Override

@@ -14,15 +14,15 @@
  */
 package me.filoghost.chestcommands.action;
 
-import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.entity.Player;
 
 public class PlayerCommandAction extends Action {
 	
-	private final RelativeString command;
+	private final PlaceholderString command;
 
 	public PlayerCommandAction(String serializedAction) {
-		command = RelativeString.of(serializedAction);
+		command = PlaceholderString.of(serializedAction);
 	}
 
 	@Override

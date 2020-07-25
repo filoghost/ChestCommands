@@ -24,7 +24,7 @@ public class NameAttribute implements ApplicableIconAttribute {
 	private final String name;
 
 	public NameAttribute(String name, AttributeErrorHandler errorHandler) {
-		this.name = ChestCommands.getCustomPlaceholders().replacePlaceholders(colorName(name));
+		this.name = colorName(name);
 	}
 
 	private String colorName(String input) {

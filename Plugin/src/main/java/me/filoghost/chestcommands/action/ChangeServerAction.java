@@ -15,15 +15,15 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.hook.BungeeCordHook;
-import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.entity.Player;
 
 public class ChangeServerAction extends Action {
 
-	private final RelativeString targetServer;
+	private final PlaceholderString targetServer;
 	
 	public ChangeServerAction(String serializedAction) {
-		targetServer = RelativeString.of(serializedAction);
+		targetServer = PlaceholderString.of(serializedAction);
 	}
 
 	@Override

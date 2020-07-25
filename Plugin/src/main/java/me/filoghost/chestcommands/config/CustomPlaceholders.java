@@ -17,7 +17,6 @@ package me.filoghost.chestcommands.config;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
 import java.util.HashMap;
@@ -49,13 +48,6 @@ public class CustomPlaceholders {
 		}
 	}
 
-	public List<String> replacePlaceholders(List<String> input) {
-		if (input == null) {
-			return null;
-		}
-		return CollectionUtils.transform(input, this::replacePlaceholders);
-	}
-
 	public String replacePlaceholders(String input) {
 		if (input == null) {
 			return null;
@@ -64,6 +56,28 @@ public class CustomPlaceholders {
 			input = input.replace(entry.getKey(), entry.getValue());
 		}
 		return input;
+	}
+
+	public boolean containsPlaceholders(String input) {
+		if (input == null) {
+			return false;
+		}
+		for (String placeholder : placeholders.keySet()) {
+			if (input.contains(placeholder)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean containsPlaceholders(List<String> list) {
+		for (String element : list) {
+			if (containsPlaceholders(element)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

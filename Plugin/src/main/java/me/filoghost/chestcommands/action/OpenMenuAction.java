@@ -16,17 +16,17 @@ package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
-import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class OpenMenuAction extends Action {
 
-	private final RelativeString targetMenu;
+	private final PlaceholderString targetMenu;
 	
 	public OpenMenuAction(String serializedAction) {
-		targetMenu = RelativeString.of(serializedAction);
+		targetMenu = PlaceholderString.of(serializedAction);
 	}
 
 	@Override

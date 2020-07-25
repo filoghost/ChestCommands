@@ -15,8 +15,8 @@
 package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.placeholder.RelativeString;
-import me.filoghost.chestcommands.placeholder.RelativeStringList;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
+import me.filoghost.chestcommands.placeholder.PlaceholderStringList;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import me.filoghost.chestcommands.util.logging.Log;
@@ -48,11 +48,11 @@ public abstract class BaseConfigurableIcon implements Icon {
 	private short durability;
 
 	private String nbtData;
-	private RelativeString name;
-	private RelativeStringList lore;
+	private PlaceholderString name;
+	private PlaceholderStringList lore;
 	private Map<Enchantment, Integer> enchantments;
 	private Color leatherColor;
-	private RelativeString skullOwner;
+	private PlaceholderString skullOwner;
 	private DyeColor bannerColor;
 	private List<Pattern> bannerPatterns;
 	private boolean placeholdersEnabled;
@@ -70,9 +70,9 @@ public abstract class BaseConfigurableIcon implements Icon {
 			return false;
 		}
 
-		return (name == null || !name.hasPlaceholders())
-				&& (lore == null || !lore.hasPlaceholders())
-				&& (skullOwner == null || !skullOwner.hasPlaceholders());
+		return (name == null || !name.hasDynamicPlaceholders())
+				&& (lore == null || !lore.hasDynamicPlaceholders())
+				&& (skullOwner == null || !skullOwner.hasDynamicPlaceholders());
 	}
 
 	public void setMaterial(Material material) {
@@ -115,7 +115,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setName(String name) {
-		this.name = RelativeString.of(name);
+		this.name = PlaceholderString.of(name);
 		cachedRendering = null;
 	}
 
@@ -125,7 +125,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
 	public String getName() {
 		if (name != null) {
-			return name.getRawValue();
+			return name.getOriginalValue();
 		} else {
 			return null;
 		}
@@ -139,7 +139,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
 	public void setLore(List<String> lore) {
 		if (!CollectionUtils.isNullOrEmpty(lore)) {
-			this.lore = new RelativeStringList(lore);
+			this.lore = new PlaceholderStringList(CollectionUtils.replaceNulls(lore, ""));
 		} else {
 			this.lore = null;
 		}
@@ -152,7 +152,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
 	public List<String> getLore() {
 		if (lore != null) {
-			return new ArrayList<>(lore.getRawValue());
+			return new ArrayList<>(lore.getOriginalValue());
 		} else {
 			return null;
 		}
@@ -198,14 +198,14 @@ public abstract class BaseConfigurableIcon implements Icon {
 
 	public String getSkullOwner() {
 		if (skullOwner != null) {
-			return skullOwner.getRawValue();
+			return skullOwner.getOriginalValue();
 		} else {
 			return null;
 		}
 	}
 
 	public void setSkullOwner(String skullOwner) {
-		this.skullOwner = RelativeString.of(skullOwner);
+		this.skullOwner = PlaceholderString.of(skullOwner);
 		cachedRendering = null;
 	}
 
@@ -237,7 +237,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 			return null;
 		}
 		if (!placeholdersEnabled) {
-			return name.getRawValue();
+			return name.getOriginalValue();
 		}
 
 		String name = this.name.getValue(viewer);
@@ -255,7 +255,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 			return null;
 		}
 		if (!placeholdersEnabled) {
-			return lore.getRawValue();
+			return lore.getOriginalValue();
 		}
 
 		return lore.getValue(viewer);

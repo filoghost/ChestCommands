@@ -27,7 +27,7 @@ public class LoreAttribute implements ApplicableIconAttribute {
 	private final List<String> lore;
 	
 	public LoreAttribute(List<String> lore, AttributeErrorHandler errorHandler) {
-		this.lore = ChestCommands.getCustomPlaceholders().replacePlaceholders(colorLore(lore));
+		this.lore = colorLore(lore);
 	}
 
 	private List<String> colorLore(List<String> input) {

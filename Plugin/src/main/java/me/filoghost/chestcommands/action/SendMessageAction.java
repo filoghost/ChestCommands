@@ -14,16 +14,16 @@
  */
 package me.filoghost.chestcommands.action;
 
-import me.filoghost.chestcommands.placeholder.RelativeString;
+import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.util.Colors;
 import org.bukkit.entity.Player;
 
 public class SendMessageAction extends Action {
 	
-	private final RelativeString message;
+	private final PlaceholderString message;
 
 	public SendMessageAction(String serializedAction) {
-		message = RelativeString.of(Colors.addColors(serializedAction));
+		message = PlaceholderString.of(Colors.addColors(serializedAction));
 	}
 
 	@Override

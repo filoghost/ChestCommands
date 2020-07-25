@@ -18,6 +18,7 @@ import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -26,7 +27,7 @@ public class PlaceholderManager {
 	private static final Map<Player, Map<Placeholder, String>> cachedReplacements = new WeakHashMap<>();
 
 	public static boolean hasPlaceholders(String text) {
-		if(text == null) {
+		if (text == null) {
 			return false;
 		}
 
@@ -40,6 +41,15 @@ public class PlaceholderManager {
 			return true;
 		}
 
+		return false;
+	}
+
+	public static boolean hasPlaceholders(List<String> list) {
+		for (String element : list) {
+			if (hasPlaceholders(element)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -71,6 +81,5 @@ public class PlaceholderManager {
 	public static void onTick() {
 		cachedReplacements.forEach((player, placeholderMap) -> placeholderMap.clear());
 	}
-
 
 }
