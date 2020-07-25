@@ -31,12 +31,12 @@ public class DefaultBackendAPI extends BackendAPI {
 
 	@Override
 	public boolean isPluginMenu(String yamlFile) {
-		return ChestCommands.getInstance().getMenuManager().getMenuByFileName(yamlFile) != null;
+		return ChestCommands.getMenuManager().getMenuByFileName(yamlFile) != null;
 	}
 
 	@Override
 	public boolean openPluginMenu(Player player, String yamlFile) {
-		InternalIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(yamlFile);
+		InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(yamlFile);
 
 		if (menu != null) {
 			menu.open(player);

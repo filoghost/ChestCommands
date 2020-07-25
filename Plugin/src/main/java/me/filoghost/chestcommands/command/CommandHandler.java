@@ -43,7 +43,7 @@ public class CommandHandler extends CommandFramework {
 		if (args.length == 0) {
 			// This info is accessible to anyone. Please don't remove it, remember that Chest Commands is developed for free
 			sender.sendMessage(ChestCommands.CHAT_PREFIX);
-			sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getInstance().getDescription().getVersion());
+			sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getPluginInstance().getDescription().getVersion());
 			sender.sendMessage(ChatColor.GREEN + "Developer: " + ChatColor.GRAY + "filoghost");
 			sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + label + " help");
 			return;
@@ -83,7 +83,7 @@ public class CommandHandler extends CommandFramework {
 
 			ChestCommands.closeAllMenus();
 
-			ErrorCollector errorCollector = ChestCommands.getInstance().load();
+			ErrorCollector errorCollector = ChestCommands.load();
 
 			if (!errorCollector.hasErrors()) {
 				sender.sendMessage(ChestCommands.CHAT_PREFIX + "Plugin reloaded.");

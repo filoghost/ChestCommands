@@ -45,6 +45,7 @@ import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,11 +57,11 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
 
-	private static ChestCommands instance;
+	private static Plugin pluginInstance;
 	private static Path dataFolderPath;
 
-	private ConfigManager configManager;
-	private MenuManager menuManager;
+	private static ConfigManager configManager;
+	private static MenuManager menuManager;
 	private static Settings settings;
 	private static Lang lang;
 	private static CustomPlaceholders placeholders;
@@ -78,29 +79,29 @@ public class ChestCommands extends BaseJavaPlugin {
 			}
 		}
 
-		if (instance != null || System.getProperty("ChestCommandsLoaded") != null) {
+		if (pluginInstance != null || System.getProperty("ChestCommandsLoaded") != null) {
 			Log.warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
 			return;
 		}
 
 		System.setProperty("ChestCommandsLoaded", "true");
 
-		instance = this;
+		pluginInstance = this;
 		dataFolderPath = getDataFolder().toPath();
 		Log.setLogger(getLogger());
-		BackendAPI.setImplementation(new DefaultBackendAPI());
-
 		configManager = new ConfigManager(getDataFolderPath());
 		menuManager = new MenuManager();
 		settings = new Settings();
 		lang = new Lang();
 		placeholders = new CustomPlaceholders();
 
+		BackendAPI.setImplementation(new DefaultBackendAPI());
+
 		VaultEconomyHook.INSTANCE.setup();
 		BarAPIHook.INSTANCE.setup();
 		PlaceholderAPIHook.INSTANCE.setup();
 		BungeeCordHook.INSTANCE.setup();
-		
+
 		if (VaultEconomyHook.INSTANCE.isEnabled()) {
 			Log.info("Hooked Vault");
 		} else {
@@ -137,7 +138,7 @@ public class ChestCommands extends BaseJavaPlugin {
 		CommandFramework.register(this, new CommandHandler(menuManager, "chestcommands"));
 
 		ErrorCollector errorCollector = load();
-		
+
 		if (errorCollector.hasErrors()) {
 			errorCollector.logToConsole();
 			Bukkit.getScheduler().runTaskLater(this, () -> {
@@ -150,16 +151,12 @@ public class ChestCommands extends BaseJavaPlugin {
 		Bukkit.getScheduler().runTaskTimer(this, new TickingTask(), 1L, 1L);
 	}
 
-	public static Path getDataFolderPath() {
-		return dataFolderPath;
-	}
-
 	@Override
 	public void onDisable() {
 		closeAllMenus();
 	}
 
-	public ErrorCollector load() {
+	public static ErrorCollector load() {
 		ErrorCollector errorCollector = new PrintableErrorCollector();
 		menuManager.clear();
 		boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
@@ -210,11 +207,15 @@ public class ChestCommands extends BaseJavaPlugin {
 	}
 
 
-	public static ChestCommands getInstance() {
-		return instance;
+	public static Plugin getPluginInstance() {
+		return pluginInstance;
 	}
 
-	public MenuManager getMenuManager() {
+	public static Path getDataFolderPath() {
+		return dataFolderPath;
+	}
+
+	public static MenuManager getMenuManager() {
 		return menuManager;
 	}
 

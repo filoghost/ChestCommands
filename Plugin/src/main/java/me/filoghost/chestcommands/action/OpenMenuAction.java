@@ -31,14 +31,14 @@ public class OpenMenuAction extends Action {
 
 	@Override
 	protected void execute0(final Player player) {
-		final InternalIconMenu menu = ChestCommands.getInstance().getMenuManager().getMenuByFileName(targetMenu.getValue(player));
+		final InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(targetMenu.getValue(player));
 		
 		if (menu != null) {
 			/*
 			 * Delay the task, since this action is executed in ClickInventoryEvent
 			 * and opening another inventory in the same moment is not a good idea.
 			 */
-			Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
+			Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
 				menu.openCheckingPermission(player);
 			});
 

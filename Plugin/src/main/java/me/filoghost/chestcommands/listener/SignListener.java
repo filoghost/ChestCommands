@@ -77,12 +77,14 @@ public class SignListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreateMenuSign(SignChangeEvent event) {
-		if (isCreatingMenuSign(event.getLine(HEADER_LINE)) && canCreateMenuSign(event.getPlayer())) {
+		Player player = event.getPlayer();
+
+		if (isCreatingMenuSign(event.getLine(HEADER_LINE)) && canCreateMenuSign(player)) {
 			String menuFileName = event.getLine(FILENAME_LINE).trim();
 			
 			if (menuFileName.isEmpty()) {
 				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "You must write a menu name in the second line.");
+				player.sendMessage(ChatColor.RED + "You must write a menu name in the second line.");
 				return;
 			}
 			
@@ -91,12 +93,12 @@ public class SignListener implements Listener {
 			InternalIconMenu iconMenu = menuManager.getMenuByFileName(menuFileName);
 			if (iconMenu == null) {
 				event.setCancelled(true);
-				event.getPlayer().sendMessage(ChatColor.RED + "Menu \"" + menuFileName + "\" was not found.");
+				player.sendMessage(ChatColor.RED + "Menu \"" + menuFileName + "\" was not found.");
 				return;
 			}
 	
 			event.setLine(HEADER_LINE, VALID_SIGN_COLOR + event.getLine(HEADER_LINE));
-			event.getPlayer().sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + menuFileName + ".");
+			player.sendMessage(ChatColor.GREEN + "Successfully created a sign for the menu " + menuFileName + ".");
 		}
 	}
 

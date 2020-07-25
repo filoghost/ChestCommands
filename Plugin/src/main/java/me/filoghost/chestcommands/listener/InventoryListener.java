@@ -89,7 +89,7 @@ public class InventoryListener implements Listener {
 		}
 
 		// Only handle the click AFTER the event has finished
-		Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
+		Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
 			ClickResult result = slotClickHandler.onClick();
 
 			if (result == ClickResult.CLOSE) {
