@@ -16,17 +16,16 @@ package me.filoghost.chestcommands.config;
 
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class CustomPlaceholders {
 
-	private final Map<String, String> placeholders = new HashMap<>();
+	private final List<StaticPlaceholder> placeholders = new ArrayList<>();
 
 	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
@@ -44,40 +43,12 @@ public class CustomPlaceholders {
 				continue;
 			}
 
-			placeholders.put(placeholder, replacement);
+			placeholders.add(new StaticPlaceholder(placeholder, replacement));
 		}
 	}
 
-	public String replacePlaceholders(String input) {
-		if (input == null) {
-			return null;
-		}
-		for (Entry<String, String> entry : placeholders.entrySet()) {
-			input = input.replace(entry.getKey(), entry.getValue());
-		}
-		return input;
-	}
-
-	public boolean containsPlaceholders(String input) {
-		if (input == null) {
-			return false;
-		}
-		for (String placeholder : placeholders.keySet()) {
-			if (input.contains(placeholder)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean containsPlaceholders(List<String> list) {
-		for (String element : list) {
-			if (containsPlaceholders(element)) {
-				return true;
-			}
-		}
-
-		return false;
+	public List<StaticPlaceholder> getPlaceholders() {
+		return placeholders;
 	}
 
 }

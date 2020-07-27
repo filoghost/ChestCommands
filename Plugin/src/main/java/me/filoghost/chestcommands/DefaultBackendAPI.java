@@ -16,12 +16,14 @@ package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.icon.APIConfigurableIcon;
 import me.filoghost.chestcommands.icon.APIStaticIcon;
 import me.filoghost.chestcommands.menu.APIIconMenu;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,6 +61,11 @@ public class DefaultBackendAPI extends BackendAPI {
 	@Override
 	public StaticIcon createStaticIcon(ItemStack itemStack) {
 		return new APIStaticIcon(itemStack);
+	}
+
+	@Override
+	public void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
+		PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
 	}
 
 }

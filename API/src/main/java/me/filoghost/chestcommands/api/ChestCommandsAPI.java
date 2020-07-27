@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.api;
 
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class ChestCommandsAPI {
 	
@@ -32,6 +33,11 @@ public class ChestCommandsAPI {
 	 */
 	public static int getAPIVersion() {
 		return 1;
+	}
+
+
+	public static void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
+		BackendAPI.getImplementation().registerPlaceholder(plugin, identifier, placeholderReplacer);
 	}
 	
 

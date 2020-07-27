@@ -12,14 +12,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.placeholder;
+package me.filoghost.chestcommands.api;
 
 import org.bukkit.entity.Player;
 
-public interface Placeholder {
+public interface PlaceholderReplacer {
 
-	String getPlaceholderText();
-
-	String getReplacementText(Player player);
+	String getReplacement(Player player, String argument);
 
 }

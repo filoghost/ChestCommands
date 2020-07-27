@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.api.internal;
 
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.Material;
@@ -49,5 +50,7 @@ public abstract class BackendAPI {
 	public abstract ConfigurableIcon createConfigurableIcon(Material material);
 
 	public abstract StaticIcon createStaticIcon(ItemStack itemStack);
+
+	public abstract void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer);
 
 }

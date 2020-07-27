@@ -29,6 +29,10 @@ public final class CollectionUtils {
 		return collection == null || collection.isEmpty();
 	}
 
+	public static boolean isNullOrEmpty(Map<?, ?> map) {
+		return map == null || map.isEmpty();
+	}
+
 	public static <E> List<E> nullableCopy(List<E> list) {
 		if (isNullOrEmpty(list)) {
 			return null;

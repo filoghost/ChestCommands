@@ -15,7 +15,6 @@
 package me.filoghost.chestcommands.placeholder;
 
 import com.google.common.collect.ImmutableList;
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import org.bukkit.entity.Player;
@@ -32,13 +31,13 @@ public class PlaceholderStringList {
 		this.originalList = list;
 
 		// Replace static placeholders only once, if present
-		if (ChestCommands.getCustomPlaceholders().containsPlaceholders(originalList)) {
-			this.listWithStaticPlaceholders = CollectionUtils.transformImmutable(originalList, ChestCommands.getCustomPlaceholders()::replacePlaceholders);
+		if (PlaceholderManager.hasStaticPlaceholders(originalList)) {
+			this.listWithStaticPlaceholders = CollectionUtils.transformImmutable(originalList, PlaceholderManager::replaceStaticPlaceholders);
 		} else {
 			this.listWithStaticPlaceholders = originalList;
 		}
 
-		this.hasDynamicPlaceholders = PlaceholderManager.hasPlaceholders(listWithStaticPlaceholders);
+		this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(listWithStaticPlaceholders);
 		if (hasDynamicPlaceholders) {
 			this.placeholderStringList = CollectionUtils.transformImmutable(listWithStaticPlaceholders, PlaceholderString::of);
 		} else {

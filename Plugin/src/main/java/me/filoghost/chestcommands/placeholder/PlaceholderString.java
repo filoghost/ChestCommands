@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import me.filoghost.chestcommands.ChestCommands;
 import org.bukkit.entity.Player;
 
 public class PlaceholderString {
@@ -33,13 +32,13 @@ public class PlaceholderString {
 	
 	private PlaceholderString(String originalString) {
 		this.originalString = originalString;
-		this.stringWithStaticPlaceholders = ChestCommands.getCustomPlaceholders().replacePlaceholders(originalString);
-		this.hasDynamicPlaceholders = PlaceholderManager.hasPlaceholders(stringWithStaticPlaceholders);
+		this.stringWithStaticPlaceholders = PlaceholderManager.replaceStaticPlaceholders(originalString);
+		this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(stringWithStaticPlaceholders);
 	}
 	
 	public String getValue(Player player) {
 		if (hasDynamicPlaceholders) {
-			return PlaceholderManager.replacePlaceholders(stringWithStaticPlaceholders, player);
+			return PlaceholderManager.replaceRelativePlaceholders(stringWithStaticPlaceholders, player);
 		} else {
 			return stringWithStaticPlaceholders;
 		}

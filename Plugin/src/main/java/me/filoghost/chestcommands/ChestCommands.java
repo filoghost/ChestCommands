@@ -36,6 +36,7 @@ import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.logging.PrintableErrorCollector;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
+import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.chestcommands.task.TickingTask;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
@@ -182,6 +183,7 @@ public class ChestCommands extends BaseJavaPlugin {
 		settings = configManager.tryLoadSettings(errorCollector);
 		lang = configManager.tryLoadLang(errorCollector);
 		placeholders = configManager.tryLoadCustomPlaceholders(errorCollector);
+		PlaceholderManager.setStaticPlaceholders(placeholders.getPlaceholders());
 
 		// Create the menu folder with the example menu
 		if (!Files.isDirectory(configManager.getMenusFolder())) {
@@ -225,10 +227,6 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static Lang getLang() {
 		return lang;
-	}
-
-	public static CustomPlaceholders getCustomPlaceholders() {
-		return placeholders;
 	}
 
 	public static boolean hasNewVersion() {

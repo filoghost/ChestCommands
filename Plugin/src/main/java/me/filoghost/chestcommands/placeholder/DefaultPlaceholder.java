@@ -14,23 +14,21 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
+import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
-import java.util.function.Function;
+public enum DefaultPlaceholder {
 
-public enum DefaultPlaceholders implements Placeholder {
+	PLAYER("player", (player, argument) -> player.getName()),
 
-	PLAYER("{player}", player -> player.getName()),
+	ONLINE("online", (player, argument) -> String.valueOf(Bukkit.getOnlinePlayers().size())),
 
-	ONLINE("{online}", player -> String.valueOf(Bukkit.getOnlinePlayers().size())),
+	MAX_PLAYERS("max_players", (player, argument) -> String.valueOf(Bukkit.getMaxPlayers())),
 
-	MAX_PLAYERS("{max_players}", player -> String.valueOf(Bukkit.getMaxPlayers())),
+	WORLD("world", (player, argument) -> player.getWorld().getName()),
 
-	WORLD("{world}", player -> player.getWorld().getName()),
-
-	MONEY("{money}", player -> {
+	MONEY("money", (player, argument) -> {
 		if (VaultEconomyHook.INSTANCE.isEnabled()) {
 			return VaultEconomyHook.formatMoney(VaultEconomyHook.getMoney(player));
 		} else {
@@ -39,22 +37,20 @@ public enum DefaultPlaceholders implements Placeholder {
 	});
 
 
-	private final String placeholderText;
-	private final Function<Player, String> placeholderReplacer;
+	private final String identifier;
+	private final PlaceholderReplacer replacer;
 
-	DefaultPlaceholders(String placeholderText, Function<Player, String> placeholderReplacer) {
-		this.placeholderText = placeholderText;
-		this.placeholderReplacer = placeholderReplacer;
+	DefaultPlaceholder(String identifier, PlaceholderReplacer replacer) {
+		this.identifier = identifier;
+		this.replacer = replacer;
 	}
 
-	@Override
-	public String getPlaceholderText() {
-		return placeholderText;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	@Override
-	public String getReplacementText(Player player) {
-		return placeholderReplacer.apply(player);
+	public PlaceholderReplacer getReplacer() {
+		return replacer;
 	}
 
 }
