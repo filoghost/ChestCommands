@@ -36,22 +36,23 @@ import java.util.regex.Pattern;
 public class ActionParser {
 
 	private static final Map<Pattern, ActionFactory> actionsByPrefix = new HashMap<>();
-
 	static {
-		actionsByPrefix.put(actionPattern("console:"), ConsoleCommandAction::new);
-		actionsByPrefix.put(actionPattern("op:"), OpCommandAction::new);
-		actionsByPrefix.put(actionPattern("(open|menu):"), OpenMenuAction::new);
-		actionsByPrefix.put(actionPattern("server:?"), ChangeServerAction::new); // The colon is optional
-		actionsByPrefix.put(actionPattern("tell:"), SendMessageAction::new);
-		actionsByPrefix.put(actionPattern("broadcast:"), BroadcastAction::new);
-		actionsByPrefix.put(actionPattern("give:"), GiveItemAction::new);
-		actionsByPrefix.put(actionPattern("give-?money:"), GiveMoneyAction::new);
-		actionsByPrefix.put(actionPattern("sound:"), PlaySoundAction::new);
-		actionsByPrefix.put(actionPattern("dragon-?bar:"), DragonBarAction::new);
+		addActionParserMapping("console:", ConsoleCommandAction::new);
+		addActionParserMapping("op:", OpCommandAction::new);
+		addActionParserMapping("(open|menu):", OpenMenuAction::new);
+		addActionParserMapping("server:?", ChangeServerAction::new); // The colon is optional
+		addActionParserMapping("tell:", SendMessageAction::new);
+		addActionParserMapping("broadcast:", BroadcastAction::new);
+		addActionParserMapping("give:", GiveItemAction::new);
+		addActionParserMapping("give-?money:", GiveMoneyAction::new);
+		addActionParserMapping("sound:", PlaySoundAction::new);
+		addActionParserMapping("dragon-?bar:", DragonBarAction::new);
 	}
 
-	private static Pattern actionPattern(String regex) {
-		return Pattern.compile("^" + regex, Pattern.CASE_INSENSITIVE); // Case insensitive and only at the beginning
+	private static void addActionParserMapping(String regex, ActionFactory actionFactory) {
+		actionsByPrefix.put(
+				Pattern.compile("^" + regex, Pattern.CASE_INSENSITIVE), // Case insensitive and only at the beginning
+				actionFactory);
 	}
 
 	public static Action parseAction(String input) {
@@ -67,7 +68,7 @@ public class ActionParser {
 		return new PlayerCommandAction(input); // Default action, no match found
 	}
 	
-	
+	@FunctionalInterface
 	private interface ActionFactory {
 		
 		Action create(String actionString);
