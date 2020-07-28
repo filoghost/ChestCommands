@@ -130,7 +130,7 @@ public class MenuParser {
 
 			for (String serializedAction : serializedOpenActions) {
 				if (serializedAction != null && !serializedAction.isEmpty()) {
-					openActions.add(ActionParser.parseAction(serializedAction));
+					openActions.add(ActionParser.parse(serializedAction));
 				}
 			}
 

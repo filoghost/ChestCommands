@@ -33,7 +33,7 @@ public class ActionsAttribute implements ApplicableIconAttribute {
 				continue; // Skip
 			}
 
-			actions.add(ActionParser.parseAction(serializedAction));
+			actions.add(ActionParser.parse(serializedAction));
 		}
 	}
 	

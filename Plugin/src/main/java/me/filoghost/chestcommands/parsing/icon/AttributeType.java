@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-import me.filoghost.chestcommands.config.framework.ConfigPath;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.parsing.ParseException;
@@ -45,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum AttributeType implements ConfigPath {
+public enum AttributeType {
 
 		POSITION_X("POSITION-X", ValueExtractor.INT, PositionAttribute::new),
 		POSITION_Y("POSITION-Y", ValueExtractor.INT, PositionAttribute::new),
@@ -94,11 +93,6 @@ public enum AttributeType implements ConfigPath {
 
 	public AttributeParser getParser() {
 		return attributeParser;
-	}
-
-	@Override
-	public String getConfigPath() {
-		return attributeName;
 	}
 
 	public static AttributeType fromAttributeName(String attributeName) {
