@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.logging;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
+import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 
 import java.nio.file.Path;
@@ -169,12 +170,16 @@ public class ErrorMessages {
 			return "the menu \"" + formatPath(menuFile) + "\" " + errorMessage;
 		}
 
+		public static String invalidAttribute(IconSettings iconSettings, AttributeType attributeType) {
+			return invalidAttribute(iconSettings, attributeType.getAttributeName());
+		}
+
 		public static String invalidAttribute(IconSettings iconSettings, String attributeName) {
 			return iconError(iconSettings, "has an invalid attribute \"" + attributeName + "\"");
 		}
 
-		public static String missingAttribute(IconSettings iconSettings, String attributeName) {
-			return iconError(iconSettings, "is missing the attribute \"" + attributeName + "\"");
+		public static String missingAttribute(IconSettings iconSettings, AttributeType attributeType) {
+			return iconError(iconSettings, "is missing the attribute \"" + attributeType.getAttributeName() + "\"");
 		}
 
 		public static String invalidAttributeListElement(IconSettings iconSettings, String attributeName, String listElement) {

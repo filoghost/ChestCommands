@@ -18,18 +18,17 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
-import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.parsing.attribute.PositionAttribute;
+import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
-import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,26 +54,29 @@ public class MenuParser {
 
 
 	private static void tryAddIconToMenu(InternalIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) {
-		if (iconSettings.getPositionX() == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.POSITION_X));
+		PositionAttribute positionX = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_X);
+		PositionAttribute positionY = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_Y);
+
+		if (positionX == null) {
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.POSITION_X));
 			return;
 		}
 
-		if (iconSettings.getPositionY() == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.POSITION_Y));
+		if (positionY == null) {
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
 			return;
 		}
 
-		int row = iconSettings.getPositionY().getPosition() - 1;
-		int column = iconSettings.getPositionX().getPosition() - 1;
+		int row = positionY.getPosition() - 1;
+		int column = positionX.getPosition() - 1;
 
 		if (row < 0 || row >= iconMenu.getRowCount()) {
-			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, IconSettingsNode.POSITION_Y))
+			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y))
 					.appendMessage("it must be between 1 and " + iconMenu.getRowCount());
 			return;
 		}
 		if (column < 0 || column >= iconMenu.getColumnCount()) {
-			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, IconSettingsNode.POSITION_X))
+			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X))
 					.appendMessage(("it must be between 1 and " + iconMenu.getColumnCount()));
 			return;
 		}
@@ -83,13 +85,11 @@ public class MenuParser {
 			errorCollector.add(ErrorMessages.Menu.iconOverridesAnother(iconSettings));
 		}
 
-		if (iconSettings.getMaterialAttribute() == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, IconSettingsNode.MATERIAL));
+		if (iconSettings.getAttributeValue(AttributeType.MATERIAL) == null) {
+			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
 		}
 
-		InternalConfigurableIcon icon = new InternalConfigurableIcon(Material.BEDROCK);
-		iconSettings.applyAttributesTo(icon);
-		iconMenu.setIcon(row, column, icon);
+		iconMenu.setIcon(row, column, iconSettings.createIcon());
 	}
 
 

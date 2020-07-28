@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
+import me.filoghost.chestcommands.parsing.icon.AttributeType;
 
 import java.nio.file.Path;
 import java.util.regex.Pattern;
@@ -28,13 +28,13 @@ public class MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
 		addSubNodeReplacer("open-action", "open-actions");
 		addSubNodeReplacer("id", "material");
 
-		addSubNodeReplacer("ID", IconSettingsNode.MATERIAL);
-		addSubNodeReplacer("DATA-VALUE", IconSettingsNode.DURABILITY);
-		addSubNodeReplacer("NBT", IconSettingsNode.NBT_DATA);
-		addSubNodeReplacer("ENCHANTMENT", IconSettingsNode.ENCHANTMENTS);
-		addSubNodeReplacer("COMMAND", IconSettingsNode.ACTIONS);
-		addSubNodeReplacer("COMMANDS", IconSettingsNode.ACTIONS);
-		addSubNodeReplacer("REQUIRED-ITEM", IconSettingsNode.REQUIRED_ITEMS);
+		addSubNodeReplacer("ID", AttributeType.MATERIAL.getAttributeName());
+		addSubNodeReplacer("DATA-VALUE", AttributeType.DURABILITY.getAttributeName());
+		addSubNodeReplacer("NBT", AttributeType.NBT_DATA.getAttributeName());
+		addSubNodeReplacer("ENCHANTMENT", AttributeType.ENCHANTMENTS.getAttributeName());
+		addSubNodeReplacer("COMMAND", AttributeType.ACTIONS.getAttributeName());
+		addSubNodeReplacer("COMMANDS", AttributeType.ACTIONS.getAttributeName());
+		addSubNodeReplacer("REQUIRED-ITEM", AttributeType.REQUIRED_ITEMS.getAttributeName());
 	}
 
 	private void addSubNodeReplacer(String oldNode, String newNode) {

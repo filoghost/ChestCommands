@@ -20,7 +20,7 @@ import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
-import me.filoghost.chestcommands.parsing.icon.IconSettingsNode;
+import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 import me.filoghost.chestcommands.util.Strings;
 
@@ -85,45 +85,45 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 	}
 
 	private void upgradeIcon(ConfigSection section) {
-		expandInlineList(section, IconSettingsNode.ACTIONS, legacyCommandSeparator);
-		expandInlineList(section, IconSettingsNode.ENCHANTMENTS, ";");
+		expandInlineList(section, AttributeType.ACTIONS.getAttributeName(), legacyCommandSeparator);
+		expandInlineList(section, AttributeType.ENCHANTMENTS.getAttributeName(), ";");
 
-		expandSingletonList(section, IconSettingsNode.REQUIRED_ITEMS);
+		expandSingletonList(section, AttributeType.REQUIRED_ITEMS.getAttributeName());
 
 		expandInlineItemstack(section);
 	}
 
 	private void expandInlineItemstack(ConfigSection section) {
-		String material = section.getString(IconSettingsNode.MATERIAL);
+		String material = section.getString(AttributeType.MATERIAL.getAttributeName());
 		if (material == null) {
 			return;
 		}
 
 		if (material.contains(",")) {
 			String[] parts = Strings.trimmedSplit(material, ",", 2);
-			if (!section.isSet(IconSettingsNode.AMOUNT)) {
+			if (!section.isSet(AttributeType.AMOUNT.getAttributeName())) {
 				try {
-					section.set(IconSettingsNode.AMOUNT, Integer.parseInt(parts[1]));
+					section.set(AttributeType.AMOUNT.getAttributeName(), Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconSettingsNode.AMOUNT, parts[1]);
+					section.set(AttributeType.AMOUNT.getAttributeName(), parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconSettingsNode.MATERIAL, material);
+			section.set(AttributeType.MATERIAL.getAttributeName(), material);
 			setSaveRequired();
 		}
 
 		if (material.contains(":")) {
 			String[] parts = Strings.trimmedSplit(material, ":", 2);
-			if (!section.isSet(IconSettingsNode.DURABILITY)) {
+			if (!section.isSet(AttributeType.DURABILITY.getAttributeName())) {
 				try {
-					section.set(IconSettingsNode.DURABILITY, Integer.parseInt(parts[1]));
+					section.set(AttributeType.DURABILITY.getAttributeName(), Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(IconSettingsNode.DURABILITY, parts[1]);
+					section.set(AttributeType.DURABILITY.getAttributeName(), parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(IconSettingsNode.MATERIAL, material);
+			section.set(AttributeType.MATERIAL.getAttributeName(), material);
 			setSaveRequired();
 		}
 	}
