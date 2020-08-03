@@ -38,6 +38,9 @@ public class CustomPlaceholders {
 
 		for (String placeholder : placeholdersSection.getKeys()) {
 			String replacement = Colors.addColors(placeholdersSection.getString(placeholder));
+			if (replacement == null) {
+				return;
+			}
 
 			if (placeholder.length() == 0) {
 				errorCollector.add(ErrorMessages.Config.emptyPlaceholder(config.getSourceFile()));
