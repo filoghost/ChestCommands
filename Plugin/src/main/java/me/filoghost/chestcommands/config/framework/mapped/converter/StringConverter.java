@@ -14,20 +14,15 @@
  */
 package me.filoghost.chestcommands.config.framework.mapped.converter;
 
-import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
 
 import java.lang.reflect.Type;
 
 public class StringConverter implements Converter {
 
 	@Override
-	public void setConfigValue(ConfigSection config, String path, Object value) {
-		config.set(path, value);
-	}
-
-	@Override
-	public String getFieldValue(ConfigSection config, String path, Type[] parameterizedTypes) {
-		return config.getString(path);
+	public ConfigValueType<?> getConfigValueType(Type[] fieldGenericTypes) {
+		return ConfigValueType.STRING;
 	}
 
 	@Override

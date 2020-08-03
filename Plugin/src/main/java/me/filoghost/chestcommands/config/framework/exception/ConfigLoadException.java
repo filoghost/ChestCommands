@@ -20,4 +20,8 @@ public class ConfigLoadException extends ConfigException {
 		super(message, cause);
 	}
 
+	public ConfigLoadException(String message) {
+		super(message);
+	}
+
 }

@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.config.framework.mapped;
 
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
+import me.filoghost.chestcommands.config.framework.ConfigValue;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.logging.ErrorMessages;
@@ -28,7 +29,7 @@ public class MappedConfigLoader<T extends MappedConfig> {
 
 	private final ConfigLoader configLoader;
 	private final Supplier<T> mappedObjectConstructor;
-	private Map<MappedField, Object> defaultValues;
+	private Map<String, ConfigValue> defaultValues;
 
 	public MappedConfigLoader(Path rootDataFolder, Path configPath, Supplier<T> mappedObjectConstructor) {
 		this.configLoader = new ConfigLoader(rootDataFolder, configPath);
@@ -49,7 +50,7 @@ public class MappedConfigLoader<T extends MappedConfig> {
 		// Extract default values from fields
 		if (defaultValues == null) {
 			try {
-				defaultValues = mapper.getFieldValues();
+				defaultValues = mapper.toConfigValues(mapper.getFieldValues());
 			} catch (ReflectiveOperationException e) {
 				throw new ConfigLoadException(ErrorMessages.Config.fieldReadError(mappedObject), e);
 			}

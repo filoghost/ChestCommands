@@ -27,13 +27,32 @@ public class MappedField {
 
 	private final Field field;
 	private final String configPath;
+	private final Type[] genericTypes;
+	private final List<Annotation> annotations;
 
-	public MappedField(Field field) {
+
+	public MappedField(Field field) throws ReflectiveOperationException {
 		this.field = field;
 
 		this.configPath = field.getName()
 				.replace("__", ".")
 				.replace("_", "-");
+
+		try {
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+				this.genericTypes = ((ParameterizedType) genericType).getActualTypeArguments();
+			} else {
+				this.genericTypes = null;
+			}
+
+			annotations = Stream.concat(
+					Arrays.stream(field.getDeclaredAnnotations()),
+					Arrays.stream(field.getDeclaringClass().getDeclaredAnnotations()))
+					.collect(Collectors.toList());
+		} catch (Throwable t) {
+			throw new ReflectiveOperationException(t);
+		}
 	}
 
 	public Object getFromObject(MappedConfig mappedObject) throws ReflectiveOperationException {
@@ -54,24 +73,12 @@ public class MappedField {
 		}
 	}
 
-	public Type[] getGenericTypes() throws ReflectiveOperationException {
-		try {
-			Type genericType = field.getGenericType();
-			if (genericType instanceof ParameterizedType) {
-				return ((ParameterizedType) genericType).getActualTypeArguments();
-			} else {
-				return null;
-			}
-		} catch (Throwable t) {
-			throw new ReflectiveOperationException(t);
-		}
+	public Type[] getGenericTypes() {
+		return genericTypes;
 	}
 
 	public List<Annotation> getAnnotations() {
-		return Stream.concat(
-				Arrays.stream(field.getDeclaredAnnotations()),
-				Arrays.stream(field.getDeclaringClass().getDeclaredAnnotations()))
-				.collect(Collectors.toList());
+		return annotations;
 	}
 
 	public String getFieldName() {
@@ -85,4 +92,5 @@ public class MappedField {
 	public String getConfigPath() {
 		return configPath;
 	}
+
 }

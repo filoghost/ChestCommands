@@ -18,6 +18,7 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
+import me.filoghost.chestcommands.config.framework.exception.MissingConfigValueException;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
@@ -104,7 +105,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			title = ChatColor.DARK_RED + "No name set";
-			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), MenuSettingsNode.NAME));
+			addMenuSettingError(errorCollector, config, MenuSettingsNode.NAME, e);
 		}
 
 		int rows;
@@ -115,7 +116,7 @@ public class MenuParser {
 			}
 		} catch (ConfigValueException e) {
 			rows = 6; // Defaults to 6 rows
-			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), MenuSettingsNode.ROWS));
+			addMenuSettingError(errorCollector, config, MenuSettingsNode.ROWS, e);
 		}
 
 		MenuSettings menuSettings = new MenuSettings(title, rows);
@@ -162,7 +163,7 @@ public class MenuParser {
 			}
 		}
 
-		if (settingsSection.isSet(MenuSettingsNode.AUTO_REFRESH)) {
+		if (settingsSection.contains(MenuSettingsNode.AUTO_REFRESH)) {
 			int refreshTicks = (int) (settingsSection.getDouble(MenuSettingsNode.AUTO_REFRESH) * 20.0);
 			if (refreshTicks < 1) {
 				refreshTicks = 1;
@@ -173,11 +174,19 @@ public class MenuParser {
 		return menuSettings;
 	}
 
+	private static void addMenuSettingError(ErrorCollector errorCollector, Config config, String missingSetting, ConfigValueException e) {
+		if (e instanceof MissingConfigValueException) {
+			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), missingSetting));
+		} else {
+			errorCollector.add(ErrorMessages.Menu.invalidSetting(config.getSourceFile(), missingSetting), e);
+		}
+	}
+
 
 	private static List<IconSettings> loadIconSettingsList(Config config, ErrorCollector errorCollector) {
 		List<IconSettings> iconSettingsList = new ArrayList<>();
 
-		for (String iconSectionName : config.getKeys(false)) {
+		for (String iconSectionName : config.getKeys()) {
 			if (iconSectionName.equals(MenuSettingsNode.ROOT_SECTION)) {
 				continue;
 			}

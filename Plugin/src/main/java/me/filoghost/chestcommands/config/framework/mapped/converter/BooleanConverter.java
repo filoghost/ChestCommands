@@ -14,20 +14,15 @@
  */
 package me.filoghost.chestcommands.config.framework.mapped.converter;
 
-import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
 
 import java.lang.reflect.Type;
 
 public class BooleanConverter implements Converter {
 
 	@Override
-	public void setConfigValue(ConfigSection config, String path, Object value) {
-		config.set(path, value);
-	}
-
-	@Override
-	public Boolean getFieldValue(ConfigSection config, String path, Type[] parameterizedTypes) {
-		return config.getBoolean(path);
+	public ConfigValueType<?> getConfigValueType(Type[] fieldGenericTypes) {
+		return ConfigValueType.BOOLEAN;
 	}
 
 	@Override

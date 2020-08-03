@@ -16,6 +16,8 @@ package me.filoghost.chestcommands.logging;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
+import me.filoghost.chestcommands.config.framework.mapped.MappedField;
+import me.filoghost.chestcommands.config.framework.mapped.converter.Converter;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 
@@ -35,6 +37,8 @@ public class ErrorMessages {
 		public static final String valueNotList = "value is not a list";
 		public static final String valueNotBoolean = "value is not a boolean";
 		public static final String valueNotNumber = "value is not a number";
+		public static final String valueNotString = "value is not a string";
+		public static final String valueNotSection = "value is not a configuration section";
 
 		public static String menuListIOException(Path menuFolder) {
 			return "couldn't fetch menu files inside the folder \"" + menuFolder + "\"";
@@ -67,6 +71,15 @@ public class ErrorMessages {
 		public static String fieldInjectError(MappedConfig mappedConfig) {
 			return "couldn't inject fields values in class \"" + mappedConfig.getClass() + "\"";
 		}
+
+		public static String mapperFieldCannotBeNull(MappedField mappedField) {
+			return "mapped field \"" + mappedField.getFieldName() + "\" cannot be null by default";
+		}
+
+		public static String converterFailed(Object value, Converter converter) {
+			return "value of type \"" + value.getClass() + "\" couldn't be converted by \"" + converter.getClass() + "\"";
+		}
+
 	}
 
 

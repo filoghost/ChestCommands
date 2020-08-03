@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.config.framework.mapped.converter;
 
-import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
 import me.filoghost.chestcommands.util.Preconditions;
 
 import java.lang.reflect.Type;
@@ -23,21 +23,16 @@ import java.util.List;
 public class ListConverter implements Converter {
 
 	@Override
-	public void setConfigValue(ConfigSection config, String path, Object value) {
-		config.set(path, value);
-	}
+	public ConfigValueType<?> getConfigValueType(Type[] fieldGenericTypes) {
+		Preconditions.notNull(fieldGenericTypes, "fieldGenericTypes");
+		Preconditions.checkArgument(fieldGenericTypes.length == 1, "fieldGenericTypes length must be 1");
 
-	@Override
-	public List<?> getFieldValue(ConfigSection config, String path, Type[] genericTypes) {
-		Preconditions.notNull(genericTypes, "genericTypes");
-		Preconditions.checkArgument(genericTypes.length == 1, "genericTypes length must be 1");
-
-		Type listType = genericTypes[0];
+		Type listType = fieldGenericTypes[0];
 
 		if (listType == Integer.class) {
-			return config.getIntegerList(path);
+			return ConfigValueType.INTEGER_LIST;
 		} else if (listType == String.class) {
-			return config.getStringList(path);
+			return ConfigValueType.STRING_LIST;
 		} else {
 			throw new IllegalArgumentException("unsupported list type: " + listType);
 		}

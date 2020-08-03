@@ -56,8 +56,8 @@ public class SettingsUpgradeTask extends UpgradeTask {
 	}
 
 	private void removeNode(Config config, String node) {
-		if (config.isSet(node)) {
-			config.set(node, null);
+		if (config.contains(node)) {
+			config.remove(node);
 			setSaveRequired();
 		}
 	}

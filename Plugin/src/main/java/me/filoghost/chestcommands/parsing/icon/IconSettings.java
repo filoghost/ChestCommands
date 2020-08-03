@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.parsing.icon;
 
 import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValue;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
@@ -58,7 +59,7 @@ public class IconSettings {
 	}
 
 	public void loadFrom(ConfigSection config, ErrorCollector errorCollector) {
-		for (String attributeName : config.getKeys(false)) {
+		for (String attributeName : config.getKeys()) {
 			try {
 				AttributeType attributeType = AttributeType.fromAttributeName(attributeName);
 				if (attributeType == null) {
@@ -69,7 +70,8 @@ public class IconSettings {
 					errorCollector.add(ErrorMessages.Menu.invalidAttributeListElement(this, attributeName, listElement), e);
 				};
 
-				IconAttribute iconAttribute = attributeType.getParser().parse(config, attributeName, errorHandler);
+				ConfigValue configValue = config.get(attributeName);
+				IconAttribute iconAttribute = attributeType.getParser().parse(configValue, errorHandler);
 				attributes.put(attributeType, iconAttribute);
 
 			} catch (ParseException | ConfigValueException e) {

@@ -30,7 +30,7 @@ public class CustomPlaceholders {
 	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
 
-		for (String placeholder : config.getKeys(false)) {
+		for (String placeholder : config.getKeys()) {
 			String replacement = Colors.addColors(config.getString(placeholder));
 
 			if (placeholder.length() == 0) {

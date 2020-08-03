@@ -79,7 +79,7 @@ public class PlaceholdersYamlUpgradeTask extends UpgradeTask {
 			String placeholder = unquote(parts[0]);
 			String replacement = StringEscapeUtils.unescapeJava(unquote(parts[1]));
 
-			newPlaceholdersConfig.set(placeholder, replacement);
+			newPlaceholdersConfig.setString(placeholder, replacement);
 			setSaveRequired();
 		}
 

@@ -18,6 +18,7 @@ import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
@@ -56,12 +57,11 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 		Config menuConfig = menuConfigLoader.load();
 		menuConfig.setHeader(null);
 
-		for (String key : menuConfig.getKeys(false)) {
-			if (!menuConfig.isConfigSection(key)) {
+		for (String key : menuConfig.getKeys()) {
+			ConfigSection section = menuConfig.getConfigSection(key);
+			if (section == null) {
 				continue;
 			}
-
-			ConfigSection section = menuConfig.getConfigSection(key);
 
 			if (key.equals(MenuSettingsNode.ROOT_SECTION)) {
 				upgradeMenuSettings(section);
@@ -101,45 +101,43 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 
 		if (material.contains(",")) {
 			String[] parts = Strings.trimmedSplit(material, ",", 2);
-			if (!section.isSet(AttributeType.AMOUNT.getAttributeName())) {
+			if (!section.contains(AttributeType.AMOUNT.getAttributeName())) {
 				try {
-					section.set(AttributeType.AMOUNT.getAttributeName(), Integer.parseInt(parts[1]));
+					section.setInt(AttributeType.AMOUNT.getAttributeName(), Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(AttributeType.AMOUNT.getAttributeName(), parts[1]);
+					section.setString(AttributeType.AMOUNT.getAttributeName(), parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(AttributeType.MATERIAL.getAttributeName(), material);
+			section.setString(AttributeType.MATERIAL.getAttributeName(), material);
 			setSaveRequired();
 		}
 
 		if (material.contains(":")) {
 			String[] parts = Strings.trimmedSplit(material, ":", 2);
-			if (!section.isSet(AttributeType.DURABILITY.getAttributeName())) {
+			if (!section.contains(AttributeType.DURABILITY.getAttributeName())) {
 				try {
-					section.set(AttributeType.DURABILITY.getAttributeName(), Integer.parseInt(parts[1]));
+					section.setInt(AttributeType.DURABILITY.getAttributeName(), Integer.parseInt(parts[1]));
 				} catch (NumberFormatException e) {
-					section.set(AttributeType.DURABILITY.getAttributeName(), parts[1]);
+					section.setString(AttributeType.DURABILITY.getAttributeName(), parts[1]);
 				}
 			}
 			material = parts[0];
-			section.set(AttributeType.MATERIAL.getAttributeName(), material);
+			section.setString(AttributeType.MATERIAL.getAttributeName(), material);
 			setSaveRequired();
 		}
 	}
 
 	private void expandInlineList(ConfigSection config, String node, String separator) {
-		if (config.isSet(node)) {
-			if (config.isString(node)) {
-				config.set(node, splitListElements(config.getString(node), separator));
-				setSaveRequired();
-			}
+		if (config.get(node).isValidAs(ConfigValueType.STRING)) {
+			config.setStringList(node, splitListElements(config.getString(node), separator));
+			setSaveRequired();
 		}
 	}
 
 	private void expandSingletonList(ConfigSection config, String node) {
-		if (config.isSet(node) && !config.isList(node)) {
-			config.set(node, Collections.singletonList(config.get(node)));
+		if (config.get(node).isValidAs(ConfigValueType.STRING)) {
+			config.setStringList(node, Collections.singletonList(config.getString(node)));
 			setSaveRequired();
 		}
 	}

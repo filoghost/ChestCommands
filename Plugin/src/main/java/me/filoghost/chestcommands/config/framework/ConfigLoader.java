@@ -36,13 +36,13 @@ import java.util.stream.StreamSupport;
 public class ConfigLoader {
 
 	private final Path rootDataFolder;
-	private final Path filePath;
+	private final Path file;
 
-	public ConfigLoader(Path rootDataFolder, Path filePath) {
-		Preconditions.checkArgument(filePath.startsWith(rootDataFolder), "file \"" + filePath + "\" must be inside \"" + rootDataFolder + "\"");
+	public ConfigLoader(Path rootDataFolder, Path file) {
+		Preconditions.checkArgument(file.startsWith(rootDataFolder), "file \"" + file + "\" must be inside \"" + rootDataFolder + "\"");
 
 		this.rootDataFolder = rootDataFolder;
-		this.filePath = filePath;
+		this.file = file;
 	}
 
 	public Config init() throws ConfigSaveException, ConfigLoadException {
@@ -57,14 +57,14 @@ public class ConfigLoader {
 
 		createParentDirectory();
 
-		Path relativeConfigPath = rootDataFolder.relativize(filePath);
+		Path relativeConfigPath = rootDataFolder.relativize(file);
 		String internalJarPath = toInternalJarPath(relativeConfigPath);
 
 		try (InputStream defaultFile = getInternalResource(internalJarPath)) {
 			if (defaultFile != null) {
-				Files.copy(defaultFile, filePath);
+				Files.copy(defaultFile, file);
 			} else {
-				Files.createFile(filePath);
+				Files.createFile(file);
 			}
 		} catch (IOException e) {
 			throw new ConfigSaveException(ErrorMessages.Config.createDefaultIOException, e);
@@ -92,15 +92,15 @@ public class ConfigLoader {
 	}
 
 	public boolean fileExists() {
-		return Files.isRegularFile(filePath);
+		return Files.isRegularFile(file);
 	}
 
 	public Config load() throws ConfigLoadException {
-		Preconditions.checkState(fileExists(), "\"" + filePath + "\" doesn't exist or is not a regular file");
+		Preconditions.checkState(fileExists(), "\"" + file + "\" doesn't exist or is not a regular file");
 
 		YamlConfiguration yaml = new YamlConfiguration();
 
-		try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+		try (BufferedReader reader = Files.newBufferedReader(file)) {
 			yaml.load(reader);
 		} catch (IOException e) {
 			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
@@ -108,7 +108,7 @@ public class ConfigLoader {
 			throw new ConfigSyntaxException(ErrorMessages.Config.invalidYamlSyntax, e);
 		}
 
-		return new Config(yaml, filePath);
+		return new Config(yaml, file);
 	}
 
 	public void save(Config config) throws ConfigSaveException {
@@ -116,7 +116,7 @@ public class ConfigLoader {
 
 		String data = config.saveToString();
 
-		try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(file)) {
 			writer.write(data);
 		} catch (IOException e) {
 			throw new ConfigSaveException(ErrorMessages.Config.writeDataIOException, e);
@@ -124,17 +124,17 @@ public class ConfigLoader {
 	}
 
 	private void createParentDirectory() throws ConfigSaveException {
-		if (filePath.getParent() != null) {
+		if (file.getParent() != null) {
 			try {
-				Files.createDirectories(filePath.getParent());
+				Files.createDirectories(file.getParent());
 			} catch (IOException e) {
-				throw new ConfigSaveException(ErrorMessages.Config.createParentFolderIOException(filePath.getParent()), e);
+				throw new ConfigSaveException(ErrorMessages.Config.createParentFolderIOException(file.getParent()), e);
 			}
 		}
 	}
 
 	public Path getFile() {
-		return filePath;
+		return file;
 	}
 
 }

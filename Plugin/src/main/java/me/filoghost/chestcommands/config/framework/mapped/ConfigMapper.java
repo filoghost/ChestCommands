@@ -16,6 +16,10 @@ package me.filoghost.chestcommands.config.framework.mapped;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValue;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
+import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
+import me.filoghost.chestcommands.config.framework.exception.ConverterCastException;
 import me.filoghost.chestcommands.config.framework.mapped.converter.BooleanConverter;
 import me.filoghost.chestcommands.config.framework.mapped.converter.Converter;
 import me.filoghost.chestcommands.config.framework.mapped.converter.DoubleConverter;
@@ -24,17 +28,17 @@ import me.filoghost.chestcommands.config.framework.mapped.converter.ListConverte
 import me.filoghost.chestcommands.config.framework.mapped.converter.StringConverter;
 import me.filoghost.chestcommands.config.framework.mapped.modifier.ChatColorsModifier;
 import me.filoghost.chestcommands.config.framework.mapped.modifier.ValueModifier;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class ConfigMapper {
 
@@ -62,17 +66,31 @@ public class ConfigMapper {
 
 	private List<MappedField> getMappableFields(Class<?> type) throws ReflectiveOperationException {
 		Field[] declaredFields;
+		List<MappedField> mappedFields = new ArrayList<>();
 
 		try {
 			declaredFields = type.getDeclaredFields();
+			for (Field field : declaredFields) {
+				if (isMappable(field)) {
+					mappedFields.add(new MappedField(field));
+				}
+			}
+
 		} catch (Throwable t) {
 			throw new ReflectiveOperationException(t);
 		}
 
-		return Arrays.stream(declaredFields)
-				.filter(this::isMappable)
-				.map(MappedField::new)
-				.collect(Collectors.toList());
+		return mappedFields;
+	}
+
+	private boolean isMappable(Field field) {
+		int modifiers = field.getModifiers();
+		boolean includeStatic = field.isAnnotationPresent(IncludeStatic.class)
+				|| field.getDeclaringClass().isAnnotationPresent(IncludeStatic.class);
+
+		return (!Modifier.isStatic(modifiers) || includeStatic)
+				|| !Modifier.isTransient(modifiers)
+				|| !Modifier.isFinal(modifiers);
 	}
 
 	public Map<MappedField, Object> getFieldValues() throws ReflectiveOperationException {
@@ -82,7 +100,7 @@ public class ConfigMapper {
 			Object defaultValue = mappedField.getFromObject(mappedObject);
 
 			if (defaultValue == null) {
-				throw new IllegalArgumentException("mapped field \"" + mappedField.getFieldName() + "\" cannot be null by default");
+				throw new ReflectiveOperationException(ErrorMessages.Config.mapperFieldCannotBeNull(mappedField));
 			}
 
 			mappedFieldValues.put(mappedField, defaultValue);
@@ -91,18 +109,35 @@ public class ConfigMapper {
 		return mappedFieldValues;
 	}
 
-	public boolean addMissingConfigValues(Map<MappedField, Object> defaultValues) {
-		boolean modified = false;
+	public Map<String, ConfigValue> toConfigValues(Map<MappedField, Object> fieldValues) throws ConfigLoadException {
+		Map<String, ConfigValue> configValues = new HashMap<>();
 
-		// Add missing values from defaults
-		for (Entry<MappedField, Object> entry : defaultValues.entrySet()) {
+		for (Entry<MappedField, Object> entry : fieldValues.entrySet()) {
 			MappedField mappedField = entry.getKey();
 			Object defaultValue = entry.getValue();
 
-			if (!config.isSet(mappedField.getConfigPath())) {
+			Converter converter = findConverter(mappedField.getFieldType());
+
+			try {
+				configValues.put(mappedField.getConfigPath(), converter.toConfigValue(mappedField, defaultValue));
+			} catch (ConverterCastException e) {
+				throw new ConfigLoadException("error while converting field \"" + mappedField.getFieldName() + "\"", e);
+			}
+		}
+
+		return configValues;
+	}
+
+	public boolean addMissingConfigValues(Map<String, ConfigValue> defaultValues) {
+		boolean modified = false;
+
+		for (Entry<String, ConfigValue> entry : defaultValues.entrySet()) {
+			String path = entry.getKey();
+			ConfigValue defaultValue = entry.getValue();
+
+			if (!config.contains(path)) {
 				modified = true;
-				Converter converter = findConverter(mappedField.getFieldType());
-				converter.setConfigValue(config, mappedField.getConfigPath(), defaultValue);
+				config.set(path, defaultValue);
 			}
 		}
 
@@ -119,7 +154,8 @@ public class ConfigMapper {
 		Type[] genericTypes = mappedField.getGenericTypes();
 		Converter converter = findConverter(mappedField.getFieldType());
 
-		Object fieldValue = converter.getFieldValue(config, mappedField.getConfigPath(), genericTypes);
+		ConfigValueType<?> configValueType = converter.getConfigValueType(genericTypes);
+		Object fieldValue = config.get(mappedField.getConfigPath(), configValueType);
 
 		for (Annotation annotation : mappedField.getAnnotations()) {
 			fieldValue = applyValueModifiers(fieldValue, annotation);
@@ -142,16 +178,6 @@ public class ConfigMapper {
 				.filter(converter -> converter.matches(type))
 				.findFirst()
 				.orElseThrow(() -> new IllegalStateException("cannot find converter for type " + type));
-	}
-
-	private boolean isMappable(Field field) {
-		int modifiers = field.getModifiers();
-		boolean includeStatic = field.isAnnotationPresent(IncludeStatic.class)
-				|| field.getDeclaringClass().isAnnotationPresent(IncludeStatic.class);
-
-		return (!Modifier.isStatic(modifiers) || includeStatic)
-				|| !Modifier.isTransient(modifiers)
-				|| !Modifier.isFinal(modifiers);
 	}
 
 }

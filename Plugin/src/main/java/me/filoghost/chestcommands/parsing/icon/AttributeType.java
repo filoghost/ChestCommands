@@ -14,7 +14,8 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValue;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.attribute.ActionsAttribute;
@@ -41,32 +42,31 @@ import me.filoghost.chestcommands.parsing.attribute.SkullOwnerAttribute;
 import me.filoghost.chestcommands.parsing.attribute.ViewPermissionAttribute;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public enum AttributeType {
 
-		POSITION_X("POSITION-X", ValueExtractor.INT, PositionAttribute::new),
-		POSITION_Y("POSITION-Y", ValueExtractor.INT, PositionAttribute::new),
-		MATERIAL("MATERIAL", ValueExtractor.STRING, MaterialAttribute::new),
-		DURABILITY("DURABILITY", ValueExtractor.SHORT, DurabilityAttribute::new),
-		AMOUNT("AMOUNT", ValueExtractor.INT, AmountAttribute::new),
-		NAME("NAME", ValueExtractor.STRING, NameAttribute::new),
-		LORE("LORE", ValueExtractor.STRING_LIST, LoreAttribute::new),
-		NBT_DATA("NBT-DATA", ValueExtractor.STRING, NBTDataAttribute::new),
-		LEATHER_COLOR("COLOR", ValueExtractor.STRING, LeatherColorAttribute::new),
-		SKULL_OWNER("SKULL-OWNER", ValueExtractor.STRING, SkullOwnerAttribute::new),
-		BANNER_COLOR("BANNER-COLOR", ValueExtractor.STRING, BannerColorAttribute::new),
-		BANNER_PATTERNS("BANNER-PATTERNS", ValueExtractor.STRING_LIST, BannerPatternsAttribute::new),
-		PRICE("PRICE", ValueExtractor.DOUBLE, PriceAttribute::new),
-		EXP_LEVELS("LEVELS", ValueExtractor.INT, ExpLevelsAttribute::new),
-		CLICK_PERMISSION("PERMISSION", ValueExtractor.STRING, ClickPermissionAttribute::new),
-		CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ValueExtractor.STRING, ClickPermissionMessageAttribute::new),
-		VIEW_PERMISSION("VIEW-PERMISSION", ValueExtractor.STRING, ViewPermissionAttribute::new),
-		KEEP_OPEN("KEEP-OPEN", ValueExtractor.BOOLEAN, KeepOpenAttribute::new),
-		ACTIONS("ACTIONS", ValueExtractor.STRING_LIST, ActionsAttribute::new),
-		ENCHANTMENTS("ENCHANTMENTS", ValueExtractor.STRING_LIST, EnchantmentsAttribute::new),
-		REQUIRED_ITEMS("REQUIRED-ITEMS", ValueExtractor.STRING_LIST, RequiredItemsAttribute::new);
+	POSITION_X("POSITION-X", ConfigValueType.INTEGER, PositionAttribute::new),
+	POSITION_Y("POSITION-Y", ConfigValueType.INTEGER, PositionAttribute::new),
+	MATERIAL("MATERIAL", ConfigValueType.STRING, MaterialAttribute::new),
+	DURABILITY("DURABILITY", ConfigValueType.SHORT, DurabilityAttribute::new),
+	AMOUNT("AMOUNT", ConfigValueType.INTEGER, AmountAttribute::new),
+	NAME("NAME", ConfigValueType.STRING, NameAttribute::new),
+	LORE("LORE", ConfigValueType.STRING_LIST, LoreAttribute::new),
+	NBT_DATA("NBT-DATA", ConfigValueType.STRING, NBTDataAttribute::new),
+	LEATHER_COLOR("COLOR", ConfigValueType.STRING, LeatherColorAttribute::new),
+	SKULL_OWNER("SKULL-OWNER", ConfigValueType.STRING, SkullOwnerAttribute::new),
+	BANNER_COLOR("BANNER-COLOR", ConfigValueType.STRING, BannerColorAttribute::new),
+	BANNER_PATTERNS("BANNER-PATTERNS", ConfigValueType.STRING_LIST, BannerPatternsAttribute::new),
+	PRICE("PRICE", ConfigValueType.DOUBLE, PriceAttribute::new),
+	EXP_LEVELS("LEVELS", ConfigValueType.INTEGER, ExpLevelsAttribute::new),
+	CLICK_PERMISSION("PERMISSION", ConfigValueType.STRING, ClickPermissionAttribute::new),
+	CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ConfigValueType.STRING, ClickPermissionMessageAttribute::new),
+	VIEW_PERMISSION("VIEW-PERMISSION", ConfigValueType.STRING, ViewPermissionAttribute::new),
+	KEEP_OPEN("KEEP-OPEN", ConfigValueType.BOOLEAN, KeepOpenAttribute::new),
+	ACTIONS("ACTIONS", ConfigValueType.STRING_LIST, ActionsAttribute::new),
+	ENCHANTMENTS("ENCHANTMENTS", ConfigValueType.STRING_LIST, EnchantmentsAttribute::new),
+	REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new);
 
 	private static final Map<String, AttributeType> parsersByAttributeName;
 	static {
@@ -79,11 +79,10 @@ public enum AttributeType {
 	private final String attributeName;
 	private final AttributeParser attributeParser;
 
-	<V> AttributeType(String attributeName, ValueExtractor<V> valueExtractor, AttributeFactory<V, ?> attributeFactory) {
+	<V> AttributeType(String attributeName, ConfigValueType<V> configValueType, AttributeFactory<V, ?> attributeFactory) {
 		this.attributeName = attributeName;
-		this.attributeParser = (ConfigSection config, String node, AttributeErrorHandler errorHandler) -> {
-			V configValue = valueExtractor.getValue(config, node);
-			return attributeFactory.create(configValue, errorHandler);
+		this.attributeParser = (ConfigValue configValue, AttributeErrorHandler errorHandler) -> {
+			return attributeFactory.create(configValue.asRequired(configValueType), errorHandler);
 		};
 	}
 
@@ -101,21 +100,6 @@ public enum AttributeType {
 
 
 	@FunctionalInterface
-	private interface ValueExtractor<V> {
-
-		V getValue(ConfigSection config, String key) throws ConfigValueException;
-
-		ValueExtractor<Integer> INT = ConfigSection::getRequiredInt;
-		ValueExtractor<Double> DOUBLE = ConfigSection::getRequiredDouble;
-		ValueExtractor<Short> SHORT = ConfigSection::getRequiredShort;
-		ValueExtractor<Boolean> BOOLEAN = ConfigSection::getRequiredBoolean;
-		ValueExtractor<String> STRING = ConfigSection::getRequiredString;
-		ValueExtractor<List<String>> STRING_LIST = ConfigSection::getRequiredStringList;
-
-	}
-
-
-	@FunctionalInterface
 	private interface AttributeFactory<V, A extends IconAttribute> {
 
 		A create(V value, AttributeErrorHandler errorHandler) throws ParseException;
@@ -126,7 +110,7 @@ public enum AttributeType {
 	@FunctionalInterface
 	public interface AttributeParser {
 
-		IconAttribute parse(ConfigSection config, String node, AttributeErrorHandler errorHandler) throws ParseException, ConfigValueException;
+		IconAttribute parse(ConfigValue configValue, AttributeErrorHandler errorHandler) throws ParseException, ConfigValueException;
 
 	}
 

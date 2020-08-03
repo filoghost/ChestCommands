@@ -14,16 +14,34 @@
  */
 package me.filoghost.chestcommands.config.framework.mapped.converter;
 
-import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.ConfigValue;
+import me.filoghost.chestcommands.config.framework.ConfigValueType;
+import me.filoghost.chestcommands.config.framework.exception.ConverterCastException;
+import me.filoghost.chestcommands.config.framework.mapped.MappedField;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 
 import java.lang.reflect.Type;
 
 public interface Converter {
 
-	void setConfigValue(ConfigSection config, String path, Object value);
-
-	Object getFieldValue(ConfigSection config, String path, Type[] genericTypes);
+	ConfigValueType<?> getConfigValueType(Type[] fieldGenericTypes);
 
 	boolean matches(Class<?> type);
+
+	default ConfigValue toConfigValue(MappedField mappedField, Object value) throws ConverterCastException {
+		ConfigValueType<?> configValueType = getConfigValueType(mappedField.getGenericTypes());
+
+		// Assume that ConfigValueType is compatible with the value
+		return toTypedConfigValue(configValueType, value);
+	}
+
+	@SuppressWarnings("unchecked")
+	default <T> ConfigValue toTypedConfigValue(ConfigValueType<T> configValueType, Object value) throws ConverterCastException {
+		try {
+			return ConfigValue.of(configValueType, (T) value);
+		} catch (ClassCastException e) {
+			throw new ConverterCastException(ErrorMessages.Config.converterFailed(value, this), e);
+		}
+	}
 
 }

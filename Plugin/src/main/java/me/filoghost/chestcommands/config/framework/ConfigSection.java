@@ -14,11 +14,11 @@
  */
 package me.filoghost.chestcommands.config.framework;
 
-import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.config.framework.exception.InvalidConfigValueException;
+import me.filoghost.chestcommands.config.framework.exception.MissingConfigValueException;
+import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,127 +27,170 @@ public class ConfigSection {
 	private final ConfigurationSection yamlSection;
 
 	public ConfigSection(ConfigurationSection yamlSection) {
+		Preconditions.notNull(yamlSection, "yamlSection");
 		this.yamlSection = yamlSection;
 	}
 
-	public String getRequiredString(String path) throws ConfigValueException {
-		Object value = getRequired(path);
-		return value.toString();
+	public ConfigValue get(String path) {
+		return ConfigValue.fromRawConfigValue(getRawValue(path));
 	}
 
-	public short getRequiredShort(String path) throws ConfigValueException {
-		return (short) getRequiredInt(path);
+	public <T> T get(String path, ConfigValueType<T> configValueType) {
+		return getOrDefault(path, configValueType, null);
 	}
 
-	public int getRequiredInt(String path) throws ConfigValueException {
-		Number value = cast(getRequired(path), Number.class, ErrorMessages.Config.valueNotNumber);
-		return value.intValue();
+	public <T> T getRequired(String path, ConfigValueType<T> configValueType) throws MissingConfigValueException, InvalidConfigValueException {
+		return configValueType.fromConfigValueRequired(getRawValue(path));
 	}
 
-	public double getRequiredDouble(String path) throws ConfigValueException {
-		Number value = cast(getRequired(path), Number.class, ErrorMessages.Config.valueNotNumber);
-		return value.doubleValue();
+	public <T> T getOrDefault(String path, ConfigValueType<T> configValueType, T defaultValue) {
+		return configValueType.fromConfigValueOrDefault(getRawValue(path), defaultValue);
 	}
 
-	public boolean getRequiredBoolean(String path) throws ConfigValueException {
-		Boolean value = cast(getRequired(path), Boolean.class, ErrorMessages.Config.valueNotBoolean);
-		return value;
+	public <T> void set(String path, ConfigValue configValue) {
+		setRawValue(path, configValue.getRawConfigValue());
 	}
 
-	public List<String> getRequiredStringList(String path) throws ConfigValueException {
-		List<?> value = cast(getRequired(path), List.class, ErrorMessages.Config.valueNotList);
-		List<String> result = new ArrayList<>();
-
-		for (Object object : value) {
-			if (object instanceof String || isPrimitiveWrapper(object)) {
-				result.add(object.toString());
-			}
-		}
-
-		return result;
+	public <T> void set(String path, ConfigValueType<T> configValueType, T value) {
+		setRawValue(path, configValueType.toConfigValue(value));
 	}
 
-	private Object getRequired(String path) throws ConfigValueException {
-		Object value = yamlSection.get(path, null);
-		if (value == null) {
-			throw new ConfigValueException(ErrorMessages.Config.valueNotSet);
-		}
-		return value;
+	public boolean contains(String path) {
+		return getRawValue(path) != null;
 	}
 
-	private <T> T cast(Object obj, Class<T> castType, String errorMessage) throws ConfigValueException {
-		if (obj != null && !castType.isInstance(obj)) {
-			throw new ConfigValueException(errorMessage);
-		}
-
-		return castType.cast(obj);
+	public void remove(String path) {
+		setRawValue(path, null);
 	}
 
-	/*
-	 * Delegate methods below
-	 */
-
-	public Set<String> getKeys(boolean deep) {
-		return yamlSection.getKeys(deep);
+	public ConfigSection createSection(String path) {
+		return new ConfigSection(yamlSection.createSection(path));
 	}
 
-	public boolean isSet(String path) {
-		return yamlSection.isSet(path);
+	public Set<String> getKeys() {
+		return yamlSection.getKeys(false);
 	}
 
-	public void set(String path, Object value) {
+	private Object getRawValue(String path) {
+		return yamlSection.get(path, null);
+	}
+
+	private void setRawValue(String path, Object value) {
 		yamlSection.set(path, value);
 	}
 
-	public String getString(String path) {
-		return yamlSection.getString(path);
+	protected ConfigurationSection getInternalYamlSection() {
+		return yamlSection;
 	}
 
-	public int getInt(String path) {
-		return yamlSection.getInt(path);
+	/*
+	 * Convenience getRequired{TYPE} alias methods
+	 */
+
+	public String getRequiredString(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.STRING);
+	}
+
+	public boolean getRequiredBoolean(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.BOOLEAN);
+	}
+
+	public int getRequiredInt(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.INTEGER);
+	}
+
+	public double getRequiredDouble(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.DOUBLE);
+	}
+
+	public List<String> getRequiredStringList(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.STRING_LIST);
+	}
+
+	public ConfigSection getRequiredConfigSection(String path) throws MissingConfigValueException, InvalidConfigValueException {
+		return getRequired(path, ConfigValueType.CONFIG_SECTION);
+	}
+
+	/*
+	 * Convenience get{TYPE} (without defaults) alias methods
+	 */
+	public String getString(String path) {
+		return getOrDefault(path, ConfigValueType.STRING, null);
 	}
 
 	public boolean getBoolean(String path) {
-		return yamlSection.getBoolean(path);
+		return getOrDefault(path, ConfigValueType.BOOLEAN, false);
+	}
+
+	public int getInt(String path) {
+		return getOrDefault(path, ConfigValueType.INTEGER, 0);
 	}
 
 	public double getDouble(String path) {
-		return yamlSection.getDouble(path);
+		return getOrDefault(path, ConfigValueType.DOUBLE, 0.0);
 	}
 
 	public List<String> getStringList(String path) {
-		return yamlSection.getStringList(path);
-	}
-
-	public List<Integer> getIntegerList(String path) {
-		return yamlSection.getIntegerList(path);
-	}
-
-	public Object get(String path) {
-		return yamlSection.get(path);
+		return getOrDefault(path, ConfigValueType.STRING_LIST, null);
 	}
 
 	public ConfigSection getConfigSection(String path) {
-		return new ConfigSection(yamlSection.getConfigurationSection(path));
+		return getOrDefault(path, ConfigValueType.CONFIG_SECTION, null);
 	}
 
-	public boolean isString(String path) {
-		return yamlSection.isString(path);
+	/*
+	 * Convenience get{TYPE} (with defaults) alias methods
+	 */
+	public String getString(String path, String defaultValue) {
+		return getOrDefault(path, ConfigValueType.STRING, defaultValue);
 	}
 
-	public boolean isConfigSection(String path) {
-		return yamlSection.isConfigurationSection(path);
+	public boolean getBoolean(String path, boolean defaultValue) {
+		return getOrDefault(path, ConfigValueType.BOOLEAN, defaultValue);
 	}
 
-	public boolean isList(String path) {
-		return yamlSection.isList(path);
+	public int getInt(String path, int defaultValue) {
+		return getOrDefault(path, ConfigValueType.INTEGER, defaultValue);
 	}
 
-	private boolean isPrimitiveWrapper(Object input) {
-		return input instanceof Integer || input instanceof Boolean ||
-				input instanceof Character || input instanceof Byte ||
-				input instanceof Short || input instanceof Double ||
-				input instanceof Long || input instanceof Float;
+	public double getDouble(String path, double defaultValue) {
+		return getOrDefault(path, ConfigValueType.DOUBLE, defaultValue);
+	}
+
+	public List<String> getStringList(String path, List<String> defaultValue) {
+		return getOrDefault(path, ConfigValueType.STRING_LIST, defaultValue);
+	}
+
+	public ConfigSection getConfigSection(String path, ConfigSection defaultValue) {
+		return getOrDefault(path, ConfigValueType.CONFIG_SECTION, defaultValue);
+	}
+
+
+	/*
+	 * Convenience set{TYPE} alias methods
+	 */
+	public void setString(String path, String value) {
+		set(path, ConfigValueType.STRING, value);
+	}
+
+	public void setBoolean(String path, boolean value) {
+		set(path, ConfigValueType.BOOLEAN, value);
+	}
+
+	public void setInt(String path, int value) {
+		set(path, ConfigValueType.INTEGER, value);
+	}
+
+	public void setDouble(String path, double value) {
+		set(path, ConfigValueType.DOUBLE, value);
+	}
+
+	public void setStringList(String path, List<String> value) {
+		set(path, ConfigValueType.STRING_LIST, value);
+	}
+
+	public void setConfigSection(String path, ConfigSection value) {
+		set(path, ConfigValueType.CONFIG_SECTION, value);
 	}
 
 }

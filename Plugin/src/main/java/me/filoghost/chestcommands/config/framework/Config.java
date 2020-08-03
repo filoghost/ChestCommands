@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.config.framework;
 
+import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.nio.file.Path;
@@ -21,20 +22,21 @@ import java.nio.file.Path;
 public class Config extends ConfigSection {
 
 	private final YamlConfiguration yaml;
-	private final Path sourceFilePath;
+	private final Path sourceFile;
 
-	public Config(Path sourceFilePath) {
-		this(new YamlConfiguration(), sourceFilePath);
+	public Config(Path sourceFile) {
+		this(new YamlConfiguration(), sourceFile);
 	}
 
-	public Config(YamlConfiguration yaml, Path sourceFilePath) {
+	public Config(YamlConfiguration yaml, Path sourceFile) {
 		super(yaml);
+		Preconditions.notNull(sourceFile, "sourceFile");
 		this.yaml = yaml;
-		this.sourceFilePath = sourceFilePath;
+		this.sourceFile = sourceFile;
 	}
 
 	public Path getSourceFile() {
-		return sourceFilePath;
+		return sourceFile;
 	}
 
 	public String saveToString() {

@@ -12,22 +12,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.config.framework.mapped.converter;
+package me.filoghost.chestcommands.config.framework.exception;
 
-import me.filoghost.chestcommands.config.framework.ConfigValueType;
+public class ConverterCastException extends ConfigException {
 
-import java.lang.reflect.Type;
-
-public class DoubleConverter implements Converter {
-
-	@Override
-	public ConfigValueType<?> getConfigValueType(Type[] fieldGenericTypes) {
-		return ConfigValueType.DOUBLE;
-	}
-
-	@Override
-	public boolean matches(Class<?> type) {
-		return type == Double.class || type == double.class;
+	public ConverterCastException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }
