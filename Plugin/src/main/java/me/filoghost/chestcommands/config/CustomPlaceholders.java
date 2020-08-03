@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.config;
 
 import me.filoghost.chestcommands.config.framework.Config;
+import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
 import me.filoghost.chestcommands.util.Colors;
@@ -30,8 +31,13 @@ public class CustomPlaceholders {
 	public void load(Config config, ErrorCollector errorCollector) {
 		placeholders.clear();
 
-		for (String placeholder : config.getKeys()) {
-			String replacement = Colors.addColors(config.getString(placeholder));
+		ConfigSection placeholdersSection = config.getConfigSection("placeholders");
+		if (placeholdersSection == null) {
+			return;
+		}
+
+		for (String placeholder : placeholdersSection.getKeys()) {
+			String replacement = Colors.addColors(placeholdersSection.getString(placeholder));
 
 			if (placeholder.length() == 0) {
 				errorCollector.add(ErrorMessages.Config.emptyPlaceholder(config.getSourceFile()));
