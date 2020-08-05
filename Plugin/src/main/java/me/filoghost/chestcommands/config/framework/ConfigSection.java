@@ -76,6 +76,7 @@ public class ConfigSection {
 	}
 
 	private void setRawValue(String path, Object value) {
+		Preconditions.checkArgument(!(value instanceof ConfigurationSection), "cannot set ConfigurationSection as value");
 		yamlSection.set(path, value);
 	}
 
