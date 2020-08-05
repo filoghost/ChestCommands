@@ -42,7 +42,7 @@ public class Backup {
 		return new Backup(dataFolder, backupName);
 	}
 
-	public void backupFile(Path fileToBackup) throws IOException {
+	public void addFile(Path fileToBackup) throws IOException {
 		Preconditions.checkArgument(fileToBackup.startsWith(dataFolder), "file is not inside data folder");
 		Path destination = backupFolder.resolve(dataFolder.relativize(fileToBackup));
 		Files.createDirectories(destination.getParent());

@@ -12,15 +12,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy.upgrade;
+package me.filoghost.chestcommands.legacy.v4_0;
 
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.ConfigValueType;
-import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
 import me.filoghost.chestcommands.util.Strings;
@@ -31,30 +29,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class MenuNodeExpandUpgradeTask extends UpgradeTask {
+public class v4_0_MenuNodeExpandUpgradeTask extends YamlUpgradeTask {
 
-	private final ConfigLoader menuConfigLoader;
 	private final String legacyCommandSeparator;
-	private Config updatedConfig;
 
-	public MenuNodeExpandUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
-		this.menuConfigLoader = configManager.getConfigLoader(menuFile);
+	public v4_0_MenuNodeExpandUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+		super(configManager.getConfigLoader(menuFile));
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
 
 	@Override
-	public Path getOriginalFile() {
-		return menuConfigLoader.getFile();
-	}
-
-	@Override
-	public Path getUpgradedFile() {
-		return menuConfigLoader.getFile();
-	}
-
-	@Override
-	public void computeChanges() throws ConfigLoadException {
-		Config menuConfig = menuConfigLoader.load();
+	public void computeYamlChanges(Config menuConfig) {
 		menuConfig.setHeader(null);
 
 		for (String key : menuConfig.getKeys()) {
@@ -69,15 +54,7 @@ public class MenuNodeExpandUpgradeTask extends UpgradeTask {
 				upgradeIcon(section);
 			}
 		}
-
-		this.updatedConfig = menuConfig;
 	}
-
-	@Override
-	public void saveChanges() throws ConfigSaveException {
-		menuConfigLoader.save(updatedConfig);
-	}
-
 
 	private void upgradeMenuSettings(ConfigSection section) {
 		expandInlineList(section, MenuSettingsNode.COMMANDS, ";");

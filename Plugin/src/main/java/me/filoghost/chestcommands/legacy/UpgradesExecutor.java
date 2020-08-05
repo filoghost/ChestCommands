@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.legacy;
 
 import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.logging.ErrorMessages;
@@ -67,7 +68,7 @@ public class UpgradesExecutor {
 
 
 	private void runMissingUpgrades(Backup backup, ErrorCollector errorCollector) {
-		for (Upgrade upgrade : Upgrade.values()) {
+		for (Upgrade upgrade : UpgradeList.getOrderedUpgrades()) {
 			if (!upgradesDoneRegistry.isDone(upgrade)) {
 				boolean allTasksSuccessful = tryRunUpgradeTasks(upgrade, backup, errorCollector);
 

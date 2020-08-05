@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
@@ -22,49 +21,47 @@ import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException
 
 import java.nio.file.Path;
 
-public class SettingsUpgradeTask extends UpgradeTask {
+public abstract class YamlUpgradeTask extends UpgradeTask {
 
-	private final ConfigLoader settingsConfigLoader;
+	private final ConfigLoader configLoader;
 	private Config updatedConfig;
 
-	public SettingsUpgradeTask(ConfigManager configManager) {
-		this.settingsConfigLoader = configManager.getConfigLoader("config.yml");
+	public YamlUpgradeTask(ConfigLoader configLoader) {
+		this.configLoader = configLoader;
 	}
 
 	@Override
-	public Path getOriginalFile() {
-		return settingsConfigLoader.getFile();
+	public final Path getOriginalFile() {
+		return configLoader.getFile();
 	}
 
 	@Override
-	public Path getUpgradedFile() {
-		return settingsConfigLoader.getFile();
+	public final Path getUpgradedFile() {
+		return configLoader.getFile();
 	}
 
 	@Override
-	public void computeChanges() throws ConfigLoadException {
-		if (!settingsConfigLoader.fileExists()) {
+	public final void computeChanges() throws ConfigLoadException {
+		if (!configLoader.fileExists()) {
 			return;
 		}
-		Config settingsConfig = settingsConfigLoader.load();
-
-		removeNode(settingsConfig, "use-only-commands-without-args");
-		removeNode(settingsConfig, "use-console-colors");
-		removeNode(settingsConfig, "multiple-commands-separator");
-
-		this.updatedConfig = settingsConfig;
+		Config config = configLoader.load();
+		computeYamlChanges(config);
+		this.updatedConfig = config;
 	}
 
-	private void removeNode(Config config, String node) {
+	@Override
+	public final void saveChanges() throws ConfigSaveException {
+		configLoader.save(updatedConfig);
+	}
+
+	protected abstract void computeYamlChanges(Config config);
+
+	protected void removeNode(Config config, String node) {
 		if (config.contains(node)) {
 			config.remove(node);
 			setSaveRequired();
 		}
 	}
 
-
-	@Override
-	public void saveChanges() throws ConfigSaveException {
-		settingsConfigLoader.save(updatedConfig);
-	}
 }

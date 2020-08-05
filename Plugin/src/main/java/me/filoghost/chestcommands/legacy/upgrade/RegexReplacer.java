@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy;
+package me.filoghost.chestcommands.legacy.upgrade;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -29,8 +29,8 @@ public class RegexReplacer implements Function<String, String> {
 	}
 
 	@Override
-	public String apply(String line) {
-		Matcher matcher = regex.matcher(line);
+	public String apply(String string) {
+		Matcher matcher = regex.matcher(string);
 		StringBuffer output = new StringBuffer();
 
 		while (matcher.find()) {

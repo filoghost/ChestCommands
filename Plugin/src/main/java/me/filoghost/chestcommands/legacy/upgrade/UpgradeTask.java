@@ -44,7 +44,7 @@ public abstract class UpgradeTask {
 
 		if (saveRequired) {
 			try {
-				backup.backupFile(getOriginalFile());
+				backup.addFile(getOriginalFile());
 			} catch (IOException e) {
 				throw new UpgradeTaskException(ErrorMessages.Upgrade.backupError(getOriginalFile()), e);
 			}

@@ -14,6 +14,8 @@
  */
 package me.filoghost.chestcommands.legacy;
 
+import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +44,7 @@ public class UpgradesDoneRegistry {
 	}
 
 	public void setAllDone() {
-		for (Upgrade upgrade : Upgrade.values()) {
+		for (Upgrade upgrade : UpgradeList.getOrderedUpgrades()) {
 			setDone(upgrade);
 		}
 	}

@@ -16,13 +16,11 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
 import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
-import me.filoghost.chestcommands.legacy.RegexReplacer;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -30,33 +28,28 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RegexUpgradeTask extends UpgradeTask {
+public abstract class RegexUpgradeTask extends UpgradeTask {
 
 	private final Path file;
-	private final List<RegexReplacer> replacers;
 	private List<String> newContents;
+	private Stream<String> linesStream;
 
 	public RegexUpgradeTask(Path file) {
 		this.file = file;
-		this.replacers = new ArrayList<>();
-	}
-
-	protected void addRegexReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
-		replacers.add(new RegexReplacer(regex, replaceCallback));
 	}
 
 	@Override
-	public Path getOriginalFile() {
+	public final Path getOriginalFile() {
 		return file;
 	}
 
 	@Override
-	public Path getUpgradedFile() {
+	public final Path getUpgradedFile() {
 		return file;
 	}
 
 	@Override
-	public void computeChanges() throws ConfigLoadException {
+	public final void computeChanges() throws ConfigLoadException {
 		if (!Files.isRegularFile(file)) {
 			return;
 		}
@@ -68,10 +61,8 @@ public class RegexUpgradeTask extends UpgradeTask {
 			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
 		}
 
-		Stream<String> linesStream = lines.stream();
-		for (RegexReplacer replacer : replacers) {
-			linesStream = linesStream.map(replacer);
-		}
+		this.linesStream = lines.stream();
+		computeRegexChanges();
 
 		newContents = linesStream.collect(Collectors.toList());
 
@@ -81,12 +72,32 @@ public class RegexUpgradeTask extends UpgradeTask {
 	}
 
 	@Override
-	public void saveChanges() throws ConfigSaveException {
+	public final void saveChanges() throws ConfigSaveException {
 		try {
 			Files.write(file, newContents);
 		} catch (IOException e) {
 			throw new ConfigSaveException(ErrorMessages.Config.writeDataIOException, e);
 		}
+	}
+
+	protected abstract void computeRegexChanges();
+
+	protected void replaceString(String target, String replacement) {
+		replaceRegex(
+				Pattern.compile(Pattern.quote(target)),
+				matcher -> replacement
+		);
+	}
+
+	protected void replaceSubNode(String oldNode, String newNode) {
+		replaceRegex(
+				Pattern.compile("(^\\s+)" + Pattern.quote(oldNode) + "(:)"),
+				matcher -> matcher.group(1) + newNode + matcher.group(2)
+		);
+	}
+
+	protected void replaceRegex(Pattern regex, Function<Matcher, String> replaceCallback) {
+		linesStream = linesStream.map(new RegexReplacer(regex, replaceCallback));
 	}
 
 }

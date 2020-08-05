@@ -12,12 +12,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.legacy;
+package me.filoghost.chestcommands.legacy.v4_0;
 
-public class UpgradeExecutorException extends Exception {
+import me.filoghost.chestcommands.config.ConfigManager;
+import me.filoghost.chestcommands.legacy.upgrade.RegexUpgradeTask;
 
-	public UpgradeExecutorException(String message, Throwable cause) {
-		super(message, cause);
+public class v4_0_LangUpgradeTask extends RegexUpgradeTask {
+
+	public v4_0_LangUpgradeTask(ConfigManager configManager) {
+		super(configManager.getRootDataFolder().resolve("lang.yml"));
+	}
+
+	@Override
+	protected void computeRegexChanges() {
+		replaceString("{datavalue}", "{durability}");
 	}
 
 }

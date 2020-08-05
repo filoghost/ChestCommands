@@ -16,14 +16,38 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.config.ConfigManager;
 
-import java.util.regex.Pattern;
+import java.util.List;
 
-public class LangUpgradeTask extends RegexUpgradeTask {
+public class Upgrade {
 
-	public LangUpgradeTask(ConfigManager configManager) {
-		super(configManager.getRootDataFolder().resolve("lang.yml"));
+	private final String id;
+	private final MultiTaskSupplier upgradeTasksSupplier;
 
-		addRegexReplacer(Pattern.compile(Pattern.quote("{datavalue}")), matcher -> "{durability}");
+	public Upgrade(String id, MultiTaskSupplier taskSupplier) {
+		this.id = id;
+		this.upgradeTasksSupplier = taskSupplier;
+	}
+
+	public String getID() {
+		return id;
+	}
+
+	public List<UpgradeTask> createUpgradeTasks(ConfigManager configManager) throws UpgradeTaskException {
+		return upgradeTasksSupplier.getTasks(configManager);
+	}
+
+	@FunctionalInterface
+	public interface SingleTaskSupplier {
+
+		UpgradeTask getTask(ConfigManager configManager) throws UpgradeTaskException;
+
+	}
+
+	@FunctionalInterface
+	public interface MultiTaskSupplier {
+
+		List<UpgradeTask> getTasks(ConfigManager configManager) throws UpgradeTaskException;
+
 	}
 
 }
