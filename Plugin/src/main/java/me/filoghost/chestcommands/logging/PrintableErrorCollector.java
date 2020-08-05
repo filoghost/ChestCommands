@@ -27,6 +27,7 @@ import org.bukkit.ChatColor;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrintableErrorCollector extends ErrorCollector {
@@ -52,7 +53,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 	}
 
 	private ErrorPrintInfo getErrorPrintInfo(int index, ErrorInfo error) {
-		List<String> message = error.getMessage();
+		List<String> message = new ArrayList<>(error.getMessage());
 		String details = null;
 		Throwable cause = error.getCause();
 

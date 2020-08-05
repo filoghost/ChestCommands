@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.util.logging;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ErrorInfo {
@@ -33,7 +34,7 @@ public class ErrorInfo {
 	}
 
 	public List<String> getMessage() {
-		return message;
+		return Collections.unmodifiableList(message);
 	}
 
 	public Throwable getCause() {
