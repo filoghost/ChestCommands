@@ -64,13 +64,15 @@ public class MenuManager {
 		}
 		menusByFile.put(fileName, menu);
 
-		for (String openCommand : loadedMenu.getOpenCommands()) {
-			if (!openCommand.isEmpty()) {
-				InternalIconMenu sameCommandMenu = menusByOpenCommand.get(openCommand);
-				if (sameCommandMenu != null) {
-					errorCollector.add(ErrorMessages.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), openCommand));
+		if (loadedMenu.getOpenCommands() != null) {
+			for (String openCommand : loadedMenu.getOpenCommands()) {
+				if (!openCommand.isEmpty()) {
+					InternalIconMenu sameCommandMenu = menusByOpenCommand.get(openCommand);
+					if (sameCommandMenu != null) {
+						errorCollector.add(ErrorMessages.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), openCommand));
+					}
+					menusByOpenCommand.put(openCommand, menu);
 				}
-				menusByOpenCommand.put(openCommand, menu);
 			}
 		}
 

@@ -179,6 +179,10 @@ public class ErrorMessages {
 			return menuError(menuFile, "is missing the menu setting \"" + missingSetting + "\"");
 		}
 
+		public static String missingSettingsSection(Path menuFile) {
+			return menuError(menuFile, "is missing the menu setting section");
+		}
+
 		private static String menuError(Path menuFile, String errorMessage) {
 			return "the menu \"" + formatPath(menuFile) + "\" " + errorMessage;
 		}

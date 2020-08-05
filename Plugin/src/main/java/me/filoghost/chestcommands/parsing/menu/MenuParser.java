@@ -17,6 +17,7 @@ package me.filoghost.chestcommands.parsing.menu;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
+import me.filoghost.chestcommands.config.framework.EmptyConfigSection;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.config.framework.exception.MissingConfigValueException;
 import me.filoghost.chestcommands.logging.ErrorMessages;
@@ -96,6 +97,10 @@ public class MenuParser {
 
 	private static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
 		ConfigSection settingsSection = config.getConfigSection(MenuSettingsNode.ROOT_SECTION);
+		if (settingsSection == null) {
+			errorCollector.add(ErrorMessages.Menu.missingSettingsSection(config.getSourceFile()));
+			settingsSection = new EmptyConfigSection();
+		}
 
 		String title;
 		try {
