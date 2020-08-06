@@ -12,12 +12,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.icon.requirement;
+package me.filoghost.chestcommands.icon.requirement.item;
 
 import me.filoghost.chestcommands.util.Preconditions;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class RequiredItem {
 
@@ -56,55 +54,16 @@ public class RequiredItem {
 		return isDurabilityRestrictive;
 	}
 
-	public boolean isItemContainedIn(Inventory inventory) {
-		int amountFound = 0;
-
-		for (ItemStack item : inventory.getContents()) {
-			if (isMatchingType(item)) {
-				amountFound += item.getAmount();
-			}
-		}
-
-		return amountFound >= amount;
-	}
-
-	public boolean takeItemFrom(Inventory inventory) {
-		if (amount <= 0) {
-			return true;
-		}
-		
-		int itemsToTake = amount; // Start from amount and decrease
-		ItemStack[] contents = inventory.getContents();
-
-		for (int i = 0; i < contents.length; i++) {
-			ItemStack current = contents[i];
-
-			if (isMatchingType(current)) {
-				if (current.getAmount() > itemsToTake) {
-					current.setAmount(current.getAmount() - itemsToTake);
-					return true;
-				} else {
-					itemsToTake -= current.getAmount();
-					inventory.setItem(i, new ItemStack(Material.AIR));
-				}
-			}
-
-			// The end
-			if (itemsToTake <= 0) return true;
-		}
-
-		return false;
-	}
-	
-	private boolean isMatchingType(ItemStack item) {
-		return item != null && item.getType() == material && isMatchingDurability(item.getDurability());
+	public boolean isMatchingType(RemainingItem item) {
+		return item != null && item.getMaterial() == material && isMatchingDurability(item.getDurability());
 	}
 	
 	private boolean isMatchingDurability(short durability) {
-		if (!isDurabilityRestrictive) {
+		if (isDurabilityRestrictive) {
+			return this.durability == durability;
+		} else {
 			return true;
 		}
-		return this.durability == durability;
 	}
 	
 }

@@ -12,10 +12,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.icon.requirement;
+package me.filoghost.chestcommands.icon.requirement.item;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.icon.requirement.Requirement;
 import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.entity.Player;
 
@@ -31,34 +32,31 @@ public class RequiredItems implements Requirement {
 
 	@Override
 	public boolean hasCost(Player player) {
-		boolean missingItems = false;
-		
-		for (RequiredItem item : items) {
-			if (!item.isItemContainedIn(player.getInventory())) {
-				missingItems = true;
-				player.sendMessage(ChestCommands.getLang().no_required_item
-						.replace("{material}", Utils.formatEnum(item.getMaterial()))
-						.replace("{amount}", Integer.toString(item.getAmount()))
-						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
-				);
-			}
+		InventoryTakeHelper inventoryTakeHelper = new InventoryTakeHelper(player.getInventory());
+		List<RequiredItem> missingItems = inventoryTakeHelper.prepareTakeItems(items);
+
+		for (RequiredItem item : missingItems) {
+			player.sendMessage(ChestCommands.getLang().no_required_item
+					.replace("{material}", Utils.formatEnum(item.getMaterial()))
+					.replace("{amount}", Integer.toString(item.getAmount()))
+					.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
+			);
 		}
 		
-		return !missingItems;
+		return missingItems.isEmpty();
 	}
 
 	@Override
 	public boolean takeCost(Player player) {
-		boolean missingItems = false;
-		
-		for (RequiredItem item : items) {
-			boolean success = item.takeItemFrom(player.getInventory());
-			if (!success) {
-				missingItems = true;
-			}
+		InventoryTakeHelper inventoryTakeHelper = new InventoryTakeHelper(player.getInventory());
+		List<RequiredItem> missingItems = inventoryTakeHelper.prepareTakeItems(items);
+
+		if (!missingItems.isEmpty()) {
+			return false;
 		}
 		
-		return !missingItems;
+		inventoryTakeHelper.applyTakeItems();
+		return true;
 	}
 	
 }

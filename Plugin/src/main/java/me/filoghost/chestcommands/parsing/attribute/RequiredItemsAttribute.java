@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.parsing.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.icon.requirement.RequiredItem;
+import me.filoghost.chestcommands.icon.requirement.item.RequiredItem;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 
