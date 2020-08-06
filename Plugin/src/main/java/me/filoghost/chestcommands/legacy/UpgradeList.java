@@ -42,13 +42,13 @@ public class UpgradeList {
 	 */
 	private static final ImmutableList<Upgrade> orderedUpgrades = ImmutableList.of(
 			multiTaskUpgrade("v4.0-menus-rename", (configManager) -> {
-				return createMenuBulkUpgrade(configManager, v4_0_MenuNodeRenameUpgradeTask::new);
+				return createMenuTasks(configManager, v4_0_MenuNodeRenameUpgradeTask::new);
 			}),
 
 			// Reformat after nodes have already been renamed
 			multiTaskUpgrade("v4.0-menus-reformat", (configManager) -> {
 				String legacyCommandSeparator = readLegacyCommandSeparator(configManager);
-				return createMenuBulkUpgrade(configManager,
+				return createMenuTasks(configManager,
 						file -> new v4_0_MenuNodeExpandUpgradeTask(configManager, file, legacyCommandSeparator));
 			}),
 
@@ -68,7 +68,7 @@ public class UpgradeList {
 		return new Upgrade(id, upgradeTasksSupplier);
 	}
 
-	private static List<UpgradeTask> createMenuBulkUpgrade(ConfigManager configManager, Function<Path, UpgradeTask> menuTaskSupplier) throws UpgradeTaskException {
+	private static List<UpgradeTask> createMenuTasks(ConfigManager configManager, Function<Path, UpgradeTask> menuTaskSupplier) throws UpgradeTaskException {
 		List<Path> menuFiles = getMenuFiles(configManager);
 		return CollectionUtils.transform(menuFiles, menuTaskSupplier);
 	}
