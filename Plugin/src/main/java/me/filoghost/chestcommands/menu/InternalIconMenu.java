@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.menu;
 
+import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
@@ -30,7 +31,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	private final Path sourceFile;
 	private final String openPermission;
 	
-	private List<Action> openActions;
+	private ImmutableList<Action> openActions;
 	private int refreshTicks;
 
 	public InternalIconMenu(String title, int rows, Path sourceFile) {
@@ -44,7 +45,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	}
 
 	public void setOpenActions(List<Action> openAction) {
-		this.openActions = CollectionUtils.nullableCopy(openAction);
+		this.openActions = CollectionUtils.immutableCopy(openAction);
 	}
 
 	public String getOpenPermission() {

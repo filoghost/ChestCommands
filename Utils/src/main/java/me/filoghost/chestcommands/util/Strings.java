@@ -85,14 +85,14 @@ public final class Strings {
 	}
 
 	public static String capitalizeFirst(String input) {
-		if (isNullOrEmpty(input)) {
+		if (isEmpty(input)) {
 			return input;
 		}
 
 		return Character.toTitleCase(input.charAt(0)) + input.substring(1);
 	}
 
-	public static boolean isNullOrEmpty(String s) {
+	public static boolean isEmpty(String s) {
 		return s == null || s.isEmpty();
 	}
 }

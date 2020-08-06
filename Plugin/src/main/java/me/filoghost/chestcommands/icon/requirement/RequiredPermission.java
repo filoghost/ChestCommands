@@ -29,7 +29,7 @@ public class RequiredPermission implements Requirement {
 			permission = permission.trim();
 		}
 		
-		if (Strings.isNullOrEmpty(permission)) {
+		if (Strings.isEmpty(permission)) {
 			this.permission = null;
 			negated = false;
 		} else {

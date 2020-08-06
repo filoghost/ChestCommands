@@ -131,7 +131,7 @@ public class MenuParser {
 
 		List<String> serializedOpenActions = settingsSection.getStringList(MenuSettingsNode.OPEN_ACTIONS);
 
-		if (serializedOpenActions != null && !serializedOpenActions.isEmpty()) {
+		if (serializedOpenActions != null) {
 			List<Action> openActions = new ArrayList<>();
 
 			for (String serializedAction : serializedOpenActions) {

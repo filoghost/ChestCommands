@@ -47,16 +47,12 @@ public interface ConfigurableIcon extends ClickableIcon {
 	String getNBTData();
 
 	void setName(String name);
-
-	boolean hasName();
 	
 	String getName();
 
 	void setLore(String... lore);
 
 	void setLore(List<String> lore);
-
-	boolean hasLore();
 
 	List<String> getLore();
 

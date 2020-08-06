@@ -16,7 +16,6 @@ package me.filoghost.chestcommands.icon.requirement;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.entity.Player;
 
@@ -27,7 +26,6 @@ public class RequiredItems implements Requirement {
 	private final List<RequiredItem> items;
 	
 	public RequiredItems(List<RequiredItem> items) {
-		Preconditions.notEmpty(items, "items");
 		this.items = ImmutableList.copyOf(items);
 	}
 

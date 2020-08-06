@@ -19,6 +19,8 @@ import me.filoghost.chestcommands.util.Preconditions;
 import me.filoghost.chestcommands.util.collection.CollectionUtils;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class PlaceholderStringList {
 
 	private final ImmutableList<String> originalList;
@@ -26,9 +28,9 @@ public class PlaceholderStringList {
 	private final ImmutableList<PlaceholderString> placeholderStringList;
 	private final boolean hasDynamicPlaceholders;
 	
-	public PlaceholderStringList(ImmutableList<String> list) {
+	public PlaceholderStringList(List<String> list) {
 		Preconditions.notNull(list, "list");
-		this.originalList = list;
+		this.originalList = ImmutableList.copyOf(list);
 
 		// Replace static placeholders only once, if present
 		if (PlaceholderManager.hasStaticPlaceholders(originalList)) {

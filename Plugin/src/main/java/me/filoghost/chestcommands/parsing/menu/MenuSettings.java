@@ -14,7 +14,9 @@
  */
 package me.filoghost.chestcommands.parsing.menu;
 
+import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.util.collection.CollectionUtils;
 
 import java.util.List;
 
@@ -25,8 +27,8 @@ public class MenuSettings {
 	private final int rows;
 
 	// Optional settings
-	private List<String> commands;
-	private List<Action> openActions;
+	private ImmutableList<String> commands;
+	private ImmutableList<Action> openActions;
 	private int refreshTicks;
 
 	private MenuOpenItem openItem;
@@ -45,19 +47,19 @@ public class MenuSettings {
 	}
 
 	public void setCommands(List<String> commands) {
-		this.commands = commands;
+		this.commands = CollectionUtils.immutableCopy(commands);
 	}
 
-	public List<String> getCommands() {
+	public ImmutableList<String> getCommands() {
 		return commands;
 	}
 
-	public List<Action> getOpenActions() {
+	public ImmutableList<Action> getOpenActions() {
 		return openActions;
 	}
 
 	public void setOpenActions(List<Action> openAction) {
-		this.openActions = openAction;
+		this.openActions = CollectionUtils.immutableCopy(openAction);
 	}
 
 	public int getRefreshTicks() {

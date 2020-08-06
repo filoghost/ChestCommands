@@ -119,10 +119,6 @@ public abstract class BaseConfigurableIcon implements Icon {
 		cachedRendering = null;
 	}
 
-	public boolean hasName() {
-		return name != null;
-	}
-
 	public String getName() {
 		if (name != null) {
 			return name.getOriginalValue();
@@ -138,16 +134,12 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setLore(List<String> lore) {
-		if (!CollectionUtils.isNullOrEmpty(lore)) {
+		if (lore != null) {
 			this.lore = new PlaceholderStringList(CollectionUtils.replaceNulls(lore, ""));
 		} else {
 			this.lore = null;
 		}
 		cachedRendering = null;
-	}
-
-	public boolean hasLore() {
-		return lore != null;
 	}
 
 	public List<String> getLore() {
@@ -159,12 +151,12 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setEnchantments(Map<Enchantment, Integer> enchantments) {
-		this.enchantments = CollectionUtils.nullableCopy(enchantments);
+		this.enchantments = CollectionUtils.copy(enchantments);
 		cachedRendering = null;
 	}
 
 	public Map<Enchantment, Integer> getEnchantments() {
-		return CollectionUtils.nullableCopy(enchantments);
+		return CollectionUtils.copy(enchantments);
 	}
 
 	public void addEnchantment(Enchantment enchantment) {
@@ -219,11 +211,11 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public List<Pattern> getBannerPatterns() {
-		return CollectionUtils.nullableCopy(bannerPatterns);
+		return CollectionUtils.copy(bannerPatterns);
 	}
 
 	public void setBannerPatterns(List<Pattern> bannerPatterns) {
-		this.bannerPatterns = CollectionUtils.nullableCopy(bannerPatterns);
+		this.bannerPatterns = CollectionUtils.copy(bannerPatterns);
 		cachedRendering = null;
 	}
 
@@ -233,7 +225,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public String renderName(Player viewer) {
-		if (!hasName()) {
+		if (name == null) {
 			return null;
 		}
 		if (!placeholdersEnabled) {
@@ -251,7 +243,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public List<String> renderLore(Player viewer) {
-		if (!hasLore()) {
+		if (lore == null) {
 			return null;
 		}
 		if (!placeholdersEnabled) {
@@ -285,12 +277,8 @@ public abstract class BaseConfigurableIcon implements Icon {
 		// Then apply data from config nodes, overwriting NBT data if there are conflicting values
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
-		if (hasName()) {
-			itemMeta.setDisplayName(renderName(viewer));
-		}
-		if (hasLore()) {
-			itemMeta.setLore(renderLore(viewer));
-		}
+		itemMeta.setDisplayName(renderName(viewer));
+		itemMeta.setLore(renderLore(viewer));
 
 		if (leatherColor != null && itemMeta instanceof LeatherArmorMeta) {
 			((LeatherArmorMeta) itemMeta).setColor(leatherColor);
@@ -312,7 +300,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 		}
 		
 		// Hide all text details (damage, enchantments, potions, etc,)
-		if (CollectionUtils.isNullOrEmpty(itemMeta.getItemFlags())) {
+		if (itemMeta.getItemFlags().isEmpty()) {
 			itemMeta.addItemFlags(ItemFlag.values());
 		}
 

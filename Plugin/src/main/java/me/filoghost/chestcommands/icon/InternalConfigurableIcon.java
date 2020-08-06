@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands.icon;
 
+import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
@@ -41,7 +42,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	private RequiredMoney requiredMoney;
 	private RequiredExpLevel requiredExpLevel;
 	private RequiredItems requiredItems;
-	private List<Action> clickActions;
+	private ImmutableList<Action> clickActions;
 
 	private ClickResult clickResult;
 	
@@ -88,7 +89,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public void setRequiredItems(List<RequiredItem> requiredItems) {
-		if (!CollectionUtils.isNullOrEmpty(requiredItems)) {
+		if (requiredItems != null) {
 			this.requiredItems = new RequiredItems(requiredItems);
 		} else {
 			this.requiredItems = null;
@@ -96,7 +97,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public void setClickActions(List<Action> clickActions) {
-		this.clickActions = CollectionUtils.nullableCopy(clickActions);
+		this.clickActions = CollectionUtils.immutableCopy(clickActions);
 	}
 	
 	

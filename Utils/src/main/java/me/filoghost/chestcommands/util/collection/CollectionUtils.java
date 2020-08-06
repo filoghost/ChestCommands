@@ -17,7 +17,6 @@ package me.filoghost.chestcommands.util.collection;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,27 +24,27 @@ import java.util.function.Function;
 
 public final class CollectionUtils {
 
-	public static boolean isNullOrEmpty(Collection<?> collection) {
-		return collection == null || collection.isEmpty();
-	}
-
-	public static boolean isNullOrEmpty(Map<?, ?> map) {
-		return map == null || map.isEmpty();
-	}
-
-	public static <E> List<E> nullableCopy(List<E> list) {
-		if (isNullOrEmpty(list)) {
-			return null;
-		} else {
+	public static <E> List<E> copy(List<E> list) {
+		if (list != null) {
 			return new ArrayList<>(list);
+		} else {
+			return null;
 		}
 	}
-	
-	public static <K, V> Map<K, V> nullableCopy(Map<K, V> map) {
-		if (map == null || map.isEmpty()) {
-			return null;
-		} else {
+
+	public static <K, V> Map<K, V> copy(Map<K, V> map) {
+		if (map != null) {
 			return new HashMap<>(map);
+		} else {
+			return null;
+		}
+	}
+
+	public static <E> ImmutableList<E> immutableCopy(List<E> list) {
+		if (list != null) {
+			return ImmutableList.copyOf(list);
+		} else {
+			return null;
 		}
 	}
 
@@ -71,18 +70,8 @@ public final class CollectionUtils {
 		return builder.build();
 	}
 
-	public static <E> ImmutableList<E> replaceNulls(List<E> list, E replacement) {
-		ImmutableList.Builder<E> builder = ImmutableList.builder();
-
-		for (E element : list) {
-			if (element != null) {
-				builder.add(element);
-			} else {
-				builder.add(replacement);
-			}
-		}
-
-		return builder.build();
+	public static <E> List<E> replaceNulls(List<E> list, E replacement) {
+		return transform(list, element -> element != null ? element : replacement);
 	}
 
 }
