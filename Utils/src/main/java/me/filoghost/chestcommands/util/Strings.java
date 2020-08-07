@@ -17,13 +17,13 @@ package me.filoghost.chestcommands.util;
 public final class Strings {
 
 	
-	public static String[] trimmedSplit(String input, String pattern) {
-		return trimmedSplit(input, pattern, 0);
+	public static String[] trimmedSplit(String string, String pattern) {
+		return trimmedSplit(string, pattern, 0);
 	}
 	
 	
-	public static String[] trimmedSplit(String input, String pattern, int limit) {
-		String[] output = input.split(pattern, limit);
+	public static String[] trimmedSplit(String string, String pattern, int limit) {
+		String[] output = string.split(pattern, limit);
 		for (int i = 0; i < output.length; i++) {
 			output[i] = output[i].trim();
 		}
@@ -31,26 +31,26 @@ public final class Strings {
 	}
 	
 
-	public static String stripChars(String input, char... removed) {
-		if (input == null || input.isEmpty() || removed.length == 0) {
-			return input;
+	public static String stripChars(String string, char... charsToRemove) {
+		if (isEmpty(string) || charsToRemove.length == 0) {
+			return string;
 		}
 
-		char[] chars = input.toCharArray();
+		StringBuilder result = new StringBuilder(string.length());
 
-		int pos = 0;
-		for (int i = 0; i < chars.length; i++) {
-			if (!arrayContains(removed, chars[i])) {
-				chars[(pos++)] = chars[i];
+		for (int i = 0; i < string.length(); i++) {
+			char c = string.charAt(i);
+			if (!arrayContains(charsToRemove, c)) {
+				result.append(c);
 			}
 		}
 
-		return new String(chars, 0, pos);
+		return result.toString();
 	}
 
-	private static boolean arrayContains(char[] arr, char match) {
-		for (char c : arr) {
-			if (c == match) {
+	private static boolean arrayContains(char[] array, char valueToFind) {
+		for (char c : array) {
+			if (c == valueToFind) {
 				return true;
 			}
 		}
@@ -58,41 +58,41 @@ public final class Strings {
 		return false;
 	}
 
-	public static String capitalizeFully(String input) {
-		if (input == null) {
-			return null;
+	public static String capitalizeFully(String string) {
+		if (isEmpty(string)) {
+			return string;
 		}
 
-		String s = input.toLowerCase();
-
-		int strLen = s.length();
-		StringBuilder output = new StringBuilder(strLen);
+		string = string.toLowerCase();
+		int length = string.length();
+		StringBuilder result = new StringBuilder(length);
 		boolean capitalizeNext = true;
-		for (int i = 0; i < strLen; i++) {
-			char ch = s.charAt(i);
 
-			if (Character.isWhitespace(ch)) {
-				output.append(ch);
+		for (int i = 0; i < length; i++) {
+			char c = string.charAt(i);
+
+			if (Character.isWhitespace(c)) {
+				result.append(c);
 				capitalizeNext = true;
 			} else if (capitalizeNext) {
-				output.append(Character.toTitleCase(ch));
+				result.append(Character.toTitleCase(c));
 				capitalizeNext = false;
 			} else {
-				output.append(ch);
+				result.append(c);
 			}
 		}
-		return output.toString();
+		return result.toString();
 	}
 
-	public static String capitalizeFirst(String input) {
-		if (isEmpty(input)) {
-			return input;
+	public static String capitalizeFirst(String string) {
+		if (isEmpty(string)) {
+			return string;
 		}
 
-		return Character.toTitleCase(input.charAt(0)) + input.substring(1);
+		return Character.toTitleCase(string.charAt(0)) + string.substring(1);
 	}
 
-	public static boolean isEmpty(String s) {
-		return s == null || s.isEmpty();
+	public static boolean isEmpty(String string) {
+		return string == null || string.isEmpty();
 	}
 }
