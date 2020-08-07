@@ -20,6 +20,7 @@ import me.filoghost.chestcommands.config.framework.mapped.MappedField;
 import me.filoghost.chestcommands.config.framework.mapped.converter.Converter;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
+import org.bukkit.ChatColor;
 
 import java.nio.file.Path;
 
@@ -119,9 +120,9 @@ public class ErrorMessages {
 
 	public static class Parsing {
 
-		public static final String invalidDouble = "value is not a valid decimal";
+		public static final String invalidDecimal = "value is not a valid decimal";
 		public static final String invalidShort = "value is not a valid short integer";
-		public static final String invalidInteger = "value not a valid integer";
+		public static final String invalidInteger = "value is not a valid integer";
 
 		public static final String strictlyPositive = "value must be greater than zero";
 		public static final String zeroOrPositive = "value must be zero or greater";
@@ -167,6 +168,22 @@ public class ErrorMessages {
 			return "invalid " + colorName + " color \"" + valueString + "\", value must be between 0 and 255";
 		}
 
+		public static String invalidBossBarTime(String timeString) {
+			return "invalid dragon bar time \"" + timeString + "\"";
+		}
+
+		public static String invalidSoundPitch(String pitchString) {
+			return "invalid sound pitch \"" + pitchString + "\"";
+		}
+
+		public static String invalidSoundVolume(String volumeString) {
+			return "invalid sound volume \"" + volumeString + "\"";
+		}
+
+		public static String unknownSound(String soundString) {
+			return "unknown sound \"" + soundString + "\"";
+		}
+
 	}
 
 	public static class Menu {
@@ -181,6 +198,12 @@ public class ErrorMessages {
 
 		public static String missingSettingsSection(Path menuFile) {
 			return menuError(menuFile, "is missing the menu setting section");
+		}
+
+		public static String invalidSettingListElement(Path menuFile, String invalidSetting, String listElement) {
+			return menuError(menuFile,
+					"contains an invalid list element (\"" + listElement + "\") "
+							+ "in the menu setting \"" + invalidSetting + "\"");
 		}
 
 		private static String menuError(Path menuFile, String errorMessage) {
@@ -225,6 +248,15 @@ public class ErrorMessages {
 		}
 	}
 
+	public static class User {
+
+		public static String notifyStaffRequest = "Please inform the staff.";
+
+		public static String configurationError(String errorMessage) {
+			return ChatColor.RED + "Error: " + errorMessage + ". " + ErrorMessages.User.notifyStaffRequest;
+		}
+
+	}
 
 	private static String formatPath(Path path) {
 		if (path.startsWith(ChestCommands.getDataFolderPath())) {

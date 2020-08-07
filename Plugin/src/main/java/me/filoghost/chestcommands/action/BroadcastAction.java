@@ -19,7 +19,7 @@ import me.filoghost.chestcommands.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class BroadcastAction extends Action {
+public class BroadcastAction implements Action {
 	
 	private final PlaceholderString message;
 
@@ -28,7 +28,7 @@ public class BroadcastAction extends Action {
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		Bukkit.broadcastMessage(message.getValue(player));
 	}
 

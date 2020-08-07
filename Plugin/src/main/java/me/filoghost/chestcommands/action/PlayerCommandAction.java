@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.action;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.entity.Player;
 
-public class PlayerCommandAction extends Action {
+public class PlayerCommandAction implements Action {
 	
 	private final PlaceholderString command;
 
@@ -26,7 +26,7 @@ public class PlayerCommandAction extends Action {
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		player.chat('/' + command.getValue(player));
 	}
 

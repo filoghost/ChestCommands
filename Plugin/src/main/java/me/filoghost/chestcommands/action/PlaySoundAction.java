@@ -14,54 +14,56 @@
  */
 package me.filoghost.chestcommands.action;
 
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.NumberParser;
+import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.util.Strings;
 import me.filoghost.chestcommands.util.collection.Registry;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-public class PlaySoundAction extends Action {
+public class PlaySoundAction implements Action {
 	
 	private static final Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
 
-	private Sound sound;
-	private float pitch;
-	private float volume;
+	private final Sound sound;
+	private final float pitch;
+	private final float volume;
 
-	public PlaySoundAction(String serializedAction) {
-		pitch = 1.0f;
-		volume = 1.0f;
-
+	public PlaySoundAction(String serializedAction) throws ParseException {
 		String[] split = Strings.trimmedSplit(serializedAction, ",", 3);
 
 		Optional<Sound> sound = SOUNDS_REGISTRY.find(split[0]);
 		if (!sound.isPresent()) {
-			disable(ChatColor.RED + "Invalid sound \"" + split[0] + "\".");
-			return;
+			throw new ParseException(ErrorMessages.Parsing.unknownSound(split[0]));
 		}
 		this.sound = sound.get();
 
 		if (split.length > 1) {
 			try {
-				pitch = Float.parseFloat(split[1]);
-			} catch (NumberFormatException e) {
-				// TODO
+				pitch = NumberParser.getFloat(split[1]);
+			} catch (ParseException e) {
+				throw new ParseException(ErrorMessages.Parsing.invalidSoundPitch(split[1]), e);
 			}
+		} else {
+			pitch = 1.0f;
 		}
 
 		if (split.length > 2) {
 			try {
-				volume = Float.parseFloat(split[2]);
-			} catch (NumberFormatException e) {
-				// TODO
+				volume = NumberParser.getFloat(split[2]);
+			} catch (ParseException e) {
+				throw new ParseException(ErrorMessages.Parsing.invalidSoundVolume(split[2]), e);
 			}
+		} else {
+			volume = 1.0f;
 		}
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		player.playSound(player.getLocation(), sound, volume, pitch);
 	}
 

@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.entity.Player;
 
-public class ChangeServerAction extends Action {
+public class ChangeServerAction implements Action {
 
 	private final PlaceholderString targetServer;
 	
@@ -27,7 +27,7 @@ public class ChangeServerAction extends Action {
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		BungeeCordHook.connect(player, targetServer.getValue(player));
 	}
 

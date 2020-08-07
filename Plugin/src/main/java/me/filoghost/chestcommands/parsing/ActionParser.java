@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 public class ActionParser {
 
-	public static Action parse(String serializedAction) {
+	public static Action parse(String serializedAction) throws ParseException {
 		for (ActionType actionType : ActionType.values()) {
 			Matcher matcher = actionType.prefixPattern.matcher(serializedAction);
 			if (matcher.find()) {
@@ -72,7 +72,7 @@ public class ActionParser {
 		@FunctionalInterface
 		private interface ActionFactory {
 
-			Action create(String serializedAction);
+			Action create(String serializedAction) throws ParseException;
 
 		}
 

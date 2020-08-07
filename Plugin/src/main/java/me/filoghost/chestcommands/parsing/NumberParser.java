@@ -28,10 +28,18 @@ public class NumberParser {
 		try {
 			return Double.parseDouble(input);
 		} catch (NumberFormatException ex) {
-			throw new ParseException(ErrorMessages.Parsing.invalidDouble);
+			throw new ParseException(ErrorMessages.Parsing.invalidDecimal);
 		}
 	}
-	
+
+	public static float getFloat(String input) throws ParseException {
+		try {
+			return Float.parseFloat(input);
+		} catch (NumberFormatException ex) {
+			throw new ParseException(ErrorMessages.Parsing.invalidDecimal);
+		}
+	}
+
 	public static short getPositiveShort(String input) throws ParseException {
 		short value = getShort(input);
 		check(value >= 0, ErrorMessages.Parsing.zeroOrPositive);
@@ -59,11 +67,10 @@ public class NumberParser {
 			throw new ParseException(ErrorMessages.Parsing.invalidInteger);
 		}
 	}
-	
+
 	private static void check(boolean expression, String errorMessage) throws ParseException {
 		if (!expression) {
 			throw new ParseException(errorMessage);
 		}
 	}
-
 }

@@ -16,22 +16,8 @@ package me.filoghost.chestcommands.action;
 
 import org.bukkit.entity.Player;
 
-public abstract class Action {
+public interface Action {
 
-	private String errorMessage;
-
-	protected void disable(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public final void execute(Player player) {
-		if (errorMessage != null) {
-			player.sendMessage(errorMessage);
-		} else {
-			execute0(player);
-		}
-	}
-	
-	protected abstract void execute0(Player player);
+	void execute(Player player);
 
 }

@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class ConsoleCommandAction extends Action {
+public class ConsoleCommandAction implements Action {
 
 	private final PlaceholderString command;
 
@@ -27,7 +27,7 @@ public class ConsoleCommandAction extends Action {
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getValue(player));
 	}
 

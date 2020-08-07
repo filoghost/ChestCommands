@@ -15,41 +15,44 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.hook.BarAPIHook;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.util.Colors;
 import me.filoghost.chestcommands.util.Strings;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class DragonBarAction extends Action {
+public class DragonBarAction implements Action {
 
-	private PlaceholderString message;
-	private int seconds;
+	private final PlaceholderString message;
+	private final int seconds;
 
-	public DragonBarAction(String serialiazedAction) {
-		seconds = 1;
-		String message = serialiazedAction;
-		
+	public DragonBarAction(String serialiazedAction) throws ParseException {
+		String message;
+
 		String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
 		if (split.length > 1) {
 			try {
 				seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
 				message = split[1];
-			} catch (ParseException ex) {
-				disable(ChatColor.RED + "Invalid dragon bar time \"" + split[0] + "\": " + ex.getMessage());
-				return;
+			} catch (ParseException e) {
+				throw new ParseException(ErrorMessages.Parsing.invalidBossBarTime(split[0]), e);
 			}
+		} else {
+			seconds = 1;
+			message = serialiazedAction;
 		}
 
 		this.message = PlaceholderString.of(Colors.addColors(message));
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		if (BarAPIHook.INSTANCE.isEnabled()) {
 			BarAPIHook.setMessage(player, message.getValue(player), seconds);
+		} else {
+			player.sendMessage(ErrorMessages.User.configurationError("BarAPI plugin not found"));
 		}
 	}
 

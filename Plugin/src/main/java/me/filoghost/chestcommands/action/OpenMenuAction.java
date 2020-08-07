@@ -15,13 +15,13 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class OpenMenuAction extends Action {
+public class OpenMenuAction implements Action {
 
 	private final PlaceholderString targetMenu;
 	
@@ -30,8 +30,9 @@ public class OpenMenuAction extends Action {
 	}
 
 	@Override
-	protected void execute0(final Player player) {
-		final InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(targetMenu.getValue(player));
+	public void execute(final Player player) {
+		String menuName = targetMenu.getValue(player);
+		final InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuName);
 		
 		if (menu != null) {
 			/*
@@ -43,7 +44,7 @@ public class OpenMenuAction extends Action {
 			});
 
 		} else {
-			player.sendMessage(ChatColor.RED + "Menu not found! Please inform the staff.");
+			player.sendMessage(ErrorMessages.User.configurationError("couldn't find the menu \"" + menuName + "\""));
 		}
 	}
 

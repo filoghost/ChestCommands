@@ -15,6 +15,7 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.EmptyConfigSection;
@@ -136,7 +137,14 @@ public class MenuParser {
 
 			for (String serializedAction : serializedOpenActions) {
 				if (serializedAction != null && !serializedAction.isEmpty()) {
-					openActions.add(ActionParser.parse(serializedAction));
+					try {
+						openActions.add(ActionParser.parse(serializedAction));
+					} catch (ParseException e) {
+						errorCollector.add(ErrorMessages.Menu.invalidSettingListElement(
+								config.getSourceFile(), MenuSettingsNode.OPEN_ACTIONS, serializedAction), e);
+						openActions.add(new DisabledAction(ErrorMessages.User.configurationError(
+								"an action linked to opening this menu was not executed because it was not valid")));
+					}
 				}
 			}
 

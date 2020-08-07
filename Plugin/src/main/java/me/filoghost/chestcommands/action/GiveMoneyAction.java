@@ -15,29 +15,25 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
+import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class GiveMoneyAction extends Action {
+public class GiveMoneyAction implements Action {
 
-	private double moneyToGive;
+	private final double moneyToGive;
 
-	public GiveMoneyAction(String serializedAction) {
-		try {
-			moneyToGive = NumberParser.getStrictlyPositiveDouble(serializedAction);
-		} catch (ParseException e) {
-			disable(ChatColor.RED + "Invalid money amount \"" + serializedAction + "\": " + e.getMessage());
-		}
+	public GiveMoneyAction(String serializedAction) throws ParseException {
+		moneyToGive = NumberParser.getStrictlyPositiveDouble(serializedAction);
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		if (VaultEconomyHook.INSTANCE.isEnabled()) {
 			VaultEconomyHook.giveMoney(player, moneyToGive);
 		} else {
-			player.sendMessage(ChatColor.RED + "Vault with a compatible economy plugin not found. Please inform the staff.");
+			player.sendMessage(ErrorMessages.User.configurationError("Vault with a compatible economy plugin not found"));
 		}
 	}
 

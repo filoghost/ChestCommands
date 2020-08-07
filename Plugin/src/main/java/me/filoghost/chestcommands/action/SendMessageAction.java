@@ -18,7 +18,7 @@ import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.util.Colors;
 import org.bukkit.entity.Player;
 
-public class SendMessageAction extends Action {
+public class SendMessageAction implements Action {
 	
 	private final PlaceholderString message;
 
@@ -27,7 +27,7 @@ public class SendMessageAction extends Action {
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		player.sendMessage(message.getValue(player));
 	}
 

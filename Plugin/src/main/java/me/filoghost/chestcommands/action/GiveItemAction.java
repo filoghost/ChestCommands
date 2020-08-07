@@ -16,25 +16,20 @@ package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GiveItemAction extends Action {
+public class GiveItemAction implements Action {
 
-	private ItemStack itemToGive;
+	private final ItemStack itemToGive;
 
-	public GiveItemAction(String serializedAction) {
-		try {
-			ItemStackParser reader = new ItemStackParser(serializedAction, true);
-			itemToGive = reader.createStack();
-		} catch (ParseException e) {
-			disable(ChatColor.RED + "Invalid item to give: " + e.getMessage());
-		}
+	public GiveItemAction(String serializedAction) throws ParseException {
+		ItemStackParser reader = new ItemStackParser(serializedAction, true);
+		itemToGive = reader.createStack();
 	}
 
 	@Override
-	protected void execute0(Player player) {
+	public void execute(Player player) {
 		player.getInventory().addItem(itemToGive.clone());
 	}
 
