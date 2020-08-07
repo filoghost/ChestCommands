@@ -14,6 +14,7 @@
  */
 package me.filoghost.chestcommands;
 
+import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,29 +29,42 @@ public abstract class BaseJavaPlugin extends JavaPlugin {
 		try {
 			onCheckedEnable();
 		} catch (PluginEnableException e) {
-			criticalShutdown(e.getMessage());
+			criticalShutdown(e.getMessage(), null);
+		} catch (Throwable t) {
+			criticalShutdown(null, t);
 		}
 	}
 
 	protected abstract void onCheckedEnable() throws PluginEnableException;
 
 
-	private void criticalShutdown(String errorMessage) {
-		Bukkit.getConsoleSender().sendMessage(getFatalErrorPrefix() + " " + errorMessage);
+	private void criticalShutdown(String errorMessage, Throwable throwable) {
+		Bukkit.getConsoleSender().sendMessage(getErrorMessage(errorMessage, throwable));
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
-			Bukkit.getConsoleSender().sendMessage(getPostStartupMessage(errorMessage));
+			Bukkit.getConsoleSender().sendMessage(
+					getFatalErrorPrefix() + "Fatal error while enabling the plugin. Check previous logs for more information.");
 		}, 10);
 
 		setEnabled(false);
 	}
 
-	protected String getPostStartupMessage(String errorMessage) {
+	protected String getErrorMessage(String errorMessage, Throwable throwable) {
 		List<String> output = new ArrayList<>();
 
-		output.add(getFatalErrorPrefix());
+		if (throwable != null) {
+			output.add(getFatalErrorPrefix() + "Fatal unexpected error while enabling plugin:");
+		} else {
+			output.add(getFatalErrorPrefix() + "Fatal error while enabling plugin:");
+		}
+		if (throwable != null) {
+			output.add(" ");
+			output.add(Utils.getStackTraceString(throwable));
+		}
 		output.add(" ");
-		output.add(errorMessage);
+		if (errorMessage != null) {
+			output.add(errorMessage);
+		}
 		output.add("The plugin has been disabled.");
 		output.add(" ");
 
@@ -58,7 +72,7 @@ public abstract class BaseJavaPlugin extends JavaPlugin {
 	}
 
 	private String getFatalErrorPrefix() {
-		return ChatColor.DARK_RED + "[" + getDescription().getName() + "] " + ChatColor.RED + "Fatal error while enabling plugin:";
+		return ChatColor.DARK_RED + "[" + getDescription().getName() + "] " + ChatColor.RED;
 	}
 
 

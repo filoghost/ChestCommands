@@ -20,13 +20,12 @@ import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxExcepti
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import me.filoghost.chestcommands.util.logging.ErrorInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 		}
 	}
 
-	private void printError(StringBuilder output, ErrorPrintInfo error) {
+	private static void printError(StringBuilder output, ErrorPrintInfo error) {
 		output.append(ChatColor.YELLOW).append(error.getIndex()).append(") ");
 		output.append(ChatColor.WHITE).append(MessagePartJoiner.join(error.getMessage()));
 
@@ -90,17 +89,11 @@ public class PrintableErrorCollector extends ErrorCollector {
 		if (error.getCause() != null) {
 			output.append(ChatColor.DARK_GRAY);
 			output.append("--------[ Exception details ]--------\n");
-			output.append(getStackTraceString(error.getCause()));
+			output.append(Utils.getStackTraceString(error.getCause()));
 			output.append("-------------------------------------\n");
 		}
 		output.append(" \n");
 		output.append(ChatColor.RESET);
-	}
-
-	private String getStackTraceString(Throwable throwable) {
-		StringWriter stringWriter = new StringWriter();
-		throwable.printStackTrace(new PrintWriter(stringWriter));
-		return stringWriter.toString();
 	}
 
 }
