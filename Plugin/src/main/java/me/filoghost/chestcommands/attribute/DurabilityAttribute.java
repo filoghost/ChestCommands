@@ -12,21 +12,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
-public class ClickPermissionAttribute implements ApplicableIconAttribute {
+public class DurabilityAttribute implements IconAttribute {
 
-	private final String clickPermission;
+	private final short durability;
 
-	public ClickPermissionAttribute(String clickPermission, AttributeErrorHandler errorHandler) {
-		this.clickPermission = clickPermission;
+	public DurabilityAttribute(short durability, AttributeErrorHandler errorHandler) {
+		this.durability = durability;
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setClickPermission(clickPermission);
+		icon.setDurability(durability);
 	}
 
 }

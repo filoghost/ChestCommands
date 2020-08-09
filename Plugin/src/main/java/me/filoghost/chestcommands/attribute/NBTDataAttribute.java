@@ -12,36 +12,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.util.Colors;
-import org.bukkit.ChatColor;
+import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
+import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 
-public class NameAttribute implements ApplicableIconAttribute {
+public class NBTDataAttribute implements IconAttribute {
 
-	private final String name;
+	private final String nbtData;
 
-	public NameAttribute(String name, AttributeErrorHandler errorHandler) {
-		this.name = colorName(name);
-	}
-
-	private String colorName(String input) {
-		if (input == null || input.isEmpty()) {
-			return input;
+	public NBTDataAttribute(String nbtData, AttributeErrorHandler errorHandler) throws ParseException {
+		try {
+			// Check that NBT syntax is valid before applying it to the icon
+			MojangsonParser.parse(nbtData);
+		} catch (MojangsonParseException e) {
+			throw new ParseException(e.getMessage());
 		}
 
-		if (input.charAt(0) != ChatColor.COLOR_CHAR) {
-			return ChestCommands.getSettings().default_color__name + Colors.addColors(input);
-		} else {
-			return Colors.addColors(input);
-		}
+		this.nbtData = nbtData;
 	}
-
+	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setName(name);
+		icon.setNBTData(nbtData);
 	}
 
 }

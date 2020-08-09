@@ -14,15 +14,14 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
+import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
+import me.filoghost.chestcommands.attribute.IconAttribute;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.ConfigValue;
 import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.attribute.ApplicableIconAttribute;
-import me.filoghost.chestcommands.parsing.attribute.AttributeErrorHandler;
-import me.filoghost.chestcommands.parsing.attribute.IconAttribute;
 import me.filoghost.chestcommands.util.logging.ErrorCollector;
 import org.bukkit.Material;
 
@@ -46,9 +45,7 @@ public class IconSettings {
 		InternalConfigurableIcon icon = new InternalConfigurableIcon(Material.BEDROCK);
 
 		for (IconAttribute attribute : attributes.values()) {
-			if (attribute instanceof ApplicableIconAttribute) {
-				((ApplicableIconAttribute) attribute).apply(icon);
-			}
+			attribute.apply(icon);
 		}
 
 		return icon;

@@ -12,21 +12,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.chestcommands.util.MaterialsHelper;
+import org.bukkit.Material;
 
-public class DurabilityAttribute implements ApplicableIconAttribute {
+import java.util.Optional;
 
-	private final short durability;
+public class MaterialAttribute implements IconAttribute {
+	
+	private final Material material;
 
-	public DurabilityAttribute(short durability, AttributeErrorHandler errorHandler) {
-		this.durability = durability;
+	public MaterialAttribute(String serializedMaterial, AttributeErrorHandler errorHandler) throws ParseException {
+		Optional<Material> material = MaterialsHelper.matchMaterial(serializedMaterial);
+
+		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
+			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(serializedMaterial));
+		}
+
+		this.material = material.get();
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setDurability(durability);
+		icon.setMaterial(material);
 	}
 
 }

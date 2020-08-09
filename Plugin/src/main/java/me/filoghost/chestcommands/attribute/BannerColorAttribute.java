@@ -12,33 +12,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ItemMetaParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.util.MaterialsHelper;
-import org.bukkit.Material;
+import org.bukkit.DyeColor;
 
-import java.util.Optional;
+public class BannerColorAttribute implements IconAttribute {
 
-public class MaterialAttribute implements ApplicableIconAttribute {
-	
-	private final Material material;
+	private final DyeColor dyeColor;
 
-	public MaterialAttribute(String serializedMaterial, AttributeErrorHandler errorHandler) throws ParseException {
-		Optional<Material> material = MaterialsHelper.matchMaterial(serializedMaterial);
-
-		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
-			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(serializedMaterial));
-		}
-
-		this.material = material.get();
+	public BannerColorAttribute(String serializedDyeColor, AttributeErrorHandler errorHandler) throws ParseException {
+		this.dyeColor = ItemMetaParser.parseDyeColor(serializedDyeColor);
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setMaterial(material);
+		icon.setBannerColor(dyeColor);
 	}
 
 }

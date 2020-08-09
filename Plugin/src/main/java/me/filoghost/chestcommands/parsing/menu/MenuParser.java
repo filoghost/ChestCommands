@@ -16,6 +16,7 @@ package me.filoghost.chestcommands.parsing.menu;
 
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
+import me.filoghost.chestcommands.attribute.PositionAttribute;
 import me.filoghost.chestcommands.config.framework.Config;
 import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.config.framework.EmptyConfigSection;
@@ -26,7 +27,6 @@ import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.parsing.attribute.PositionAttribute;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 import me.filoghost.chestcommands.util.Colors;

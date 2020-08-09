@@ -12,26 +12,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
+import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.parsing.ParseException;
 
-public class PriceAttribute implements ApplicableIconAttribute {
+public class KeepOpenAttribute implements IconAttribute {
 
-	private final double price;
+	private final ClickResult clickResult;
 
-	public PriceAttribute(double price, AttributeErrorHandler errorHandler) throws ParseException {
-		if (price < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+	public KeepOpenAttribute(boolean keepOpen, AttributeErrorHandler errorHandler) {
+		if (keepOpen) {
+			this.clickResult = ClickResult.KEEP_OPEN;
+		} else {
+			this.clickResult = ClickResult.CLOSE;
 		}
-		this.price = price;
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setRequiredMoney(price);
+		icon.setClickResult(clickResult);
 	}
 
 }

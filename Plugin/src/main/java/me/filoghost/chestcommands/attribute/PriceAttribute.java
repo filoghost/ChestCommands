@@ -12,21 +12,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ParseException;
 
-public class ClickPermissionMessageAttribute implements ApplicableIconAttribute {
+public class PriceAttribute implements IconAttribute {
 
-	private final String clickPermissionMessage;
+	private final double price;
 
-	public ClickPermissionMessageAttribute(String clickPermissionMessage, AttributeErrorHandler errorHandler) {
-		this.clickPermissionMessage = clickPermissionMessage;
+	public PriceAttribute(double price, AttributeErrorHandler errorHandler) throws ParseException {
+		if (price < 0) {
+			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+		}
+		this.price = price;
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setNoClickPermissionMessage(clickPermissionMessage);
+		icon.setRequiredMoney(price);
 	}
 
 }

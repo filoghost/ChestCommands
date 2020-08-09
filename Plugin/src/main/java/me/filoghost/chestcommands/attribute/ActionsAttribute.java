@@ -12,41 +12,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
+import me.filoghost.chestcommands.action.Action;
+import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.parsing.EnchantmentParser;
+import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import org.bukkit.enchantments.Enchantment;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class EnchantmentsAttribute implements ApplicableIconAttribute {
+public class ActionsAttribute implements IconAttribute {
 
-	private final Map<Enchantment, Integer> enchantments;
+	private final List<Action> actions;
 
-	public EnchantmentsAttribute(List<String> serializedEnchantments, AttributeErrorHandler errorHandler) {
-		enchantments = new HashMap<>();
+	public ActionsAttribute(List<String> serializedActions, AttributeErrorHandler errorHandler) {
+		actions = new ArrayList<>();
 
-		for (String serializedEnchantment : serializedEnchantments) {
-			if (serializedEnchantment == null || serializedEnchantment.isEmpty()) {
+		for (String serializedAction : serializedActions) {
+			if (serializedAction == null || serializedAction.isEmpty()) {
 				continue; // Skip
 			}
 
 			try {
-				EnchantmentParser.EnchantmentDetails enchantment = EnchantmentParser.parseEnchantment(serializedEnchantment);
-				enchantments.put(enchantment.getEnchantment(), enchantment.getLevel());
+				actions.add(ActionParser.parse(serializedAction));
 			} catch (ParseException e) {
-				errorHandler.onListElementError(serializedEnchantment, e);
+				actions.add(new DisabledAction(ErrorMessages.User.configurationError(
+						"an action linked to clicking this icon was not executed because it was not valid")));
+				errorHandler.onListElementError(serializedAction, e);
 			}
 		}
 	}
 	
 	@Override
 	public void apply(InternalConfigurableIcon icon) {
-		icon.setEnchantments(enchantments);
+		icon.setClickActions(actions);
 	}
 
 }

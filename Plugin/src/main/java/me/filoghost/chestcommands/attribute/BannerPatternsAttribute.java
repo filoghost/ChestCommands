@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ItemMetaParser;
@@ -22,7 +22,7 @@ import org.bukkit.block.banner.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BannerPatternsAttribute implements ApplicableIconAttribute {
+public class BannerPatternsAttribute implements IconAttribute {
 
 	private final List<Pattern> patterns;
 

@@ -12,26 +12,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
-public class KeepOpenAttribute implements ApplicableIconAttribute {
+public class PositionAttribute implements IconAttribute {
+	
+	private final int position;
 
-	private final ClickResult clickResult;
-
-	public KeepOpenAttribute(boolean keepOpen, AttributeErrorHandler errorHandler) {
-		if (keepOpen) {
-			this.clickResult = ClickResult.KEEP_OPEN;
-		} else {
-			this.clickResult = ClickResult.CLOSE;
-		}
+	public PositionAttribute(int position, AttributeErrorHandler errorHandler) {
+		this.position = position;
 	}
 	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setClickResult(clickResult);
+	public int getPosition() {
+		return position;
 	}
 
+	@Override
+	public void apply(InternalConfigurableIcon icon) {
+		// Position has no effect on the icon itself
+	}
 }

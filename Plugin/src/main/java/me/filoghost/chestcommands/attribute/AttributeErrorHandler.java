@@ -12,26 +12,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package me.filoghost.chestcommands.parsing.attribute;
+package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
 
-public class AmountAttribute implements ApplicableIconAttribute {
+public interface AttributeErrorHandler {
 
-	private final int amount;
-
-	public AmountAttribute(int amount, AttributeErrorHandler errorHandler) throws ParseException {
-		if (amount < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
-		}
-		this.amount = amount;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setAmount(amount);
-	}
+	void onListElementError(String listElement, ParseException e);
 
 }
