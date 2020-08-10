@@ -16,8 +16,8 @@ package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.commons.Colors;
+import me.filoghost.commons.collection.CollectionUtils;
 import org.bukkit.ChatColor;
 
 import java.util.List;

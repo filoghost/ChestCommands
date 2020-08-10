@@ -16,13 +16,13 @@ package me.filoghost.chestcommands.parsing.icon;
 
 import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
 import me.filoghost.chestcommands.attribute.IconAttribute;
-import me.filoghost.chestcommands.config.framework.ConfigSection;
-import me.filoghost.chestcommands.config.framework.ConfigValue;
-import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.commons.config.ConfigSection;
+import me.filoghost.commons.config.ConfigValue;
+import me.filoghost.commons.config.exception.ConfigValueException;
+import me.filoghost.commons.logging.ErrorCollector;
 import org.bukkit.Material;
 
 import java.nio.file.Path;

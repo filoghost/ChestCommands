@@ -16,12 +16,12 @@ package me.filoghost.chestcommands.command;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
-import me.filoghost.chestcommands.command.framework.CommandFramework;
-import me.filoghost.chestcommands.command.framework.CommandValidate;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.commons.command.CommandFramework;
+import me.filoghost.commons.command.CommandValidate;
+import me.filoghost.commons.logging.ErrorCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

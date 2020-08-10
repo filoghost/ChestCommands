@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.commons.Preconditions;
 
 import java.io.IOException;
 import java.nio.file.Files;

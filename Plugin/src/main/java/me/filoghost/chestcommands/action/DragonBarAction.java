@@ -19,8 +19,8 @@ import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
-import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.Colors;
+import me.filoghost.commons.Strings;
 import org.bukkit.entity.Player;
 
 public class DragonBarAction implements Action {

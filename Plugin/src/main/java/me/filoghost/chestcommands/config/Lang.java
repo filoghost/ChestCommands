@@ -14,9 +14,9 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.framework.mapped.MappedConfig;
-import me.filoghost.chestcommands.config.framework.mapped.modifier.ChatColors;
 import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.commons.config.mapped.MappedConfig;
+import me.filoghost.commons.config.mapped.modifier.ChatColors;
 
 @ChatColors
 public class Lang extends MappedConfig {

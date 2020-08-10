@@ -17,10 +17,10 @@ package me.filoghost.chestcommands.menu;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.IconMenu;
 import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.inventory.ArrayGrid;
 import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.collection.ArrayGrid;
-import me.filoghost.chestcommands.util.collection.Grid;
+import me.filoghost.chestcommands.inventory.Grid;
+import me.filoghost.commons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

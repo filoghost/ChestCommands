@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.parsing.menu;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.commons.collection.CollectionUtils;
 
 import java.nio.file.Path;
 import java.util.List;

@@ -28,7 +28,7 @@
 	<modules>
 		<module>API</module>
 		<module>Plugin</module>
-        <module>Utils</module>
+        <module>Commons</module>
     </modules>
 
 	<build>

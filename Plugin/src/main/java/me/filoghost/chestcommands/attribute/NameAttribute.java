@@ -16,7 +16,7 @@ package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.util.Colors;
+import me.filoghost.commons.Colors;
 import org.bukkit.ChatColor;
 
 public class NameAttribute implements IconAttribute {

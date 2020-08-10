@@ -15,9 +15,9 @@
 package me.filoghost.chestcommands.parsing;
 
 import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.MaterialsHelper;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.MaterialsHelper;
+import me.filoghost.commons.Preconditions;
+import me.filoghost.commons.Strings;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

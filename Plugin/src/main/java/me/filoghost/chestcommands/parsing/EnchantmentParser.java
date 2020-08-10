@@ -15,8 +15,8 @@
 package me.filoghost.chestcommands.parsing;
 
 import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.Strings;
-import me.filoghost.chestcommands.util.collection.Registry;
+import me.filoghost.commons.Strings;
+import me.filoghost.commons.collection.Registry;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.Optional;

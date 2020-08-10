@@ -14,7 +14,6 @@
  */
 package me.filoghost.chestcommands.inventory;
 
-import me.filoghost.chestcommands.util.collection.Grid;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

@@ -14,16 +14,16 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.framework.BaseConfigManager;
-import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
-import me.filoghost.chestcommands.config.framework.exception.ConfigException;
-import me.filoghost.chestcommands.config.framework.mapped.MappedConfigLoader;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuParser;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.commons.Preconditions;
+import me.filoghost.commons.config.BaseConfigManager;
+import me.filoghost.commons.config.Config;
+import me.filoghost.commons.config.ConfigLoader;
+import me.filoghost.commons.config.exception.ConfigException;
+import me.filoghost.commons.config.mapped.MappedConfigLoader;
+import me.filoghost.commons.logging.ErrorCollector;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;

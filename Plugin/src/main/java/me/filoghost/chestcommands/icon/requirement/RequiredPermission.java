@@ -15,7 +15,7 @@
 package me.filoghost.chestcommands.icon.requirement;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.Strings;
 import org.bukkit.entity.Player;
 
 public class RequiredPermission implements Requirement {

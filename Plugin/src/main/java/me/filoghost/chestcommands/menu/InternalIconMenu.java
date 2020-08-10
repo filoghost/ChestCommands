@@ -19,7 +19,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuInventory;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.commons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -14,11 +14,11 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.Backup;
 import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.commons.Preconditions;
+import me.filoghost.commons.config.exception.ConfigLoadException;
+import me.filoghost.commons.config.exception.ConfigSaveException;
 
 import java.io.IOException;
 import java.nio.file.Path;

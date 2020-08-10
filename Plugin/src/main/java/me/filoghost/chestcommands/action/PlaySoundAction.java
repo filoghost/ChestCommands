@@ -17,8 +17,8 @@ package me.filoghost.chestcommands.action;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.util.Strings;
-import me.filoghost.chestcommands.util.collection.Registry;
+import me.filoghost.commons.Strings;
+import me.filoghost.commons.collection.Registry;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 

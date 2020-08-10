@@ -36,10 +36,10 @@ import me.filoghost.chestcommands.attribute.PriceAttribute;
 import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
 import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
 import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
-import me.filoghost.chestcommands.config.framework.ConfigValue;
-import me.filoghost.chestcommands.config.framework.ConfigValueType;
-import me.filoghost.chestcommands.config.framework.exception.ConfigValueException;
 import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.commons.config.ConfigValue;
+import me.filoghost.commons.config.ConfigValueType;
+import me.filoghost.commons.config.exception.ConfigValueException;
 
 import java.util.HashMap;
 import java.util.Map;

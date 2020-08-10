@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.hook;
 
-import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.commons.Preconditions;
 
 public interface PluginHook {
 

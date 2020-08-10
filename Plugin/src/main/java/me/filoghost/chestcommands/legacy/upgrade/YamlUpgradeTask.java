@@ -14,10 +14,10 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
-import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
+import me.filoghost.commons.config.Config;
+import me.filoghost.commons.config.ConfigLoader;
+import me.filoghost.commons.config.exception.ConfigLoadException;
+import me.filoghost.commons.config.exception.ConfigSaveException;
 
 import java.nio.file.Path;
 

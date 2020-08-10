@@ -15,13 +15,13 @@
 package me.filoghost.chestcommands.legacy.v4_0;
 
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
-import me.filoghost.chestcommands.config.framework.exception.ConfigLoadException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSaveException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
-import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.Strings;
+import me.filoghost.commons.config.Config;
+import me.filoghost.commons.config.ConfigErrors;
+import me.filoghost.commons.config.ConfigLoader;
+import me.filoghost.commons.config.exception.ConfigLoadException;
+import me.filoghost.commons.config.exception.ConfigSaveException;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class v4_0_PlaceholdersFileUpgradeTask extends UpgradeTask {
 		try {
 			lines = Files.readAllLines(oldPlaceholdersFile);
 		} catch (IOException e) {
-			throw new ConfigLoadException(ErrorMessages.Config.readIOException, e);
+			throw new ConfigLoadException(ConfigErrors.readIOException, e);
 		}
 
 		for (String line : lines) {

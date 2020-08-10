@@ -15,14 +15,14 @@
 package me.filoghost.chestcommands.logging;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.config.framework.exception.ConfigException;
-import me.filoghost.chestcommands.config.framework.exception.ConfigSyntaxException;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
-import me.filoghost.chestcommands.util.logging.ErrorInfo;
+import me.filoghost.commons.CommonsUtil;
+import me.filoghost.commons.config.exception.ConfigException;
+import me.filoghost.commons.config.exception.ConfigSyntaxException;
+import me.filoghost.commons.logging.ErrorCollector;
+import me.filoghost.commons.logging.ErrorInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -89,7 +89,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 		if (error.getCause() != null) {
 			output.append(ChatColor.DARK_GRAY);
 			output.append("--------[ Exception details ]--------\n");
-			output.append(Utils.getStackTraceString(error.getCause()));
+			output.append(CommonsUtil.getStackTraceString(error.getCause()));
 			output.append("-------------------------------------\n");
 		}
 		output.append(" \n");

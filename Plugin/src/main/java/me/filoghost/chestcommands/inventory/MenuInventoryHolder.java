@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.inventory;
 
-import me.filoghost.chestcommands.util.Preconditions;
+import me.filoghost.commons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

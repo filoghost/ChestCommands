@@ -15,8 +15,8 @@
 package me.filoghost.chestcommands.placeholder;
 
 import com.google.common.collect.ImmutableList;
-import me.filoghost.chestcommands.util.Preconditions;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
+import me.filoghost.commons.Preconditions;
+import me.filoghost.commons.collection.CollectionUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;

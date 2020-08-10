@@ -16,7 +16,6 @@ package me.filoghost.chestcommands.legacy;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
@@ -26,8 +25,9 @@ import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuNodeRenameUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_PlaceholdersFileUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_SettingsUpgradeTask;
 import me.filoghost.chestcommands.logging.ErrorMessages;
-import me.filoghost.chestcommands.util.collection.CollectionUtils;
-import me.filoghost.chestcommands.util.logging.Log;
+import me.filoghost.commons.collection.CollectionUtils;
+import me.filoghost.commons.config.ConfigLoader;
+import me.filoghost.commons.logging.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -17,7 +17,7 @@ package me.filoghost.chestcommands.attribute;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.chestcommands.util.MaterialsHelper;
+import me.filoghost.commons.MaterialsHelper;
 import org.bukkit.Material;
 
 import java.util.Optional;

@@ -16,12 +16,10 @@ package me.filoghost.chestcommands;
 
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
-import me.filoghost.chestcommands.command.framework.CommandFramework;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.CustomPlaceholders;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
-import me.filoghost.chestcommands.config.framework.ConfigLoader;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
@@ -38,9 +36,12 @@ import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.chestcommands.task.TickingTask;
-import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
-import me.filoghost.chestcommands.util.logging.Log;
+import me.filoghost.commons.BaseJavaPlugin;
+import me.filoghost.commons.CommonsUtil;
+import me.filoghost.commons.command.CommandFramework;
+import me.filoghost.commons.config.ConfigLoader;
+import me.filoghost.commons.logging.ErrorCollector;
+import me.filoghost.commons.logging.Log;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -72,7 +73,7 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	@Override
 	protected void onCheckedEnable() throws PluginEnableException {
-		if (!Utils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
+		if (!CommonsUtil.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
 			if (Bukkit.getVersion().contains("(MC: 1.8)")) {
 				throw new PluginEnableException("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
 			} else {

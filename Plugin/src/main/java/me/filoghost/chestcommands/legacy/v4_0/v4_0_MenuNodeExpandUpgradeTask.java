@@ -15,13 +15,13 @@
 package me.filoghost.chestcommands.legacy.v4_0;
 
 import me.filoghost.chestcommands.config.ConfigManager;
-import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigSection;
-import me.filoghost.chestcommands.config.framework.ConfigValueType;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.Strings;
+import me.filoghost.commons.config.Config;
+import me.filoghost.commons.config.ConfigSection;
+import me.filoghost.commons.config.ConfigValueType;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

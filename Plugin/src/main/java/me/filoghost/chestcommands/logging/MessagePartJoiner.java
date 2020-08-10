@@ -14,7 +14,7 @@
  */
 package me.filoghost.chestcommands.logging;
 
-import me.filoghost.chestcommands.util.Strings;
+import me.filoghost.commons.Strings;
 
 import java.util.List;
 

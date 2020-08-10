@@ -14,12 +14,12 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.config.framework.Config;
-import me.filoghost.chestcommands.config.framework.ConfigSection;
 import me.filoghost.chestcommands.logging.ErrorMessages;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
-import me.filoghost.chestcommands.util.Colors;
-import me.filoghost.chestcommands.util.logging.ErrorCollector;
+import me.filoghost.commons.Colors;
+import me.filoghost.commons.config.Config;
+import me.filoghost.commons.config.ConfigSection;
+import me.filoghost.commons.logging.ErrorCollector;
 
 import java.util.ArrayList;
 import java.util.List;
