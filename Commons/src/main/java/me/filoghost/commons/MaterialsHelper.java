@@ -23,9 +23,6 @@ import java.util.Optional;
 
 public final class MaterialsHelper {
 
-	// Material names have been changed in 1.13, when dolphins were added
-	private static final boolean USE_NEW_MATERIAL_NAMES = CommonsUtil.isClassLoaded("org.bukkit.entity.Dolphin");
-
 	// Registry of materials by numerical ID (before 1.13), name and aliases
 	private static final Registry<Material> MATERIALS_REGISTRY = initMaterialsRegistry();
 
@@ -36,11 +33,11 @@ public final class MaterialsHelper {
 	@SuppressWarnings("deprecation")
 	private static Registry<Material> initMaterialsRegistry() {
 		Registry<Material> materialsRegistry = Registry.fromEnumValues(Material.class);
-		
-		if (!USE_NEW_MATERIAL_NAMES) {
-			// Add numerical IDs in versions before 1.13
+
+		// Add numerical IDs in legacy versions (the Tag class was added in 1.13)
+		if (!CommonsUtil.isClassLoaded("org.bukkit.Tag")) {
 			for (Material material : Material.values()) {
-				materialsRegistry.put(String.valueOf(material.getId()), material);
+				materialsRegistry.put(Integer.toString(material.getId()), material);
 			}
 		}
 
