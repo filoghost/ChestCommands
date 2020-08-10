@@ -33,25 +33,26 @@ public class RequiredItems implements Requirement {
 	@Override
 	public boolean hasCost(Player player) {
 		InventoryTakeHelper inventoryTakeHelper = new InventoryTakeHelper(player.getInventory());
-		List<RequiredItem> missingItems = inventoryTakeHelper.prepareTakeItems(items);
+		boolean hasItems = inventoryTakeHelper.prepareTakeItems(items);
 
-		for (RequiredItem item : missingItems) {
-			player.sendMessage(ChestCommands.getLang().no_required_item
-					.replace("{material}", Utils.formatEnum(item.getMaterial()))
-					.replace("{amount}", Integer.toString(item.getAmount()))
-					.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any)
-			);
+		if (!hasItems) {
+			for (RequiredItem item : items) {
+				player.sendMessage(ChestCommands.getLang().no_required_item
+						.replace("{material}", Utils.formatEnum(item.getMaterial()))
+						.replace("{amount}", Integer.toString(item.getAmount()))
+						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any));
+			}
 		}
 		
-		return missingItems.isEmpty();
+		return hasItems;
 	}
 
 	@Override
 	public boolean takeCost(Player player) {
 		InventoryTakeHelper inventoryTakeHelper = new InventoryTakeHelper(player.getInventory());
-		List<RequiredItem> missingItems = inventoryTakeHelper.prepareTakeItems(items);
+		boolean hasItems = inventoryTakeHelper.prepareTakeItems(items);
 
-		if (!missingItems.isEmpty()) {
+		if (!hasItems) {
 			return false;
 		}
 		

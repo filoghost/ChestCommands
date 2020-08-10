@@ -29,7 +29,7 @@ public class InventoryTakeHelper {
 		}
 	}
 
-	public List<RequiredItem> prepareTakeItems(List<RequiredItem> requiredItems) {
+	public boolean prepareTakeItems(List<RequiredItem> requiredItems) {
 		List<RequiredItem> missingItems = new ArrayList<>();
 
 		// Sort required items: check required items with a restrictive durability first
@@ -57,7 +57,7 @@ public class InventoryTakeHelper {
 		}
 
 		success = missingItems.isEmpty();
-		return missingItems;
+		return success;
 	}
 
 	public void applyTakeItems() {
