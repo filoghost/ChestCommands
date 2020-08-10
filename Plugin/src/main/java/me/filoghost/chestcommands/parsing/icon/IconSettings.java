@@ -64,7 +64,7 @@ public class IconSettings {
 				}
 
 				AttributeErrorHandler errorHandler = (String listElement, ParseException e) -> {
-					errorCollector.add(ErrorMessages.Menu.invalidAttributeListElement(this, attributeName, listElement), e);
+					errorCollector.add(e, ErrorMessages.Menu.invalidAttributeListElement(this, attributeName, listElement));
 				};
 
 				ConfigValue configValue = config.get(attributeName);
@@ -72,7 +72,7 @@ public class IconSettings {
 				attributes.put(attributeType, iconAttribute);
 
 			} catch (ParseException | ConfigValueException e) {
-				errorCollector.add(ErrorMessages.Menu.invalidAttribute(this, attributeName), e);
+				errorCollector.add(e, ErrorMessages.Menu.invalidAttribute(this, attributeName));
 			}
 		}
 	}

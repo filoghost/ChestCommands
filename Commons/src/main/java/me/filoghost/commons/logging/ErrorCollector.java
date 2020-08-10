@@ -22,17 +22,14 @@ import java.util.List;
  */
 public abstract class ErrorCollector {
 
-	protected final List<ErrorInfo> errors = new ArrayList<>();
+	protected final List<ErrorLog> errors = new ArrayList<>();
 
-	public ErrorInfo add(String message) {
-		return add(message, null);
+	public void add(String... messageParts) {
+		add(null, messageParts);
 	}
 
-	public ErrorInfo add(String message, Throwable throwable) {
-		ErrorInfo errorInfo = new ErrorInfo(message);
-		errorInfo.setCause(throwable);
-		errors.add(errorInfo);
-		return errorInfo;
+	public void add(Throwable cause, String... messageParts) {
+		errors.add(new ErrorLog(cause, messageParts));
 	}
 
 	public int getErrorsCount() {

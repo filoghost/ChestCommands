@@ -165,7 +165,7 @@ public class ChestCommands extends BaseJavaPlugin {
 		try {
 			Files.createDirectories(configManager.getRootDataFolder());
 		} catch (IOException e) {
-			errorCollector.add(ErrorMessages.Config.createDataFolderIOException, e);
+			errorCollector.add(e, ErrorMessages.Config.createDataFolderIOException);
 			return errorCollector;
 		}
 
@@ -177,7 +177,7 @@ public class ChestCommands extends BaseJavaPlugin {
 				errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
 			}
 		} catch (UpgradeExecutorException e) {
-			errorCollector.add(ErrorMessages.Upgrade.genericExecutorError, e);
+			errorCollector.add(e, ErrorMessages.Upgrade.genericExecutorError);
 			errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
 		}
 

@@ -101,7 +101,7 @@ public class ConfigManager extends BaseConfigManager {
 	}
 
 	private void logConfigInitException(ErrorCollector errorCollector, Path file, ConfigException e) {
-		errorCollector.add(ErrorMessages.Config.initException(file), e);
+		errorCollector.add(e, ErrorMessages.Config.initException(file));
 	}
 
 	public List<LoadedMenu> tryLoadMenus(ErrorCollector errorCollector) {
@@ -111,7 +111,7 @@ public class ConfigManager extends BaseConfigManager {
 		try {
 			menuFiles = getMenuFiles();
 		} catch (IOException e) {
-			errorCollector.add(ErrorMessages.Config.menuListIOException(getMenusFolder()), e);
+			errorCollector.add(e, ErrorMessages.Config.menuListIOException(getMenusFolder()));
 			return Collections.emptyList();
 		}
 

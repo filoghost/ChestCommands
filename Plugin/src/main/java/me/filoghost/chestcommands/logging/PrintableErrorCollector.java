@@ -22,7 +22,7 @@ import me.filoghost.commons.CommonsUtil;
 import me.filoghost.commons.config.exception.ConfigException;
 import me.filoghost.commons.config.exception.ConfigSyntaxException;
 import me.filoghost.commons.logging.ErrorCollector;
-import me.filoghost.commons.logging.ErrorInfo;
+import me.filoghost.commons.logging.ErrorLog;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -41,7 +41,7 @@ public class PrintableErrorCollector extends ErrorCollector {
 			output.append(" \n");
 
 			int index = 1;
-			for (ErrorInfo error : errors) {
+			for (ErrorLog error : errors) {
 				ErrorPrintInfo printFormat = getErrorPrintInfo(index, error);
 				printError(output, printFormat);
 				index++;
@@ -51,8 +51,8 @@ public class PrintableErrorCollector extends ErrorCollector {
 		Bukkit.getConsoleSender().sendMessage(output.toString());
 	}
 
-	private ErrorPrintInfo getErrorPrintInfo(int index, ErrorInfo error) {
-		List<String> message = new ArrayList<>(error.getMessage());
+	private ErrorPrintInfo getErrorPrintInfo(int index, ErrorLog error) {
+		List<String> message = new ArrayList<>(error.getMessage().asList());
 		String details = null;
 		Throwable cause = error.getCause();
 

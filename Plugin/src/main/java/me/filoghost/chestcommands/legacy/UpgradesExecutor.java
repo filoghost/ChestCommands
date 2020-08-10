@@ -90,7 +90,7 @@ public class UpgradesExecutor {
 		try {
 			upgradeTasks = upgrade.createUpgradeTasks(configManager);
 		} catch (UpgradeTaskException e) {
-			errorCollector.add(ErrorMessages.Upgrade.failedToPrepareUpgradeTasks, e);
+			errorCollector.add(e, ErrorMessages.Upgrade.failedToPrepareUpgradeTasks);
 			return false;
 		}
 
@@ -103,7 +103,7 @@ public class UpgradesExecutor {
 				}
 			} catch (UpgradeTaskException e) {
 				allTasksSuccessful = false;
-				errorCollector.add(ErrorMessages.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()), e);
+				errorCollector.add(e, ErrorMessages.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()));
 			}
 		}
 

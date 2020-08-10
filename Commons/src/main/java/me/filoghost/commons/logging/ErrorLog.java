@@ -14,35 +14,24 @@
  */
 package me.filoghost.commons.logging;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
-public class ErrorInfo {
+public class ErrorLog {
 
-	private final List<String> message;
-	private Throwable cause;
+	private final ImmutableList<String> message;
+	private final Throwable cause;
 
-	protected ErrorInfo(String messagePart) {
-		this.message = new ArrayList<>();
-		this.message.add(messagePart);
+	protected ErrorLog(Throwable cause, String[] message) {
+		this.message = ImmutableList.copyOf(message);
+		this.cause = cause;
 	}
 
-	public ErrorInfo appendMessage(String messagePart) {
-		message.add(messagePart);
-		return this;
-	}
-
-	public List<String> getMessage() {
-		return Collections.unmodifiableList(message);
+	public ImmutableList<String> getMessage() {
+		return message;
 	}
 
 	public Throwable getCause() {
 		return cause;
-	}
-
-	public void setCause(Throwable cause) {
-		this.cause = cause;
 	}
 
 }

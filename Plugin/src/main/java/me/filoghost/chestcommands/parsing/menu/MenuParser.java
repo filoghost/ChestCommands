@@ -74,13 +74,15 @@ public class MenuParser {
 		int column = positionX.getPosition() - 1;
 
 		if (row < 0 || row >= iconMenu.getRowCount()) {
-			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y))
-					.appendMessage("it must be between 1 and " + iconMenu.getRowCount());
+			errorCollector.add(
+					ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
+					"it must be between 1 and " + iconMenu.getRowCount());
 			return;
 		}
 		if (column < 0 || column >= iconMenu.getColumnCount()) {
-			errorCollector.add(ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X))
-					.appendMessage(("it must be between 1 and " + iconMenu.getColumnCount()));
+			errorCollector.add(
+					ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
+					"it must be between 1 and " + iconMenu.getColumnCount());
 			return;
 		}
 
@@ -140,8 +142,8 @@ public class MenuParser {
 					try {
 						openActions.add(ActionParser.parse(serializedAction));
 					} catch (ParseException e) {
-						errorCollector.add(ErrorMessages.Menu.invalidSettingListElement(
-								config.getSourceFile(), MenuSettingsNode.OPEN_ACTIONS, serializedAction), e);
+						errorCollector.add(e, ErrorMessages.Menu.invalidSettingListElement(
+								config.getSourceFile(), MenuSettingsNode.OPEN_ACTIONS, serializedAction));
 						openActions.add(new DisabledAction(ErrorMessages.User.configurationError(
 								"an action linked to opening this menu was not executed because it was not valid")));
 					}
@@ -170,8 +172,7 @@ public class MenuParser {
 					menuSettings.setOpenItem(openItem);
 
 				} catch (ParseException e) {
-					errorCollector.add(
-							ErrorMessages.Menu.invalidSetting(config.getSourceFile(), MenuSettingsNode.OPEN_ITEM_MATERIAL),	e);
+					errorCollector.add(e, ErrorMessages.Menu.invalidSetting(config.getSourceFile(), MenuSettingsNode.OPEN_ITEM_MATERIAL));
 				}
 			}
 		}
@@ -191,7 +192,7 @@ public class MenuParser {
 		if (e instanceof MissingConfigValueException) {
 			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), missingSetting));
 		} else {
-			errorCollector.add(ErrorMessages.Menu.invalidSetting(config.getSourceFile(), missingSetting), e);
+			errorCollector.add(e, ErrorMessages.Menu.invalidSetting(config.getSourceFile(), missingSetting));
 		}
 	}
 
