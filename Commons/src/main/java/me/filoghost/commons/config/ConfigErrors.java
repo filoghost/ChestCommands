@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) filoghost and contributors
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 package me.filoghost.commons.config;
 
 import me.filoghost.commons.config.mapped.MappedConfig;

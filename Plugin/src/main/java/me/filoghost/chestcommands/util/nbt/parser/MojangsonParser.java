@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) Jan Schultke
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package me.filoghost.chestcommands.util.nbt.parser;
 
 import me.filoghost.chestcommands.util.nbt.NBTByte;
