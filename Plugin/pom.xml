@@ -125,7 +125,7 @@
 					</filters>
 					<relocations>
 						<relocation>
-							<pattern>org.bstats</pattern>
+							<pattern>org.bstats.bukkit</pattern>
 							<shadedPattern>me.filoghost.chestcommands.metrics</shadedPattern>
 						</relocation>
 						<relocation>
