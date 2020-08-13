@@ -108,18 +108,36 @@
 				</includes>
 			</resource>
 		</resources>
+
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.version}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.1</version>
 				<configuration>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<shadedArtifactAttached>false</shadedArtifactAttached>
 					<filters>
 						<filter>
 							<artifact>*:*</artifact>
 							<excludes>
-								<exclude>META-INF/</exclude>
+								<exclude>META-INF/maven/</exclude>
 							</excludes>
 						</filter>
 					</filters>
