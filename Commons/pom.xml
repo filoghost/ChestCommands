@@ -12,19 +12,10 @@
     <artifactId>chestcommands-commons</artifactId>
     <name>ChestCommands Commons</name>
 
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>${bukkit.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
