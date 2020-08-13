@@ -127,6 +127,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
 					<configuration>
 						<archive>
 							<addMavenDescriptor>false</addMavenDescriptor>
@@ -135,6 +136,12 @@
 							</manifest>
 						</archive>
 					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.2.3</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
