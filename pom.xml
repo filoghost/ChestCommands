@@ -33,9 +33,9 @@
 	</properties>
 
 	<modules>
-		<module>API</module>
-		<module>Plugin</module>
-        <module>Commons</module>
+		<module>commons</module>
+		<module>api</module>
+        <module>plugin</module>
     </modules>
 
 	<repositories>
