@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.hook.BarAPIHook;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
@@ -28,7 +28,7 @@ public class DragonBarAction implements Action {
 				seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
 				message = split[1];
 			} catch (ParseException e) {
-				throw new ParseException(ErrorMessages.Parsing.invalidBossBarTime(split[0]), e);
+				throw new ParseException(Errors.Parsing.invalidBossBarTime(split[0]), e);
 			}
 		} else {
 			seconds = 1;
@@ -43,7 +43,7 @@ public class DragonBarAction implements Action {
 		if (BarAPIHook.INSTANCE.isEnabled()) {
 			BarAPIHook.setMessage(player, message.getValue(player), seconds);
 		} else {
-			player.sendMessage(ErrorMessages.User.configurationError("BarAPI plugin not found"));
+			player.sendMessage(Errors.User.configurationError("BarAPI plugin not found"));
 		}
 	}
 

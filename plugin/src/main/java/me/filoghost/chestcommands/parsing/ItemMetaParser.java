@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.commons.Strings;
 import me.filoghost.commons.collection.Registry;
 import org.bukkit.Color;
@@ -25,7 +25,7 @@ public final class ItemMetaParser {
 		String[] split = Strings.trimmedSplit(input, ",");
 
 		if (split.length != 3) {
-			throw new ParseException(ErrorMessages.Parsing.invalidColorFormat);
+			throw new ParseException(Errors.Parsing.invalidColorFormat);
 		}
 
 		int red = parseColor(split[0], "red");
@@ -41,11 +41,11 @@ public final class ItemMetaParser {
 		try {
 			value = NumberParser.getInteger(valueString);
 		} catch (ParseException e) {
-			throw new ParseException(ErrorMessages.Parsing.invalidColorNumber(valueString, colorName), e);
+			throw new ParseException(Errors.Parsing.invalidColorNumber(valueString, colorName), e);
 		}
 
 		if (value < 0 || value > 255) {
-			throw new ParseException(ErrorMessages.Parsing.invalidColorRange(valueString, colorName));
+			throw new ParseException(Errors.Parsing.invalidColorRange(valueString, colorName));
 		}
 
 		return value;
@@ -53,17 +53,17 @@ public final class ItemMetaParser {
 
 	public static DyeColor parseDyeColor(String input) throws ParseException {
 		return DYE_COLORS_REGISTRY.find(input)
-				.orElseThrow(() -> new ParseException(ErrorMessages.Parsing.unknownDyeColor(input)));
+				.orElseThrow(() -> new ParseException(Errors.Parsing.unknownDyeColor(input)));
 	}
 
 	public static Pattern parseBannerPattern(String input) throws ParseException {
 		String[] split = Strings.trimmedSplit(input, ":");
 		if (split.length != 2) {
-			throw new ParseException(ErrorMessages.Parsing.invalidPatternFormat);
+			throw new ParseException(Errors.Parsing.invalidPatternFormat);
 		}
 
 		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
-				.orElseThrow(() -> new ParseException(ErrorMessages.Parsing.unknownPatternType(split[0])));
+				.orElseThrow(() -> new ParseException(Errors.Parsing.unknownPatternType(split[0])));
 		DyeColor patternColor = parseDyeColor(split[1]);
 
 		return new Pattern(patternColor, patternType);

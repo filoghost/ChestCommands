@@ -15,7 +15,7 @@ import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuNodeExpandUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuNodeRenameUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_PlaceholdersFileUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_SettingsUpgradeTask;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.commons.collection.CollectionUtils;
 import me.filoghost.commons.config.ConfigLoader;
 import me.filoghost.commons.logging.Log;
@@ -68,7 +68,7 @@ public class UpgradeList {
 		try {
 			return configManager.getMenuFiles();
 		} catch (IOException e) {
-			throw new UpgradeTaskException(ErrorMessages.Upgrade.menuListIOException, e);
+			throw new UpgradeTaskException(Errors.Upgrade.menuListIOException, e);
 		}
 	}
 

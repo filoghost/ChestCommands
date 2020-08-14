@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.commons.MaterialsHelper;
 import me.filoghost.commons.Preconditions;
 import me.filoghost.commons.Strings;
@@ -33,7 +33,7 @@ public class ItemStackParser {
 				try {
 					this.amount = NumberParser.getStrictlyPositiveInteger(splitAmount[1]);
 				} catch (ParseException e) {
-					throw new ParseException(ErrorMessages.Parsing.invalidAmount(splitAmount[1]), e);
+					throw new ParseException(Errors.Parsing.invalidAmount(splitAmount[1]), e);
 				}
 
 				// Only keep the first part as input
@@ -49,7 +49,7 @@ public class ItemStackParser {
 			try {
 				this.durability = NumberParser.getPositiveShort(splitByColons[1]);
 			} catch (ParseException e) {
-				throw new ParseException(ErrorMessages.Parsing.invalidDurability(splitByColons[1]), e);
+				throw new ParseException(Errors.Parsing.invalidDurability(splitByColons[1]), e);
 			}
 
 			this.hasExplicitDurability = true;
@@ -63,7 +63,7 @@ public class ItemStackParser {
 
 	public void checkNotAir() throws ParseException {
 		if (MaterialsHelper.isAir(material)) {
-			throw new ParseException(ErrorMessages.Parsing.materialCannotBeAir);
+			throw new ParseException(Errors.Parsing.materialCannotBeAir);
 		}
 	}
 

@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ public class GiveMoneyAction implements Action {
 		if (VaultEconomyHook.INSTANCE.isEnabled()) {
 			VaultEconomyHook.giveMoney(player, moneyToGive);
 		} else {
-			player.sendMessage(ErrorMessages.User.configurationError("Vault with a compatible economy plugin not found"));
+			player.sendMessage(Errors.User.configurationError("Vault with a compatible economy plugin not found"));
 		}
 	}
 

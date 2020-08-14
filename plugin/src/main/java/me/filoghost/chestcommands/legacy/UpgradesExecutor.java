@@ -9,7 +9,7 @@ import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.commons.logging.ErrorCollector;
 import me.filoghost.commons.logging.Log;
 
@@ -35,7 +35,7 @@ public class UpgradesExecutor {
 			upgradesDoneRegistry = new UpgradesDoneRegistry(upgradesDoneFile);
 		} catch (IOException e) {
 			// Upgrades can't proceed if metadata file is not read correctly
-			throw new UpgradeExecutorException(ErrorMessages.Upgrade.metadataReadError(upgradesDoneFile), e);
+			throw new UpgradeExecutorException(Errors.Upgrade.metadataReadError(upgradesDoneFile), e);
 		}
 
 		if (isFreshInstall) {
@@ -51,7 +51,7 @@ public class UpgradesExecutor {
 			upgradesDoneRegistry.save();
 		} catch (IOException e) {
 			// Upgrades can't proceed if metadata file is not saved correctly
-			throw new UpgradeExecutorException(ErrorMessages.Upgrade.metadataSaveError(upgradesDoneFile), e);
+			throw new UpgradeExecutorException(Errors.Upgrade.metadataSaveError(upgradesDoneFile), e);
 		}
 
 		return allUpgradesSuccessful;
@@ -81,7 +81,7 @@ public class UpgradesExecutor {
 		try {
 			upgradeTasks = upgrade.createUpgradeTasks(configManager);
 		} catch (UpgradeTaskException e) {
-			errorCollector.add(e, ErrorMessages.Upgrade.failedToPrepareUpgradeTasks);
+			errorCollector.add(e, Errors.Upgrade.failedToPrepareUpgradeTasks);
 			return false;
 		}
 
@@ -94,7 +94,7 @@ public class UpgradesExecutor {
 				}
 			} catch (UpgradeTaskException e) {
 				allTasksSuccessful = false;
-				errorCollector.add(e, ErrorMessages.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()));
+				errorCollector.add(e, Errors.Upgrade.failedSingleUpgrade(upgradeTask.getOriginalFile()));
 			}
 		}
 

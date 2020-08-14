@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.action;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.commons.Strings;
@@ -28,7 +28,7 @@ public class PlaySoundAction implements Action {
 
 		Optional<Sound> sound = SOUNDS_REGISTRY.find(split[0]);
 		if (!sound.isPresent()) {
-			throw new ParseException(ErrorMessages.Parsing.unknownSound(split[0]));
+			throw new ParseException(Errors.Parsing.unknownSound(split[0]));
 		}
 		this.sound = sound.get();
 
@@ -36,7 +36,7 @@ public class PlaySoundAction implements Action {
 			try {
 				pitch = NumberParser.getFloat(split[1]);
 			} catch (ParseException e) {
-				throw new ParseException(ErrorMessages.Parsing.invalidSoundPitch(split[1]), e);
+				throw new ParseException(Errors.Parsing.invalidSoundPitch(split[1]), e);
 			}
 		} else {
 			pitch = 1.0f;
@@ -46,7 +46,7 @@ public class PlaySoundAction implements Action {
 			try {
 				volume = NumberParser.getFloat(split[2]);
 			} catch (ParseException e) {
-				throw new ParseException(ErrorMessages.Parsing.invalidSoundVolume(split[2]), e);
+				throw new ParseException(Errors.Parsing.invalidSoundVolume(split[2]), e);
 			}
 		} else {
 			volume = 1.0f;

@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuParser;
 import me.filoghost.commons.Preconditions;
@@ -92,7 +92,7 @@ public class ConfigManager extends BaseConfigManager {
 	}
 
 	private void logConfigInitException(ErrorCollector errorCollector, Path file, ConfigException e) {
-		errorCollector.add(e, ErrorMessages.Config.initException(file));
+		errorCollector.add(e, Errors.Config.initException(file));
 	}
 
 	public List<LoadedMenu> tryLoadMenus(ErrorCollector errorCollector) {
@@ -102,7 +102,7 @@ public class ConfigManager extends BaseConfigManager {
 		try {
 			menuFiles = getMenuFiles();
 		} catch (IOException e) {
-			errorCollector.add(e, ErrorMessages.Config.menuListIOException(getMenusFolder()));
+			errorCollector.add(e, Errors.Config.menuListIOException(getMenusFolder()));
 			return Collections.emptyList();
 		}
 

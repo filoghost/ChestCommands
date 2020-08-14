@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.ParseException;
 
 public class AmountAttribute implements IconAttribute {
@@ -15,7 +15,7 @@ public class AmountAttribute implements IconAttribute {
 
 	public AmountAttribute(int amount, AttributeErrorHandler errorHandler) throws ParseException {
 		if (amount < 0) {
-			throw new ParseException(ErrorMessages.Parsing.zeroOrPositive);
+			throw new ParseException(Errors.Parsing.zeroOrPositive);
 		}
 		this.amount = amount;
 	}

@@ -8,7 +8,7 @@ package me.filoghost.chestcommands.parsing.icon;
 import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
 import me.filoghost.chestcommands.attribute.IconAttribute;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.commons.config.ConfigSection;
 import me.filoghost.commons.config.ConfigValue;
@@ -51,11 +51,11 @@ public class IconSettings {
 			try {
 				AttributeType attributeType = AttributeType.fromAttributeName(attributeName);
 				if (attributeType == null) {
-					throw new ParseException(ErrorMessages.Parsing.unknownAttribute);
+					throw new ParseException(Errors.Parsing.unknownAttribute);
 				}
 
 				AttributeErrorHandler errorHandler = (String listElement, ParseException e) -> {
-					errorCollector.add(e, ErrorMessages.Menu.invalidAttributeListElement(this, attributeName, listElement));
+					errorCollector.add(e, Errors.Menu.invalidAttributeListElement(this, attributeName, listElement));
 				};
 
 				ConfigValue configValue = config.get(attributeName);
@@ -63,7 +63,7 @@ public class IconSettings {
 				attributes.put(attributeType, iconAttribute);
 
 			} catch (ParseException | ConfigValueException e) {
-				errorCollector.add(e, ErrorMessages.Menu.invalidAttribute(this, attributeName));
+				errorCollector.add(e, Errors.Menu.invalidAttribute(this, attributeName));
 			}
 		}
 	}

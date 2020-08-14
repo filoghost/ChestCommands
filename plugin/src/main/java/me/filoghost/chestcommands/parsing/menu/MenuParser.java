@@ -8,7 +8,7 @@ package me.filoghost.chestcommands.parsing.menu;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.attribute.PositionAttribute;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
@@ -52,12 +52,12 @@ public class MenuParser {
 		PositionAttribute positionY = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_Y);
 
 		if (positionX == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.POSITION_X));
+			errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_X));
 			return;
 		}
 
 		if (positionY == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
+			errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
 			return;
 		}
 
@@ -66,23 +66,23 @@ public class MenuParser {
 
 		if (row < 0 || row >= iconMenu.getRowCount()) {
 			errorCollector.add(
-					ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
+					Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
 					"it must be between 1 and " + iconMenu.getRowCount());
 			return;
 		}
 		if (column < 0 || column >= iconMenu.getColumnCount()) {
 			errorCollector.add(
-					ErrorMessages.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
+					Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
 					"it must be between 1 and " + iconMenu.getColumnCount());
 			return;
 		}
 
 		if (iconMenu.getIcon(row, column) != null) {
-			errorCollector.add(ErrorMessages.Menu.iconOverridesAnother(iconSettings));
+			errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
 		}
 
 		if (iconSettings.getAttributeValue(AttributeType.MATERIAL) == null) {
-			errorCollector.add(ErrorMessages.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
+			errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
 		}
 
 		iconMenu.setIcon(row, column, iconSettings.createIcon());
@@ -92,7 +92,7 @@ public class MenuParser {
 	private static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
 		ConfigSection settingsSection = config.getConfigSection(MenuSettingsNode.ROOT_SECTION);
 		if (settingsSection == null) {
-			errorCollector.add(ErrorMessages.Menu.missingSettingsSection(config.getSourceFile()));
+			errorCollector.add(Errors.Menu.missingSettingsSection(config.getSourceFile()));
 			settingsSection = new EmptyConfigSection();
 		}
 
@@ -133,9 +133,9 @@ public class MenuParser {
 					try {
 						openActions.add(ActionParser.parse(serializedAction));
 					} catch (ParseException e) {
-						errorCollector.add(e, ErrorMessages.Menu.invalidSettingListElement(
+						errorCollector.add(e, Errors.Menu.invalidSettingListElement(
 								config.getSourceFile(), MenuSettingsNode.OPEN_ACTIONS, serializedAction));
-						openActions.add(new DisabledAction(ErrorMessages.User.configurationError(
+						openActions.add(new DisabledAction(Errors.User.configurationError(
 								"an action linked to opening this menu was not executed because it was not valid")));
 					}
 				}
@@ -164,7 +164,7 @@ public class MenuParser {
 					menuSettings.setOpenItem(openItem);
 
 				} catch (ParseException e) {
-					errorCollector.add(e, ErrorMessages.Menu.invalidSetting(config.getSourceFile(), MenuSettingsNode.OPEN_ITEM_MATERIAL));
+					errorCollector.add(e, Errors.Menu.invalidSetting(config.getSourceFile(), MenuSettingsNode.OPEN_ITEM_MATERIAL));
 				}
 			}
 		}
@@ -182,9 +182,9 @@ public class MenuParser {
 
 	private static void addMenuSettingError(ErrorCollector errorCollector, Config config, String missingSetting, ConfigValueException e) {
 		if (e instanceof MissingConfigValueException) {
-			errorCollector.add(ErrorMessages.Menu.missingSetting(config.getSourceFile(), missingSetting));
+			errorCollector.add(Errors.Menu.missingSetting(config.getSourceFile(), missingSetting));
 		} else {
-			errorCollector.add(e, ErrorMessages.Menu.invalidSetting(config.getSourceFile(), missingSetting));
+			errorCollector.add(e, Errors.Menu.invalidSetting(config.getSourceFile(), missingSetting));
 		}
 	}
 

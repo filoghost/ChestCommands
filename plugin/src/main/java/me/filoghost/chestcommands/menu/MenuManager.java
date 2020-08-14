@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
 import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuOpenItem;
 import me.filoghost.commons.collection.CaseInsensitiveMap;
@@ -51,7 +51,7 @@ public class MenuManager {
 		String fileName = loadedMenu.getSourceFile().getFileName().toString();
 		InternalIconMenu sameNameMenu = menusByFile.get(fileName);
 		if (sameNameMenu != null) {
-			errorCollector.add(ErrorMessages.Menu.duplicateMenuName(sameNameMenu.getSourceFile(), loadedMenu.getSourceFile()));
+			errorCollector.add(Errors.Menu.duplicateMenuName(sameNameMenu.getSourceFile(), loadedMenu.getSourceFile()));
 		}
 		menusByFile.put(fileName, menu);
 
@@ -60,7 +60,7 @@ public class MenuManager {
 				if (!openCommand.isEmpty()) {
 					InternalIconMenu sameCommandMenu = menusByOpenCommand.get(openCommand);
 					if (sameCommandMenu != null) {
-						errorCollector.add(ErrorMessages.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), openCommand));
+						errorCollector.add(Errors.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), openCommand));
 					}
 					menusByOpenCommand.put(openCommand, menu);
 				}

@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.Bukkit;
@@ -35,7 +35,7 @@ public class OpenMenuAction implements Action {
 			});
 
 		} else {
-			player.sendMessage(ErrorMessages.User.configurationError("couldn't find the menu \"" + menuName + "\""));
+			player.sendMessage(Errors.User.configurationError("couldn't find the menu \"" + menuName + "\""));
 		}
 	}
 

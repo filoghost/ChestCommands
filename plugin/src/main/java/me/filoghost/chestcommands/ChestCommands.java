@@ -21,7 +21,7 @@ import me.filoghost.chestcommands.listener.CommandListener;
 import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.listener.JoinListener;
 import me.filoghost.chestcommands.listener.SignListener;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.logging.PrintableErrorCollector;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
@@ -156,7 +156,7 @@ public class ChestCommands extends BaseJavaPlugin {
 		try {
 			Files.createDirectories(configManager.getRootDataFolder());
 		} catch (IOException e) {
-			errorCollector.add(e, ErrorMessages.Config.createDataFolderIOException);
+			errorCollector.add(e, Errors.Config.createDataFolderIOException);
 			return errorCollector;
 		}
 
@@ -165,11 +165,11 @@ public class ChestCommands extends BaseJavaPlugin {
 		try {
 			boolean allUpgradesSuccessful = upgradeExecutor.run(isFreshInstall, errorCollector);
 			if (!allUpgradesSuccessful) {
-				errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
+				errorCollector.add(Errors.Upgrade.failedSomeUpgrades);
 			}
 		} catch (UpgradeExecutorException e) {
-			errorCollector.add(e, ErrorMessages.Upgrade.genericExecutorError);
-			errorCollector.add(ErrorMessages.Upgrade.failedSomeUpgrades);
+			errorCollector.add(e, Errors.Upgrade.genericExecutorError);
+			errorCollector.add(Errors.Upgrade.failedSomeUpgrades);
 		}
 
 		settings = configManager.tryLoadSettings(errorCollector);

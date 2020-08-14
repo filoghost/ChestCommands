@@ -5,13 +5,13 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 
 public class NumberParser {
 
 	public static double getStrictlyPositiveDouble(String input) throws ParseException {
 		double value = getDouble(input);
-		check(value > 0.0, ErrorMessages.Parsing.strictlyPositive);
+		check(value > 0.0, Errors.Parsing.strictlyPositive);
 		return value;
 	}
 
@@ -19,7 +19,7 @@ public class NumberParser {
 		try {
 			return Double.parseDouble(input);
 		} catch (NumberFormatException ex) {
-			throw new ParseException(ErrorMessages.Parsing.invalidDecimal);
+			throw new ParseException(Errors.Parsing.invalidDecimal);
 		}
 	}
 
@@ -27,13 +27,13 @@ public class NumberParser {
 		try {
 			return Float.parseFloat(input);
 		} catch (NumberFormatException ex) {
-			throw new ParseException(ErrorMessages.Parsing.invalidDecimal);
+			throw new ParseException(Errors.Parsing.invalidDecimal);
 		}
 	}
 
 	public static short getPositiveShort(String input) throws ParseException {
 		short value = getShort(input);
-		check(value >= 0, ErrorMessages.Parsing.zeroOrPositive);
+		check(value >= 0, Errors.Parsing.zeroOrPositive);
 		return value;
 	}
 
@@ -41,13 +41,13 @@ public class NumberParser {
 		try {
 			return Short.parseShort(input);
 		} catch (NumberFormatException ex) {
-			throw new ParseException(ErrorMessages.Parsing.invalidShort);
+			throw new ParseException(Errors.Parsing.invalidShort);
 		}
 	}
 
 	public static int getStrictlyPositiveInteger(String input) throws ParseException {
 		int value = getInteger(input);
-		check(value > 0, ErrorMessages.Parsing.strictlyPositive);
+		check(value > 0, Errors.Parsing.strictlyPositive);
 		return value;
 	}
 
@@ -55,7 +55,7 @@ public class NumberParser {
 		try {
 			return Integer.parseInt(input);
 		} catch (NumberFormatException ex) {
-			throw new ParseException(ErrorMessages.Parsing.invalidInteger);
+			throw new ParseException(Errors.Parsing.invalidInteger);
 		}
 	}
 

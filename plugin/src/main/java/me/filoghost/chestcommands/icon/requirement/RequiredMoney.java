@@ -8,7 +8,7 @@ package me.filoghost.chestcommands.icon.requirement;
 import com.google.common.base.Preconditions;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import org.bukkit.entity.Player;
 
 public class RequiredMoney implements Requirement {
@@ -23,7 +23,7 @@ public class RequiredMoney implements Requirement {
 	@Override
 	public boolean hasCost(Player player) {
 		if (!VaultEconomyHook.INSTANCE.isEnabled()) {
-			player.sendMessage(ErrorMessages.User.configurationError(
+			player.sendMessage(Errors.User.configurationError(
 					"the item has a price, but Vault with a compatible economy plugin was not found. "
 					+ "For security, the action has been blocked"));
 			return false;
@@ -42,7 +42,7 @@ public class RequiredMoney implements Requirement {
 		boolean success = VaultEconomyHook.takeMoney(player, moneyAmount);
 		
 		if (!success) {
-			player.sendMessage(ErrorMessages.User.configurationError("a money transaction couldn't be executed"));
+			player.sendMessage(Errors.User.configurationError("a money transaction couldn't be executed"));
 		}
 		
 		return success;

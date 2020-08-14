@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.chestcommands.logging.ErrorMessages;
+import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
 import me.filoghost.commons.Colors;
 import me.filoghost.commons.config.Config;
@@ -34,12 +34,12 @@ public class CustomPlaceholders {
 			}
 
 			if (placeholder.length() == 0) {
-				errorCollector.add(ErrorMessages.Config.emptyPlaceholder(config.getSourceFile()));
+				errorCollector.add(Errors.Config.emptyPlaceholder(config.getSourceFile()));
 				continue;
 			}
 
 			if (placeholder.length() > 100) {
-				errorCollector.add(ErrorMessages.Config.tooLongPlaceholder(config.getSourceFile(), placeholder));
+				errorCollector.add(Errors.Config.tooLongPlaceholder(config.getSourceFile(), placeholder));
 				continue;
 			}
 

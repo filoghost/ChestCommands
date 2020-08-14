@@ -12,7 +12,7 @@ import org.bukkit.ChatColor;
 
 import java.nio.file.Path;
 
-public class ErrorMessages {
+public class Errors {
 
 	public static class Config {
 
@@ -207,7 +207,7 @@ public class ErrorMessages {
 		public static String notifyStaffRequest = "Please inform the staff.";
 
 		public static String configurationError(String errorMessage) {
-			return ChatColor.RED + "Error: " + errorMessage + ". " + ErrorMessages.User.notifyStaffRequest;
+			return ChatColor.RED + "Error: " + errorMessage + ". " + Errors.User.notifyStaffRequest;
 		}
 
 	}
