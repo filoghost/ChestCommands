@@ -8,6 +8,7 @@ package me.filoghost.chestcommands.logging;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
+import me.filoghost.commons.config.ConfigErrors;
 import org.bukkit.ChatColor;
 
 import java.nio.file.Path;
@@ -213,12 +214,7 @@ public class Errors {
 	}
 
 	private static String formatPath(Path path) {
-		if (path.startsWith(ChestCommands.getDataFolderPath())) {
-			// Remove "/plugins/ChestCommands" prefix
-			return path.subpath(ChestCommands.getDataFolderPath().getNameCount(), path.getNameCount()).toString();
-		} else {
-			return path.toString();
-		}
+		return ConfigErrors.formatPath(ChestCommands.getDataFolderPath(), path);
 	}
 
 }

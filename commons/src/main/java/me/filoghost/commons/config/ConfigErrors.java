@@ -49,7 +49,7 @@ public class ConfigErrors {
 		return "value of type \"" + value.getClass() + "\" couldn't be converted by \"" + converter.getClass() + "\"";
 	}
 
-	private static String formatPath(Path rootDataFolder, Path path) {
+	public static String formatPath(Path rootDataFolder, Path path) {
 		if (path.startsWith(rootDataFolder)) {
 			// Remove root data folder prefix
 			return path.subpath(rootDataFolder.getNameCount(), path.getNameCount()).toString();
