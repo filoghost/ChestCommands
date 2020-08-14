@@ -12,8 +12,6 @@ import me.filoghost.commons.Strings;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Optional;
-
 public class ItemStackParser {
 
 	private final Material material;
@@ -60,12 +58,13 @@ public class ItemStackParser {
 			input = splitByColons[0];
 		}
 
-		Optional<Material> material = MaterialsHelper.matchMaterial(input);
+		this.material = MaterialParser.parseMaterial(input);
+	}
 
-		if (!material.isPresent() || MaterialsHelper.isAir(material.get())) {
-			throw new ParseException(ErrorMessages.Parsing.unknownMaterial(input));
+	public void checkNotAir() throws ParseException {
+		if (MaterialsHelper.isAir(material)) {
+			throw new ParseException(ErrorMessages.Parsing.materialCannotBeAir);
 		}
-		this.material = material.get();
 	}
 
 	public Material getMaterial() {

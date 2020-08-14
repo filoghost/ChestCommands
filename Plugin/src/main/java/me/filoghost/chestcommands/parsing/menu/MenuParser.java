@@ -152,6 +152,7 @@ public class MenuParser {
 			if (leftClick || rightClick) {
 				try {
 					ItemStackParser itemReader = new ItemStackParser(openItemMaterial, false);
+					itemReader.checkNotAir();
 					ClickType clickType = ClickType.fromOptions(leftClick, rightClick);
 
 					MenuOpenItem openItem = new MenuOpenItem(itemReader.getMaterial(), clickType);

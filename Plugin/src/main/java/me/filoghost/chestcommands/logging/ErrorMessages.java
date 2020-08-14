@@ -84,6 +84,7 @@ public class ErrorMessages {
 		public static final String invalidPatternFormat = "value must match the format \"pattern:color\"";
 
 		public static final String unknownAttribute = "unknown attribute";
+		public static String materialCannotBeAir = "material cannot be air";
 
 		public static String unknownMaterial(String materialString) {
 			return "unknown material \"" + materialString + "\"";

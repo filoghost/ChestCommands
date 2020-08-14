@@ -16,6 +16,7 @@ public class GiveItemAction implements Action {
 
 	public GiveItemAction(String serializedAction) throws ParseException {
 		ItemStackParser reader = new ItemStackParser(serializedAction, true);
+		reader.checkNotAir();
 		itemToGive = reader.createStack();
 	}
 
