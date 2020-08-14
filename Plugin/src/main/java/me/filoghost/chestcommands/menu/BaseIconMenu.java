@@ -23,6 +23,8 @@ public abstract class BaseIconMenu implements IconMenu {
 
 
 	public BaseIconMenu(String title, int rows) {
+		Preconditions.notNull(title, "title");
+		Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
 		this.title = title;
 		this.icons = new ArrayGrid<>(rows, 9);
 	}
@@ -66,7 +68,7 @@ public abstract class BaseIconMenu implements IconMenu {
 	}
 
 	@Override
-	public void refreshOpenInventories() {
+	public void refreshOpenMenuInventories() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(player);
 			if (menuInventory != null && menuInventory.getIconMenu() == this) {

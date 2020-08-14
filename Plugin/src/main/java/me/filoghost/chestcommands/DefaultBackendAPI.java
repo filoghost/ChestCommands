@@ -15,6 +15,7 @@ import me.filoghost.chestcommands.icon.APIStaticIcon;
 import me.filoghost.chestcommands.menu.APIIconMenu;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
+import me.filoghost.commons.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,13 +24,18 @@ import org.bukkit.plugin.Plugin;
 public class DefaultBackendAPI extends BackendAPI {
 
 	@Override
-	public boolean isPluginMenu(String yamlFile) {
-		return ChestCommands.getMenuManager().getMenuByFileName(yamlFile) != null;
+	public boolean pluginMenuExists(String menuFileName) {
+		Preconditions.notNull(menuFileName, "menuFileName");
+
+		return ChestCommands.getMenuManager().getMenuByFileName(menuFileName) != null;
 	}
 
 	@Override
-	public boolean openPluginMenu(Player player, String yamlFile) {
-		InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(yamlFile);
+	public boolean openPluginMenu(Player player, String menuFileName) {
+		Preconditions.notNull(player, "player");
+		Preconditions.notNull(menuFileName, "menuFileName");
+
+		InternalIconMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuFileName);
 
 		if (menu != null) {
 			menu.open(player);

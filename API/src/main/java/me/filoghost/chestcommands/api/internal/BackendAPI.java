@@ -32,9 +32,9 @@ public abstract class BackendAPI {
 		return implementation;
 	}
 	
-	public abstract boolean isPluginMenu(String yamlFile);
+	public abstract boolean pluginMenuExists(String menuFileName);
 
-	public abstract boolean openPluginMenu(Player player, String yamlFile);
+	public abstract boolean openPluginMenu(Player player, String menuFileName);
 
 	public abstract IconMenu createIconMenu(Plugin owner, String title, int rows);
 	

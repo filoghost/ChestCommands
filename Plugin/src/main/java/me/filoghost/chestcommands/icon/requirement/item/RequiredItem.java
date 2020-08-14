@@ -35,7 +35,7 @@ public class RequiredItem {
 	}
 
 	public void setRestrictiveDurability(short durability) {
-		Preconditions.checkArgument(durability >= 0, "Durability cannot be negative");
+		Preconditions.checkArgument(durability >= 0, "durability must be 0 or greater");
 
 		this.durability = durability;
 		isDurabilityRestrictive = true;

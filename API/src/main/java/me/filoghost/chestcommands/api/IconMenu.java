@@ -33,6 +33,6 @@ public interface IconMenu {
 	 */
 	MenuInventory open(Player player);
 
-	void refreshOpenInventories();
+	void refreshOpenMenuInventories();
 
 }

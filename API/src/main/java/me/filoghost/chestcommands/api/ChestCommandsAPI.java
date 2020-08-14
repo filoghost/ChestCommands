@@ -37,8 +37,8 @@ public class ChestCommandsAPI {
 	 *
 	 * @return if the menu was found
 	 */
-	public static boolean isPluginMenu(String yamlFile) {
-		return BackendAPI.getImplementation().isPluginMenu(yamlFile);
+	public static boolean pluginMenuExists(String menuFileName) {
+		return BackendAPI.getImplementation().pluginMenuExists(menuFileName);
 	}
 	
 
@@ -47,10 +47,10 @@ public class ChestCommandsAPI {
 	 * NOTE: this method ignores permissions.
 	 *
 	 * @param player the player that will see the menu
-	 * @param yamlFile the file name of the menu to open (with the .yml extension)
+	 * @param menuFileName the file name of the menu to open (with the .yml extension)
 	 * @return if the menu was found and opened
 	 */
-	public static boolean openPluginMenu(Player player, String yamlFile) {
-		return BackendAPI.getImplementation().openPluginMenu(player, yamlFile);
+	public static boolean openPluginMenu(Player player, String menuFileName) {
+		return BackendAPI.getImplementation().openPluginMenu(player, menuFileName);
 	}
 }

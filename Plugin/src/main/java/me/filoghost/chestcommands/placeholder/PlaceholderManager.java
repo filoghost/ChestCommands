@@ -106,8 +106,11 @@ public class PlaceholderManager {
 	}
 
 	public static void registerPluginPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
+		Preconditions.notNull(plugin, "plugin");
+		Preconditions.notNull(identifier, "identifier");
 		Preconditions.checkArgument(1 <= identifier.length() && identifier.length() <= 30, "identifier length must be between 1 and 30");
 		Preconditions.checkArgument(identifier.matches("[a-zA-Z0-9_]+"), "identifier must contain only letters, numbers and underscores");
+		Preconditions.notNull(placeholderReplacer, "placeholderReplacer");
 
 		relativePlaceholderRegistry.registerExternalPlaceholder(plugin, identifier, placeholderReplacer);
 	}

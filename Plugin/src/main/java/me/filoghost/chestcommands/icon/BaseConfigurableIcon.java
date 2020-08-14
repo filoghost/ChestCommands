@@ -8,6 +8,8 @@ package me.filoghost.chestcommands.icon;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.placeholder.PlaceholderStringList;
+import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
+import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 import me.filoghost.commons.Preconditions;
 import me.filoghost.commons.collection.CollectionUtils;
 import me.filoghost.commons.logging.Log;
@@ -51,7 +53,6 @@ public abstract class BaseConfigurableIcon implements Icon {
 	protected ItemStack cachedRendering; // Cache the rendered item when possible and if state hasn't changed
 
 	public BaseConfigurableIcon(Material material) {
-		Preconditions.checkArgumentNotAir(material, "material");
 		this.material = material;
 		this.amount = 1;
 	}
@@ -67,7 +68,6 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setMaterial(Material material) {
-		Preconditions.checkArgumentNotAir(material, "material");
 		this.material = material;
 		cachedRendering = null;
 	}
@@ -77,7 +77,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setAmount(int amount) {
-		Preconditions.checkArgument(amount >= 1, "Amount must 1 or greater");
+		Preconditions.checkArgument(amount > 0, "amount must be greater than 0");
 		this.amount = Math.min(amount, 127);
 		cachedRendering = null;
 	}
@@ -87,7 +87,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setDurability(short durability) {
-		Preconditions.checkArgument(durability >= 0, "Durability must not be negative");
+		Preconditions.checkArgument(durability >= 0, "durability must be 0 or greater");
 		this.durability = durability;
 		cachedRendering = null;
 	}
@@ -97,6 +97,13 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	public void setNBTData(String nbtData) {
+		if (nbtData != null) {
+			try {
+				MojangsonParser.parse(nbtData);
+			} catch (MojangsonParseException e) {
+				throw new IllegalArgumentException("invalid nbtData", e);
+			}
+		}
 		this.nbtData = nbtData;
 		cachedRendering = null;
 	}

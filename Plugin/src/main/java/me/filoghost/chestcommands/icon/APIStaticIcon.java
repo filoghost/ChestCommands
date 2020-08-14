@@ -7,6 +7,7 @@ package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.StaticIcon;
+import me.filoghost.commons.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +17,7 @@ public class APIStaticIcon implements StaticIcon {
 	private ClickHandler clickHandler;
 
 	public APIStaticIcon(ItemStack itemStack) {
+		Preconditions.notNull(itemStack, "itemStack");
 		this.itemStack = itemStack;
 	}
 
@@ -26,6 +28,7 @@ public class APIStaticIcon implements StaticIcon {
 
 	@Override
 	public void setItemStack(ItemStack itemStack) {
+		Preconditions.notNull(itemStack, "itemStack");
 		this.itemStack = itemStack;
 	}
 

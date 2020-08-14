@@ -5,6 +5,7 @@
  */
 package me.filoghost.chestcommands.menu;
 
+import me.filoghost.commons.Preconditions;
 import org.bukkit.plugin.Plugin;
 
 public class APIIconMenu extends BaseIconMenu {
@@ -13,6 +14,7 @@ public class APIIconMenu extends BaseIconMenu {
 	
 	public APIIconMenu(Plugin owner, String title, int rows) {
 		super(title, rows);
+		Preconditions.notNull(owner, "owner");
 		this.owner = owner;
 	}
 
