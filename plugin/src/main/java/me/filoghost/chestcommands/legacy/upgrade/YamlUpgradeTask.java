@@ -55,4 +55,12 @@ public abstract class YamlUpgradeTask extends UpgradeTask {
 		}
 	}
 
+	protected void replaceStringValue(Config settingsConfig, String node, String target, String replacement) {
+		String value = settingsConfig.getString(node);
+		if (value.contains(target)) {
+			settingsConfig.setString(node, value.replace(target, replacement));
+			setSaveRequired();
+		}
+	}
+
 }

@@ -7,7 +7,6 @@ package me.filoghost.chestcommands.command;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
-import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.Utils;
@@ -120,13 +119,9 @@ public class CommandHandler extends CommandFramework {
 			}
 
 			if (sender.getName().equalsIgnoreCase(target.getName())) {
-				if (!Lang.open_menu.isEmpty()) {
-					sender.sendMessage(Lang.open_menu.replace("{menu}", menuName));
-				}
+				sender.sendMessage(ChatColor.GREEN + "Opening the menu " + menuName + ".");
 			} else {
-				if (!Lang.open_menu_others.isEmpty()) {
-					sender.sendMessage(Lang.open_menu_others.replace("{menu}", menuName).replace("{player}", target.getName()));
-				}
+				sender.sendMessage(ChatColor.GREEN + "Opening the menu " + menuName + " to " + target.getName() + ".");
 			}
 
 			menu.open(target);

@@ -20,8 +20,6 @@ public class Lang extends MappedConfig {
 	public static String no_money = "&cYou need {money}$ for this.";
 	public static String no_exp = "&cYou need {levels} XP levels for this.";
 	public static String menu_not_found = "&cMenu not found! " + Errors.User.notifyStaffRequest;
-	public static String open_menu = "&aOpening the menu \"{menu}\".";
-	public static String open_menu_others = "&aOpening the menu \"{menu}\" to {player}.";
 	public static String any = "any"; // Used in no_required_item when durability is not restrictive
 
 }

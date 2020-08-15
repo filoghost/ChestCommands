@@ -37,9 +37,13 @@ public class Backup {
 		Preconditions.checkArgument(fileToBackup.startsWith(dataFolder), "file is not inside data folder");
 		Path destination = backupFolder.resolve(dataFolder.relativize(fileToBackup));
 		Files.createDirectories(destination.getParent());
+
+		// Add backup file if no already present
 		if (!Files.isRegularFile(destination)) {
 			Files.copy(fileToBackup, destination);
 		}
+
+		// Add README file if not already present
 		if (!Files.isRegularFile(infoFile)) {
 			Files.write(infoFile, Arrays.asList(
 					"Files in this folders are copies of original configuration files that have been automatically upgraded.",
