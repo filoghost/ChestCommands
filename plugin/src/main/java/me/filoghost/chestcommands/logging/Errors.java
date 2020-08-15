@@ -85,7 +85,7 @@ public class Errors {
 		public static final String invalidPatternFormat = "value must match the format \"pattern:color\"";
 
 		public static final String unknownAttribute = "unknown attribute";
-		public static String materialCannotBeAir = "material cannot be air";
+		public static final String materialCannotBeAir = "material cannot be air";
 
 		public static String unknownMaterial(String materialString) {
 			return "unknown material \"" + materialString + "\"";
@@ -205,7 +205,7 @@ public class Errors {
 
 	public static class User {
 
-		public static String notifyStaffRequest = "Please inform the staff.";
+		public static final String notifyStaffRequest = "Please inform the staff.";
 
 		public static String configurationError(String errorMessage) {
 			return ChatColor.RED + "Error: " + errorMessage + ". " + Errors.User.notifyStaffRequest;
