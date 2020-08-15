@@ -275,34 +275,36 @@ public abstract class BaseConfigurableIcon implements Icon {
 		// Then apply data from config nodes, overwriting NBT data if there are conflicting values
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
-		itemMeta.setDisplayName(renderName(viewer));
-		itemMeta.setLore(renderLore(viewer));
+		if (itemMeta != null) {
+			itemMeta.setDisplayName(renderName(viewer));
+			itemMeta.setLore(renderLore(viewer));
 
-		if (leatherColor != null && itemMeta instanceof LeatherArmorMeta) {
-			((LeatherArmorMeta) itemMeta).setColor(leatherColor);
-		}
-
-		if (skullOwner != null && itemMeta instanceof SkullMeta) {
-			String skullOwner = this.skullOwner.getValue(viewer);
-			((SkullMeta) itemMeta).setOwner(skullOwner);
-		}
-
-		if (itemMeta instanceof BannerMeta) {
-			BannerMeta bannerMeta = (BannerMeta) itemMeta;
-			if (bannerColor != null) {
-				bannerMeta.setBaseColor(bannerColor);
+			if (leatherColor != null && itemMeta instanceof LeatherArmorMeta) {
+				((LeatherArmorMeta) itemMeta).setColor(leatherColor);
 			}
-			if (bannerPatterns != null) {
-				((BannerMeta) itemMeta).setPatterns(bannerPatterns);
-			}
-		}
-		
-		// Hide all text details (damage, enchantments, potions, etc,)
-		if (itemMeta.getItemFlags().isEmpty()) {
-			itemMeta.addItemFlags(ItemFlag.values());
-		}
 
-		itemStack.setItemMeta(itemMeta);
+			if (skullOwner != null && itemMeta instanceof SkullMeta) {
+				String skullOwner = this.skullOwner.getValue(viewer);
+				((SkullMeta) itemMeta).setOwner(skullOwner);
+			}
+
+			if (itemMeta instanceof BannerMeta) {
+				BannerMeta bannerMeta = (BannerMeta) itemMeta;
+				if (bannerColor != null) {
+					bannerMeta.setBaseColor(bannerColor);
+				}
+				if (bannerPatterns != null) {
+					((BannerMeta) itemMeta).setPatterns(bannerPatterns);
+				}
+			}
+
+			// Hide all text details (damage, enchantments, potions, etc,)
+			if (itemMeta.getItemFlags().isEmpty()) {
+				itemMeta.addItemFlags(ItemFlag.values());
+			}
+
+			itemStack.setItemMeta(itemMeta);
+		}
 
 		if (enchantments != null) {
 			enchantments.forEach(itemStack::addUnsafeEnchantment);
