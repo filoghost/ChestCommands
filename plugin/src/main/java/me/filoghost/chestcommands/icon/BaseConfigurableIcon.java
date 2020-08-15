@@ -58,13 +58,17 @@ public abstract class BaseConfigurableIcon implements Icon {
 	}
 
 	protected boolean shouldCacheRendering() {
-		if (placeholdersEnabled) {
+		if (placeholdersEnabled && hasDynamicPlaceholders()) {
 			return false;
+		} else {
+			return true;
 		}
+	}
 
-		return (name == null || !name.hasDynamicPlaceholders())
-				&& (lore == null || !lore.hasDynamicPlaceholders())
-				&& (skullOwner == null || !skullOwner.hasDynamicPlaceholders());
+	private boolean hasDynamicPlaceholders() {
+		return (name != null && name.hasDynamicPlaceholders())
+				|| (lore != null && lore.hasDynamicPlaceholders())
+				|| (skullOwner != null && skullOwner.hasDynamicPlaceholders());
 	}
 
 	public void setMaterial(Material material) {
