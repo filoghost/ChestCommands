@@ -40,21 +40,19 @@ public class ConfigManager extends BaseConfigManager {
 		langConfigLoader = getMappedConfigLoader("lang.yml", Lang::new);
 	}
 
-	public Settings tryLoadSettings(ErrorCollector errorCollector) {
+	public void tryLoadSettings(ErrorCollector errorCollector) {
 		try {
-			return settingsConfigLoader.init();
+			settingsConfigLoader.init();
 		} catch (ConfigException e) {
 			logConfigInitException(errorCollector, settingsConfigLoader.getFile(), e);
-			return new Settings();
 		}
 	}
 
-	public Lang tryLoadLang(ErrorCollector errorCollector) {
+	public void tryLoadLang(ErrorCollector errorCollector) {
 		try {
-			return langConfigLoader.init();
+			langConfigLoader.init();
 		} catch (ConfigException e) {
 			logConfigInitException(errorCollector, langConfigLoader.getFile(), e);
-			return new Lang();
 		}
 	}
 

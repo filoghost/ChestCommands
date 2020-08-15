@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.commons.Colors;
 import org.bukkit.ChatColor;
@@ -24,7 +24,7 @@ public class NameAttribute implements IconAttribute {
 		}
 
 		if (input.charAt(0) != ChatColor.COLOR_CHAR) {
-			return ChestCommands.getSettings().default_color__name + Colors.addColors(input);
+			return Settings.default_color__name + Colors.addColors(input);
 		} else {
 			return Colors.addColors(input);
 		}

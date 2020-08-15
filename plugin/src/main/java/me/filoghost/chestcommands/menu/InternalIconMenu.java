@@ -6,10 +6,10 @@
 package me.filoghost.chestcommands.menu;
 
 import com.google.common.collect.ImmutableList;
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.commons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -71,7 +71,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	}
 
 	public void sendNoOpenPermissionMessage(CommandSender sender) {
-		String noPermMessage = ChestCommands.getLang().no_open_permission;
+		String noPermMessage = Lang.no_open_permission;
 		if (noPermMessage != null && !noPermMessage.isEmpty()) {
 			sender.sendMessage(noPermMessage.replace("{permission}", this.openPermission));
 		}

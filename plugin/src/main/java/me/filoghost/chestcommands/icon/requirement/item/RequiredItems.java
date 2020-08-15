@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.icon.requirement.item;
 
 import com.google.common.collect.ImmutableList;
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.Requirement;
 import me.filoghost.chestcommands.util.Utils;
 import org.bukkit.entity.Player;
@@ -28,10 +28,10 @@ public class RequiredItems implements Requirement {
 
 		if (!hasItems) {
 			for (RequiredItem item : items) {
-				player.sendMessage(ChestCommands.getLang().no_required_item
+				player.sendMessage(Lang.no_required_item
 						.replace("{material}", Utils.formatEnum(item.getMaterial()))
 						.replace("{amount}", Integer.toString(item.getAmount()))
-						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : ChestCommands.getLang().any));
+						.replace("{durability}", item.hasRestrictiveDurability() ? Short.toString(item.getDurability()) : Lang.any));
 			}
 		}
 		

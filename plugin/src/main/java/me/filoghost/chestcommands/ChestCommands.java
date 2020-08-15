@@ -9,7 +9,6 @@ import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.config.CustomPlaceholders;
-import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
@@ -55,8 +54,6 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	private static ConfigManager configManager;
 	private static MenuManager menuManager;
-	private static Settings settings;
-	private static Lang lang;
 	private static CustomPlaceholders placeholders;
 
 	private static ErrorCollector lastLoadErrors;
@@ -84,8 +81,6 @@ public class ChestCommands extends BaseJavaPlugin {
 		Log.setLogger(getLogger());
 		configManager = new ConfigManager(getDataFolderPath());
 		menuManager = new MenuManager();
-		settings = new Settings();
-		lang = new Lang();
 		placeholders = new CustomPlaceholders();
 
 		BackendAPI.setImplementation(new DefaultBackendAPI());
@@ -109,7 +104,7 @@ public class ChestCommands extends BaseJavaPlugin {
 			Log.info("Hooked PlaceholderAPI");
 		}
 
-		if (settings.update_notifications) {
+		if (Settings.update_notifications) {
 			UpdateChecker.run(this, 56919, (String newVersion) -> {
 				ChestCommands.newVersion = newVersion;
 
@@ -172,8 +167,8 @@ public class ChestCommands extends BaseJavaPlugin {
 			errorCollector.add(Errors.Upgrade.failedSomeUpgrades);
 		}
 
-		settings = configManager.tryLoadSettings(errorCollector);
-		lang = configManager.tryLoadLang(errorCollector);
+		configManager.tryLoadSettings(errorCollector);
+		configManager.tryLoadLang(errorCollector);
 		placeholders = configManager.tryLoadCustomPlaceholders(errorCollector);
 		PlaceholderManager.setStaticPlaceholders(placeholders.getPlaceholders());
 
@@ -211,14 +206,6 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static MenuManager getMenuManager() {
 		return menuManager;
-	}
-
-	public static Settings getSettings() {
-		return settings;
-	}
-
-	public static Lang getLang() {
-		return lang;
 	}
 
 	public static boolean hasNewVersion() {

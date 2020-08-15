@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.commons.Colors;
 import me.filoghost.commons.collection.CollectionUtils;
@@ -26,7 +26,7 @@ public class LoreAttribute implements IconAttribute {
 			if (line.isEmpty()) {
 				return line;
 			} else if (line.charAt(0) != ChatColor.COLOR_CHAR) {
-				return ChestCommands.getSettings().default_color__lore + Colors.addColors(line);
+				return Settings.default_color__lore + Colors.addColors(line);
 			} else {
 				return Colors.addColors(line);
 			}

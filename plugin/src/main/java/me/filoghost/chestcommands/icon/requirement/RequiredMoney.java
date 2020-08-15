@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.icon.requirement;
 
 import com.google.common.base.Preconditions;
-import me.filoghost.chestcommands.ChestCommands;
+import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
 import me.filoghost.chestcommands.logging.Errors;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class RequiredMoney implements Requirement {
 		}
 
 		if (!VaultEconomyHook.hasMoney(player, moneyAmount)) {
-			player.sendMessage(ChestCommands.getLang().no_money.replace("{money}", VaultEconomyHook.formatMoney(moneyAmount)));
+			player.sendMessage(Lang.no_money.replace("{money}", VaultEconomyHook.formatMoney(moneyAmount)));
 			return false;
 		}
 		

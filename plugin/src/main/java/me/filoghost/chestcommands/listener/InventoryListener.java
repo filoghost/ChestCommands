@@ -7,6 +7,7 @@ package me.filoghost.chestcommands.listener;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
 import me.filoghost.chestcommands.inventory.DefaultMenuInventory.SlotClickHandler;
 import me.filoghost.chestcommands.menu.MenuManager;
@@ -69,7 +70,7 @@ public class InventoryListener implements Listener {
 
 		Long cooldownUntil = antiClickSpam.get(clicker);
 		long now = System.currentTimeMillis();
-		int minDelay = ChestCommands.getSettings().anti_click_spam_delay;
+		int minDelay = Settings.anti_click_spam_delay;
 
 		if (minDelay > 0) {
 			if (cooldownUntil != null && cooldownUntil > now) {

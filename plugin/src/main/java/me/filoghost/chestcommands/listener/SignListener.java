@@ -5,8 +5,8 @@
  */
 package me.filoghost.chestcommands.listener;
 
-import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
+import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.menu.InternalIconMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.Utils;
@@ -59,7 +59,7 @@ public class SignListener implements Listener {
 		InternalIconMenu menu = menuManager.getMenuByFileName(menuFileName);
 		
 		if (menu == null) {
-			event.getPlayer().sendMessage(ChestCommands.getLang().menu_not_found);
+			event.getPlayer().sendMessage(Lang.menu_not_found);
 			return;
 		}
 		
