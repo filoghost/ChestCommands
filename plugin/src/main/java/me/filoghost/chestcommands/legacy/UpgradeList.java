@@ -11,9 +11,9 @@ import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_LangUpgradeTask;
-import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuNodeReformatUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuNodeRenameUpgradeTask;
-import me.filoghost.chestcommands.legacy.v4_0.v4_0_PlaceholdersFileUpgradeTask;
+import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuReformatUpgradeTask;
+import me.filoghost.chestcommands.legacy.v4_0.v4_0_PlaceholdersUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_SettingsUpgradeTask;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.commons.collection.CollectionUtils;
@@ -40,12 +40,12 @@ public class UpgradeList {
 			multiTaskUpgrade("v4.0-menus-reformat", (configManager) -> {
 				String legacyCommandSeparator = readLegacyCommandSeparator(configManager);
 				return createMenuTasks(configManager,
-						file -> new v4_0_MenuNodeReformatUpgradeTask(configManager, file, legacyCommandSeparator));
+						file -> new v4_0_MenuReformatUpgradeTask(configManager, file, legacyCommandSeparator));
 			}),
 
 			// Upgrade config after reading the command separator for menus
 			singleTaskUpgrade("v4.0-config", v4_0_SettingsUpgradeTask::new),
-			singleTaskUpgrade("v4.0-placeholders", v4_0_PlaceholdersFileUpgradeTask::new),
+			singleTaskUpgrade("v4.0-placeholders", v4_0_PlaceholdersUpgradeTask::new),
 			singleTaskUpgrade("v4.0-lang", v4_0_LangUpgradeTask::new)
 	);
 

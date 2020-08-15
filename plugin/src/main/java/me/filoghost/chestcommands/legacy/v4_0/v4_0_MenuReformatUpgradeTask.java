@@ -20,11 +20,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class v4_0_MenuNodeReformatUpgradeTask extends YamlUpgradeTask {
+public class v4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
 
 	private final String legacyCommandSeparator;
 
-	public v4_0_MenuNodeReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+	public v4_0_MenuReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
 		super(configManager.getConfigLoader(menuFile));
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}

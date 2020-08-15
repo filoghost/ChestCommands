@@ -20,13 +20,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class v4_0_PlaceholdersFileUpgradeTask extends UpgradeTask {
+public class v4_0_PlaceholdersUpgradeTask extends UpgradeTask {
 
 	private final Path oldPlaceholdersFile;
 	private final ConfigLoader newPlaceholdersConfigLoader;
 	private Config updatedConfig;
 
-	public v4_0_PlaceholdersFileUpgradeTask(ConfigManager configManager) {
+	public v4_0_PlaceholdersUpgradeTask(ConfigManager configManager) {
 		this.oldPlaceholdersFile = configManager.getRootDataFolder().resolve("placeholders.yml");
 		this.newPlaceholdersConfigLoader = configManager.getConfigLoader("custom-placeholders.yml");
 	}
