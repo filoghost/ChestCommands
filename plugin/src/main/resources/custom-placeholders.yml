@@ -7,7 +7,8 @@
 #
 # Another use would be for defining colors, symbols, or text decorations.
 #
-'{custom_placeholder}': 'This line is a custom placeholder.'
-'{primary_color}': '&b'
-'{secondary_color}': '&7'
-'{separator}': '&8[====|====|====|====|====|====|====|====]'
+placeholders:
+  '{custom_placeholder}': 'This line is a custom placeholder.'
+  '{primary_color}': '&b'
+  '{secondary_color}': '&7'
+  '{separator}': '&8[====|====|====|====|====|====|====|====]'
