@@ -9,7 +9,6 @@ import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.commons.Colors;
 import me.filoghost.commons.collection.CollectionUtils;
-import org.bukkit.ChatColor;
 
 import java.util.List;
 
@@ -23,12 +22,10 @@ public class LoreAttribute implements IconAttribute {
 
 	private List<String> colorLore(List<String> input) {
 		return CollectionUtils.transform(input, line -> {
-			if (line.isEmpty()) {
-				return line;
-			} else if (line.charAt(0) != ChatColor.COLOR_CHAR) {
+			if (!line.isEmpty()) {
 				return Settings.default_color__lore + Colors.addColors(line);
 			} else {
-				return Colors.addColors(line);
+				return line;
 			}
 		});
 	}
