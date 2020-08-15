@@ -20,11 +20,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class v4_0_MenuNodeExpandUpgradeTask extends YamlUpgradeTask {
+public class v4_0_MenuNodeReformatUpgradeTask extends YamlUpgradeTask {
 
 	private final String legacyCommandSeparator;
 
-	public v4_0_MenuNodeExpandUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+	public v4_0_MenuNodeReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
 		super(configManager.getConfigLoader(menuFile));
 		this.legacyCommandSeparator = legacyCommandSeparator;
 	}
@@ -50,15 +50,47 @@ public class v4_0_MenuNodeExpandUpgradeTask extends YamlUpgradeTask {
 	private void upgradeMenuSettings(ConfigSection section) {
 		expandInlineList(section, MenuSettingsNode.COMMANDS, ";");
 		expandInlineList(section, MenuSettingsNode.OPEN_ACTIONS, legacyCommandSeparator);
+		updateActionPrefixes(section, MenuSettingsNode.OPEN_ACTIONS);
 	}
 
 	private void upgradeIcon(ConfigSection section) {
-		expandInlineList(section, AttributeType.ACTIONS.getAttributeName(), legacyCommandSeparator);
 		expandInlineList(section, AttributeType.ENCHANTMENTS.getAttributeName(), ";");
-
+		expandInlineList(section, AttributeType.ACTIONS.getAttributeName(), legacyCommandSeparator);
+		updateActionPrefixes(section, AttributeType.ACTIONS.getAttributeName());
 		expandSingletonList(section, AttributeType.REQUIRED_ITEMS.getAttributeName());
-
 		expandInlineItemstack(section);
+	}
+
+	private void updateActionPrefixes(ConfigSection config, String node) {
+		List<String> actions = config.getStringList(node);
+		if (actions == null) {
+			return;
+		}
+
+		for (int i = 0; i < actions.size(); i++) {
+			String oldAction = actions.get(i);
+			String newAction = oldAction;
+			newAction = replacePrefix(newAction, "menu:", "open:");
+			newAction = replacePrefix(newAction, "givemoney:", "give-money:");
+			newAction = replacePrefix(newAction, "dragonbar:", "dragon-bar:");
+			newAction = replacePrefix(newAction, "server ", "server: ");
+
+			if (!newAction.equals(oldAction)) {
+				setSaveRequired();
+				actions.set(i, newAction);
+			}
+ 		}
+
+		config.setStringList(node, actions);
+	}
+
+	private String replacePrefix(String action, String oldPrefix, String newPrefix) {
+		if (action.startsWith(oldPrefix)) {
+			setSaveRequired();
+			return newPrefix + action.substring(oldPrefix.length());
+		} else {
+			return action;
+		}
 	}
 
 	private void expandInlineItemstack(ConfigSection section) {
