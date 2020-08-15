@@ -39,24 +39,25 @@ public class ActionParser {
 
 	private enum ActionType {
 
-		CONSOLE_COMMAND("console:", ConsoleCommandAction::new),
-		OP_COMMAND("op:", OpCommandAction::new),
-		OPEN("(open|menu):", OpenMenuAction::new),
-		SERVER("server:?", ChangeServerAction::new), // The colon is optional
-		TELL("tell:", SendMessageAction::new),
-		BROADCAST("broadcast:", BroadcastAction::new),
-		GIVE_ITEM("give:", GiveItemAction::new),
-		GIVE_MONEY("give-?money:", GiveMoneyAction::new),
-		SOUND("sound:", PlaySoundAction::new),
-		BOSS_BAR("dragon-?bar:", DragonBarAction::new);
+		CONSOLE_COMMAND("console", ConsoleCommandAction::new),
+		OP_COMMAND("op", OpCommandAction::new),
+		OPEN("open", OpenMenuAction::new),
+		SERVER("server", ChangeServerAction::new), // The colon is optional
+		TELL("tell", SendMessageAction::new),
+		BROADCAST("broadcast", BroadcastAction::new),
+		GIVE_ITEM("give", GiveItemAction::new),
+		GIVE_MONEY("give-money", GiveMoneyAction::new),
+		SOUND("sound", PlaySoundAction::new),
+		BOSS_BAR("dragon-bar", DragonBarAction::new);
 
 
 		private final Pattern prefixPattern;
 		private final ActionFactory actionFactory;
 
 
-		ActionType(String prefixPattern, ActionFactory actionFactory) {
-			this.prefixPattern = Pattern.compile("^" + prefixPattern, Pattern.CASE_INSENSITIVE); // Case insensitive and only at the beginning
+		ActionType(String prefix, ActionFactory actionFactory) {
+			// Non-default actions must match the format "{prefix}: {content}"
+			this.prefixPattern = Pattern.compile("^" + Pattern.quote(prefix) + ":", Pattern.CASE_INSENSITIVE);
 			this.actionFactory = actionFactory;
 		}
 
