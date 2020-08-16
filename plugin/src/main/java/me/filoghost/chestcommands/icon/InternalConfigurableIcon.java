@@ -10,9 +10,9 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
 import me.filoghost.chestcommands.icon.requirement.RequiredMoney;
-import me.filoghost.chestcommands.icon.requirement.RequiredPermission;
 import me.filoghost.chestcommands.icon.requirement.Requirement;
 import me.filoghost.chestcommands.icon.requirement.item.RequiredItem;
 import me.filoghost.chestcommands.icon.requirement.item.RequiredItems;
@@ -27,16 +27,17 @@ import java.util.List;
 
 public class InternalConfigurableIcon extends BaseConfigurableIcon implements RefreshableIcon {
 
-	private RequiredPermission viewPermission;
+	private IconPermission viewPermission;
+	private IconPermission clickPermission;
+	private String noClickPermissionMessage;
 
-	private RequiredPermission clickPermission;
 	private RequiredMoney requiredMoney;
 	private RequiredExpLevel requiredExpLevel;
 	private RequiredItems requiredItems;
-	private ImmutableList<Action> clickActions;
 
+	private ImmutableList<Action> clickActions;
 	private ClickResult clickResult;
-	
+
 	public InternalConfigurableIcon(Material material) {
 		super(material);
 		setPlaceholdersEnabled(true);
@@ -44,7 +45,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public boolean canViewIcon(Player player) {
-		return viewPermission == null || viewPermission.hasPermission(player);
+		return IconPermission.hasPermission(player, viewPermission);
 	}
 	
 	public boolean hasViewPermission() {
@@ -52,24 +53,15 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public void setClickPermission(String permission) {
-		if (this.clickPermission == null) {
-			this.clickPermission = new RequiredPermission();
-		}
-		this.clickPermission.setPermission(permission);
+		this.clickPermission = new IconPermission(permission);
 	}
 	
-	public void setNoClickPermissionMessage(String clickNoPermissionMessage) {
-		if (this.clickPermission == null) {
-			this.clickPermission = new RequiredPermission();
-		}
-		this.clickPermission.setNoPermissionMessage(clickNoPermissionMessage);
+	public void setNoClickPermissionMessage(String noClickPermissionMessage) {
+		this.noClickPermissionMessage = noClickPermissionMessage;
 	}
 		
 	public void setViewPermission(String viewPermission) {
-		if (this.viewPermission == null) {
-			this.viewPermission = new RequiredPermission();
-		}
-		this.viewPermission.setPermission(viewPermission);
+		this.viewPermission = new IconPermission(viewPermission);
 	}
 
 	public void setRequiredMoney(double requiredMoney) {
@@ -123,8 +115,21 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 
 	@Override
 	public ClickResult onClick(MenuInventory menuInventory, Player player) {
+		if (!IconPermission.hasPermission(player, viewPermission)) {
+			return ClickResult.KEEP_OPEN;
+		}
+
+		if (!IconPermission.hasPermission(player, clickPermission)) {
+			if (noClickPermissionMessage != null) {
+				player.sendMessage(noClickPermissionMessage);
+			} else {
+				player.sendMessage(Lang.default_no_icon_permission);
+			}
+			return clickResult;
+		}
+
 		// Check all the requirements
-		Requirement[] requirements = {clickPermission, requiredMoney, requiredExpLevel, requiredItems};
+		Requirement[] requirements = {requiredMoney, requiredExpLevel, requiredItems};
 		boolean hasAllRequirements = Requirement.hasAllCosts(player, requirements);
 		if (!hasAllRequirements) {
 			return clickResult;
