@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>me.filoghost.chestcommands</groupId>
+		<artifactId>chestcommands-parent</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>chestcommands-plugin</artifactId>
+	<name>ChestCommands Plugin</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>VaultAPI</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>me.confuser</groupId>
+			<artifactId>BarAPI</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>me.clip</groupId>
+			<artifactId>placeholderapi</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit-lite</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>me.filoghost.updatechecker</groupId>
+			<artifactId>updatechecker</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>chestcommands-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>chestcommands-commons</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>..</directory>
+				<includes>
+					<include>LICENSE.txt</include>
+					<include>THIRD-PARTY.txt</include>
+					<include>licenses/*</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<!-- Appends build number to plugin version on SNAPSHOT builds. -->
+					<execution>
+						<id>set-plugin-version</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<exportAntProperties>true</exportAntProperties>
+							<target>
+								<property environment="env" />
+								<condition property="project.pluginVersion"	value="${project.version}-b${env.BUILD_NUMBER}"	else="${project.version}">
+									<and>
+										<isset property="env.BUILD_NUMBER" />
+										<contains string="${project.version}" substring="SNAPSHOT" />
+									</and>
+								</condition>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.pluginVersion}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<configuration>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<shadedArtifactAttached>false</shadedArtifactAttached>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/maven/</exclude>
+							</excludes>
+						</filter>
+					</filters>
+					<relocations>
+						<relocation>
+							<pattern>org.bstats.bukkit</pattern>
+							<shadedPattern>me.filoghost.chestcommands.metrics</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>me.filoghost.updatechecker</pattern>
+							<shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>me.filoghost.commons</pattern>
+							<shadedPattern>me.filoghost.chestcommands.commons</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

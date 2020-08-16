@@ -5,7 +5,7 @@ labels: Documentation
 ---
 <!--
 
-⚠️ READ BELOW BEFOR SUBMITTING ⚠️
+⚠️ READ BELOW BEFORE SUBMITTING ⚠️
 
 You MUST fill out the template below, without modifying or deleting the existing text, otherwise the issue will be automatically closed.
 

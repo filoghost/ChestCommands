@@ -1,9 +1,17 @@
-Chest Commands contains code from the following third party projects, listed with their license information.
+Chest Commands contains code from the following third-party open source
+projects, listed with their license information.
 
-[bStats Metrics]
-URL: https://github.com/Bastian/bStats-Metrics
-License: GNU Lesser General Public License v3.0
+bStats Metrics
+   URL: https://github.com/Bastian/bStats-Metrics
+   License name: GNU Lesser General Public License v3.0
+   License file: /licenses/LICENSE-bStats.txt
 
-[EisenNBT]
-URL: https://github.com/Eisenwave/eisen-nbt
-License: MIT License
+EisenNBT
+   URL: https://github.com/Eisenwave/eisen-nbt
+   License name: MIT License
+   License file: /licenses/LICENSE-EisenNBT.txt
+
+Update Checker
+   URL: https://github.com/filoghost/UpdateChecker
+   License name: MIT License
+   License file: /licenses/LICENSE-UpdateChecker.txt

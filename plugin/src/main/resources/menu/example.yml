@@ -1,0 +1,247 @@
+######################
+#+                  +#
+#   MENU SETTINGS    #
+#+                  +#
+######################
+
+menu-settings:
+
+  # REQUIRED
+  # Appears as the title of the menu.
+  name: '&1Example menu'
+
+  # REQUIRED
+  # The number of rows in the menu.
+  rows: 3
+
+  # OPTIONAL
+  # Set which commands a player can execute to open the menu.
+  commands:
+  - 'menu'
+
+  # OPTIONAL
+  # How frequently the menu will be refreshed, in seconds.
+  # Useful if you have placeholders in icon descriptions.
+  auto-refresh: 5
+
+  # OPTIONAL
+  # These actions will be executed when the menu is opened.
+  # Supports all the icon action types.
+  open-actions:
+  - 'tell: &eYou opened the example menu.'
+
+  # OPTIONAL
+  # The menu will open only when right-clicking with a compass.
+  open-with-item:
+    material: compass
+    left-click: false
+    right-click: true
+
+
+######################
+#+                  +#
+#       ICONS        #
+#+                  +#
+######################
+
+
+spawn-command:
+  MATERIAL: enderpearl
+  POSITION-X: 1
+  POSITION-Y: 1
+  NAME: '&e/spawn'
+  LORE:
+    - 'Makes the player run the /spawn command.'
+  ACTIONS:
+    - 'spawn'
+
+
+durability-armor:
+  MATERIAL: diamond helmet
+  POSITION-X: 2
+  POSITION-Y: 1
+  NAME: '&aDamaged armor'
+  LORE:
+    - 'This armor appears damaged.'
+  DURABILITY: 200
+
+
+enchanted-sword:
+  MATERIAL: diamond sword
+  POSITION-X: 3
+  POSITION-Y: 1
+  NAME: '&aEnchanted sword'
+  LORE:
+    - 'This sword has a glowing effects.'
+  ENCHANTMENTS:
+    - durability, 1
+
+
+multiple-items:
+  MATERIAL: arrow
+  POSITION-X: 4
+  POSITION-Y: 1
+  NAME: '&aSome arrows'
+  LORE:
+    - 'You can set the amount of items to display.'
+  AMOUNT: 5
+
+
+command-from-console:
+  MATERIAL: command block
+  POSITION-X: 5
+  POSITION-Y: 1
+  NAME: '&cRuns command from the console.'
+  LORE:
+    - 'It broadcasts your name with the command /say.'
+  ACTIONS:
+    - 'console: say Hello {player}!'
+
+
+command-as-op:
+  MATERIAL: command block
+  POSITION-X: 6
+  POSITION-Y: 1
+  NAME: '&cRuns command as OP.'
+  LORE:
+    - 'Be careful with this type of commands.'
+    - 'It will ignore nearly all the permission checks.'
+  ACTIONS:
+    - 'op: say Hello world!'
+
+
+placeholders:
+  MATERIAL: water bucket
+  POSITION-X: 7
+  POSITION-Y: 1
+  NAME: '&6Placeholders'
+  LORE:
+    - 'This icon''s actions contain placeholders'
+    - 'that will be replaced when the icon is clicked.'
+  ACTIONS:
+    - 'tell: &9Online players: &f{online}/{max_players}'
+    - 'tell: &9Your name: &f{player}'
+    - 'tell: &9The world you are in: &f{world}'
+    - 'tell: &9Money: &f{money}'
+
+
+economy-give:
+  MATERIAL: gold ingot
+  POSITION-X: 8
+  POSITION-Y: 1
+  NAME: '&eEconomy & Give action'
+  LORE:
+    - 'This action will be executed'
+    - 'only if you have at least 50$.'
+    - 'It gives you a gold ingot.'
+    - ''
+    - 'Current money: {money}'
+  PRICE: 50
+  ACTIONS:
+    - 'tell: &aYou have paid 50$'
+    - 'give: gold ingot'
+  KEEP-OPEN: true
+
+economy-take:
+  MATERIAL: gold ingot
+  POSITION-X: 9
+  POSITION-Y: 1
+  NAME: '&eEconomy & Required item'
+  LORE:
+    - 'This icon is the opposite of the previous.'
+    - 'It will take you a gold ingot and give you $50.'
+    - ''
+    - 'Current money: {money}'
+  REQUIRED-ITEMS:
+    - gold ingot
+  ACTIONS:
+    - 'tell: &aYou have been paid 50$'
+    - 'give-money: 50'
+  KEEP-OPEN: true
+
+
+formatting-codes:
+  MATERIAL: paper
+  POSITION-X: 1
+  POSITION-Y: 2
+  NAME: '&dFormatting codes'
+  LORE:
+    - 'You can use all the formatting codes!'
+    - 'Colors: &c#c &a#a &9#9 &e#e &f... ...'
+    - 'Random (#k): &kexample'
+    - 'Bold (#l): &lexample'
+    - 'Strikethrough (#m): &mexample'
+    - 'Underline (#n): &nexample'
+    - 'Italic (#o): &oexample'
+
+
+will-not-close:
+  MATERIAL: book
+  POSITION-X: 2
+  POSITION-Y: 2
+  NAME: '&2Info'
+  LORE:
+    - 'The menu will not close'
+    - 'when clicking on this icon.'
+  KEEP-OPEN: true
+
+
+chat-message:
+  MATERIAL: torch
+  POSITION-X: 3
+  POSITION-Y: 2
+  NAME: '&3Chat message'
+  LORE:
+    - 'Sends a chat message without commands.'
+  ACTIONS:
+    - 'tell: This is a simple message, without using commands.'
+
+
+permission:
+  MATERIAL: iron bars
+  POSITION-X: 4
+  POSITION-Y: 2
+  NAME: '&8Permission test'
+  LORE:
+    - 'To use this icon you need the'
+    - 'permission "chestcommands.test".'
+    - 'Otherwise, a configurable error'
+    - 'message will be displayed.'
+  PERMISSION: chestcommands.test
+  PERMISSION-MESSAGE: 'You don''t have the correct permission.'
+  ACTIONS:
+    - 'tell: &a✔ You have the correct permission.'
+
+
+nbt-tags:
+  MATERIAL: leather chestplate
+  POSITION-X: 5
+  POSITION-Y: 2
+  NAME: '&aNBT tags'
+  LORE:
+    - 'This item was colored using custom NBT tags.'
+    - 'All NBT tags valid in Minecraft can be used.'
+  NBT-DATA: '{display: {color: 8910400}}'
+
+
+custom-placeholder:
+  MATERIAL: compass
+  POSITION-X: 6
+  POSITION-Y: 2
+  NAME: '{primary_color}Custom placeholders'
+  LORE:
+    - '{separator}'
+    - '{secondary_color}This item contains custom placeholders,'
+    - '{secondary_color}defined in custom-placeholders.yml.'
+    - ''
+    - '{custom_placeholder}'
+
+
+close-without-actions:
+  MATERIAL: redstone lamp
+  POSITION-X: 9
+  POSITION-Y: 3
+  NAME: '&6Close the menu'
+  LORE:
+    - 'An icon without actions will just close'
+    - 'the window when clicked.'

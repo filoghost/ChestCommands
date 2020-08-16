@@ -1,0 +1,17 @@
+name: ChestCommands
+main: me.filoghost.chestcommands.ChestCommands
+version: ${project.pluginVersion}
+api-version: 1.13
+
+softdepend: [Vault, BarAPI, PlaceholderAPI]
+
+commands:
+   chestcommands:
+      description: Main command for ChestCommands.
+      usage: /<command> (Startup error)
+      aliases: [cc]
+
+permissions:
+  chestcommands.economy.bypass:
+    description: Bypass command costs.
+    default: false
