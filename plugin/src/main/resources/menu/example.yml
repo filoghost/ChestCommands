@@ -134,11 +134,13 @@ economy-give:
     - 'This action will be executed'
     - 'only if you have at least 50$.'
     - 'It gives you a gold ingot.'
+    - ''
+    - 'Current money: {money}'
   PRICE: 50
   ACTIONS:
     - 'tell: &aYou have paid 50$'
     - 'give: gold ingot'
-
+  KEEP-OPEN: true
 
 economy-take:
   MATERIAL: gold ingot
@@ -148,11 +150,14 @@ economy-take:
   LORE:
     - 'This icon is the opposite of the previous.'
     - 'It will take you a gold ingot and give you $50.'
+    - ''
+    - 'Current money: {money}'
   REQUIRED-ITEMS:
     - gold ingot
   ACTIONS:
     - 'tell: &aYou have been paid 50$'
     - 'give-money: 50'
+  KEEP-OPEN: true
 
 
 formatting-codes:
