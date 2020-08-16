@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
 
 public class RequiredPermission implements Requirement {
 	
-	private final String permission;
-	private final boolean negated;
+	private String permission;
+	private boolean negated;
 	private String noPermissionMessage;
-	
-	public RequiredPermission(String permission) {
+
+	public void setPermission(String permission) {
 		if (permission != null) {
 			permission = permission.trim();
 		}

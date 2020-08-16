@@ -52,15 +52,24 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	public void setClickPermission(String permission) {
-		this.clickPermission = new RequiredPermission(permission);
+		if (this.clickPermission == null) {
+			this.clickPermission = new RequiredPermission();
+		}
+		this.clickPermission.setPermission(permission);
 	}
 	
 	public void setNoClickPermissionMessage(String clickNoPermissionMessage) {
-		clickPermission.setNoPermissionMessage(clickNoPermissionMessage);
+		if (this.clickPermission == null) {
+			this.clickPermission = new RequiredPermission();
+		}
+		this.clickPermission.setNoPermissionMessage(clickNoPermissionMessage);
 	}
 		
 	public void setViewPermission(String viewPermission) {
-		this.viewPermission = new RequiredPermission(viewPermission);
+		if (this.viewPermission == null) {
+			this.viewPermission = new RequiredPermission();
+		}
+		this.viewPermission.setPermission(viewPermission);
 	}
 
 	public void setRequiredMoney(double requiredMoney) {
