@@ -10,3 +10,8 @@ EisenNBT
    URL: https://github.com/Eisenwave/eisen-nbt
    License name: MIT License
    License file: /licenses/LICENSE-EisenNBT.txt
+
+Update Checker
+   URL: https://github.com/filoghost/UpdateChecker
+   License name: MIT License
+   License file: /licenses/LICENSE-UpdateChecker.txt
