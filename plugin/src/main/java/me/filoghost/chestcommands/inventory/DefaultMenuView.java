@@ -5,7 +5,6 @@
  */
 package me.filoghost.chestcommands.inventory;
 
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.icon.RefreshableIcon;
@@ -49,17 +48,12 @@ public class DefaultMenuView implements MenuView {
 		viewer.openInventory(bukkitInventory.getInventory());
 	}
 
-	public SlotClickHandler getSlotClickHandler(int slot, Player clicker) {
+	public Icon getIcon(int slot) {
 		if (slot < 0 || slot >= bukkitInventory.getSize()) {
 			return null;
 		}
 
-		Icon icon = menu.getIcons().getByIndex(slot);
-		if (icon == null) {
-			return null;
-		}
-
-		return () -> icon.onClick(this, clicker);
+		return menu.getIcons().getByIndex(slot);
 	}
 
 	@Override
@@ -70,14 +64,6 @@ public class DefaultMenuView implements MenuView {
 	@Override
 	public Player getViewer() {
 		return viewer;
-	}
-
-
-	@FunctionalInterface
-	public interface SlotClickHandler {
-
-		ClickResult onClick();
-
 	}
 
 }

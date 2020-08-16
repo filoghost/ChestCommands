@@ -7,9 +7,9 @@ package me.filoghost.chestcommands.listener;
 
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
-import me.filoghost.chestcommands.inventory.DefaultMenuView.SlotClickHandler;
 import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -63,8 +63,8 @@ public class InventoryListener implements Listener {
 
 		int slot = event.getRawSlot();
 		Player clicker = (Player) event.getWhoClicked();
-		SlotClickHandler slotClickHandler = menuView.getSlotClickHandler(slot, clicker);
-		if (slotClickHandler == null) {
+		Icon icon = menuView.getIcon(slot);
+		if (icon == null) {
 			return;
 		}
 
@@ -82,7 +82,7 @@ public class InventoryListener implements Listener {
 
 		// Only handle the click AFTER the event has finished
 		Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
-			ClickResult result = slotClickHandler.onClick();
+			ClickResult result = icon.onClick(menuView, clicker);
 
 			if (result == ClickResult.CLOSE) {
 				clicker.closeInventory();
