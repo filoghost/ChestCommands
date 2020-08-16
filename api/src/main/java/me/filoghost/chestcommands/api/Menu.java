@@ -9,10 +9,10 @@ import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public interface IconMenu {
+public interface Menu {
 	
-	static IconMenu create(Plugin owner, String title, int rowCount) {
-		return BackendAPI.getImplementation().createIconMenu(owner, title, rowCount);
+	static Menu create(Plugin owner, String title, int rowCount) {
+		return BackendAPI.getImplementation().createMenu(owner, title, rowCount);
 	}
 
 	void setIcon(int row, int column, Icon icon);
@@ -31,8 +31,8 @@ public interface IconMenu {
 	 *
 	 * @param player the player to which the menu will be displayed
 	 */
-	MenuInventory open(Player player);
+	MenuView open(Player player);
 
-	void refreshOpenMenuInventories();
+	void refreshMenuViews();
 
 }

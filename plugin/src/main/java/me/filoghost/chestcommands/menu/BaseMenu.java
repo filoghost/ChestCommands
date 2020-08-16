@@ -6,23 +6,23 @@
 package me.filoghost.chestcommands.menu;
 
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.api.IconMenu;
-import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.api.Menu;
+import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.inventory.ArrayGrid;
-import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
+import me.filoghost.chestcommands.inventory.DefaultMenuView;
 import me.filoghost.chestcommands.inventory.Grid;
 import me.filoghost.commons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public abstract class BaseIconMenu implements IconMenu {
+public abstract class BaseMenu implements Menu {
 
     
 	protected final String title;
 	protected final Grid<Icon> icons;
 
 
-	public BaseIconMenu(String title, int rows) {
+	public BaseMenu(String title, int rows) {
 		Preconditions.notNull(title, "title");
 		Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
 		this.title = title;
@@ -59,20 +59,20 @@ public abstract class BaseIconMenu implements IconMenu {
 	}
 
 	@Override
-	public MenuInventory open(Player player) {
+	public MenuView open(Player player) {
 		Preconditions.notNull(player, "player");
 
-		DefaultMenuInventory menuInventory = new DefaultMenuInventory(this, player);
-		menuInventory.open(player);
-		return menuInventory;
+		DefaultMenuView menuView = new DefaultMenuView(this, player);
+		menuView.open(player);
+		return menuView;
 	}
 
 	@Override
-	public void refreshOpenMenuInventories() {
+	public void refreshMenuViews() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(player);
-			if (menuInventory != null && menuInventory.getIconMenu() == this) {
-				menuInventory.refresh();
+			DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
+			if (menuView != null && menuView.getMenu() == this) {
+				menuView.refresh();
 			}
 		}
 	}

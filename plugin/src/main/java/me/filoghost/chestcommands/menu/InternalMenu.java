@@ -8,7 +8,7 @@ package me.filoghost.chestcommands.menu;
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.commons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import java.nio.file.Path;
 import java.util.List;
 
-public class InternalIconMenu extends BaseIconMenu {
+public class InternalMenu extends BaseMenu {
 
 	private final Path sourceFile;
 	private final String openPermission;
@@ -25,7 +25,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	private ImmutableList<Action> openActions;
 	private int refreshTicks;
 
-	public InternalIconMenu(String title, int rows, Path sourceFile) {
+	public InternalMenu(String title, int rows, Path sourceFile) {
 		super(title, rows);
 		this.sourceFile = sourceFile;
 		this.openPermission = Permissions.OPEN_MENU_PREFIX + sourceFile.getFileName();
@@ -52,7 +52,7 @@ public class InternalIconMenu extends BaseIconMenu {
 	}
 
 	@Override
-	public MenuInventory open(Player player) {
+	public MenuView open(Player player) {
 		if (openActions != null) {
 			for (Action openAction : openActions) {
 				openAction.execute(player);

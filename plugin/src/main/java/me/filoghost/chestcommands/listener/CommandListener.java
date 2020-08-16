@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.listener;
 
-import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +27,7 @@ public class CommandListener implements Listener {
 			return;
 		}
 
-		InternalIconMenu menu = menuManager.getMenuByOpenCommand(command);
+		InternalMenu menu = menuManager.getMenuByOpenCommand(command);
 		if (menu == null) {
 			return;
 		}

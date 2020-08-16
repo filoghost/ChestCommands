@@ -8,8 +8,8 @@ package me.filoghost.chestcommands.listener;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.config.Settings;
-import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
-import me.filoghost.chestcommands.inventory.DefaultMenuInventory.SlotClickHandler;
+import me.filoghost.chestcommands.inventory.DefaultMenuView;
+import me.filoghost.chestcommands.inventory.DefaultMenuView.SlotClickHandler;
 import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -53,8 +53,8 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onLateInventoryClick(InventoryClickEvent event) {
 	    Inventory inventory = event.getInventory();
-	    DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(inventory);
-	    if (menuInventory == null) {
+	    DefaultMenuView menuView = MenuManager.getOpenMenuView(inventory);
+	    if (menuView == null) {
 			return;
 		}
 
@@ -63,7 +63,7 @@ public class InventoryListener implements Listener {
 
 		int slot = event.getRawSlot();
 		Player clicker = (Player) event.getWhoClicked();
-		SlotClickHandler slotClickHandler = menuInventory.getSlotClickHandler(slot, clicker);
+		SlotClickHandler slotClickHandler = menuView.getSlotClickHandler(slot, clicker);
 		if (slotClickHandler == null) {
 			return;
 		}

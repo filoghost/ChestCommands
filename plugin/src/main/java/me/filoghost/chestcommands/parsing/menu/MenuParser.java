@@ -9,7 +9,7 @@ import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.attribute.PositionAttribute;
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
 import me.filoghost.chestcommands.parsing.ItemStackParser;
 import me.filoghost.chestcommands.parsing.ParseException;
@@ -34,20 +34,20 @@ public class MenuParser {
 		MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
 		List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
 
-		InternalIconMenu iconMenu = new InternalIconMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFile());
+		InternalMenu menu = new InternalMenu(menuSettings.getTitle(), menuSettings.getRows(), menuConfig.getSourceFile());
 
 		for (IconSettings iconSettings : iconSettingsList) {
-			tryAddIconToMenu(iconMenu, iconSettings, errorCollector);
+			tryAddIconToMenu(menu, iconSettings, errorCollector);
 		}
 
-		iconMenu.setRefreshTicks(menuSettings.getRefreshTicks());
-		iconMenu.setOpenActions(menuSettings.getOpenActions());
+		menu.setRefreshTicks(menuSettings.getRefreshTicks());
+		menu.setOpenActions(menuSettings.getOpenActions());
 
-		return new LoadedMenu(iconMenu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenItem());
+		return new LoadedMenu(menu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenItem());
 	}
 
 
-	private static void tryAddIconToMenu(InternalIconMenu iconMenu, IconSettings iconSettings, ErrorCollector errorCollector) {
+	private static void tryAddIconToMenu(InternalMenu menu, IconSettings iconSettings, ErrorCollector errorCollector) {
 		PositionAttribute positionX = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_X);
 		PositionAttribute positionY = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_Y);
 
@@ -64,20 +64,20 @@ public class MenuParser {
 		int row = positionY.getPosition() - 1;
 		int column = positionX.getPosition() - 1;
 
-		if (row < 0 || row >= iconMenu.getRowCount()) {
+		if (row < 0 || row >= menu.getRowCount()) {
 			errorCollector.add(
 					Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
-					"it must be between 1 and " + iconMenu.getRowCount());
+					"it must be between 1 and " + menu.getRowCount());
 			return;
 		}
-		if (column < 0 || column >= iconMenu.getColumnCount()) {
+		if (column < 0 || column >= menu.getColumnCount()) {
 			errorCollector.add(
 					Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
-					"it must be between 1 and " + iconMenu.getColumnCount());
+					"it must be between 1 and " + menu.getColumnCount());
 			return;
 		}
 
-		if (iconMenu.getIcon(row, column) != null) {
+		if (menu.getIcon(row, column) != null) {
 			errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
 		}
 
@@ -85,7 +85,7 @@ public class MenuParser {
 			errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
 		}
 
-		iconMenu.setIcon(row, column, iconSettings.createIcon());
+		menu.setIcon(row, column, iconSettings.createIcon());
 	}
 
 

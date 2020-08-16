@@ -12,6 +12,6 @@ public interface Icon {
 
 	ItemStack render(Player viewer);
 
-	ClickResult onClick(MenuInventory menuInventory, Player clicker);
+	ClickResult onClick(MenuView menuView, Player clicker);
 
 }

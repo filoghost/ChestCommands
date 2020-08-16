@@ -5,8 +5,8 @@
  */
 package me.filoghost.chestcommands.task;
 
-import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
-import me.filoghost.chestcommands.menu.InternalIconMenu;
+import me.filoghost.chestcommands.inventory.DefaultMenuView;
+import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import org.bukkit.Bukkit;
@@ -18,24 +18,24 @@ public class TickingTask implements Runnable {
 
 	@Override
 	public void run() {
-		updateInventories();
+		updateMenus();
 		PlaceholderManager.onTick();
 
 		currentTick++;
 	}
 
-	private void updateInventories() {
+	private void updateMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultMenuInventory menuInventory = MenuManager.getOpenMenuInventory(player);
+			DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
 
-			if (menuInventory == null || !(menuInventory.getIconMenu() instanceof InternalIconMenu)) {
+			if (menuView == null || !(menuView.getMenu() instanceof InternalMenu)) {
 				continue;
 			}
 
-			int refreshTicks = ((InternalIconMenu) menuInventory.getIconMenu()).getRefreshTicks();
+			int refreshTicks = ((InternalMenu) menuView.getMenu()).getRefreshTicks();
 
 			if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
-				menuInventory.refresh();
+				menuView.refresh();
 			}
 		}
 	}

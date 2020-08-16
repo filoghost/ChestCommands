@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
-import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
 import me.filoghost.chestcommands.icon.requirement.RequiredMoney;
@@ -114,7 +114,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 	}
 
 	@Override
-	public ClickResult onClick(MenuInventory menuInventory, Player player) {
+	public ClickResult onClick(MenuView menuView, Player player) {
 		if (!IconPermission.hasPermission(player, viewPermission)) {
 			return ClickResult.KEEP_OPEN;
 		}
@@ -154,7 +154,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 		}
 
 		// Update the menu after taking requirement costs and executing all actions
-		menuInventory.refresh();
+		menuView.refresh();
 		
 		// Force menu to stay open if actions open another menu
 		if (hasOpenMenuAction) {

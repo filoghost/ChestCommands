@@ -7,12 +7,12 @@ package me.filoghost.chestcommands.api;
 
 import org.bukkit.entity.Player;
 
-public interface MenuInventory {
+public interface MenuView {
 
 	void refresh();
 
 	Player getViewer();
 
-	IconMenu getIconMenu();
+	Menu getMenu();
 
 }

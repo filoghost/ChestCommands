@@ -189,7 +189,7 @@ public class ChestCommands extends BaseJavaPlugin {
 
 	public static void closeAllMenus() {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (MenuManager.getOpenMenuInventory(player) != null) {
+			if (MenuManager.getOpenMenuView(player) != null) {
 				player.closeInventory();
 			}
 		}

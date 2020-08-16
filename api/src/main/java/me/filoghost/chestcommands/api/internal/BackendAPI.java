@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.api.internal;
 
 import me.filoghost.chestcommands.api.ConfigurableIcon;
-import me.filoghost.chestcommands.api.IconMenu;
+import me.filoghost.chestcommands.api.Menu;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.commons.Preconditions;
@@ -36,7 +36,7 @@ public abstract class BackendAPI {
 
 	public abstract boolean openPluginMenu(Player player, String menuFileName);
 
-	public abstract IconMenu createIconMenu(Plugin owner, String title, int rows);
+	public abstract Menu createMenu(Plugin owner, String title, int rows);
 	
 	public abstract ConfigurableIcon createConfigurableIcon(Material material);
 

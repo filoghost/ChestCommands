@@ -14,9 +14,9 @@ public interface ClickableIcon extends Icon {
 	ClickHandler getClickHandler();
 
 	@Override
-	default ClickResult onClick(MenuInventory menuInventory, Player clicker) {
+	default ClickResult onClick(MenuView menuView, Player clicker) {
 		if (getClickHandler() != null) {
-			return getClickHandler().onClick(menuInventory, clicker);
+			return getClickHandler().onClick(menuView, clicker);
 		} else {
 			return ClickResult.KEEP_OPEN;
 		}

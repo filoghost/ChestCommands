@@ -12,11 +12,11 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class MenuInventoryHolder implements InventoryHolder {
 
-	private final DefaultMenuInventory menuInventory;
+	private final DefaultMenuView menuView;
 
-	public MenuInventoryHolder(DefaultMenuInventory menuInventory) {
-		Preconditions.notNull(menuInventory, "menuInventory");
-		this.menuInventory = menuInventory;
+	public MenuInventoryHolder(DefaultMenuView menuView) {
+		Preconditions.notNull(menuView, "menuView");
+		this.menuView = menuView;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class MenuInventoryHolder implements InventoryHolder {
 		return Bukkit.createInventory(null, 9);
 	}
 
-	public DefaultMenuInventory getMenuInventory() {
-		return menuInventory;
+	public DefaultMenuView getMenuView() {
+		return menuView;
 	}
 }

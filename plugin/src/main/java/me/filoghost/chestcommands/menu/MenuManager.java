@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.menu;
 
-import me.filoghost.chestcommands.inventory.DefaultMenuInventory;
+import me.filoghost.chestcommands.inventory.DefaultMenuView;
 import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
@@ -25,9 +25,9 @@ import java.util.Map;
 
 public class MenuManager {
 	
-	private static Map<String, InternalIconMenu> menusByFile;
-	private static Map<String, InternalIconMenu> menusByOpenCommand;
-	private static Map<MenuOpenItem, InternalIconMenu> menusByOpenItem;
+	private static Map<String, InternalMenu> menusByFile;
+	private static Map<String, InternalMenu> menusByOpenCommand;
+	private static Map<MenuOpenItem, InternalMenu> menusByOpenItem;
 	
 	public MenuManager() {
 		menusByFile = new CaseInsensitiveMap<>();
@@ -41,15 +41,15 @@ public class MenuManager {
 		menusByOpenItem.clear();
 	}
 
-	public InternalIconMenu getMenuByFileName(String fileName) {
+	public InternalMenu getMenuByFileName(String fileName) {
 		return menusByFile.get(fileName);
 	}
 
 	public void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
-		InternalIconMenu menu = loadedMenu.getMenu();
+		InternalMenu menu = loadedMenu.getMenu();
 
 		String fileName = loadedMenu.getSourceFile().getFileName().toString();
-		InternalIconMenu sameNameMenu = menusByFile.get(fileName);
+		InternalMenu sameNameMenu = menusByFile.get(fileName);
 		if (sameNameMenu != null) {
 			errorCollector.add(Errors.Menu.duplicateMenuName(sameNameMenu.getSourceFile(), loadedMenu.getSourceFile()));
 		}
@@ -58,7 +58,7 @@ public class MenuManager {
 		if (loadedMenu.getOpenCommands() != null) {
 			for (String openCommand : loadedMenu.getOpenCommands()) {
 				if (!openCommand.isEmpty()) {
-					InternalIconMenu sameCommandMenu = menusByOpenCommand.get(openCommand);
+					InternalMenu sameCommandMenu = menusByOpenCommand.get(openCommand);
 					if (sameCommandMenu != null) {
 						errorCollector.add(Errors.Menu.duplicateMenuCommand(sameCommandMenu.getSourceFile(), loadedMenu.getSourceFile(), openCommand));
 					}
@@ -80,7 +80,7 @@ public class MenuManager {
 		});
 	}
 
-	public InternalIconMenu getMenuByOpenCommand(String openCommand) {
+	public InternalMenu getMenuByOpenCommand(String openCommand) {
 		return menusByOpenCommand.get(openCommand);
 	}
 
@@ -92,25 +92,25 @@ public class MenuManager {
 		return getMenuInventoryHolder(inventory) != null;
 	}
 
-	public static DefaultMenuInventory getOpenMenuInventory(Player player) {
+	public static DefaultMenuView getOpenMenuView(Player player) {
 		InventoryView view = player.getOpenInventory();
 		if (view == null) {
 			return null;
 		}
 
-		DefaultMenuInventory menuInventory = getOpenMenuInventory(view.getTopInventory());
-		if (menuInventory == null) {
-			menuInventory = getOpenMenuInventory(view.getBottomInventory());
+		DefaultMenuView menuView = getOpenMenuView(view.getTopInventory());
+		if (menuView == null) {
+			menuView = getOpenMenuView(view.getBottomInventory());
 		}
 		
-		return menuInventory;
+		return menuView;
 	}
 	
 	
-	public static DefaultMenuInventory getOpenMenuInventory(Inventory inventory) {
+	public static DefaultMenuView getOpenMenuView(Inventory inventory) {
 		MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
 		if (inventoryHolder != null) {
-			return inventoryHolder.getMenuInventory();
+			return inventoryHolder.getMenuView();
 		} else {
 			return null;
 		}

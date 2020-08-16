@@ -7,22 +7,22 @@ package me.filoghost.chestcommands.inventory;
 
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
-import me.filoghost.chestcommands.api.MenuInventory;
+import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.icon.RefreshableIcon;
-import me.filoghost.chestcommands.menu.BaseIconMenu;
+import me.filoghost.chestcommands.menu.BaseMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents a particular view of a menu.
  */
-public class DefaultMenuInventory implements MenuInventory {
+public class DefaultMenuView implements MenuView {
 
-	private final BaseIconMenu menu;
+	private final BaseMenu menu;
 	private final InventoryGrid bukkitInventory;
 	private final Player viewer;
 
-	public DefaultMenuInventory(BaseIconMenu menu, Player viewer) {
+	public DefaultMenuView(BaseMenu menu, Player viewer) {
 		this.menu = menu;
 		this.viewer = viewer;
 		this.bukkitInventory = new InventoryGrid(new MenuInventoryHolder(this), menu.getRowCount(), menu.getTitle());
@@ -63,7 +63,7 @@ public class DefaultMenuInventory implements MenuInventory {
 	}
 
 	@Override
-	public BaseIconMenu getIconMenu() {
+	public BaseMenu getMenu() {
 		return menu;
 	}
 
