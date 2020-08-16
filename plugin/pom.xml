@@ -136,6 +136,10 @@
 							<pattern>me.filoghost.updatechecker</pattern>
 							<shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
 						</relocation>
+						<relocation>
+							<pattern>me.filoghost.commons</pattern>
+							<shadedPattern>me.filoghost.chestcommands.commons</shadedPattern>
+						</relocation>
 					</relocations>
 				</configuration>
 				<executions>
