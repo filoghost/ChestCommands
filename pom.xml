@@ -37,6 +37,17 @@
         <module>plugin</module>
     </modules>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>codemc-snapshots</id>
+			<url>https://repo.codemc.io/repository/maven-snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>codemc-releases</id>
+			<url>https://repo.codemc.io/repository/maven-releases/</url>
+		</repository>
+	</distributionManagement>
+
 	<repositories>
 		<repository>
 			<id>spigot-repo</id>
@@ -210,5 +221,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
