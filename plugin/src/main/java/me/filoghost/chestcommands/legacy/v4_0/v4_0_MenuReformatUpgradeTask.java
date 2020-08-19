@@ -9,10 +9,10 @@ import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
-import me.filoghost.commons.Strings;
-import me.filoghost.commons.config.Config;
-import me.filoghost.commons.config.ConfigSection;
-import me.filoghost.commons.config.ConfigValueType;
+import me.filoghost.fcommons.Strings;
+import me.filoghost.fcommons.config.Config;
+import me.filoghost.fcommons.config.ConfigSection;
+import me.filoghost.fcommons.config.ConfigValueType;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.placeholder.scanner;
 
-import me.filoghost.commons.Strings;
+import me.filoghost.fcommons.Strings;
 
 import java.util.Objects;
 

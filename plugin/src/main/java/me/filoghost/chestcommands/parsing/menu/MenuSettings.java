@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.parsing.menu;
 
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.action.Action;
-import me.filoghost.commons.collection.CollectionUtils;
+import me.filoghost.fcommons.collection.CollectionUtils;
 
 import java.util.List;
 

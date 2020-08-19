@@ -15,7 +15,7 @@ import me.filoghost.chestcommands.icon.APIStaticIcon;
 import me.filoghost.chestcommands.menu.APIMenu;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

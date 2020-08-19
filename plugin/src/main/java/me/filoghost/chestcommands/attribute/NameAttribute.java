@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.commons.Colors;
+import me.filoghost.fcommons.Colors;
 
 public class NameAttribute implements IconAttribute {
 

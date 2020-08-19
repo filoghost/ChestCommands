@@ -8,7 +8,7 @@ package me.filoghost.chestcommands.logging;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
-import me.filoghost.commons.config.ConfigErrors;
+import me.filoghost.fcommons.config.ConfigErrors;
 import org.bukkit.ChatColor;
 
 import java.nio.file.Path;

@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.legacy;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -5,9 +5,9 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.commons.config.ConfigErrors;
-import me.filoghost.commons.config.exception.ConfigLoadException;
-import me.filoghost.commons.config.exception.ConfigSaveException;
+import me.filoghost.fcommons.config.ConfigErrors;
+import me.filoghost.fcommons.config.exception.ConfigLoadException;
+import me.filoghost.fcommons.config.exception.ConfigSaveException;
 
 import java.io.IOException;
 import java.nio.file.Files;

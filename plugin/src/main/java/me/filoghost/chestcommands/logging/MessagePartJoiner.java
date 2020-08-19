@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.logging;
 
-import me.filoghost.commons.Strings;
+import me.filoghost.fcommons.Strings;
 
 import java.util.List;
 

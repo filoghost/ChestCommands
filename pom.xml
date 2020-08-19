@@ -33,7 +33,6 @@
 	</properties>
 
 	<modules>
-		<module>commons</module>
 		<module>api</module>
         <module>plugin</module>
     </modules>
@@ -108,14 +107,14 @@
 			</dependency>
 
 			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>chestcommands-api</artifactId>
-				<version>${project.version}</version>
+				<groupId>me.filoghost.fcommons</groupId>
+				<artifactId>fcommons</artifactId>
+				<version>1.0.0</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>chestcommands-commons</artifactId>
+				<artifactId>chestcommands-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

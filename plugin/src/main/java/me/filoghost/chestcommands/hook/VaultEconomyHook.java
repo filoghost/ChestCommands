@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.hook;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;

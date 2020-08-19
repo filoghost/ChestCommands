@@ -5,10 +5,10 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.commons.config.Config;
-import me.filoghost.commons.config.ConfigLoader;
-import me.filoghost.commons.config.exception.ConfigLoadException;
-import me.filoghost.commons.config.exception.ConfigSaveException;
+import me.filoghost.fcommons.config.Config;
+import me.filoghost.fcommons.config.ConfigLoader;
+import me.filoghost.fcommons.config.exception.ConfigLoadException;
+import me.filoghost.fcommons.config.exception.ConfigSaveException;
 
 import java.nio.file.Path;
 

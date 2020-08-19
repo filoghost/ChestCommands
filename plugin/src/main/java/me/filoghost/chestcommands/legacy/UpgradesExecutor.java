@@ -10,8 +10,8 @@ import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.commons.logging.ErrorCollector;
-import me.filoghost.commons.logging.Log;
+import me.filoghost.fcommons.logging.ErrorCollector;
+import me.filoghost.fcommons.logging.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;

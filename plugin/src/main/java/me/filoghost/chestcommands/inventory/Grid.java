@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.inventory;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 
 /* 
  * Example:

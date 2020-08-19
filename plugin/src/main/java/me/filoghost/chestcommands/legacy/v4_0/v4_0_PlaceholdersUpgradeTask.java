@@ -7,12 +7,12 @@ package me.filoghost.chestcommands.legacy.v4_0;
 
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
-import me.filoghost.commons.Strings;
-import me.filoghost.commons.config.Config;
-import me.filoghost.commons.config.ConfigErrors;
-import me.filoghost.commons.config.ConfigLoader;
-import me.filoghost.commons.config.exception.ConfigLoadException;
-import me.filoghost.commons.config.exception.ConfigSaveException;
+import me.filoghost.fcommons.Strings;
+import me.filoghost.fcommons.config.Config;
+import me.filoghost.fcommons.config.ConfigErrors;
+import me.filoghost.fcommons.config.ConfigLoader;
+import me.filoghost.fcommons.config.exception.ConfigLoadException;
+import me.filoghost.fcommons.config.exception.ConfigSaveException;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;

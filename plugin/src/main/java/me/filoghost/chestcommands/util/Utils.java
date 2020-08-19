@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.util;
 
-import me.filoghost.commons.Strings;
+import me.filoghost.fcommons.Strings;
 
 public class Utils {
 

@@ -9,7 +9,7 @@ import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderScanner;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

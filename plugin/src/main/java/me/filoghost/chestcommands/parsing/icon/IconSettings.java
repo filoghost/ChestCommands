@@ -10,10 +10,10 @@ import me.filoghost.chestcommands.attribute.IconAttribute;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.commons.config.ConfigSection;
-import me.filoghost.commons.config.ConfigValue;
-import me.filoghost.commons.config.exception.ConfigValueException;
-import me.filoghost.commons.logging.ErrorCollector;
+import me.filoghost.fcommons.config.ConfigSection;
+import me.filoghost.fcommons.config.ConfigValue;
+import me.filoghost.fcommons.config.exception.ConfigValueException;
+import me.filoghost.fcommons.logging.ErrorCollector;
 import org.bukkit.Material;
 
 import java.nio.file.Path;

@@ -5,9 +5,9 @@
  */
 package me.filoghost.chestcommands.config;
 
-import me.filoghost.commons.config.mapped.IncludeStatic;
-import me.filoghost.commons.config.mapped.MappedConfig;
-import me.filoghost.commons.config.mapped.modifier.ChatColors;
+import me.filoghost.fcommons.config.mapped.IncludeStatic;
+import me.filoghost.fcommons.config.mapped.MappedConfig;
+import me.filoghost.fcommons.config.mapped.modifier.ChatColors;
 
 @ChatColors
 @IncludeStatic

@@ -19,8 +19,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>chestcommands-commons</artifactId>
+			<groupId>me.filoghost.fcommons</groupId>
+			<artifactId>fcommons</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

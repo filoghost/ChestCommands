@@ -8,8 +8,8 @@ package me.filoghost.chestcommands.action;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.commons.Strings;
-import me.filoghost.commons.collection.Registry;
+import me.filoghost.fcommons.Strings;
+import me.filoghost.fcommons.collection.Registry;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 

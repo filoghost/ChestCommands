@@ -7,10 +7,10 @@ package me.filoghost.chestcommands.config;
 
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
-import me.filoghost.commons.Colors;
-import me.filoghost.commons.config.Config;
-import me.filoghost.commons.config.ConfigSection;
-import me.filoghost.commons.logging.ErrorCollector;
+import me.filoghost.fcommons.Colors;
+import me.filoghost.fcommons.config.Config;
+import me.filoghost.fcommons.config.ConfigSection;
+import me.filoghost.fcommons.logging.ErrorCollector;
 
 import java.util.ArrayList;
 import java.util.List;

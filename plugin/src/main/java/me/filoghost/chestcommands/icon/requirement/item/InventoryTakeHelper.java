@@ -5,8 +5,8 @@
  */
 package me.filoghost.chestcommands.icon.requirement.item;
 
-import me.filoghost.commons.MaterialsHelper;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.MaterialsHelper;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 

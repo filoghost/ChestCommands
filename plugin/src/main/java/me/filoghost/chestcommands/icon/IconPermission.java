@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.icon;
 
-import me.filoghost.commons.Strings;
+import me.filoghost.fcommons.Strings;
 import org.bukkit.entity.Player;
 
 public class IconPermission {

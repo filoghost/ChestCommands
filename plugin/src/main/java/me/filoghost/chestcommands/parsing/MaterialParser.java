@@ -1,7 +1,7 @@
 package me.filoghost.chestcommands.parsing;
 
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.commons.MaterialsHelper;
+import me.filoghost.fcommons.MaterialsHelper;
 import org.bukkit.Material;
 
 public class MaterialParser {

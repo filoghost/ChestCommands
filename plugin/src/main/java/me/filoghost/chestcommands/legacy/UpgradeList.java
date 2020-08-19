@@ -16,9 +16,9 @@ import me.filoghost.chestcommands.legacy.v4_0.v4_0_MenuReformatUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_PlaceholdersUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.v4_0_SettingsUpgradeTask;
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.commons.collection.CollectionUtils;
-import me.filoghost.commons.config.ConfigLoader;
-import me.filoghost.commons.logging.Log;
+import me.filoghost.fcommons.collection.CollectionUtils;
+import me.filoghost.fcommons.config.ConfigLoader;
+import me.filoghost.fcommons.logging.Log;
 
 import java.io.IOException;
 import java.nio.file.Path;

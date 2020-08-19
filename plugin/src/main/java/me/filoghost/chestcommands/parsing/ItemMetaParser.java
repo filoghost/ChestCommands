@@ -6,8 +6,8 @@
 package me.filoghost.chestcommands.parsing;
 
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.commons.Strings;
-import me.filoghost.commons.collection.Registry;
+import me.filoghost.fcommons.Strings;
+import me.filoghost.fcommons.collection.Registry;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;

@@ -28,9 +28,9 @@ import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
 import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
 import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.commons.config.ConfigValue;
-import me.filoghost.commons.config.ConfigValueType;
-import me.filoghost.commons.config.exception.ConfigValueException;
+import me.filoghost.fcommons.config.ConfigValue;
+import me.filoghost.fcommons.config.ConfigValueType;
+import me.filoghost.fcommons.config.exception.ConfigValueException;
 
 import java.util.HashMap;
 import java.util.Map;

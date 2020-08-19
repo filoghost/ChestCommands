@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.parsing.menu;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;

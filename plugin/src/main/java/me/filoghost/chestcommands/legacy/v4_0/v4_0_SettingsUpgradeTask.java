@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.legacy.v4_0;
 
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
-import me.filoghost.commons.config.Config;
+import me.filoghost.fcommons.config.Config;
 
 public class v4_0_SettingsUpgradeTask extends YamlUpgradeTask {
 

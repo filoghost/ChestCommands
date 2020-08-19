@@ -7,8 +7,8 @@ package me.filoghost.chestcommands.attribute;
 
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
-import me.filoghost.commons.Colors;
-import me.filoghost.commons.collection.CollectionUtils;
+import me.filoghost.fcommons.Colors;
+import me.filoghost.fcommons.collection.CollectionUtils;
 
 import java.util.List;
 

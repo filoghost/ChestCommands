@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.icon;
 
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.StaticIcon;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

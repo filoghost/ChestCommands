@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.menu;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.plugin.Plugin;
 
 public class APIMenu extends BaseMenu {

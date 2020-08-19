@@ -6,7 +6,7 @@
 package me.filoghost.chestcommands.action;
 
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
-import me.filoghost.commons.Colors;
+import me.filoghost.fcommons.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

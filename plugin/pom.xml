@@ -49,8 +49,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>chestcommands-commons</artifactId>
+			<groupId>me.filoghost.fcommons</groupId>
+			<artifactId>fcommons</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -137,8 +137,8 @@
 							<shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
 						</relocation>
 						<relocation>
-							<pattern>me.filoghost.commons</pattern>
-							<shadedPattern>me.filoghost.chestcommands.commons</shadedPattern>
+							<pattern>me.filoghost.fcommons</pattern>
+							<shadedPattern>me.filoghost.chestcommands.fcommons</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>

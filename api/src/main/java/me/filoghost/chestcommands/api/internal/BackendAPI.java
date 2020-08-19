@@ -9,7 +9,7 @@ import me.filoghost.chestcommands.api.ConfigurableIcon;
 import me.filoghost.chestcommands.api.Menu;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.api.StaticIcon;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

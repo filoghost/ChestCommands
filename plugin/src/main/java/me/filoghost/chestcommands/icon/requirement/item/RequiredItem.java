@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.icon.requirement.item;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Material;
 
 public class RequiredItem {

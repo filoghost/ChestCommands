@@ -11,7 +11,7 @@ import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.inventory.ArrayGrid;
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
 import me.filoghost.chestcommands.inventory.Grid;
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

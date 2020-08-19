@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.hook;
 
-import me.filoghost.commons.Preconditions;
+import me.filoghost.fcommons.Preconditions;
 
 public interface PluginHook {
 

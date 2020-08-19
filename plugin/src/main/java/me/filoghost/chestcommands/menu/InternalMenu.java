@@ -10,7 +10,7 @@ import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
-import me.filoghost.commons.collection.CollectionUtils;
+import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

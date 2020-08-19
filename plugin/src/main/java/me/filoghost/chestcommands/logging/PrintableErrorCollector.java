@@ -9,11 +9,11 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.commons.CommonsUtil;
-import me.filoghost.commons.config.exception.ConfigException;
-import me.filoghost.commons.config.exception.ConfigSyntaxException;
-import me.filoghost.commons.logging.ErrorCollector;
-import me.filoghost.commons.logging.ErrorLog;
+import me.filoghost.fcommons.CommonsUtil;
+import me.filoghost.fcommons.config.exception.ConfigException;
+import me.filoghost.fcommons.config.exception.ConfigSyntaxException;
+import me.filoghost.fcommons.logging.ErrorCollector;
+import me.filoghost.fcommons.logging.ErrorLog;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

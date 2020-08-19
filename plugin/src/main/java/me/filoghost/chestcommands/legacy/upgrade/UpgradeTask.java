@@ -7,9 +7,9 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 import me.filoghost.chestcommands.legacy.Backup;
 import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.commons.Preconditions;
-import me.filoghost.commons.config.exception.ConfigLoadException;
-import me.filoghost.commons.config.exception.ConfigSaveException;
+import me.filoghost.fcommons.Preconditions;
+import me.filoghost.fcommons.config.exception.ConfigLoadException;
+import me.filoghost.fcommons.config.exception.ConfigSaveException;
 
 import java.io.IOException;
 import java.nio.file.Path;

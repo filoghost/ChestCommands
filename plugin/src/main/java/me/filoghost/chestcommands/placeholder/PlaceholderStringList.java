@@ -6,8 +6,8 @@
 package me.filoghost.chestcommands.placeholder;
 
 import com.google.common.collect.ImmutableList;
-import me.filoghost.commons.Preconditions;
-import me.filoghost.commons.collection.CollectionUtils;
+import me.filoghost.fcommons.Preconditions;
+import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
