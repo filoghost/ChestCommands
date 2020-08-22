@@ -1,6 +1,6 @@
 name: ChestCommands
 main: me.filoghost.chestcommands.ChestCommands
-version: ${project.pluginVersion}
+version: ${pluginVersion}
 api-version: 1.13
 
 softdepend: [Vault, BarAPI, PlaceholderAPI]
