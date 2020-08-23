@@ -185,7 +185,7 @@
 					<sourceDirectories>
 						<sourceDirectory>${project.basedir}</sourceDirectory>
 					</sourceDirectories>
-					<includes>pom.xml, src/main/java/**/*.java</includes>
+					<includes>checkstyle/**/*, pom.xml, src/main/java/**/*.java</includes>
 				</configuration>
 				<executions>
 					<execution>
