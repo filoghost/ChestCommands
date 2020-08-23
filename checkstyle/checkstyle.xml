@@ -16,4 +16,9 @@
         <property name="fileExtensions" value="java"/>
         <property name="headerFile" value="checkstyle/header.txt"/>
     </module>
+
+    <!-- Check that files dont contain tabs -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
 </module>
