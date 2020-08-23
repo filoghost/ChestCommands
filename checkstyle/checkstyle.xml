@@ -7,8 +7,12 @@
     <property name="fileExtensions" value="java, xml"/>
     <property name="charset" value="UTF-8"/>
 
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle/suppressions.xml"/>
+    </module>
+
     <module name="Header">
         <property name="fileExtensions" value="java"/>
-        <property name="headerFile" value="${checkstyle.header.file}"/>
+        <property name="headerFile" value="checkstyle/header.txt"/>
     </module>
 </module>
