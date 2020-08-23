@@ -12,17 +12,17 @@ import org.bukkit.inventory.ItemStack;
 
 public class GiveItemAction implements Action {
 
-	private final ItemStack itemToGive;
+    private final ItemStack itemToGive;
 
-	public GiveItemAction(String serializedAction) throws ParseException {
-		ItemStackParser reader = new ItemStackParser(serializedAction, true);
-		reader.checkNotAir();
-		itemToGive = reader.createStack();
-	}
+    public GiveItemAction(String serializedAction) throws ParseException {
+        ItemStackParser reader = new ItemStackParser(serializedAction, true);
+        reader.checkNotAir();
+        itemToGive = reader.createStack();
+    }
 
-	@Override
-	public void execute(Player player) {
-		player.getInventory().addItem(itemToGive.clone());
-	}
+    @Override
+    public void execute(Player player) {
+        player.getInventory().addItem(itemToGive.clone());
+    }
 
 }

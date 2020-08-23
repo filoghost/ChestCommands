@@ -14,30 +14,30 @@ import org.bukkit.entity.Player;
 
 public class TickingTask implements Runnable {
 
-	private long currentTick;
+    private long currentTick;
 
-	@Override
-	public void run() {
-		updateMenus();
-		PlaceholderManager.onTick();
+    @Override
+    public void run() {
+        updateMenus();
+        PlaceholderManager.onTick();
 
-		currentTick++;
-	}
+        currentTick++;
+    }
 
-	private void updateMenus() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
+    private void updateMenus() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
 
-			if (menuView == null || !(menuView.getMenu() instanceof InternalMenu)) {
-				continue;
-			}
+            if (menuView == null || !(menuView.getMenu() instanceof InternalMenu)) {
+                continue;
+            }
 
-			int refreshTicks = ((InternalMenu) menuView.getMenu()).getRefreshTicks();
+            int refreshTicks = ((InternalMenu) menuView.getMenu()).getRefreshTicks();
 
-			if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
-				menuView.refresh();
-			}
-		}
-	}
+            if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
+                menuView.refresh();
+            }
+        }
+    }
 
 }

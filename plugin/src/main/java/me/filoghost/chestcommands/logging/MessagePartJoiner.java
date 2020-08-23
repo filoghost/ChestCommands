@@ -5,77 +5,76 @@
  */
 package me.filoghost.chestcommands.logging;
 
-import me.filoghost.fcommons.Strings;
-
 import java.util.List;
+import me.filoghost.fcommons.Strings;
 
 class MessagePartJoiner {
 
-	private final StringBuilder output;
+    private final StringBuilder output;
 
-	private String previousMessagePart;
-	private boolean appendedFirstSentenceSeparator;
+    private String previousMessagePart;
+    private boolean appendedFirstSentenceSeparator;
 
-	public static String join(List<String> messageParts) {
-		int estimateLength = getEstimateLength(messageParts);
-		MessagePartJoiner errorMessageBuilder = new MessagePartJoiner(estimateLength);
-		for (String messagePart : messageParts) {
-			errorMessageBuilder.append(messagePart);
-		}
-		return errorMessageBuilder.build();
-	}
+    public static String join(List<String> messageParts) {
+        int estimateLength = getEstimateLength(messageParts);
+        MessagePartJoiner errorMessageBuilder = new MessagePartJoiner(estimateLength);
+        for (String messagePart : messageParts) {
+            errorMessageBuilder.append(messagePart);
+        }
+        return errorMessageBuilder.build();
+    }
 
-	private static int getEstimateLength(List<String> messageParts) {
-		int estimateLength = 0;
+    private static int getEstimateLength(List<String> messageParts) {
+        int estimateLength = 0;
 
-		// Length of message parts
-		for (String messagePart : messageParts) {
-			estimateLength += messagePart.length();
-		}
+        // Length of message parts
+        for (String messagePart : messageParts) {
+            estimateLength += messagePart.length();
+        }
 
-		// Length of separators in between
-		estimateLength += (messageParts.size() - 1) * 2;
+        // Length of separators in between
+        estimateLength += (messageParts.size() - 1) * 2;
 
-		return estimateLength;
-	}
+        return estimateLength;
+    }
 
-	private MessagePartJoiner(int estimateLength) {
-		output = new StringBuilder(estimateLength);
-	}
+    private MessagePartJoiner(int estimateLength) {
+        output = new StringBuilder(estimateLength);
+    }
 
-	private void append(String messagePart) {
-		appendSeparator();
-		appendMessagePart(messagePart);
+    private void append(String messagePart) {
+        appendSeparator();
+        appendMessagePart(messagePart);
 
-		previousMessagePart = messagePart;
-	}
+        previousMessagePart = messagePart;
+    }
 
-	private void appendMessagePart(String messagePart) {
-		if (previousMessagePart == null || previousMessagePart.endsWith(".")) {
-			output.append(Strings.capitalizeFirst(messagePart));
-		} else {
-			output.append(messagePart);
-		}
-	}
+    private void appendMessagePart(String messagePart) {
+        if (previousMessagePart == null || previousMessagePart.endsWith(".")) {
+            output.append(Strings.capitalizeFirst(messagePart));
+        } else {
+            output.append(messagePart);
+        }
+    }
 
-	private void appendSeparator() {
-		if (previousMessagePart != null) {
-			if (previousMessagePart.endsWith(".")) {
-				output.append(" ");
-				this.appendedFirstSentenceSeparator = false;
+    private void appendSeparator() {
+        if (previousMessagePart != null) {
+            if (previousMessagePart.endsWith(".")) {
+                output.append(" ");
+                this.appendedFirstSentenceSeparator = false;
 
-			} else if (!appendedFirstSentenceSeparator) {
-				output.append(": ");
-				this.appendedFirstSentenceSeparator = true;
+            } else if (!appendedFirstSentenceSeparator) {
+                output.append(": ");
+                this.appendedFirstSentenceSeparator = true;
 
-			} else {
-				output.append(", ");
-			}
-		}
-	}
+            } else {
+                output.append(", ");
+            }
+        }
+    }
 
-	private String build() {
-		return output.toString();
-	}
+    private String build() {
+        return output.toString();
+    }
 
 }

@@ -23,46 +23,46 @@ import org.bukkit.plugin.Plugin;
 
 public class DefaultBackendAPI extends BackendAPI {
 
-	@Override
-	public boolean pluginMenuExists(String menuFileName) {
-		Preconditions.notNull(menuFileName, "menuFileName");
+    @Override
+    public boolean pluginMenuExists(String menuFileName) {
+        Preconditions.notNull(menuFileName, "menuFileName");
 
-		return ChestCommands.getMenuManager().getMenuByFileName(menuFileName) != null;
-	}
+        return ChestCommands.getMenuManager().getMenuByFileName(menuFileName) != null;
+    }
 
-	@Override
-	public boolean openPluginMenu(Player player, String menuFileName) {
-		Preconditions.notNull(player, "player");
-		Preconditions.notNull(menuFileName, "menuFileName");
+    @Override
+    public boolean openPluginMenu(Player player, String menuFileName) {
+        Preconditions.notNull(player, "player");
+        Preconditions.notNull(menuFileName, "menuFileName");
 
-		InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuFileName);
+        InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuFileName);
 
-		if (menu != null) {
-			menu.open(player);
-			return true;
-		} else {
-			return false;
-		}
-	}
+        if (menu != null) {
+            menu.open(player);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	public ConfigurableIcon createConfigurableIcon(Material material) {
-		return new APIConfigurableIcon(material);
-	}
+    @Override
+    public ConfigurableIcon createConfigurableIcon(Material material) {
+        return new APIConfigurableIcon(material);
+    }
 
-	@Override
-	public Menu createMenu(Plugin owner, String title, int rows) {
-		return new APIMenu(owner, title, rows);
-	}
+    @Override
+    public Menu createMenu(Plugin owner, String title, int rows) {
+        return new APIMenu(owner, title, rows);
+    }
 
-	@Override
-	public StaticIcon createStaticIcon(ItemStack itemStack) {
-		return new APIStaticIcon(itemStack);
-	}
+    @Override
+    public StaticIcon createStaticIcon(ItemStack itemStack) {
+        return new APIStaticIcon(itemStack);
+    }
 
-	@Override
-	public void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
-		PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
-	}
+    @Override
+    public void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
+        PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
+    }
 
 }

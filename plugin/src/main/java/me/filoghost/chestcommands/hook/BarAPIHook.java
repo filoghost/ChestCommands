@@ -11,25 +11,25 @@ import org.bukkit.entity.Player;
 
 public enum BarAPIHook implements PluginHook {
 
-	INSTANCE;
-	
-	private boolean enabled;
+    INSTANCE;
 
-	@Override
-	public void setup() {
-		enabled = Bukkit.getPluginManager().getPlugin("BarAPI") != null;
-	}
-	
-	@Override
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
-	@SuppressWarnings("deprecation")
-	public static void setMessage(Player player, String message, int seconds) {
-		INSTANCE.checkEnabledState();
-		
-		BarAPI.setMessage(player, message, seconds);
-	}
+    private boolean enabled;
+
+    @Override
+    public void setup() {
+        enabled = Bukkit.getPluginManager().getPlugin("BarAPI") != null;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setMessage(Player player, String message, int seconds) {
+        INSTANCE.checkEnabledState();
+
+        BarAPI.setMessage(player, message, seconds);
+    }
 
 }

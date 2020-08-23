@@ -9,13 +9,13 @@ import me.filoghost.fcommons.Preconditions;
 
 public interface PluginHook {
 
-	
-	void setup();
-	
-	boolean isEnabled();
-	
-	default void checkEnabledState() {
-		Preconditions.checkState(isEnabled(), "Plugin hook " + getClass().getSimpleName() + " is not enabled");
-	}
+    
+    void setup();
+    
+    boolean isEnabled();
+    
+    default void checkEnabledState() {
+        Preconditions.checkState(isEnabled(), "Plugin hook " + getClass().getSimpleName() + " is not enabled");
+    }
 
 }

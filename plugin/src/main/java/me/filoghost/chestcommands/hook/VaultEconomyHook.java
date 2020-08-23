@@ -14,72 +14,72 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public enum VaultEconomyHook implements PluginHook {
 
-	INSTANCE;
-	
-	private Economy economy;
+    INSTANCE;
+    
+    private Economy economy;
 
-	@Override
-	public void setup() {
-		economy = null;
-		
-		if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-			return;
-		}
-		
-		RegisteredServiceProvider<Economy> economyServiceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
-		if (economyServiceProvider == null) {
-			return;
-		}
-		
-		economy = economyServiceProvider.getProvider();
-	}
+    @Override
+    public void setup() {
+        economy = null;
+        
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            return;
+        }
+        
+        RegisteredServiceProvider<Economy> economyServiceProvider = Bukkit.getServicesManager().getRegistration(Economy.class);
+        if (economyServiceProvider == null) {
+            return;
+        }
+        
+        economy = economyServiceProvider.getProvider();
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return economy != null;
-	}
+    @Override
+    public boolean isEnabled() {
+        return economy != null;
+    }
 
-	public static double getMoney(Player player) {
-		INSTANCE.checkEnabledState();
-		return INSTANCE.economy.getBalance(player, player.getWorld().getName());
-	}
+    public static double getMoney(Player player) {
+        INSTANCE.checkEnabledState();
+        return INSTANCE.economy.getBalance(player, player.getWorld().getName());
+    }
 
-	public static boolean hasMoney(Player player, double minimum) {
-		INSTANCE.checkEnabledState();
-		checkPositiveAmount(minimum);
+    public static boolean hasMoney(Player player, double minimum) {
+        INSTANCE.checkEnabledState();
+        checkPositiveAmount(minimum);
 
-		double balance = INSTANCE.economy.getBalance(player, player.getWorld().getName());
-		return balance >= minimum;
-	}
+        double balance = INSTANCE.economy.getBalance(player, player.getWorld().getName());
+        return balance >= minimum;
+    }
 
-	/**
-	 * @return true if the operation was successful.
-	 */
-	public static boolean takeMoney(Player player, double amount) {
-		INSTANCE.checkEnabledState();
-		checkPositiveAmount(amount);
+    /**
+     * @return true if the operation was successful.
+     */
+    public static boolean takeMoney(Player player, double amount) {
+        INSTANCE.checkEnabledState();
+        checkPositiveAmount(amount);
 
-		EconomyResponse response = INSTANCE.economy.withdrawPlayer(player, player.getWorld().getName(), amount);
-		return response.transactionSuccess();
-	}
+        EconomyResponse response = INSTANCE.economy.withdrawPlayer(player, player.getWorld().getName(), amount);
+        return response.transactionSuccess();
+    }
 
-	public static boolean giveMoney(Player player, double amount) {
-		INSTANCE.checkEnabledState();
-		checkPositiveAmount(amount);
+    public static boolean giveMoney(Player player, double amount) {
+        INSTANCE.checkEnabledState();
+        checkPositiveAmount(amount);
 
-		EconomyResponse response = INSTANCE.economy.depositPlayer(player, player.getWorld().getName(), amount);
-		return response.transactionSuccess();
-	}
-	
-	private static void checkPositiveAmount(double amount) {
-		Preconditions.checkArgument(amount >= 0.0, "amount cannot be negative");
-	}
+        EconomyResponse response = INSTANCE.economy.depositPlayer(player, player.getWorld().getName(), amount);
+        return response.transactionSuccess();
+    }
+    
+    private static void checkPositiveAmount(double amount) {
+        Preconditions.checkArgument(amount >= 0.0, "amount cannot be negative");
+    }
 
-	public static String formatMoney(double amount) {
-		if (INSTANCE.economy != null) {
-			return INSTANCE.economy.format(amount);
-		} else {
-			return Double.toString(amount);
-		}
-	}
+    public static String formatMoney(double amount) {
+        if (INSTANCE.economy != null) {
+            return INSTANCE.economy.format(amount);
+        } else {
+            return Double.toString(amount);
+        }
+    }
 }

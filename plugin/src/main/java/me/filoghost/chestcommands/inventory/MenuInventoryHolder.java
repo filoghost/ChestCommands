@@ -12,25 +12,25 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class MenuInventoryHolder implements InventoryHolder {
 
-	private final DefaultMenuView menuView;
+    private final DefaultMenuView menuView;
 
-	public MenuInventoryHolder(DefaultMenuView menuView) {
-		Preconditions.notNull(menuView, "menuView");
-		this.menuView = menuView;
-	}
+    public MenuInventoryHolder(DefaultMenuView menuView) {
+        Preconditions.notNull(menuView, "menuView");
+        this.menuView = menuView;
+    }
 
-	@Override
-	public Inventory getInventory() {
-		/*
-		 * This inventory will not do anything.
-		 * I'm 90% sure that it doesn't break any other plugin,
-		 * because the only way you can get here is using InventoryClickEvent,
-		 * that is cancelled by ChestCommands, or using InventoryOpenEvent.
-		 */
-		return Bukkit.createInventory(null, 9);
-	}
+    @Override
+    public Inventory getInventory() {
+        /*
+         * This inventory will not do anything.
+         * I'm 90% sure that it doesn't break any other plugin,
+         * because the only way you can get here is using InventoryClickEvent,
+         * that is cancelled by ChestCommands, or using InventoryOpenEvent.
+         */
+        return Bukkit.createInventory(null, 9);
+    }
 
-	public DefaultMenuView getMenuView() {
-		return menuView;
-	}
+    public DefaultMenuView getMenuView() {
+        return menuView;
+    }
 }

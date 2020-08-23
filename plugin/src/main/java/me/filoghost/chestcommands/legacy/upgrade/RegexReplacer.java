@@ -11,24 +11,24 @@ import java.util.regex.Pattern;
 
 public class RegexReplacer implements Function<String, String> {
 
-	private final Pattern regex;
-	private final Function<Matcher, String> replaceCallback;
+    private final Pattern regex;
+    private final Function<Matcher, String> replaceCallback;
 
-	public RegexReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
-		this.regex = regex;
-		this.replaceCallback = replaceCallback;
-	}
+    public RegexReplacer(Pattern regex, Function<Matcher, String> replaceCallback) {
+        this.regex = regex;
+        this.replaceCallback = replaceCallback;
+    }
 
-	@Override
-	public String apply(String string) {
-		Matcher matcher = regex.matcher(string);
-		StringBuffer output = new StringBuffer();
+    @Override
+    public String apply(String string) {
+        Matcher matcher = regex.matcher(string);
+        StringBuffer output = new StringBuffer();
 
-		while (matcher.find()) {
-			matcher.appendReplacement(output, replaceCallback.apply(matcher));
-		}
-		matcher.appendTail(output);
+        while (matcher.find()) {
+            matcher.appendReplacement(output, replaceCallback.apply(matcher));
+        }
+        matcher.appendTail(output);
 
-		return output.toString();
-	}
+        return output.toString();
+    }
 }

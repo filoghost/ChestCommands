@@ -9,6 +9,6 @@ import me.filoghost.chestcommands.parsing.ParseException;
 
 public interface AttributeErrorHandler {
 
-	void onListElementError(String listElement, ParseException e);
+    void onListElementError(String listElement, ParseException e);
 
 }

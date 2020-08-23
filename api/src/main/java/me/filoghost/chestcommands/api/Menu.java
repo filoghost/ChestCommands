@@ -10,29 +10,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public interface Menu {
-	
-	static Menu create(Plugin owner, String title, int rowCount) {
-		return BackendAPI.getImplementation().createMenu(owner, title, rowCount);
-	}
 
-	void setIcon(int row, int column, Icon icon);
+    static Menu create(Plugin owner, String title, int rowCount) {
+        return BackendAPI.getImplementation().createMenu(owner, title, rowCount);
+    }
 
-	Icon getIcon(int row, int column);
+    void setIcon(int row, int column, Icon icon);
 
-	String getTitle();
-	
-	int getRowCount();
-	
-	int getColumnCount();
+    Icon getIcon(int row, int column);
 
-	/**
-	 * Opens a view of the current menu configuration.
-	 * Updating the menu doesn't automatically update all the views.
-	 *
-	 * @param player the player to which the menu will be displayed
-	 */
-	MenuView open(Player player);
+    String getTitle();
 
-	void refreshMenuViews();
+    int getRowCount();
+
+    int getColumnCount();
+
+    /**
+     * Opens a view of the current menu configuration.
+     * Updating the menu doesn't automatically update all the views.
+     *
+     * @param player the player to which the menu will be displayed
+     */
+    MenuView open(Player player);
+
+    void refreshMenuViews();
 
 }

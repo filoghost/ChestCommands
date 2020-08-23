@@ -10,16 +10,16 @@ import org.bukkit.plugin.Plugin;
 
 public class APIMenu extends BaseMenu {
 
-	private final Plugin owner;
-	
-	public APIMenu(Plugin owner, String title, int rows) {
-		super(title, rows);
-		Preconditions.notNull(owner, "owner");
-		this.owner = owner;
-	}
+    private final Plugin owner;
+    
+    public APIMenu(Plugin owner, String title, int rows) {
+        super(title, rows);
+        Preconditions.notNull(owner, "owner");
+        this.owner = owner;
+    }
 
-	public Plugin getOwner() {
-		return owner;
-	}
+    public Plugin getOwner() {
+        return owner;
+    }
 
 }

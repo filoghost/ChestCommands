@@ -10,21 +10,21 @@ import org.bukkit.entity.Player;
 
 public class OpCommandAction implements Action {
 
-	private final PlaceholderString command;
+    private final PlaceholderString command;
 
-	public OpCommandAction(String serializedAction) {
-		command = PlaceholderString.of(serializedAction);
-	}
+    public OpCommandAction(String serializedAction) {
+        command = PlaceholderString.of(serializedAction);
+    }
 
-	@Override
-	public void execute(Player player) {
-		if (player.isOp()) {
-			player.chat("/" + command.getValue(player));
-		} else {
-			player.setOp(true);
-			player.chat("/" + command.getValue(player));
-			player.setOp(false);
-		}
-	}
+    @Override
+    public void execute(Player player) {
+        if (player.isOp()) {
+            player.chat("/" + command.getValue(player));
+        } else {
+            player.setOp(true);
+            player.chat("/" + command.getValue(player));
+            player.setOp(false);
+        }
+    }
 
 }

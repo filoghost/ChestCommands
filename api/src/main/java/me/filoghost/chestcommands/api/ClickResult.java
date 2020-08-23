@@ -7,7 +7,7 @@ package me.filoghost.chestcommands.api;
 
 public enum ClickResult {
 
-	KEEP_OPEN,
-	CLOSE
+    KEEP_OPEN,
+    CLOSE
 
 }

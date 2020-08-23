@@ -11,16 +11,16 @@ import me.filoghost.chestcommands.parsing.ParseException;
 import org.bukkit.Material;
 
 public class MaterialAttribute implements IconAttribute {
-	
-	private final Material material;
 
-	public MaterialAttribute(String serializedMaterial, AttributeErrorHandler errorHandler) throws ParseException {
-		this.material = MaterialParser.parseMaterial(serializedMaterial);
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setMaterial(material);
-	}
+    private final Material material;
+
+    public MaterialAttribute(String serializedMaterial, AttributeErrorHandler errorHandler) throws ParseException {
+        this.material = MaterialParser.parseMaterial(serializedMaterial);
+    }
+
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setMaterial(material);
+    }
 
 }

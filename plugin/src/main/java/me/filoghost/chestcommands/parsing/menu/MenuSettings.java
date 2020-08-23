@@ -6,67 +6,66 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.fcommons.collection.CollectionUtils;
 
-import java.util.List;
-
 public class MenuSettings {
 
-	// Required settings
-	private final String title;
-	private final int rows;
+    // Required settings
+    private final String title;
+    private final int rows;
 
-	// Optional settings
-	private ImmutableList<String> commands;
-	private ImmutableList<Action> openActions;
-	private int refreshTicks;
+    // Optional settings
+    private ImmutableList<String> commands;
+    private ImmutableList<Action> openActions;
+    private int refreshTicks;
 
-	private MenuOpenItem openItem;
-	
-	public MenuSettings(String title, int rows) {
-		this.title = title;
-		this.rows = rows;
-	}
+    private MenuOpenItem openItem;
 
-	public String getTitle() {
-		return title;
-	}
+    public MenuSettings(String title, int rows) {
+        this.title = title;
+        this.rows = rows;
+    }
 
-	public int getRows() {
-		return rows;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setCommands(List<String> commands) {
-		this.commands = CollectionUtils.immutableCopy(commands);
-	}
+    public int getRows() {
+        return rows;
+    }
 
-	public ImmutableList<String> getCommands() {
-		return commands;
-	}
+    public void setCommands(List<String> commands) {
+        this.commands = CollectionUtils.immutableCopy(commands);
+    }
 
-	public ImmutableList<Action> getOpenActions() {
-		return openActions;
-	}
+    public ImmutableList<String> getCommands() {
+        return commands;
+    }
 
-	public void setOpenActions(List<Action> openAction) {
-		this.openActions = CollectionUtils.immutableCopy(openAction);
-	}
+    public ImmutableList<Action> getOpenActions() {
+        return openActions;
+    }
 
-	public int getRefreshTicks() {
-		return refreshTicks;
-	}
+    public void setOpenActions(List<Action> openAction) {
+        this.openActions = CollectionUtils.immutableCopy(openAction);
+    }
 
-	public void setRefreshTicks(int refreshTicks) {
-		this.refreshTicks = refreshTicks;
-	}
-	
-	public MenuOpenItem getOpenItem() {
-		return openItem;
-	}
+    public int getRefreshTicks() {
+        return refreshTicks;
+    }
 
-	public void setOpenItem(MenuOpenItem openItem) {
-		this.openItem = openItem;
-	}
-	
+    public void setRefreshTicks(int refreshTicks) {
+        this.refreshTicks = refreshTicks;
+    }
+
+    public MenuOpenItem getOpenItem() {
+        return openItem;
+    }
+
+    public void setOpenItem(MenuOpenItem openItem) {
+        this.openItem = openItem;
+    }
+
 }

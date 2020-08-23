@@ -13,38 +13,38 @@ import org.bukkit.inventory.ItemStack;
 
 public class APIStaticIcon implements StaticIcon {
 
-	private ItemStack itemStack;
-	private ClickHandler clickHandler;
+    private ItemStack itemStack;
+    private ClickHandler clickHandler;
 
-	public APIStaticIcon(ItemStack itemStack) {
-		Preconditions.notNull(itemStack, "itemStack");
-		this.itemStack = itemStack;
-	}
+    public APIStaticIcon(ItemStack itemStack) {
+        Preconditions.notNull(itemStack, "itemStack");
+        this.itemStack = itemStack;
+    }
 
-	@Override
-	public ItemStack getItemStack() {
-		return itemStack;
-	}
+    @Override
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
 
-	@Override
-	public void setItemStack(ItemStack itemStack) {
-		Preconditions.notNull(itemStack, "itemStack");
-		this.itemStack = itemStack;
-	}
+    @Override
+    public void setItemStack(ItemStack itemStack) {
+        Preconditions.notNull(itemStack, "itemStack");
+        this.itemStack = itemStack;
+    }
 
-	@Override
-	public ClickHandler getClickHandler() {
-		return clickHandler;
-	}
+    @Override
+    public ClickHandler getClickHandler() {
+        return clickHandler;
+    }
 
-	@Override
-	public void setClickHandler(ClickHandler clickHandler) {
-		this.clickHandler = clickHandler;
-	}
+    @Override
+    public void setClickHandler(ClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
+    }
 
-	@Override
-	public ItemStack render(Player viewer) {
-		return itemStack;
-	}
+    @Override
+    public ItemStack render(Player viewer) {
+        return itemStack;
+    }
 
 }

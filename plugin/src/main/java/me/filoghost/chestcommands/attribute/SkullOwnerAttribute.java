@@ -9,15 +9,15 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public class SkullOwnerAttribute implements IconAttribute {
 
-	private final String skullOwner;
+    private final String skullOwner;
 
-	public SkullOwnerAttribute(String skullOwner, AttributeErrorHandler errorHandler) {
-		this.skullOwner = skullOwner;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setSkullOwner(skullOwner);
-	}
+    public SkullOwnerAttribute(String skullOwner, AttributeErrorHandler errorHandler) {
+        this.skullOwner = skullOwner;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setSkullOwner(skullOwner);
+    }
 
 }

@@ -14,58 +14,58 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 
 public final class ItemMetaParser {
-	
-	private static final Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
-	private static final Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
 
-	private ItemMetaParser() {}
+    private static final Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
+    private static final Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
 
-	
-	public static Color parseRGBColor(String input) throws ParseException {
-		String[] split = Strings.trimmedSplit(input, ",");
+    private ItemMetaParser() {}
 
-		if (split.length != 3) {
-			throw new ParseException(Errors.Parsing.invalidColorFormat);
-		}
 
-		int red = parseColor(split[0], "red");
-		int green = parseColor(split[1], "green");
-		int blue = parseColor(split[2], "blue");
+    public static Color parseRGBColor(String input) throws ParseException {
+        String[] split = Strings.trimmedSplit(input, ",");
 
-		return Color.fromRGB(red, green, blue);
-	}
+        if (split.length != 3) {
+            throw new ParseException(Errors.Parsing.invalidColorFormat);
+        }
 
-	private static int parseColor(String valueString, String colorName) throws ParseException {
-		int value;
+        int red = parseColor(split[0], "red");
+        int green = parseColor(split[1], "green");
+        int blue = parseColor(split[2], "blue");
 
-		try {
-			value = NumberParser.getInteger(valueString);
-		} catch (ParseException e) {
-			throw new ParseException(Errors.Parsing.invalidColorNumber(valueString, colorName), e);
-		}
+        return Color.fromRGB(red, green, blue);
+    }
 
-		if (value < 0 || value > 255) {
-			throw new ParseException(Errors.Parsing.invalidColorRange(valueString, colorName));
-		}
+    private static int parseColor(String valueString, String colorName) throws ParseException {
+        int value;
 
-		return value;
-	}
+        try {
+            value = NumberParser.getInteger(valueString);
+        } catch (ParseException e) {
+            throw new ParseException(Errors.Parsing.invalidColorNumber(valueString, colorName), e);
+        }
 
-	public static DyeColor parseDyeColor(String input) throws ParseException {
-		return DYE_COLORS_REGISTRY.find(input)
-				.orElseThrow(() -> new ParseException(Errors.Parsing.unknownDyeColor(input)));
-	}
+        if (value < 0 || value > 255) {
+            throw new ParseException(Errors.Parsing.invalidColorRange(valueString, colorName));
+        }
 
-	public static Pattern parseBannerPattern(String input) throws ParseException {
-		String[] split = Strings.trimmedSplit(input, ":");
-		if (split.length != 2) {
-			throw new ParseException(Errors.Parsing.invalidPatternFormat);
-		}
+        return value;
+    }
 
-		PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
-				.orElseThrow(() -> new ParseException(Errors.Parsing.unknownPatternType(split[0])));
-		DyeColor patternColor = parseDyeColor(split[1]);
+    public static DyeColor parseDyeColor(String input) throws ParseException {
+        return DYE_COLORS_REGISTRY.find(input)
+                .orElseThrow(() -> new ParseException(Errors.Parsing.unknownDyeColor(input)));
+    }
 
-		return new Pattern(patternColor, patternType);
-	}
+    public static Pattern parseBannerPattern(String input) throws ParseException {
+        String[] split = Strings.trimmedSplit(input, ":");
+        if (split.length != 2) {
+            throw new ParseException(Errors.Parsing.invalidPatternFormat);
+        }
+
+        PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
+                .orElseThrow(() -> new ParseException(Errors.Parsing.unknownPatternType(split[0])));
+        DyeColor patternColor = parseDyeColor(split[1]);
+
+        return new Pattern(patternColor, patternType);
+    }
 }

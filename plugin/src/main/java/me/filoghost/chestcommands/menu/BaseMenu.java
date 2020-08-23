@@ -18,62 +18,62 @@ import org.bukkit.entity.Player;
 public abstract class BaseMenu implements Menu {
 
     
-	protected final String title;
-	protected final Grid<Icon> icons;
+    protected final String title;
+    protected final Grid<Icon> icons;
 
 
-	public BaseMenu(String title, int rows) {
-		Preconditions.notNull(title, "title");
-		Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
-		this.title = title;
-		this.icons = new ArrayGrid<>(rows, 9);
-	}
+    public BaseMenu(String title, int rows) {
+        Preconditions.notNull(title, "title");
+        Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
+        this.title = title;
+        this.icons = new ArrayGrid<>(rows, 9);
+    }
 
-	@Override
-	public void setIcon(int row, int column, Icon icon) {
-		icons.set(row, column, icon);
-	}
+    @Override
+    public void setIcon(int row, int column, Icon icon) {
+        icons.set(row, column, icon);
+    }
 
-	@Override
-	public Icon getIcon(int row, int column) {
-		return icons.get(row, column);
-	}
+    @Override
+    public Icon getIcon(int row, int column) {
+        return icons.get(row, column);
+    }
 
-	@Override
-	public int getRowCount() {
-		return icons.getRows();
-	}
-	
-	@Override
-	public int getColumnCount() {
-		return icons.getColumns();
-	}
+    @Override
+    public int getRowCount() {
+        return icons.getRows();
+    }
+    
+    @Override
+    public int getColumnCount() {
+        return icons.getColumns();
+    }
 
-	@Override
-	public String getTitle() {
-		return title;
-	}
+    @Override
+    public String getTitle() {
+        return title;
+    }
 
-	public Grid<Icon> getIcons() {
-		return icons;
-	}
+    public Grid<Icon> getIcons() {
+        return icons;
+    }
 
-	@Override
-	public MenuView open(Player player) {
-		Preconditions.notNull(player, "player");
+    @Override
+    public MenuView open(Player player) {
+        Preconditions.notNull(player, "player");
 
-		DefaultMenuView menuView = new DefaultMenuView(this, player);
-		menuView.open(player);
-		return menuView;
-	}
+        DefaultMenuView menuView = new DefaultMenuView(this, player);
+        menuView.open(player);
+        return menuView;
+    }
 
-	@Override
-	public void refreshMenuViews() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
-			if (menuView != null && menuView.getMenu() == this) {
-				menuView.refresh();
-			}
-		}
-	}
+    @Override
+    public void refreshMenuViews() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
+            if (menuView != null && menuView.getMenu() == this) {
+                menuView.refresh();
+            }
+        }
+    }
 }

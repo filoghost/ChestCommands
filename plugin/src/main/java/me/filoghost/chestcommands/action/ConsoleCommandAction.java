@@ -11,15 +11,15 @@ import org.bukkit.entity.Player;
 
 public class ConsoleCommandAction implements Action {
 
-	private final PlaceholderString command;
+    private final PlaceholderString command;
 
-	public ConsoleCommandAction(String serializedAction) {
-		command = PlaceholderString.of(serializedAction);
-	}
+    public ConsoleCommandAction(String serializedAction) {
+        command = PlaceholderString.of(serializedAction);
+    }
 
-	@Override
-	public void execute(Player player) {
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getValue(player));
-	}
+    @Override
+    public void execute(Player player) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getValue(player));
+    }
 
 }

@@ -10,16 +10,16 @@ import me.filoghost.fcommons.Colors;
 import org.bukkit.entity.Player;
 
 public class SendMessageAction implements Action {
-	
-	private final PlaceholderString message;
+    
+    private final PlaceholderString message;
 
-	public SendMessageAction(String serializedAction) {
-		message = PlaceholderString.of(Colors.addColors(serializedAction));
-	}
+    public SendMessageAction(String serializedAction) {
+        message = PlaceholderString.of(Colors.addColors(serializedAction));
+    }
 
-	@Override
-	public void execute(Player player) {
-		player.sendMessage(message.getValue(player));
-	}
+    @Override
+    public void execute(Player player) {
+        player.sendMessage(message.getValue(player));
+    }
 
 }

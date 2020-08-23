@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public interface Icon {
 
-	ItemStack render(Player viewer);
+    ItemStack render(Player viewer);
 
-	ClickResult onClick(MenuView menuView, Player clicker);
+    ClickResult onClick(MenuView menuView, Player clicker);
 
 }

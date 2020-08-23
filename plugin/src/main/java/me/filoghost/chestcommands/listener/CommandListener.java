@@ -13,40 +13,40 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandListener implements Listener {
-	
-	private final MenuManager menuManager;
-	
-	public CommandListener(MenuManager menuManager) {
-		this.menuManager = menuManager;
-	}
+    
+    private final MenuManager menuManager;
+    
+    public CommandListener(MenuManager menuManager) {
+        this.menuManager = menuManager;
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onCommand(PlayerCommandPreprocessEvent event) {
-		String command = getCommandName(event.getMessage());
-		if (command == null) {
-			return;
-		}
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onCommand(PlayerCommandPreprocessEvent event) {
+        String command = getCommandName(event.getMessage());
+        if (command == null) {
+            return;
+        }
 
-		InternalMenu menu = menuManager.getMenuByOpenCommand(command);
-		if (menu == null) {
-			return;
-		}
-		
-		event.setCancelled(true);
-		menu.openCheckingPermission(event.getPlayer());
-	}
-	
-	private static String getCommandName(String fullCommand) {
-		if (!fullCommand.startsWith("/")) {
-			return null;
-		}
-		
-		int firstSpace = fullCommand.indexOf(' ');
-		if (firstSpace >= 1) {
-			return fullCommand.substring(1, firstSpace);
-		} else {
-			return fullCommand.substring(1);
-		}
-	}
+        InternalMenu menu = menuManager.getMenuByOpenCommand(command);
+        if (menu == null) {
+            return;
+        }
+        
+        event.setCancelled(true);
+        menu.openCheckingPermission(event.getPlayer());
+    }
+    
+    private static String getCommandName(String fullCommand) {
+        if (!fullCommand.startsWith("/")) {
+            return null;
+        }
+        
+        int firstSpace = fullCommand.indexOf(' ');
+        if (firstSpace >= 1) {
+            return fullCommand.substring(1, firstSpace);
+        } else {
+            return fullCommand.substring(1);
+        }
+    }
 
 }

@@ -6,52 +6,51 @@
 package me.filoghost.chestcommands.placeholder;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import me.filoghost.fcommons.Preconditions;
 import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 public class PlaceholderStringList {
 
-	private final ImmutableList<String> originalList;
-	private final ImmutableList<String> listWithStaticPlaceholders;
-	private final ImmutableList<PlaceholderString> placeholderStringList;
-	private final boolean hasDynamicPlaceholders;
-	
-	public PlaceholderStringList(List<String> list) {
-		Preconditions.notNull(list, "list");
-		this.originalList = ImmutableList.copyOf(list);
+    private final ImmutableList<String> originalList;
+    private final ImmutableList<String> listWithStaticPlaceholders;
+    private final ImmutableList<PlaceholderString> placeholderStringList;
+    private final boolean hasDynamicPlaceholders;
 
-		// Replace static placeholders only once, if present
-		if (PlaceholderManager.hasStaticPlaceholders(originalList)) {
-			this.listWithStaticPlaceholders = CollectionUtils.transformImmutable(originalList, PlaceholderManager::replaceStaticPlaceholders);
-		} else {
-			this.listWithStaticPlaceholders = originalList;
-		}
+    public PlaceholderStringList(List<String> list) {
+        Preconditions.notNull(list, "list");
+        this.originalList = ImmutableList.copyOf(list);
 
-		this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(listWithStaticPlaceholders);
-		if (hasDynamicPlaceholders) {
-			this.placeholderStringList = CollectionUtils.transformImmutable(listWithStaticPlaceholders, PlaceholderString::of);
-		} else {
-			this.placeholderStringList = null;
-		}
-	}
-	
-	public ImmutableList<String> getOriginalValue() {
-		return originalList;
-	}
-	
-	public ImmutableList<String> getValue(Player player) {
-		if (hasDynamicPlaceholders) {
-			return CollectionUtils.transformImmutable(placeholderStringList, element -> element.getValue(player));
-		} else {
-			return listWithStaticPlaceholders;
-		}
-	}
-	
-	public boolean hasDynamicPlaceholders() {
-		return hasDynamicPlaceholders;
-	}
+        // Replace static placeholders only once, if present
+        if (PlaceholderManager.hasStaticPlaceholders(originalList)) {
+            this.listWithStaticPlaceholders = CollectionUtils.transformImmutable(originalList, PlaceholderManager::replaceStaticPlaceholders);
+        } else {
+            this.listWithStaticPlaceholders = originalList;
+        }
+
+        this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(listWithStaticPlaceholders);
+        if (hasDynamicPlaceholders) {
+            this.placeholderStringList = CollectionUtils.transformImmutable(listWithStaticPlaceholders, PlaceholderString::of);
+        } else {
+            this.placeholderStringList = null;
+        }
+    }
+
+    public ImmutableList<String> getOriginalValue() {
+        return originalList;
+    }
+
+    public ImmutableList<String> getValue(Player player) {
+        if (hasDynamicPlaceholders) {
+            return CollectionUtils.transformImmutable(placeholderStringList, element -> element.getValue(player));
+        } else {
+            return listWithStaticPlaceholders;
+        }
+    }
+
+    public boolean hasDynamicPlaceholders() {
+        return hasDynamicPlaceholders;
+    }
 
 }

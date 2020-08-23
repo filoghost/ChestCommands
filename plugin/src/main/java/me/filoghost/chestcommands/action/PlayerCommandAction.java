@@ -9,16 +9,16 @@ import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.entity.Player;
 
 public class PlayerCommandAction implements Action {
-	
-	private final PlaceholderString command;
 
-	public PlayerCommandAction(String serializedAction) {
-		command = PlaceholderString.of(serializedAction);
-	}
+    private final PlaceholderString command;
 
-	@Override
-	public void execute(Player player) {
-		player.chat('/' + command.getValue(player));
-	}
+    public PlayerCommandAction(String serializedAction) {
+        command = PlaceholderString.of(serializedAction);
+    }
+
+    @Override
+    public void execute(Player player) {
+        player.chat('/' + command.getValue(player));
+    }
 
 }

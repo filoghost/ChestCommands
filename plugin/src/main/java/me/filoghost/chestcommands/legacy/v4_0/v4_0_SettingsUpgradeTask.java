@@ -11,15 +11,15 @@ import me.filoghost.fcommons.config.Config;
 
 public class v4_0_SettingsUpgradeTask extends YamlUpgradeTask {
 
-	public v4_0_SettingsUpgradeTask(ConfigManager configManager) {
-		super(configManager.getConfigLoader("config.yml"));
-	}
+    public v4_0_SettingsUpgradeTask(ConfigManager configManager) {
+        super(configManager.getConfigLoader("config.yml"));
+    }
 
-	@Override
-	public void computeYamlChanges(Config settingsConfig) {
-		removeNode(settingsConfig, "use-only-commands-without-args");
-		removeNode(settingsConfig, "use-console-colors");
-		removeNode(settingsConfig, "multiple-commands-separator");
-	}
+    @Override
+    public void computeYamlChanges(Config settingsConfig) {
+        removeNode(settingsConfig, "use-only-commands-without-args");
+        removeNode(settingsConfig, "use-console-colors");
+        removeNode(settingsConfig, "multiple-commands-separator");
+    }
 
 }

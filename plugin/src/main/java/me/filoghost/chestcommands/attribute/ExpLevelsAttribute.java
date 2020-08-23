@@ -11,18 +11,18 @@ import me.filoghost.chestcommands.parsing.ParseException;
 
 public class ExpLevelsAttribute implements IconAttribute {
 
-	private final int expLevels;
+    private final int expLevels;
 
-	public ExpLevelsAttribute(int expLevels, AttributeErrorHandler errorHandler) throws ParseException {
-		if (expLevels < 0) {
-			throw new ParseException(Errors.Parsing.zeroOrPositive);
-		}
-		this.expLevels = expLevels;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setRequiredExpLevel(expLevels);
-	}
+    public ExpLevelsAttribute(int expLevels, AttributeErrorHandler errorHandler) throws ParseException {
+        if (expLevels < 0) {
+            throw new ParseException(Errors.Parsing.zeroOrPositive);
+        }
+        this.expLevels = expLevels;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setRequiredExpLevel(expLevels);
+    }
 
 }

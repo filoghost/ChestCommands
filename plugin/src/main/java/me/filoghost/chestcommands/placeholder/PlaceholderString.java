@@ -9,38 +9,38 @@ import org.bukkit.entity.Player;
 
 public class PlaceholderString {
 
-	private final String originalString;
-	private final String stringWithStaticPlaceholders;
-	private final boolean hasDynamicPlaceholders;
+    private final String originalString;
+    private final String stringWithStaticPlaceholders;
+    private final boolean hasDynamicPlaceholders;
 
-	public static PlaceholderString of(String string) {
-		if (string != null) {
-			return new PlaceholderString(string);
-		} else {
-			return null;
-		}
-	}
-	
-	private PlaceholderString(String originalString) {
-		this.originalString = originalString;
-		this.stringWithStaticPlaceholders = PlaceholderManager.replaceStaticPlaceholders(originalString);
-		this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(stringWithStaticPlaceholders);
-	}
-	
-	public String getValue(Player player) {
-		if (hasDynamicPlaceholders) {
-			return PlaceholderManager.replaceRelativePlaceholders(stringWithStaticPlaceholders, player);
-		} else {
-			return stringWithStaticPlaceholders;
-		}
-	}
+    public static PlaceholderString of(String string) {
+        if (string != null) {
+            return new PlaceholderString(string);
+        } else {
+            return null;
+        }
+    }
+    
+    private PlaceholderString(String originalString) {
+        this.originalString = originalString;
+        this.stringWithStaticPlaceholders = PlaceholderManager.replaceStaticPlaceholders(originalString);
+        this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(stringWithStaticPlaceholders);
+    }
+    
+    public String getValue(Player player) {
+        if (hasDynamicPlaceholders) {
+            return PlaceholderManager.replaceRelativePlaceholders(stringWithStaticPlaceholders, player);
+        } else {
+            return stringWithStaticPlaceholders;
+        }
+    }
 
-	public String getOriginalValue() {
-		return originalString;
-	}
+    public String getOriginalValue() {
+        return originalString;
+    }
 
-	public boolean hasDynamicPlaceholders() {
-		return hasDynamicPlaceholders;
-	}
+    public boolean hasDynamicPlaceholders() {
+        return hasDynamicPlaceholders;
+    }
 
 }

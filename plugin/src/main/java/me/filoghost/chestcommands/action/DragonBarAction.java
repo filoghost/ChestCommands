@@ -16,35 +16,35 @@ import org.bukkit.entity.Player;
 
 public class DragonBarAction implements Action {
 
-	private final PlaceholderString message;
-	private final int seconds;
+    private final PlaceholderString message;
+    private final int seconds;
 
-	public DragonBarAction(String serialiazedAction) throws ParseException {
-		String message;
+    public DragonBarAction(String serialiazedAction) throws ParseException {
+        String message;
 
-		String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
-		if (split.length > 1) {
-			try {
-				seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
-				message = split[1];
-			} catch (ParseException e) {
-				throw new ParseException(Errors.Parsing.invalidBossBarTime(split[0]), e);
-			}
-		} else {
-			seconds = 1;
-			message = serialiazedAction;
-		}
+        String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
+        if (split.length > 1) {
+            try {
+                seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
+                message = split[1];
+            } catch (ParseException e) {
+                throw new ParseException(Errors.Parsing.invalidBossBarTime(split[0]), e);
+            }
+        } else {
+            seconds = 1;
+            message = serialiazedAction;
+        }
 
-		this.message = PlaceholderString.of(Colors.addColors(message));
-	}
+        this.message = PlaceholderString.of(Colors.addColors(message));
+    }
 
-	@Override
-	public void execute(Player player) {
-		if (BarAPIHook.INSTANCE.isEnabled()) {
-			BarAPIHook.setMessage(player, message.getValue(player), seconds);
-		} else {
-			player.sendMessage(Errors.User.configurationError("BarAPI plugin not found"));
-		}
-	}
+    @Override
+    public void execute(Player player) {
+        if (BarAPIHook.INSTANCE.isEnabled()) {
+            BarAPIHook.setMessage(player, message.getValue(player), seconds);
+        } else {
+            player.sendMessage(Errors.User.configurationError("BarAPI plugin not found"));
+        }
+    }
 
 }

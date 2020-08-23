@@ -12,15 +12,15 @@ import org.bukkit.DyeColor;
 
 public class BannerColorAttribute implements IconAttribute {
 
-	private final DyeColor dyeColor;
+    private final DyeColor dyeColor;
 
-	public BannerColorAttribute(String serializedDyeColor, AttributeErrorHandler errorHandler) throws ParseException {
-		this.dyeColor = ItemMetaParser.parseDyeColor(serializedDyeColor);
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setBannerColor(dyeColor);
-	}
+    public BannerColorAttribute(String serializedDyeColor, AttributeErrorHandler errorHandler) throws ParseException {
+        this.dyeColor = ItemMetaParser.parseDyeColor(serializedDyeColor);
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setBannerColor(dyeColor);
+    }
 
 }

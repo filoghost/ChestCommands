@@ -24,57 +24,57 @@ import me.filoghost.fcommons.Preconditions;
  * 
  */
 public abstract class Grid<T> {
-	
-	private final int rows, columns, size;
+    
+    private final int rows, columns, size;
 
-	public Grid(int rows, int columns) {
-		this.rows = rows;
-		this.columns = columns;
-		this.size = rows * columns;
-	}
+    public Grid(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
+        this.size = rows * columns;
+    }
 
-	public final void set(int row, int column, T element) {
-		setByIndex(toOrdinalIndex(row, column), element);
-	}
+    public final void set(int row, int column, T element) {
+        setByIndex(toOrdinalIndex(row, column), element);
+    }
 
-	public final T get(int row, int column) {
-		return getByIndex(toOrdinalIndex(row, column));
-	}
-	
-	public final T getByIndex(int ordinalIndex) {
-	    Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
-		return getByIndex0(ordinalIndex);
-	}
+    public final T get(int row, int column) {
+        return getByIndex(toOrdinalIndex(row, column));
+    }
+    
+    public final T getByIndex(int ordinalIndex) {
+        Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
+        return getByIndex0(ordinalIndex);
+    }
 
-	protected abstract T getByIndex0(int ordinalIndex);
+    protected abstract T getByIndex0(int ordinalIndex);
 
-	public final void setByIndex(int ordinalIndex, T element) {
-		Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
-		setByIndex0(ordinalIndex, element);
-	}
+    public final void setByIndex(int ordinalIndex, T element) {
+        Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
+        setByIndex0(ordinalIndex, element);
+    }
 
 
-	protected abstract void setByIndex0(int ordinalIndex, T element);
+    protected abstract void setByIndex0(int ordinalIndex, T element);
 
-	private int toOrdinalIndex(int row, int column) {
-	    Preconditions.checkIndex(row, getRows(), "row");
-		Preconditions.checkIndex(column, getColumns(), "column");
+    private int toOrdinalIndex(int row, int column) {
+        Preconditions.checkIndex(row, getRows(), "row");
+        Preconditions.checkIndex(column, getColumns(), "column");
 
-		int ordinalIndex = row * getColumns() + column;
-		Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
-		return ordinalIndex;
-	}
-	
-	public int getRows() {
-		return rows;
-	}
-	
-	public int getColumns() {
-		return columns;
-	}
+        int ordinalIndex = row * getColumns() + column;
+        Preconditions.checkIndex(ordinalIndex, getSize(), "ordinalIndex");
+        return ordinalIndex;
+    }
+    
+    public int getRows() {
+        return rows;
+    }
+    
+    public int getColumns() {
+        return columns;
+    }
 
-	public int getSize() {
-		return size;
-	}
+    public int getSize() {
+        return size;
+    }
 
 }

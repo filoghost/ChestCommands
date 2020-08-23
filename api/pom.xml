@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>me.filoghost.chestcommands</groupId>
-		<artifactId>chestcommands-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>me.filoghost.chestcommands</groupId>
+        <artifactId>chestcommands-parent</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>chestcommands-api</artifactId>
-	<name>ChestCommands API</name>
+    <artifactId>chestcommands-api</artifactId>
+    <name>ChestCommands API</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>me.filoghost.fcommons</groupId>
-			<artifactId>fcommons</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>me.filoghost.fcommons</groupId>
+            <artifactId>fcommons</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>

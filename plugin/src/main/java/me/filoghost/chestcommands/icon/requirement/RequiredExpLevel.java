@@ -11,32 +11,32 @@ import org.bukkit.entity.Player;
 
 public class RequiredExpLevel implements Requirement {
 
-	private final int levels;
-	
-	public RequiredExpLevel(int levels) {
-		Preconditions.checkArgument(levels > 0, "levels must be positive");
-		this.levels = levels;
-	}
+    private final int levels;
 
-	@Override
-	public boolean hasCost(Player player) {
-		if (player.getLevel() < levels) {
-			player.sendMessage(Lang.no_exp.replace("{levels}", Integer.toString(levels)));
-			return false;
-		}
-		
-		return true;
-	}
+    public RequiredExpLevel(int levels) {
+        Preconditions.checkArgument(levels > 0, "levels must be positive");
+        this.levels = levels;
+    }
 
-	@Override
-	public boolean takeCost(Player player) {
-		int newLevel = player.getLevel() - levels;
-		if (newLevel < 0) {
-			newLevel = 0;
-		}
-		
-		player.setLevel(newLevel);
-		return true;
-	}	
+    @Override
+    public boolean hasCost(Player player) {
+        if (player.getLevel() < levels) {
+            player.sendMessage(Lang.no_exp.replace("{levels}", Integer.toString(levels)));
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean takeCost(Player player) {
+        int newLevel = player.getLevel() - levels;
+        if (newLevel < 0) {
+            newLevel = 0;
+        }
+
+        player.setLevel(newLevel);
+        return true;
+    }
 
 }

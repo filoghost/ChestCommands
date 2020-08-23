@@ -1,165 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>me.filoghost.chestcommands</groupId>
-		<artifactId>chestcommands-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>me.filoghost.chestcommands</groupId>
+        <artifactId>chestcommands-parent</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>chestcommands-plugin</artifactId>
-	<name>ChestCommands Plugin</name>
+    <artifactId>chestcommands-plugin</artifactId>
+    <name>ChestCommands Plugin</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>VaultAPI</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>me.confuser</groupId>
-			<artifactId>BarAPI</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>me.confuser</groupId>
+            <artifactId>BarAPI</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>me.clip</groupId>
-			<artifactId>placeholderapi</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.bstats</groupId>
-			<artifactId>bstats-bukkit-lite</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>me.filoghost.updatechecker</groupId>
-			<artifactId>updatechecker</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>chestcommands-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit-lite</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>me.filoghost.fcommons</groupId>
-			<artifactId>fcommons</artifactId>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>me.filoghost.updatechecker</groupId>
+            <artifactId>updatechecker</artifactId>
+        </dependency>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>..</directory>
-				<includes>
-					<include>LICENSE.txt</include>
-					<include>THIRD-PARTY.txt</include>
-					<include>licenses/*</include>
-				</includes>
-			</resource>
-		</resources>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chestcommands-api</artifactId>
+        </dependency>
 
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<!-- Appends build number to plugin version on SNAPSHOT builds. -->
-					<execution>
-						<id>set-plugin-version</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>bsh-property</goal>
-						</goals>
-						<configuration>
-							<properties>
-								<property>pluginVersion</property>
-							</properties>
-							<source>
-								projectVersion = project.version;
-								buildNumber = System.getenv("BUILD_NUMBER");
+        <dependency>
+            <groupId>me.filoghost.fcommons</groupId>
+            <artifactId>fcommons</artifactId>
+        </dependency>
+    </dependencies>
 
-								String pluginVersion;
-								if (buildNumber != null @and projectVersion.contains("SNAPSHOT")) {
-									pluginVersion = projectVersion + "-b" + buildNumber;
-								} else {
-									pluginVersion = projectVersion;
-								}
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>..</directory>
+                <includes>
+                    <include>LICENSE.txt</include>
+                    <include>THIRD-PARTY.txt</include>
+                    <include>licenses/*</include>
+                </includes>
+            </resource>
+        </resources>
 
-								print("Project version: " + projectVersion);
-								print("Build number: " + buildNumber);
-								print("Computed plugin version: " + pluginVersion);
-							</source>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <!-- Appends build number to plugin version on SNAPSHOT builds. -->
+                    <execution>
+                        <id>set-plugin-version</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>bsh-property</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>pluginVersion</property>
+                            </properties>
+                            <source>
+                                projectVersion = project.version;
+                                buildNumber = System.getenv("BUILD_NUMBER");
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Version>${pluginVersion}</Implementation-Version>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
+                                String pluginVersion;
+                                if (buildNumber != null @and projectVersion.contains("SNAPSHOT")) {
+                                    pluginVersion = projectVersion + "-b" + buildNumber;
+                                } else {
+                                    pluginVersion = projectVersion;
+                                }
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<shadedArtifactAttached>false</shadedArtifactAttached>
-					<filters>
-						<filter>
-							<artifact>*:*</artifact>
-							<excludes>
-								<exclude>META-INF/maven/</exclude>
-							</excludes>
-						</filter>
-					</filters>
-					<relocations>
-						<relocation>
-							<pattern>org.bstats.bukkit</pattern>
-							<shadedPattern>me.filoghost.chestcommands.metrics</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>me.filoghost.updatechecker</pattern>
-							<shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>me.filoghost.fcommons</pattern>
-							<shadedPattern>me.filoghost.chestcommands.fcommons</shadedPattern>
-						</relocation>
-					</relocations>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+                                print("Project version: " + projectVersion);
+                                print("Build number: " + buildNumber);
+                                print("Computed plugin version: " + pluginVersion);
+                            </source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Version>${pluginVersion}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/maven/</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats.bukkit</pattern>
+                            <shadedPattern>me.filoghost.chestcommands.metrics</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.filoghost.updatechecker</pattern>
+                            <shadedPattern>me.filoghost.chestcommands.updater</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.filoghost.fcommons</pattern>
+                            <shadedPattern>me.filoghost.chestcommands.fcommons</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

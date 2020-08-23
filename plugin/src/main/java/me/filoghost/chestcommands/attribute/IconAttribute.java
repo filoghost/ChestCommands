@@ -9,5 +9,5 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public interface IconAttribute {
 
-	void apply(InternalConfigurableIcon icon);
+    void apply(InternalConfigurableIcon icon);
 }

@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 
 public interface MenuView {
 
-	void refresh();
+    void refresh();
 
-	Player getViewer();
+    Player getViewer();
 
-	Menu getMenu();
+    Menu getMenu();
 
 }

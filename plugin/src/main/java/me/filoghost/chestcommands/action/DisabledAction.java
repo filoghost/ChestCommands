@@ -9,15 +9,15 @@ import org.bukkit.entity.Player;
 
 public class DisabledAction implements Action {
 
-	private final String errorMessage;
+    private final String errorMessage;
 
-	public DisabledAction(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
+    public DisabledAction(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 
-	@Override
-	public void execute(Player player) {
-		player.sendMessage(errorMessage);
-	}
+    @Override
+    public void execute(Player player) {
+        player.sendMessage(errorMessage);
+    }
 
 }

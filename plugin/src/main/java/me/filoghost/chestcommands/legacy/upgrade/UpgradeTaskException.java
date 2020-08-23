@@ -7,8 +7,8 @@ package me.filoghost.chestcommands.legacy.upgrade;
 
 public class UpgradeTaskException extends Exception {
 
-	public UpgradeTaskException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public UpgradeTaskException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

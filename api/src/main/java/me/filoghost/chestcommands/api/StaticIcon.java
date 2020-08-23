@@ -9,13 +9,13 @@ import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.inventory.ItemStack;
 
 public interface StaticIcon extends ClickableIcon {
-	
-	static StaticIcon create(ItemStack itemStack) {
-		return BackendAPI.getImplementation().createStaticIcon(itemStack);
-	}
+    
+    static StaticIcon create(ItemStack itemStack) {
+        return BackendAPI.getImplementation().createStaticIcon(itemStack);
+    }
 
-	ItemStack getItemStack();
+    ItemStack getItemStack();
 
-	void setItemStack(ItemStack itemStack);
+    void setItemStack(ItemStack itemStack);
 
 }

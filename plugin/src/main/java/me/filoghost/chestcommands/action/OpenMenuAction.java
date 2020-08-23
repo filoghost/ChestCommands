@@ -14,29 +14,29 @@ import org.bukkit.entity.Player;
 
 public class OpenMenuAction implements Action {
 
-	private final PlaceholderString targetMenu;
-	
-	public OpenMenuAction(String serializedAction) {
-		targetMenu = PlaceholderString.of(serializedAction);
-	}
+    private final PlaceholderString targetMenu;
+    
+    public OpenMenuAction(String serializedAction) {
+        targetMenu = PlaceholderString.of(serializedAction);
+    }
 
-	@Override
-	public void execute(final Player player) {
-		String menuName = targetMenu.getValue(player);
-		final InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuName);
-		
-		if (menu != null) {
-			/*
-			 * Delay the task, since this action is executed in ClickInventoryEvent
-			 * and opening another inventory in the same moment is not a good idea.
-			 */
-			Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
-				menu.openCheckingPermission(player);
-			});
+    @Override
+    public void execute(final Player player) {
+        String menuName = targetMenu.getValue(player);
+        final InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuName);
+        
+        if (menu != null) {
+            /*
+             * Delay the task, since this action is executed in ClickInventoryEvent
+             * and opening another inventory in the same moment is not a good idea.
+             */
+            Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
+                menu.openCheckingPermission(player);
+            });
 
-		} else {
-			player.sendMessage(Errors.User.configurationError("couldn't find the menu \"" + menuName + "\""));
-		}
-	}
+        } else {
+            player.sendMessage(Errors.User.configurationError("couldn't find the menu \"" + menuName + "\""));
+        }
+    }
 
 }

@@ -11,23 +11,23 @@ import me.filoghost.fcommons.Colors;
 
 public class NameAttribute implements IconAttribute {
 
-	private final String name;
+    private final String name;
 
-	public NameAttribute(String name, AttributeErrorHandler errorHandler) {
-		this.name = colorName(name);
-	}
+    public NameAttribute(String name, AttributeErrorHandler errorHandler) {
+        this.name = colorName(name);
+    }
 
-	private String colorName(String name) {
-		if (!name.isEmpty()) {
-			return Settings.default_color__name + Colors.addColors(name);
-		} else {
-			return name;
-		}
-	}
+    private String colorName(String name) {
+        if (!name.isEmpty()) {
+            return Settings.default_color__name + Colors.addColors(name);
+        } else {
+            return name;
+        }
+    }
 
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setName(name);
-	}
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setName(name);
+    }
 
 }

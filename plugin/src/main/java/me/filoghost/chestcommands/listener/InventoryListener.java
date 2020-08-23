@@ -5,6 +5,8 @@
  */
 package me.filoghost.chestcommands.listener;
 
+import java.util.Map;
+import java.util.WeakHashMap;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
@@ -21,73 +23,70 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 public class InventoryListener implements Listener {
 
-	private final MenuManager menuManager;
-	private final Map<Player, Long> antiClickSpam;
+    private final MenuManager menuManager;
+    private final Map<Player, Long> antiClickSpam;
 
-	public InventoryListener(MenuManager menuManager) {
-		this.menuManager = menuManager;
-		this.antiClickSpam = new WeakHashMap<>();
-	}
-	
+    public InventoryListener(MenuManager menuManager) {
+        this.menuManager = menuManager;
+        this.antiClickSpam = new WeakHashMap<>();
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-	public void onInteract(PlayerInteractEvent event) {
-		if (event.hasItem() && event.getAction() != Action.PHYSICAL) {
-			menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-	public void onEarlyInventoryClick(InventoryClickEvent event) {
-		if (MenuManager.isMenuInventory(event.getInventory())) {
-			// Cancel the event as early as possible
-			event.setCancelled(true);
-		}
-	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
-	public void onLateInventoryClick(InventoryClickEvent event) {
-	    Inventory inventory = event.getInventory();
-	    DefaultMenuView menuView = MenuManager.getOpenMenuView(inventory);
-	    if (menuView == null) {
-			return;
-		}
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.hasItem() && event.getAction() != Action.PHYSICAL) {
+            menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
+        }
+    }
 
-	    // Cancel the event again just in case a plugin un-cancels it
-	    event.setCancelled(true);
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onEarlyInventoryClick(InventoryClickEvent event) {
+        if (MenuManager.isMenuInventory(event.getInventory())) {
+            // Cancel the event as early as possible
+            event.setCancelled(true);
+        }
+    }
 
-		int slot = event.getRawSlot();
-		Player clicker = (Player) event.getWhoClicked();
-		Icon icon = menuView.getIcon(slot);
-		if (icon == null) {
-			return;
-		}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    public void onLateInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        DefaultMenuView menuView = MenuManager.getOpenMenuView(inventory);
+        if (menuView == null) {
+            return;
+        }
 
-		Long cooldownUntil = antiClickSpam.get(clicker);
-		long now = System.currentTimeMillis();
-		int minDelay = Settings.anti_click_spam_delay;
+        // Cancel the event again just in case a plugin un-cancels it
+        event.setCancelled(true);
 
-		if (minDelay > 0) {
-			if (cooldownUntil != null && cooldownUntil > now) {
-				return;
-			} else {
-				antiClickSpam.put(clicker, now + minDelay);
-			}
-		}
+        int slot = event.getRawSlot();
+        Player clicker = (Player) event.getWhoClicked();
+        Icon icon = menuView.getIcon(slot);
+        if (icon == null) {
+            return;
+        }
 
-		// Only handle the click AFTER the event has finished
-		Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
-			ClickResult result = icon.onClick(menuView, clicker);
+        Long cooldownUntil = antiClickSpam.get(clicker);
+        long now = System.currentTimeMillis();
+        int minDelay = Settings.anti_click_spam_delay;
 
-			if (result == ClickResult.CLOSE) {
-				clicker.closeInventory();
-			}
-		});
-	}
+        if (minDelay > 0) {
+            if (cooldownUntil != null && cooldownUntil > now) {
+                return;
+            } else {
+                antiClickSpam.put(clicker, now + minDelay);
+            }
+        }
+
+        // Only handle the click AFTER the event has finished
+        Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
+            ClickResult result = icon.onClick(menuView, clicker);
+
+            if (result == ClickResult.CLOSE) {
+                clicker.closeInventory();
+            }
+        });
+    }
 
 }

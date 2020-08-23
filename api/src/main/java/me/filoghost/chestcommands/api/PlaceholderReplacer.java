@@ -9,6 +9,6 @@ import org.bukkit.entity.Player;
 
 public interface PlaceholderReplacer {
 
-	String getReplacement(Player player, String argument);
+    String getReplacement(Player player, String argument);
 
 }

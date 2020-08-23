@@ -11,16 +11,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class BroadcastAction implements Action {
-	
-	private final PlaceholderString message;
+    
+    private final PlaceholderString message;
 
-	public BroadcastAction(String serializedAction) {
-		message = PlaceholderString.of(Colors.addColors(serializedAction));
-	}
+    public BroadcastAction(String serializedAction) {
+        message = PlaceholderString.of(Colors.addColors(serializedAction));
+    }
 
-	@Override
-	public void execute(Player player) {
-		Bukkit.broadcastMessage(message.getValue(player));
-	}
+    @Override
+    public void execute(Player player) {
+        Bukkit.broadcastMessage(message.getValue(player));
+    }
 
 }

@@ -11,30 +11,30 @@ import org.bukkit.entity.Player;
 
 public enum PlaceholderAPIHook implements PluginHook {
 
-	INSTANCE;
-	
-	private boolean enabled;
+    INSTANCE;
 
-	@Override
-	public void setup() {
-		enabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-	}
+    private boolean enabled;
 
-	@Override
-	public boolean isEnabled() {
-		return enabled;
-	}
+    @Override
+    public void setup() {
+        enabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+    }
 
-	public static boolean hasPlaceholders(String message) {
-		INSTANCE.checkEnabledState();
-		
-		return PlaceholderAPI.containsPlaceholders(message);
-	}
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public static String setPlaceholders(String message, Player viewer) {
-		INSTANCE.checkEnabledState();
+    public static boolean hasPlaceholders(String message) {
+        INSTANCE.checkEnabledState();
 
-		return PlaceholderAPI.setPlaceholders(viewer, message);
-	}
+        return PlaceholderAPI.containsPlaceholders(message);
+    }
+
+    public static String setPlaceholders(String message, Player viewer) {
+        INSTANCE.checkEnabledState();
+
+        return PlaceholderAPI.setPlaceholders(viewer, message);
+    }
 
 }

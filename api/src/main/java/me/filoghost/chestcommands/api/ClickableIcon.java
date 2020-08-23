@@ -9,17 +9,17 @@ import org.bukkit.entity.Player;
 
 public interface ClickableIcon extends Icon {
 
-	void setClickHandler(ClickHandler clickHandler);
+    void setClickHandler(ClickHandler clickHandler);
 
-	ClickHandler getClickHandler();
+    ClickHandler getClickHandler();
 
-	@Override
-	default ClickResult onClick(MenuView menuView, Player clicker) {
-		if (getClickHandler() != null) {
-			return getClickHandler().onClick(menuView, clicker);
-		} else {
-			return ClickResult.KEEP_OPEN;
-		}
-	}
+    @Override
+    default ClickResult onClick(MenuView menuView, Player clicker) {
+        if (getClickHandler() != null) {
+            return getClickHandler().onClick(menuView, clicker);
+        } else {
+            return ClickResult.KEEP_OPEN;
+        }
+    }
 
 }

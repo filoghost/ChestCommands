@@ -11,20 +11,20 @@ import org.bukkit.Material;
 
 public class APIConfigurableIcon extends BaseConfigurableIcon implements ConfigurableIcon {
 
-	private ClickHandler clickHandler;
+    private ClickHandler clickHandler;
 
-	public APIConfigurableIcon(Material material) {
-		super(material);
-	}
+    public APIConfigurableIcon(Material material) {
+        super(material);
+    }
 
-	@Override
-	public void setClickHandler(ClickHandler clickHandler) {
-		this.clickHandler = clickHandler;
-	}
+    @Override
+    public void setClickHandler(ClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
+    }
 
-	@Override
-	public ClickHandler getClickHandler() {
-		return clickHandler;
-	}
+    @Override
+    public ClickHandler getClickHandler() {
+        return clickHandler;
+    }
 
 }

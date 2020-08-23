@@ -10,51 +10,51 @@ import org.bukkit.Material;
 
 public class RequiredItem {
 
-	private final Material material;
-	private final int amount;
-	private short durability;
-	private boolean isDurabilityRestrictive = false;
+    private final Material material;
+    private final int amount;
+    private short durability;
+    private boolean isDurabilityRestrictive = false;
 
-	public RequiredItem(Material material, int amount) {
-		Preconditions.checkArgumentNotAir(material, "material");
+    public RequiredItem(Material material, int amount) {
+        Preconditions.checkArgumentNotAir(material, "material");
 
-		this.material = material;
-		this.amount = amount;
-	}
+        this.material = material;
+        this.amount = amount;
+    }
 
-	public Material getMaterial() {
-		return material;
-	}
+    public Material getMaterial() {
+        return material;
+    }
 
-	public int getAmount() {
-		return amount;
-	}
+    public int getAmount() {
+        return amount;
+    }
 
-	public short getDurability() {
-		return durability;
-	}
+    public short getDurability() {
+        return durability;
+    }
 
-	public void setRestrictiveDurability(short durability) {
-		Preconditions.checkArgument(durability >= 0, "durability must be 0 or greater");
+    public void setRestrictiveDurability(short durability) {
+        Preconditions.checkArgument(durability >= 0, "durability must be 0 or greater");
 
-		this.durability = durability;
-		isDurabilityRestrictive = true;
-	}
+        this.durability = durability;
+        isDurabilityRestrictive = true;
+    }
 
-	public boolean hasRestrictiveDurability() {
-		return isDurabilityRestrictive;
-	}
+    public boolean hasRestrictiveDurability() {
+        return isDurabilityRestrictive;
+    }
 
-	public boolean isMatchingType(RemainingItem item) {
-		return item != null && item.getMaterial() == material && isMatchingDurability(item.getDurability());
-	}
-	
-	private boolean isMatchingDurability(short durability) {
-		if (isDurabilityRestrictive) {
-			return this.durability == durability;
-		} else {
-			return true;
-		}
-	}
-	
+    public boolean isMatchingType(RemainingItem item) {
+        return item != null && item.getMaterial() == material && isMatchingDurability(item.getDurability());
+    }
+    
+    private boolean isMatchingDurability(short durability) {
+        if (isDurabilityRestrictive) {
+            return this.durability == durability;
+        } else {
+            return true;
+        }
+    }
+    
 }

@@ -9,15 +9,15 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public class ClickPermissionMessageAttribute implements IconAttribute {
 
-	private final String clickPermissionMessage;
+    private final String clickPermissionMessage;
 
-	public ClickPermissionMessageAttribute(String clickPermissionMessage, AttributeErrorHandler errorHandler) {
-		this.clickPermissionMessage = clickPermissionMessage;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setNoClickPermissionMessage(clickPermissionMessage);
-	}
+    public ClickPermissionMessageAttribute(String clickPermissionMessage, AttributeErrorHandler errorHandler) {
+        this.clickPermissionMessage = clickPermissionMessage;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setNoClickPermissionMessage(clickPermissionMessage);
+    }
 
 }

@@ -5,6 +5,8 @@
  */
 package me.filoghost.chestcommands.api;
 
+import java.util.List;
+import java.util.Map;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -12,67 +14,64 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 
-import java.util.List;
-import java.util.Map;
-
 public interface ConfigurableIcon extends ClickableIcon {
-	
-	static ConfigurableIcon create(Material material) {
-		return BackendAPI.getImplementation().createConfigurableIcon(material);
-	}
-	
-	void setMaterial(Material material);
+    
+    static ConfigurableIcon create(Material material) {
+        return BackendAPI.getImplementation().createConfigurableIcon(material);
+    }
+    
+    void setMaterial(Material material);
 
-	Material getMaterial();
+    Material getMaterial();
 
-	void setAmount(int amount);
+    void setAmount(int amount);
 
-	int getAmount();
+    int getAmount();
 
-	void setDurability(short durability);
+    void setDurability(short durability);
 
-	short getDurability();
+    short getDurability();
 
-	void setNBTData(String nbtData);
+    void setNBTData(String nbtData);
 
-	String getNBTData();
+    String getNBTData();
 
-	void setName(String name);
-	
-	String getName();
+    void setName(String name);
+    
+    String getName();
 
-	void setLore(String... lore);
+    void setLore(String... lore);
 
-	void setLore(List<String> lore);
+    void setLore(List<String> lore);
 
-	List<String> getLore();
+    List<String> getLore();
 
-	void setEnchantments(Map<Enchantment, Integer> enchantments);
+    void setEnchantments(Map<Enchantment, Integer> enchantments);
 
-	Map<Enchantment, Integer> getEnchantments();
+    Map<Enchantment, Integer> getEnchantments();
 
-	void addEnchantment(Enchantment enchantment);
+    void addEnchantment(Enchantment enchantment);
 
-	void addEnchantment(Enchantment enchantment, Integer level);
+    void addEnchantment(Enchantment enchantment, Integer level);
 
-	void removeEnchantment(Enchantment enchantment);
+    void removeEnchantment(Enchantment enchantment);
 
-	Color getLeatherColor();
+    Color getLeatherColor();
 
-	void setLeatherColor(Color leatherColor);
+    void setLeatherColor(Color leatherColor);
 
-	String getSkullOwner();
+    String getSkullOwner();
 
-	void setSkullOwner(String skullOwner);
+    void setSkullOwner(String skullOwner);
 
-	DyeColor getBannerColor();
+    DyeColor getBannerColor();
 
-	void setBannerColor(DyeColor bannerColor);
+    void setBannerColor(DyeColor bannerColor);
 
-	List<Pattern> getBannerPatterns();
+    List<Pattern> getBannerPatterns();
 
-	void setBannerPatterns(List<Pattern> bannerPatterns);
+    void setBannerPatterns(List<Pattern> bannerPatterns);
 
-	void setPlaceholdersEnabled(boolean enabled);
+    void setPlaceholdersEnabled(boolean enabled);
 
 }

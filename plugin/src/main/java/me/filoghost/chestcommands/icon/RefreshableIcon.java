@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public interface RefreshableIcon {
-	
-	ItemStack updateRendering(Player viewer, ItemStack currentRendering);
-	
+
+    ItemStack updateRendering(Player viewer, ItemStack currentRendering);
+
 }

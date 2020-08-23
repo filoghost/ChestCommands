@@ -12,15 +12,15 @@ import org.bukkit.Color;
 
 public class LeatherColorAttribute implements IconAttribute {
 
-	private final Color color;
+    private final Color color;
 
-	public LeatherColorAttribute(String serializedColor, AttributeErrorHandler errorHandler) throws ParseException {
-		this.color = ItemMetaParser.parseRGBColor(serializedColor);
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setLeatherColor(color);
-	}
+    public LeatherColorAttribute(String serializedColor, AttributeErrorHandler errorHandler) throws ParseException {
+        this.color = ItemMetaParser.parseRGBColor(serializedColor);
+    }
+
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setLeatherColor(color);
+    }
 
 }

@@ -7,20 +7,20 @@ package me.filoghost.chestcommands.placeholder;
 
 public class StaticPlaceholder {
 
-	private final String identifier;
-	private final String replacement;
+    private final String identifier;
+    private final String replacement;
 
-	public StaticPlaceholder(String identifier, String replacement) {
-		this.identifier = identifier;
-		this.replacement = replacement;
-	}
+    public StaticPlaceholder(String identifier, String replacement) {
+        this.identifier = identifier;
+        this.replacement = replacement;
+    }
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public String getReplacement() {
-		return replacement;
-	}
+    public String getReplacement() {
+        return replacement;
+    }
 
 }

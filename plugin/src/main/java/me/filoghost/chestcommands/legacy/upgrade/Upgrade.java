@@ -5,40 +5,39 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import me.filoghost.chestcommands.config.ConfigManager;
-
 import java.util.List;
+import me.filoghost.chestcommands.config.ConfigManager;
 
 public class Upgrade {
 
-	private final String id;
-	private final MultiTaskSupplier upgradeTasksSupplier;
+    private final String id;
+    private final MultiTaskSupplier upgradeTasksSupplier;
 
-	public Upgrade(String id, MultiTaskSupplier taskSupplier) {
-		this.id = id;
-		this.upgradeTasksSupplier = taskSupplier;
-	}
+    public Upgrade(String id, MultiTaskSupplier taskSupplier) {
+        this.id = id;
+        this.upgradeTasksSupplier = taskSupplier;
+    }
 
-	public String getID() {
-		return id;
-	}
+    public String getID() {
+        return id;
+    }
 
-	public List<UpgradeTask> createUpgradeTasks(ConfigManager configManager) throws UpgradeTaskException {
-		return upgradeTasksSupplier.getTasks(configManager);
-	}
+    public List<UpgradeTask> createUpgradeTasks(ConfigManager configManager) throws UpgradeTaskException {
+        return upgradeTasksSupplier.getTasks(configManager);
+    }
 
-	@FunctionalInterface
-	public interface SingleTaskSupplier {
+    @FunctionalInterface
+    public interface SingleTaskSupplier {
 
-		UpgradeTask getTask(ConfigManager configManager) throws UpgradeTaskException;
+        UpgradeTask getTask(ConfigManager configManager) throws UpgradeTaskException;
 
-	}
+    }
 
-	@FunctionalInterface
-	public interface MultiTaskSupplier {
+    @FunctionalInterface
+    public interface MultiTaskSupplier {
 
-		List<UpgradeTask> getTasks(ConfigManager configManager) throws UpgradeTaskException;
+        List<UpgradeTask> getTasks(ConfigManager configManager) throws UpgradeTaskException;
 
-	}
+    }
 
 }

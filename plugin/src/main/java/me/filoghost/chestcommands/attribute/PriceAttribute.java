@@ -11,18 +11,18 @@ import me.filoghost.chestcommands.parsing.ParseException;
 
 public class PriceAttribute implements IconAttribute {
 
-	private final double price;
+    private final double price;
 
-	public PriceAttribute(double price, AttributeErrorHandler errorHandler) throws ParseException {
-		if (price < 0) {
-			throw new ParseException(Errors.Parsing.zeroOrPositive);
-		}
-		this.price = price;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setRequiredMoney(price);
-	}
+    public PriceAttribute(double price, AttributeErrorHandler errorHandler) throws ParseException {
+        if (price < 0) {
+            throw new ParseException(Errors.Parsing.zeroOrPositive);
+        }
+        this.price = price;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setRequiredMoney(price);
+    }
 
 }

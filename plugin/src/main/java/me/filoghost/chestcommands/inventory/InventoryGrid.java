@@ -11,25 +11,25 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryGrid extends Grid<ItemStack> {
 
-	private final Inventory inventory;
+    private final Inventory inventory;
 
-	public InventoryGrid(MenuInventoryHolder inventoryHolder, int rows, String title) {
-		super(rows, 9);
-		this.inventory = Bukkit.createInventory(inventoryHolder, getSize(), title);
-	}
+    public InventoryGrid(MenuInventoryHolder inventoryHolder, int rows, String title) {
+        super(rows, 9);
+        this.inventory = Bukkit.createInventory(inventoryHolder, getSize(), title);
+    }
 
-	public Inventory getInventory() {
-		return inventory;
-	}
+    public Inventory getInventory() {
+        return inventory;
+    }
 
-	@Override
-	protected ItemStack getByIndex0(int ordinalIndex) {
-		return inventory.getItem(ordinalIndex);
-	}
+    @Override
+    protected ItemStack getByIndex0(int ordinalIndex) {
+        return inventory.getItem(ordinalIndex);
+    }
 
-	@Override
-	protected void setByIndex0(int ordinalIndex, ItemStack element) {
-		inventory.setItem(ordinalIndex, element);
-	}
+    @Override
+    protected void setByIndex0(int ordinalIndex, ItemStack element) {
+        inventory.setItem(ordinalIndex, element);
+    }
 
 }

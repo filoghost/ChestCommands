@@ -11,37 +11,37 @@ import org.bukkit.Bukkit;
 
 public enum DefaultPlaceholder {
 
-	PLAYER("player", (player, argument) -> player.getName()),
+    PLAYER("player", (player, argument) -> player.getName()),
 
-	ONLINE("online", (player, argument) -> String.valueOf(Bukkit.getOnlinePlayers().size())),
+    ONLINE("online", (player, argument) -> String.valueOf(Bukkit.getOnlinePlayers().size())),
 
-	MAX_PLAYERS("max_players", (player, argument) -> String.valueOf(Bukkit.getMaxPlayers())),
+    MAX_PLAYERS("max_players", (player, argument) -> String.valueOf(Bukkit.getMaxPlayers())),
 
-	WORLD("world", (player, argument) -> player.getWorld().getName()),
+    WORLD("world", (player, argument) -> player.getWorld().getName()),
 
-	MONEY("money", (player, argument) -> {
-		if (VaultEconomyHook.INSTANCE.isEnabled()) {
-			return VaultEconomyHook.formatMoney(VaultEconomyHook.getMoney(player));
-		} else {
-			return "[ECONOMY PLUGIN NOT FOUND]";
-		}
-	});
+    MONEY("money", (player, argument) -> {
+        if (VaultEconomyHook.INSTANCE.isEnabled()) {
+            return VaultEconomyHook.formatMoney(VaultEconomyHook.getMoney(player));
+        } else {
+            return "[ECONOMY PLUGIN NOT FOUND]";
+        }
+    });
 
 
-	private final String identifier;
-	private final PlaceholderReplacer replacer;
+    private final String identifier;
+    private final PlaceholderReplacer replacer;
 
-	DefaultPlaceholder(String identifier, PlaceholderReplacer replacer) {
-		this.identifier = identifier;
-		this.replacer = replacer;
-	}
+    DefaultPlaceholder(String identifier, PlaceholderReplacer replacer) {
+        this.identifier = identifier;
+        this.replacer = replacer;
+    }
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public PlaceholderReplacer getReplacer() {
-		return replacer;
-	}
+    public PlaceholderReplacer getReplacer() {
+        return replacer;
+    }
 
 }

@@ -5,39 +5,38 @@
  */
 package me.filoghost.chestcommands.attribute;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ItemMetaParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import org.bukkit.block.banner.Pattern;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BannerPatternsAttribute implements IconAttribute {
 
-	private final List<Pattern> patterns;
+    private final List<Pattern> patterns;
 
-	public BannerPatternsAttribute(List<String> serializedPatterns, AttributeErrorHandler errorHandler) {
-		patterns = new ArrayList<>();
+    public BannerPatternsAttribute(List<String> serializedPatterns, AttributeErrorHandler errorHandler) {
+        patterns = new ArrayList<>();
 
-		for (String serializedPattern : serializedPatterns) {
-			if (serializedPattern == null || serializedPattern.isEmpty()) {
-				continue; // Skip
-			}
+        for (String serializedPattern : serializedPatterns) {
+            if (serializedPattern == null || serializedPattern.isEmpty()) {
+                continue; // Skip
+            }
 
-			try {
-				Pattern pattern = ItemMetaParser.parseBannerPattern(serializedPattern);
-				patterns.add(pattern);
-			} catch (ParseException e) {
-				errorHandler.onListElementError(serializedPattern, e);
-			}
-		}
+            try {
+                Pattern pattern = ItemMetaParser.parseBannerPattern(serializedPattern);
+                patterns.add(pattern);
+            } catch (ParseException e) {
+                errorHandler.onListElementError(serializedPattern, e);
+            }
+        }
 
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setBannerPatterns(patterns);
-	}
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setBannerPatterns(patterns);
+    }
 
 }

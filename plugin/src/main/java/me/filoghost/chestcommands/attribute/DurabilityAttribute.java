@@ -9,15 +9,15 @@ import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public class DurabilityAttribute implements IconAttribute {
 
-	private final short durability;
+    private final short durability;
 
-	public DurabilityAttribute(short durability, AttributeErrorHandler errorHandler) {
-		this.durability = durability;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setDurability(durability);
-	}
+    public DurabilityAttribute(short durability, AttributeErrorHandler errorHandler) {
+        this.durability = durability;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setDurability(durability);
+    }
 
 }

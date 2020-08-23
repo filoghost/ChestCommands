@@ -11,18 +11,18 @@ import me.filoghost.chestcommands.parsing.ParseException;
 
 public class AmountAttribute implements IconAttribute {
 
-	private final int amount;
+    private final int amount;
 
-	public AmountAttribute(int amount, AttributeErrorHandler errorHandler) throws ParseException {
-		if (amount < 0) {
-			throw new ParseException(Errors.Parsing.zeroOrPositive);
-		}
-		this.amount = amount;
-	}
-	
-	@Override
-	public void apply(InternalConfigurableIcon icon) {
-		icon.setAmount(amount);
-	}
+    public AmountAttribute(int amount, AttributeErrorHandler errorHandler) throws ParseException {
+        if (amount < 0) {
+            throw new ParseException(Errors.Parsing.zeroOrPositive);
+        }
+        this.amount = amount;
+    }
+    
+    @Override
+    public void apply(InternalConfigurableIcon icon) {
+        icon.setAmount(amount);
+    }
 
 }
