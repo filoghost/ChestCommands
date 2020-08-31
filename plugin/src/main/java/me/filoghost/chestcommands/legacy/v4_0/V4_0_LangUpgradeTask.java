@@ -9,9 +9,9 @@ import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.fcommons.config.Config;
 
-public class v4_0_LangUpgradeTask extends YamlUpgradeTask {
+public class V4_0_LangUpgradeTask extends YamlUpgradeTask {
 
-    public v4_0_LangUpgradeTask(ConfigManager configManager) {
+    public V4_0_LangUpgradeTask(ConfigManager configManager) {
         super(configManager.getConfigLoader("lang.yml"));
     }
 

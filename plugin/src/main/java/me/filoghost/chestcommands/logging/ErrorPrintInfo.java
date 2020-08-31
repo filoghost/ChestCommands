@@ -14,7 +14,7 @@ class ErrorPrintInfo {
     private final String details;
     private final Throwable cause;
 
-    public ErrorPrintInfo(int index, List<String> message, String details, Throwable cause) {
+    protected ErrorPrintInfo(int index, List<String> message, String details, Throwable cause) {
         this.index = index;
         this.message = message;
         this.details = details;

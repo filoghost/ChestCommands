@@ -5,11 +5,6 @@
  */
 package me.filoghost.chestcommands.legacy.v4_0;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
@@ -19,11 +14,17 @@ import me.filoghost.fcommons.config.Config;
 import me.filoghost.fcommons.config.ConfigSection;
 import me.filoghost.fcommons.config.ConfigValueType;
 
-public class v4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+
+public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
 
     private final String legacyCommandSeparator;
 
-    public v4_0_MenuReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+    public V4_0_MenuReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
         super(configManager.getConfigLoader(menuFile));
         this.legacyCommandSeparator = legacyCommandSeparator;
     }
@@ -78,7 +79,7 @@ public class v4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
                 setSaveRequired();
                 actions.set(i, newAction);
             }
-         }
+        }
 
         config.setStringList(node, actions);
     }

@@ -5,8 +5,9 @@
  */
 package me.filoghost.chestcommands.placeholder.scanner;
 
-import java.util.Objects;
 import me.filoghost.fcommons.Strings;
+
+import java.util.Objects;
 
 public class PlaceholderMatch {
 
@@ -32,7 +33,7 @@ public class PlaceholderMatch {
         return argument;
     }
 
-    /**
+    /*
      * Valid formats:
      * {pluginName/placeholder: argument}
      * {placeholder: argument}
@@ -70,9 +71,9 @@ public class PlaceholderMatch {
         }
 
         PlaceholderMatch other = (PlaceholderMatch) obj;
-        return Objects.equals(this.pluginNamespace, other.pluginNamespace) &&
-                Objects.equals(this.identifier, other.identifier) &&
-                Objects.equals(this.argument, other.argument);
+        return Objects.equals(this.pluginNamespace, other.pluginNamespace)
+                && Objects.equals(this.identifier, other.identifier)
+                && Objects.equals(this.argument, other.argument);
     }
 
     @Override

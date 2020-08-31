@@ -5,12 +5,13 @@
  */
 package me.filoghost.chestcommands.logging;
 
-import java.nio.file.Path;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 import me.filoghost.fcommons.config.ConfigErrors;
 import org.bukkit.ChatColor;
+
+import java.nio.file.Path;
 
 public class Errors {
 
@@ -41,7 +42,9 @@ public class Errors {
 
         public static final String genericExecutorError = "error while running automatic configuration upgrades";
         public static final String menuListIOException = "couldn't obtain a list of menu files";
-        public static final String failedSomeUpgrades = "note: one or more automatic upgrades may have not been applied, configuration files or menus may require manual changes";
+        public static final String failedSomeUpgrades =
+                "note: one or more automatic upgrades may have not been applied, "
+                + "configuration files or menus may require manual changes";
         public static final String failedToPrepareUpgradeTasks = "error while trying to prepare an automatic configuration upgrade";
 
         public static String metadataReadError(Path metadataFile) {

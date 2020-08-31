@@ -5,15 +5,17 @@
  */
 package me.filoghost.chestcommands.legacy.v4_0;
 
-import java.nio.file.Path;
 import me.filoghost.chestcommands.legacy.upgrade.RegexUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 
-public class v4_0_MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
+import java.nio.file.Path;
 
-    public v4_0_MenuNodeRenameUpgradeTask(Path menuFile) {
+public class V4_0_MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
+
+    public V4_0_MenuNodeRenameUpgradeTask(Path menuFile) {
         super(menuFile);
     }
+
     @Override
     protected void computeRegexChanges() {
         replaceSubNode("command", "commands");

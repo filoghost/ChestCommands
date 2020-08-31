@@ -19,7 +19,7 @@ public class ItemStackParser {
     private short durability = 0;
     private boolean hasExplicitDurability = false;
 
-    /**
+    /*
      * Reads item in the format "material:durability, amount".
      */
     public ItemStackParser(String input, boolean parseAmount) throws ParseException {

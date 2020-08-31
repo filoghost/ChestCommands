@@ -5,9 +5,6 @@
  */
 package me.filoghost.chestcommands.util.nbt.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 import me.filoghost.chestcommands.util.nbt.NBTByte;
 import me.filoghost.chestcommands.util.nbt.NBTByteArray;
 import me.filoghost.chestcommands.util.nbt.NBTCompound;
@@ -22,6 +19,10 @@ import me.filoghost.chestcommands.util.nbt.NBTShort;
 import me.filoghost.chestcommands.util.nbt.NBTString;
 import me.filoghost.chestcommands.util.nbt.NBTTag;
 import me.filoghost.chestcommands.util.nbt.NBTType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public final class MojangsonParser {
 
@@ -65,11 +66,13 @@ public final class MojangsonParser {
 
     private NBTTag parseStringOrLiteral() throws MojangsonParseException {
         skipWhitespace();
-        if (currentChar() == '"')
+        if (currentChar() == '"') {
             return new NBTString(parseQuotedString());
+        }
         String str = parseSimpleString();
-        if (str.isEmpty())
+        if (str.isEmpty()) {
             throw parseException("Expected value");
+        }
         return parseLiteral(str);
     }
 
@@ -150,16 +153,18 @@ public final class MojangsonParser {
 
     private NBTTag parseAnything() throws MojangsonParseException {
         skipWhitespace();
-        if (!hasNext())
+        if (!hasNext()) {
             throw parseException("Expected value");
+        }
 
         int c = currentChar();
-        if (c == '{')
+        if (c == '{') {
             return parseCompound();
-        else if (c == '[')
+        } else if (c == '[') {
             return parseDetectedArray();
-        else
+        } else {
             return parseStringOrLiteral();
+        }
     }
 
     private NBTTag parseDetectedArray() throws MojangsonParseException {
@@ -237,12 +242,13 @@ public final class MojangsonParser {
         if (!hasNext()) {
             throw parseException("Expected value");
         }
-        if (arrayType == 'B')
+        if (arrayType == 'B') {
             return new NBTByteArray(parseNumArray(NBTType.BYTE_ARRAY, NBTType.BYTE));
-        else if (arrayType == 'L')
+        } else if (arrayType == 'L') {
             return new NBTLongArray(parseNumArray(NBTType.LONG_ARRAY, NBTType.LONG));
-        else if (arrayType == 'I')
+        } else if (arrayType == 'I') {
             return new NBTIntArray(parseNumArray(NBTType.INT_ARRAY, NBTType.INT));
+        }
         throw parseException("Invalid array type '" + arrayType + "' found");
     }
 
@@ -346,7 +352,10 @@ public final class MojangsonParser {
             this.index += 1;
             return;
         }
-        throw new MojangsonParseException("Expected '" + c + "' but got '" + (hasNext ? Character.valueOf(currentChar()) : "<End of string>") + "'", this.str, this.index + 1);
+        throw new MojangsonParseException(
+                "Expected '" + c + "' but got '" + (hasNext ? Character.valueOf(currentChar()) : "<End of string>") + "'",
+                this.str,
+                this.index + 1);
     }
 
     /**

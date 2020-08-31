@@ -5,11 +5,6 @@
  */
 package me.filoghost.chestcommands.icon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import me.filoghost.chestcommands.placeholder.PlaceholderStringList;
@@ -17,7 +12,6 @@ import me.filoghost.chestcommands.util.nbt.parser.MojangsonParseException;
 import me.filoghost.chestcommands.util.nbt.parser.MojangsonParser;
 import me.filoghost.fcommons.Preconditions;
 import me.filoghost.fcommons.collection.CollectionUtils;
-import me.filoghost.fcommons.logging.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -32,6 +26,12 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BaseConfigurableIcon implements Icon {
 
@@ -49,7 +49,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     private List<Pattern> bannerPatterns;
     private boolean placeholdersEnabled;
 
-    protected ItemStack cachedRendering; // Cache the rendered item when possible and if state hasn't changed
+    private ItemStack cachedRendering; // Cache the rendered item when possible and if state hasn't changed
 
     public BaseConfigurableIcon(Material material) {
         this.material = material;
@@ -266,13 +266,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
         // First try to apply NBT data
         if (nbtData != null) {
-            try {
-                // Note: this method should not throw any exception. It should log directly to the console
-                Bukkit.getUnsafe().modifyItemStack(itemStack, nbtData);
-            } catch (Throwable t) {
-                this.nbtData = null;
-                Log.warning("Could not apply NBT data to an item.", t);
-            }
+            Bukkit.getUnsafe().modifyItemStack(itemStack, nbtData);
         }
 
         // Then apply data from config nodes, overwriting NBT data if there are conflicting values

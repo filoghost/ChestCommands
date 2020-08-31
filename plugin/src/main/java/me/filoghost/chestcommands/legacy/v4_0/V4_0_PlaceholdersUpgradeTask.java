@@ -5,10 +5,6 @@
  */
 package me.filoghost.chestcommands.legacy.v4_0;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.fcommons.Strings;
@@ -19,13 +15,18 @@ import me.filoghost.fcommons.config.exception.ConfigLoadException;
 import me.filoghost.fcommons.config.exception.ConfigSaveException;
 import org.apache.commons.lang.StringEscapeUtils;
 
-public class v4_0_PlaceholdersUpgradeTask extends UpgradeTask {
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public class V4_0_PlaceholdersUpgradeTask extends UpgradeTask {
 
     private final Path oldPlaceholdersFile;
     private final ConfigLoader newPlaceholdersConfigLoader;
     private Config updatedConfig;
 
-    public v4_0_PlaceholdersUpgradeTask(ConfigManager configManager) {
+    public V4_0_PlaceholdersUpgradeTask(ConfigManager configManager) {
         this.oldPlaceholdersFile = configManager.getRootDataFolder().resolve("placeholders.yml");
         this.newPlaceholdersConfigLoader = configManager.getConfigLoader("custom-placeholders.yml");
     }

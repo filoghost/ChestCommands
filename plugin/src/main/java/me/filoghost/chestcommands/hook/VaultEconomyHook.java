@@ -52,8 +52,8 @@ public enum VaultEconomyHook implements PluginHook {
         return balance >= minimum;
     }
 
-    /**
-     * @return true if the operation was successful.
+    /*
+     * Returns true if the operation was successful.
      */
     public static boolean takeMoney(Player player, double amount) {
         INSTANCE.checkEnabledState();

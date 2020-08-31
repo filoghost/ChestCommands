@@ -18,8 +18,8 @@ import org.bukkit.entity.Player;
 public abstract class BaseMenu implements Menu {
 
     
-    protected final String title;
-    protected final Grid<Icon> icons;
+    private final String title;
+    private final Grid<Icon> icons;
 
 
     public BaseMenu(String title, int rows) {

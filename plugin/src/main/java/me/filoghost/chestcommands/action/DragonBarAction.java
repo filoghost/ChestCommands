@@ -25,7 +25,7 @@ public class DragonBarAction implements Action {
         String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
         if (split.length > 1) {
             try {
-                seconds =  NumberParser.getStrictlyPositiveInteger(split[0]);
+                seconds = NumberParser.getStrictlyPositiveInteger(split[0]);
                 message = split[1];
             } catch (ParseException e) {
                 throw new ParseException(Errors.Parsing.invalidBossBarTime(split[0]), e);

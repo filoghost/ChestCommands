@@ -5,6 +5,8 @@
  */
 package me.filoghost.chestcommands.legacy;
 
+import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 
 public class UpgradesDoneRegistry {
 
@@ -21,7 +22,7 @@ public class UpgradesDoneRegistry {
     private final Set<String> upgradesDone;
     private boolean needSave;
 
-    public     UpgradesDoneRegistry(Path saveFile) throws IOException {
+    public UpgradesDoneRegistry(Path saveFile) throws IOException {
         this.saveFile = saveFile;
         this.upgradesDone = new HashSet<>();
 

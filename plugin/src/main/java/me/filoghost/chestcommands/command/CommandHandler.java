@@ -58,7 +58,8 @@ public class CommandHandler extends CommandFramework {
 
             if (errorCollector.hasErrors()) {
                 errorCollector.logToConsole();
-                sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Last time the plugin loaded, " + errorCollector.getErrorsCount() + " error(s) were found.");
+                sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Last time the plugin loaded, "
+                        + errorCollector.getErrorsCount() + " error(s) were found.");
                 if (!(sender instanceof ConsoleCommandSender)) {
                     sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "Errors were printed on the console.");
                 }
