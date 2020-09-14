@@ -9,17 +9,20 @@ import me.filoghost.fcommons.config.mapped.IncludeStatic;
 import me.filoghost.fcommons.config.mapped.MappedConfig;
 import me.filoghost.fcommons.config.mapped.modifier.ChatColors;
 
+import java.util.Arrays;
+import java.util.List;
+
 @ChatColors
 @IncludeStatic
-public class Settings extends MappedConfig {
+public class Settings implements MappedConfig {
 
     public static String default_color__name = "&f";
     public static String default_color__lore = "&7";
     public static boolean update_notifications = true;
     public static int anti_click_spam_delay = 200;
 
-    public Settings() {
-        setHeader(
+    public List<String> getHeader() {
+        return Arrays.asList(
                 "ChestCommands main configuration file.",
                 "Documentation: https://filoghost.me/docs/chest-commands");
     }

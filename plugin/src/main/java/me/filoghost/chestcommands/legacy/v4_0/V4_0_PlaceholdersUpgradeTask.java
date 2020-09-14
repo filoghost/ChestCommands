@@ -48,7 +48,7 @@ public class V4_0_PlaceholdersUpgradeTask extends UpgradeTask {
         }
 
         // Do NOT load the new placeholder configuration from disk, as it should only contain placeholders imported from the old file
-        Config newPlaceholdersConfig = new Config(newPlaceholdersConfigLoader.getFile());
+        Config newPlaceholdersConfig = new Config();
         List<String> lines;
         try {
             lines = Files.readAllLines(oldPlaceholdersFile);

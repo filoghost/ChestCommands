@@ -5,6 +5,17 @@
  */
 package me.filoghost.chestcommands.config;
 
+import me.filoghost.chestcommands.logging.Errors;
+import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
+import me.filoghost.chestcommands.parsing.menu.MenuParser;
+import me.filoghost.fcommons.Preconditions;
+import me.filoghost.fcommons.config.BaseConfigManager;
+import me.filoghost.fcommons.config.ConfigLoader;
+import me.filoghost.fcommons.config.FileConfig;
+import me.filoghost.fcommons.config.exception.ConfigException;
+import me.filoghost.fcommons.config.mapped.MappedConfigLoader;
+import me.filoghost.fcommons.logging.ErrorCollector;
+
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -14,16 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import me.filoghost.chestcommands.logging.Errors;
-import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
-import me.filoghost.chestcommands.parsing.menu.MenuParser;
-import me.filoghost.fcommons.Preconditions;
-import me.filoghost.fcommons.config.BaseConfigManager;
-import me.filoghost.fcommons.config.Config;
-import me.filoghost.fcommons.config.ConfigLoader;
-import me.filoghost.fcommons.config.exception.ConfigException;
-import me.filoghost.fcommons.config.mapped.MappedConfigLoader;
-import me.filoghost.fcommons.logging.ErrorCollector;
 
 public class ConfigManager extends BaseConfigManager {
 
@@ -34,9 +35,9 @@ public class ConfigManager extends BaseConfigManager {
     public ConfigManager(Path rootDataFolder) {
         super(rootDataFolder);
 
-        settingsConfigLoader = getMappedConfigLoader("config.yml", Settings::new);
+        settingsConfigLoader = getMappedConfigLoader("config.yml", Settings.class);
         placeholdersConfigLoader = getConfigLoader("custom-placeholders.yml");
-        langConfigLoader = getMappedConfigLoader("lang.yml", Lang::new);
+        langConfigLoader = getMappedConfigLoader("lang.yml", Lang.class);
     }
 
     public void tryLoadSettings(ErrorCollector errorCollector) {
@@ -59,7 +60,7 @@ public class ConfigManager extends BaseConfigManager {
         CustomPlaceholders placeholders = new CustomPlaceholders();
 
         try {
-            Config placeholdersConfig = placeholdersConfigLoader.init();
+            FileConfig placeholdersConfig = placeholdersConfigLoader.init();
             placeholders.load(placeholdersConfig, errorCollector);
         } catch (ConfigException t) {
             logConfigInitException(errorCollector, placeholdersConfigLoader.getFile(), t);
@@ -107,7 +108,7 @@ public class ConfigManager extends BaseConfigManager {
             ConfigLoader menuConfigLoader = new ConfigLoader(rootDataFolder, menuFile);
 
             try {
-                Config menuConfig = menuConfigLoader.load();
+                FileConfig menuConfig = menuConfigLoader.load();
                 loadedMenus.add(MenuParser.loadMenu(menuConfig, errorCollector));
             } catch (ConfigException e) {
                 logConfigInitException(errorCollector, menuConfigLoader.getFile(), e);

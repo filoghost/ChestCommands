@@ -31,7 +31,7 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
 
     @Override
     public void computeYamlChanges(Config menuConfig) {
-        menuConfig.setHeader(null);
+        menuConfig.setHeader();
 
         for (String key : menuConfig.getKeys()) {
             ConfigSection section = menuConfig.getConfigSection(key);
@@ -129,14 +129,14 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
     }
 
     private void expandInlineList(ConfigSection config, String node, String separator) {
-        if (config.get(node).isValidAs(ConfigValueType.STRING)) {
+        if (config.get(node).isPresentAs(ConfigValueType.STRING)) {
             config.setStringList(node, splitListElements(config.getString(node), separator));
             setSaveRequired();
         }
     }
 
     private void expandSingletonList(ConfigSection config, String node) {
-        if (config.get(node).isValidAs(ConfigValueType.STRING)) {
+        if (config.get(node).isPresentAs(ConfigValueType.STRING)) {
             config.setStringList(node, Collections.singletonList(config.getString(node)));
             setSaveRequired();
         }

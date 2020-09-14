@@ -5,20 +5,21 @@
  */
 package me.filoghost.chestcommands.config;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
 import me.filoghost.fcommons.Colors;
-import me.filoghost.fcommons.config.Config;
 import me.filoghost.fcommons.config.ConfigSection;
+import me.filoghost.fcommons.config.FileConfig;
 import me.filoghost.fcommons.logging.ErrorCollector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomPlaceholders {
 
     private final List<StaticPlaceholder> placeholders = new ArrayList<>();
 
-    public void load(Config config, ErrorCollector errorCollector) {
+    public void load(FileConfig config, ErrorCollector errorCollector) {
         placeholders.clear();
 
         ConfigSection placeholdersSection = config.getConfigSection("placeholders");

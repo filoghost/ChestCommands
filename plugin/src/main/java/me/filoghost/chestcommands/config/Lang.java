@@ -12,7 +12,7 @@ import me.filoghost.fcommons.config.mapped.modifier.ChatColors;
 
 @ChatColors
 @IncludeStatic
-public class Lang extends MappedConfig {
+public class Lang implements MappedConfig {
 
     public static String no_open_permission = "&cYou don't have permission &e{permission} &cto use this menu.";
     public static String default_no_icon_permission = "&cYou don't have permission for this icon.";

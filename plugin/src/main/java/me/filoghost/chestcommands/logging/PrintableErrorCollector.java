@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.logging;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
@@ -18,6 +16,9 @@ import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.fcommons.logging.ErrorLog;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrintableErrorCollector extends ErrorCollector {
 
@@ -50,7 +51,7 @@ public class PrintableErrorCollector extends ErrorCollector {
         while (true) {
             if (cause instanceof ConfigSyntaxException) {
                 message.add(cause.getMessage());
-                details = ((ConfigSyntaxException) cause).getParsingErrorDetails();
+                details = ((ConfigSyntaxException) cause).getSyntaxErrorDetails();
                 cause = null; // Do not print stacktrace for syntax exceptions
 
             } else if (cause instanceof ConfigException

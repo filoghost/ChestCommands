@@ -5,10 +5,6 @@
  */
 package me.filoghost.chestcommands;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 import me.filoghost.chestcommands.api.internal.BackendAPI;
 import me.filoghost.chestcommands.command.CommandHandler;
 import me.filoghost.chestcommands.config.ConfigManager;
@@ -31,17 +27,22 @@ import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.chestcommands.task.TickingTask;
 import me.filoghost.fcommons.BaseJavaPlugin;
-import me.filoghost.fcommons.CommonsUtil;
 import me.filoghost.fcommons.command.CommandFramework;
 import me.filoghost.fcommons.config.ConfigLoader;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.fcommons.logging.Log;
+import me.filoghost.fcommons.reflection.ReflectionUtils;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class ChestCommands extends BaseJavaPlugin {
 
@@ -60,7 +61,7 @@ public class ChestCommands extends BaseJavaPlugin {
 
     @Override
     protected void onCheckedEnable() throws PluginEnableException {
-        if (!CommonsUtil.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
+        if (!ReflectionUtils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
             if (Bukkit.getVersion().contains("(MC: 1.8)")) {
                 throw new PluginEnableException("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
             } else {

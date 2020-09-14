@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.parsing.menu;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.attribute.PositionAttribute;
@@ -18,18 +16,20 @@ import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 import me.filoghost.fcommons.Colors;
-import me.filoghost.fcommons.config.Config;
 import me.filoghost.fcommons.config.ConfigSection;
-import me.filoghost.fcommons.config.EmptyConfigSection;
+import me.filoghost.fcommons.config.FileConfig;
 import me.filoghost.fcommons.config.exception.ConfigValueException;
 import me.filoghost.fcommons.config.exception.MissingConfigValueException;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuParser {
 
 
-    public static LoadedMenu loadMenu(Config menuConfig, ErrorCollector errorCollector) {
+    public static LoadedMenu loadMenu(FileConfig menuConfig, ErrorCollector errorCollector) {
         MenuSettings menuSettings = loadMenuSettings(menuConfig, errorCollector);
         List<IconSettings> iconSettingsList = loadIconSettingsList(menuConfig, errorCollector);
 
@@ -88,11 +88,11 @@ public class MenuParser {
     }
 
 
-    private static MenuSettings loadMenuSettings(Config config, ErrorCollector errorCollector) {
+    private static MenuSettings loadMenuSettings(FileConfig config, ErrorCollector errorCollector) {
         ConfigSection settingsSection = config.getConfigSection(MenuSettingsNode.ROOT_SECTION);
         if (settingsSection == null) {
             errorCollector.add(Errors.Menu.missingSettingsSection(config.getSourceFile()));
-            settingsSection = new EmptyConfigSection();
+            settingsSection = new ConfigSection();
         }
 
         String title;
@@ -179,7 +179,7 @@ public class MenuParser {
         return menuSettings;
     }
 
-    private static void addMenuSettingError(ErrorCollector errorCollector, Config config, String missingSetting, ConfigValueException e) {
+    private static void addMenuSettingError(ErrorCollector errorCollector, FileConfig config, String missingSetting, ConfigValueException e) {
         if (e instanceof MissingConfigValueException) {
             errorCollector.add(Errors.Menu.missingSetting(config.getSourceFile(), missingSetting));
         } else {
@@ -188,7 +188,7 @@ public class MenuParser {
     }
 
 
-    private static List<IconSettings> loadIconSettingsList(Config config, ErrorCollector errorCollector) {
+    private static List<IconSettings> loadIconSettingsList(FileConfig config, ErrorCollector errorCollector) {
         List<IconSettings> iconSettingsList = new ArrayList<>();
 
         for (String iconSectionName : config.getKeys()) {
