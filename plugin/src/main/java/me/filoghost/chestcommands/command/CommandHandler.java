@@ -50,6 +50,12 @@ public class CommandHandler extends MultiCommandManager {
         sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + rootCommandLabel + " help");
     }
 
+    @Override
+    protected void sendUnknownSubCommandMessage(SubCommandSession session) {
+        session.getSender().sendMessage(ChatColor.RED + "Unknown sub-command \"" + session.getSubLabelUsed() + "\". "
+                + "Use \"/" + session.getRootLabelUsed() + " help\" to see available commands.");
+    }
+
     @Name("help")
     @Permission(Permissions.COMMAND_PREFIX + "help")
     public void help(CommandSender sender, SubCommandSession session) {
