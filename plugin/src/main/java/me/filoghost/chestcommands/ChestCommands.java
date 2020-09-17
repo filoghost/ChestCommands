@@ -27,7 +27,6 @@ import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.chestcommands.task.TickingTask;
 import me.filoghost.fcommons.BaseJavaPlugin;
-import me.filoghost.fcommons.command.CommandFramework;
 import me.filoghost.fcommons.config.ConfigLoader;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.fcommons.logging.Log;
@@ -123,7 +122,7 @@ public class ChestCommands extends BaseJavaPlugin {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignListener(menuManager), this);
 
-        CommandFramework.register(this, new CommandHandler(menuManager, "chestcommands"));
+        new CommandHandler(menuManager, "chestcommands").register(this);
 
         ErrorCollector errorCollector = load();
 
