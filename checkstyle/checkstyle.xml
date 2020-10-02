@@ -134,6 +134,10 @@
         <module name="SingleLineJavadoc"/>
         <module name="SummaryJavadoc"/>
 
+        <!-- Javadoc for API -->
+        <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocType"/>
+
         <!-- Miscellaneous -->
         <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters"/>

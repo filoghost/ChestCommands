@@ -21,6 +21,7 @@ public class Settings implements MappedConfig {
     public static boolean update_notifications = true;
     public static int anti_click_spam_delay = 200;
 
+    @Override
     public List<String> getHeader() {
         return Arrays.asList(
                 "ChestCommands main configuration file.",

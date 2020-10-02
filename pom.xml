@@ -129,6 +129,15 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>20.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <defaultGoal>clean package</defaultGoal>
 
@@ -145,6 +154,20 @@
                                 <addClasspath>false</addClasspath>
                             </manifest>
                         </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <sourceFileIncludes>
+                            <include>**/chestcommands/api/**/*.java</include>
+                        </sourceFileIncludes>
+                        <sourceFileExcludes>
+                            <exclude>**/chestcommands/api/internal/**/*.java</exclude>
+                        </sourceFileExcludes>
                     </configuration>
                 </plugin>
 

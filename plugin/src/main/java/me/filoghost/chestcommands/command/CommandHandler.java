@@ -125,6 +125,7 @@ public class CommandHandler extends MultiCommandManager {
     @MinArgs(1)
     @UsageArgs("<menu> [player]")
     @DisplayPriority(1)
+    @SuppressWarnings("deprecation")
     public void open(CommandSender sender, String[] args) throws CommandException {
         Player target;
 

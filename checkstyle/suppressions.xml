@@ -4,5 +4,10 @@
         "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-    <suppress checks="Header|EqualsHashCode" files="[\\/]me[\\/]filoghost[\\/]chestcommands[\\/]util[\\/]nbt[\\/].+\.java"/>
+    <suppress
+            checks="Header|EqualsHashCode"
+            files="[\\/]me[\\/]filoghost[\\/]chestcommands[\\/]util[\\/]nbt[\\/].+\.java"/>
+    <suppress
+            checks="MissingJavadocMethod|MissingJavadocType"
+            files="[\\/]me[\\/]filoghost[\\/]chestcommands[\\/](?!api[\\/](?!internal[\\/])).+\.java"/>
 </suppressions>

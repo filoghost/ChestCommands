@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
-import java.util.HashMap;
-import java.util.Map;
 import me.filoghost.chestcommands.attribute.ActionsAttribute;
 import me.filoghost.chestcommands.attribute.AmountAttribute;
 import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
@@ -33,6 +31,9 @@ import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.fcommons.config.ConfigValue;
 import me.filoghost.fcommons.config.ConfigValueType;
 import me.filoghost.fcommons.config.exception.ConfigValueException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum AttributeType {
 

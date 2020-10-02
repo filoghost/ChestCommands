@@ -164,7 +164,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         addEnchantment(enchantment, 1);
     }
 
-    public void addEnchantment(Enchantment enchantment, Integer level) {
+    public void addEnchantment(Enchantment enchantment, int level) {
         if (enchantments == null) {
             enchantments = new HashMap<>();
         }
@@ -218,6 +218,10 @@ public abstract class BaseConfigurableIcon implements Icon {
     public void setBannerPatterns(List<Pattern> bannerPatterns) {
         this.bannerPatterns = CollectionUtils.copy(bannerPatterns);
         cachedRendering = null;
+    }
+
+    public boolean isPlaceholdersEnabled() {
+        return placeholdersEnabled;
     }
 
     public void setPlaceholdersEnabled(boolean placeholdersEnabled) {
