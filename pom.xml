@@ -176,12 +176,30 @@
 
         <plugins>
             <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+                <version>0.3.1</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>set-root-dir</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>highest-basedir</goal>
+                        </goals>
+                        <configuration>
+                            <property>rootDir</property>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
-                    <configLocation>checkstyle/checkstyle.xml</configLocation>
-                    <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
-                    <headerLocation>checkstyle/header.txt</headerLocation>
+                    <configLocation>${rootDir}/checkstyle/checkstyle.xml</configLocation>
+                    <propertyExpansion>samedir=${rootDir}/checkstyle</propertyExpansion>
                     <sourceDirectories>
                         <sourceDirectory>${project.basedir}</sourceDirectory>
                     </sourceDirectories>

@@ -9,14 +9,14 @@
     <property name="severity" value="warning"/>
 
     <module name="SuppressionFilter">
-        <property name="file" value="checkstyle/suppressions.xml"/>
+        <property name="file" value="${samedir}/suppressions.xml"/>
     </module>
 
     <!-- Check that Java source files have the correct header -->
     <module name="Header">
         <property name="severity" value="error"/>
         <property name="fileExtensions" value="java"/>
-        <property name="headerFile" value="checkstyle/header.txt"/>
+        <property name="headerFile" value="${samedir}/header.txt"/>
     </module>
 
     <!-- Check that files don't contain tabs -->
