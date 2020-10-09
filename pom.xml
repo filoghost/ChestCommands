@@ -168,6 +168,12 @@
                         <sourceFileExcludes>
                             <exclude>**/chestcommands/api/internal/**/*.java</exclude>
                         </sourceFileExcludes>
+                        <offlineLinks>
+                            <offlineLink>
+                                <url>https://hub.spigotmc.org/javadocs/bukkit</url>
+                                <location>${basedir}/javadoc/bukkit-1.8</location>
+                            </offlineLink>
+                        </offlineLinks>
                     </configuration>
                 </plugin>
 
