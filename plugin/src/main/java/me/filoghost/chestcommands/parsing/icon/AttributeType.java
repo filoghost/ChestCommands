@@ -7,28 +7,8 @@ package me.filoghost.chestcommands.parsing.icon;
 
 import java.util.HashMap;
 import java.util.Map;
-import me.filoghost.chestcommands.attribute.ActionsAttribute;
-import me.filoghost.chestcommands.attribute.AmountAttribute;
-import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
-import me.filoghost.chestcommands.attribute.BannerColorAttribute;
-import me.filoghost.chestcommands.attribute.BannerPatternsAttribute;
-import me.filoghost.chestcommands.attribute.ClickPermissionAttribute;
-import me.filoghost.chestcommands.attribute.ClickPermissionMessageAttribute;
-import me.filoghost.chestcommands.attribute.DurabilityAttribute;
-import me.filoghost.chestcommands.attribute.EnchantmentsAttribute;
-import me.filoghost.chestcommands.attribute.ExpLevelsAttribute;
-import me.filoghost.chestcommands.attribute.IconAttribute;
-import me.filoghost.chestcommands.attribute.KeepOpenAttribute;
-import me.filoghost.chestcommands.attribute.LeatherColorAttribute;
-import me.filoghost.chestcommands.attribute.LoreAttribute;
-import me.filoghost.chestcommands.attribute.MaterialAttribute;
-import me.filoghost.chestcommands.attribute.NBTDataAttribute;
-import me.filoghost.chestcommands.attribute.NameAttribute;
-import me.filoghost.chestcommands.attribute.PositionAttribute;
-import me.filoghost.chestcommands.attribute.PriceAttribute;
-import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
-import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
-import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
+
+import me.filoghost.chestcommands.attribute.*;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.fcommons.config.ConfigValue;
 import me.filoghost.fcommons.config.ConfigValueType;
@@ -56,7 +36,8 @@ public enum AttributeType {
     KEEP_OPEN("KEEP-OPEN", ConfigValueType.BOOLEAN, KeepOpenAttribute::new),
     ACTIONS("ACTIONS", ConfigValueType.STRING_LIST, ActionsAttribute::new),
     ENCHANTMENTS("ENCHANTMENTS", ConfigValueType.STRING_LIST, EnchantmentsAttribute::new),
-    REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new);
+    REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new),
+    CUSTOM_ITEM("CUSTOM-ITEM", ConfigValueType.STRING, CustomModelDataAutomaticAttribute::new);
 
     private static final Map<String, AttributeType> parsersByAttributeName;
     static {

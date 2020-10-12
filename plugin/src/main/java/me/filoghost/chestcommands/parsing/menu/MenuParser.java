@@ -5,9 +5,11 @@
  */
 package me.filoghost.chestcommands.parsing.menu;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.DisabledAction;
 import me.filoghost.chestcommands.attribute.PositionAttribute;
+import me.filoghost.chestcommands.hook.ItemsAdderHook;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.parsing.ActionParser;
@@ -98,6 +100,9 @@ public class MenuParser {
         String title;
         try {
             title = Colors.addColors(settingsSection.getRequiredString(MenuSettingsNode.NAME));
+            if(ItemsAdderHook.INSTANCE.isEnabled())
+                title = FontImageWrapper.replaceFontImages(title);
+
             if (title.length() > 32) {
                 title = title.substring(0, 32);
             }

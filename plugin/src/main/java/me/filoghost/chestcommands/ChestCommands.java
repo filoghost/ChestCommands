@@ -14,6 +14,7 @@ import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
+import me.filoghost.chestcommands.hook.ItemsAdderHook;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.UpgradesExecutor;
 import me.filoghost.chestcommands.listener.CommandListener;
@@ -88,6 +89,7 @@ public class ChestCommands extends BaseJavaPlugin {
         BarAPIHook.INSTANCE.setup();
         PlaceholderAPIHook.INSTANCE.setup();
         BungeeCordHook.INSTANCE.setup();
+        ItemsAdderHook.INSTANCE.setup();
 
         if (VaultEconomyHook.INSTANCE.isEnabled()) {
             Log.info("Hooked Vault");
@@ -101,6 +103,10 @@ public class ChestCommands extends BaseJavaPlugin {
 
         if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
             Log.info("Hooked PlaceholderAPI");
+        }
+
+        if (ItemsAdderHook.INSTANCE.isEnabled()) {
+            Log.info("Hooked ItemsAdder API");
         }
 
         if (Settings.update_notifications) {

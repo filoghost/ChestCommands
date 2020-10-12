@@ -52,6 +52,15 @@
             <groupId>me.filoghost.fcommons</groupId>
             <artifactId>fcommons</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>dev.lone.itemsadder.api</groupId>
+            <artifactId>ItemsAdder</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/repo/ItemsAdder.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>
