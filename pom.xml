@@ -162,6 +162,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.2.0</version>
                     <configuration>
+                        <windowtitle>Chest Commands API ${project.version}</windowtitle>
                         <sourceFileIncludes>
                             <include>**/chestcommands/api/**/*.java</include>
                         </sourceFileIncludes>
