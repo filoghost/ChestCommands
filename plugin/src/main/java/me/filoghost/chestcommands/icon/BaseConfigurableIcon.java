@@ -129,9 +129,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     }
 
     public void setLore(String... lore) {
-        if (lore != null) {
-            setLore(Arrays.asList(lore));
-        }
+        setLore(lore != null ? Arrays.asList(lore) : null);
     }
 
     public void setLore(List<String> lore) {
@@ -213,6 +211,10 @@ public abstract class BaseConfigurableIcon implements Icon {
 
     public List<Pattern> getBannerPatterns() {
         return CollectionUtils.copy(bannerPatterns);
+    }
+
+    public void setBannerPatterns(Pattern... bannerPatterns) {
+        setBannerPatterns(bannerPatterns != null ? Arrays.asList(bannerPatterns) : null);
     }
 
     public void setBannerPatterns(List<Pattern> bannerPatterns) {
