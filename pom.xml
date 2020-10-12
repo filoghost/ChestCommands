@@ -171,6 +171,10 @@
                         </sourceFileExcludes>
                         <offlineLinks>
                             <offlineLink>
+                                <url>https://javadoc.io/doc/org.jetbrains/annotations/20.1.0</url>
+                                <location>${basedir}/javadoc/jetbrains-annotations</location>
+                            </offlineLink>
+                            <offlineLink>
                                 <url>https://hub.spigotmc.org/javadocs/bukkit</url>
                                 <location>${basedir}/javadoc/bukkit-1.8</location>
                             </offlineLink>
