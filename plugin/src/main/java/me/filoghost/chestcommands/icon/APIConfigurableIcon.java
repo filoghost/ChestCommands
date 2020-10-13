@@ -27,4 +27,8 @@ public class APIConfigurableIcon extends BaseConfigurableIcon implements Configu
         return clickHandler;
     }
 
+    boolean isPlaceholdersEnabled()
+    {
+        return true;
+    }
 }

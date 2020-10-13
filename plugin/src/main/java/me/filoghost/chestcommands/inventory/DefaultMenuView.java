@@ -65,5 +65,4 @@ public class DefaultMenuView implements MenuView {
     public Player getViewer() {
         return viewer;
     }
-
 }

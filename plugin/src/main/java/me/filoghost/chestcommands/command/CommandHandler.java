@@ -22,6 +22,7 @@ import me.filoghost.fcommons.command.multi.MultiCommandManager;
 import me.filoghost.fcommons.command.multi.SubCommand;
 import me.filoghost.fcommons.command.multi.SubCommandSession;
 import me.filoghost.fcommons.logging.ErrorCollector;
+import me.filoghost.chestcommands.menucreator.MenuCreatorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -159,6 +160,50 @@ public class CommandHandler extends MultiCommandManager {
         }
 
         menu.open(target);
+    }
+
+    @Name("edit")
+    @Description("Create/edit a custom gui.")
+    @Permission(Permissions.COMMAND_PREFIX + "edit")
+    @DisplayPriority(100)
+    public void edit(CommandSender sender, String[] args) {
+        ChestCommands.closeAllMenus();
+
+        if(!(sender instanceof Player))
+        {
+            sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "This command cannot be run from console.");
+            return;
+        }
+
+        if(args.length == 0)
+        {
+            sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "You must specify a menu name.");
+            return;
+        }
+
+        String menuName = Utils.addYamlExtension(args[0]);
+        InternalMenu menu = menuManager.getMenuByFileName(menuName);
+        if(menu == null)
+        {
+            sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The menu \"" + menuName + "\" was not found.");
+            return;
+        }
+
+        /*for (int i = 0; i < menu.getIcons().getSize(); i++) {
+            Icon icon = menu.getIcons().getByIndex(i);
+
+            if (icon == null) {
+                bukkitInventory.setByIndex(i, null);
+            } else if (icon instanceof RefreshableIcon) {
+                ItemStack newItemStack = ((RefreshableIcon) icon).updateRendering(viewer, bukkitInventory.getByIndex(i));
+                bukkitInventory.setByIndex(i, newItemStack);
+            } else {
+                bukkitInventory.setByIndex(i, icon.render(viewer));
+            }
+        }*/
+        menu.getIcons();
+
+        MenuCreatorListener.getInstance().openGuiEditor((Player) sender);
     }
 
 }

@@ -33,6 +33,7 @@ import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.fcommons.logging.Log;
 import me.filoghost.fcommons.reflection.ReflectionUtils;
 import me.filoghost.updatechecker.UpdateChecker;
+import me.filoghost.chestcommands.menucreator.MenuCreatorListener;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -55,6 +56,7 @@ public class ChestCommands extends BaseJavaPlugin {
     private static ConfigManager configManager;
     private static MenuManager menuManager;
     private static CustomPlaceholders placeholders;
+    private static MenuCreatorListener menuCreatorListener;
 
     private static ErrorCollector lastLoadErrors;
     private static String newVersion;
@@ -82,6 +84,7 @@ public class ChestCommands extends BaseJavaPlugin {
         configManager = new ConfigManager(getDataFolderPath());
         menuManager = new MenuManager();
         placeholders = new CustomPlaceholders();
+        menuCreatorListener = new MenuCreatorListener(this);
 
         BackendAPI.setImplementation(new DefaultBackendAPI());
 
@@ -127,6 +130,7 @@ public class ChestCommands extends BaseJavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(menuManager), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignListener(menuManager), this);
+        menuCreatorListener.registerEvents();
 
         new CommandHandler(menuManager, "chestcommands").register(this);
 

@@ -67,7 +67,7 @@ public abstract class BaseMenu implements Menu {
         return menuView;
     }
 
-    @Override
+    //@Override
     public void refreshMenuViews() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
