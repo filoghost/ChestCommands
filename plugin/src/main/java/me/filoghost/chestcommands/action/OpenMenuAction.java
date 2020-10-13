@@ -8,6 +8,7 @@ package me.filoghost.chestcommands.action;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.menu.InternalMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.placeholder.PlaceholderString;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class OpenMenuAction implements Action {
     @Override
     public void execute(final Player player) {
         String menuName = targetMenu.getValue(player);
-        final InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuName);
+        final InternalMenu menu = MenuManager.getMenuByFileName(menuName);
         
         if (menu != null) {
             /*

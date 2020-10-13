@@ -14,6 +14,7 @@ import me.filoghost.chestcommands.icon.APIConfigurableIcon;
 import me.filoghost.chestcommands.icon.APIStaticIcon;
 import me.filoghost.chestcommands.menu.APIMenu;
 import me.filoghost.chestcommands.menu.InternalMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class DefaultBackendAPI extends BackendAPI {
     public boolean pluginMenuExists(@NotNull String menuFileName) {
         Preconditions.notNull(menuFileName, "menuFileName");
 
-        return ChestCommands.getMenuManager().getMenuByFileName(menuFileName) != null;
+        return MenuManager.getMenuByFileName(menuFileName) != null;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class DefaultBackendAPI extends BackendAPI {
         Preconditions.notNull(player, "player");
         Preconditions.notNull(menuFileName, "menuFileName");
 
-        InternalMenu menu = ChestCommands.getMenuManager().getMenuByFileName(menuFileName);
+        InternalMenu menu = MenuManager.getMenuByFileName(menuFileName);
 
         if (menu != null) {
             menu.open(player);

@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.listener;
 
-import java.util.Map;
-import java.util.WeakHashMap;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
@@ -23,21 +21,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class InventoryListener implements Listener {
 
-    private final MenuManager menuManager;
-    private final Map<Player, Long> antiClickSpam;
-
-    public InventoryListener(MenuManager menuManager) {
-        this.menuManager = menuManager;
-        this.antiClickSpam = new WeakHashMap<>();
-    }
+    private final Map<Player, Long> antiClickSpam = new WeakHashMap<>();
 
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent event) {
         if (event.hasItem() && event.getAction() != Action.PHYSICAL) {
-            menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
+            MenuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
         }
     }
 

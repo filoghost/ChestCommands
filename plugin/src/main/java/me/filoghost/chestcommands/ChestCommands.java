@@ -35,7 +35,6 @@ import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
@@ -52,7 +51,6 @@ public class ChestCommands extends BaseJavaPlugin {
     private static Path dataFolderPath;
 
     private static ConfigManager configManager;
-    private static MenuManager menuManager;
     private static CustomPlaceholders placeholders;
 
     private static ErrorCollector lastLoadErrors;
@@ -79,7 +77,6 @@ public class ChestCommands extends BaseJavaPlugin {
         dataFolderPath = getDataFolder().toPath();
         Log.setLogger(getLogger());
         configManager = new ConfigManager(getDataFolderPath());
-        menuManager = new MenuManager();
         placeholders = new CustomPlaceholders();
 
         BackendAPI.setImplementation(new DefaultBackendAPI());
@@ -117,12 +114,12 @@ public class ChestCommands extends BaseJavaPlugin {
         int pluginID = 3658;
         new MetricsLite(this, pluginID);
 
-        Bukkit.getPluginManager().registerEvents(new CommandListener(menuManager), this);
-        Bukkit.getPluginManager().registerEvents(new InventoryListener(menuManager), this);
+        Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
-        Bukkit.getPluginManager().registerEvents(new SignListener(menuManager), this);
+        Bukkit.getPluginManager().registerEvents(new SignListener(), this);
 
-        new CommandHandler(menuManager, "chestcommands").register(this);
+        new CommandHandler("chestcommands").register(this);
 
         ErrorCollector errorCollector = load();
 
@@ -140,12 +137,12 @@ public class ChestCommands extends BaseJavaPlugin {
 
     @Override
     public void onDisable() {
-        closeAllMenus();
+        MenuManager.closeAllOpenMenuViews();
     }
 
     public static ErrorCollector load() {
         ErrorCollector errorCollector = new PrintableErrorCollector();
-        menuManager.clear();
+        MenuManager.reset();
         boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
         try {
             Files.createDirectories(configManager.getRootDataFolder());
@@ -179,19 +176,11 @@ public class ChestCommands extends BaseJavaPlugin {
 
         List<LoadedMenu> loadedMenus = configManager.tryLoadMenus(errorCollector);
         for (LoadedMenu loadedMenu : loadedMenus) {
-            menuManager.registerMenu(loadedMenu, errorCollector);
+            MenuManager.registerMenu(loadedMenu, errorCollector);
         }
 
         ChestCommands.lastLoadErrors = errorCollector;
         return errorCollector;
-    }
-
-    public static void closeAllMenus() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (MenuManager.getOpenMenuView(player) != null) {
-                player.closeInventory();
-            }
-        }
     }
 
 
@@ -201,10 +190,6 @@ public class ChestCommands extends BaseJavaPlugin {
 
     public static Path getDataFolderPath() {
         return dataFolderPath;
-    }
-
-    public static MenuManager getMenuManager() {
-        return menuManager;
     }
 
     public static boolean hasNewVersion() {

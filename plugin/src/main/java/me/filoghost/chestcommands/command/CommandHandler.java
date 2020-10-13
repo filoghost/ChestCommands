@@ -30,11 +30,8 @@ import org.bukkit.entity.Player;
 
 public class CommandHandler extends MultiCommandManager {
 
-    private final MenuManager menuManager;
-
-    public CommandHandler(MenuManager menuManager, String label) {
+    public CommandHandler(String label) {
         super(label);
-        this.menuManager = menuManager;
     }
 
     @Override
@@ -74,7 +71,7 @@ public class CommandHandler extends MultiCommandManager {
     @Permission(Permissions.COMMAND_PREFIX + "reload")
     @DisplayPriority(100)
     public void reload(CommandSender sender) {
-        ChestCommands.closeAllMenus();
+        MenuManager.closeAllOpenMenuViews();
 
         ErrorCollector errorCollector = ChestCommands.load();
 
@@ -114,7 +111,7 @@ public class CommandHandler extends MultiCommandManager {
     @DisplayPriority(2)
     public void list(CommandSender sender) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX + "Loaded menus:");
-        for (String file : menuManager.getMenuFileNames()) {
+        for (String file : MenuManager.getMenuFileNames()) {
             sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
         }
     }
@@ -145,7 +142,7 @@ public class CommandHandler extends MultiCommandManager {
         CommandValidate.notNull(target, "That player is not online.");
 
         String menuName = Utils.addYamlExtension(args[0]);
-        InternalMenu menu = menuManager.getMenuByFileName(menuName);
+        InternalMenu menu = MenuManager.getMenuByFileName(menuName);
         CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
         if (!sender.hasPermission(menu.getOpenPermission())) {

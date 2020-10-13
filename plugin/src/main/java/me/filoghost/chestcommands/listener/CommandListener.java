@@ -13,12 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandListener implements Listener {
-    
-    private final MenuManager menuManager;
-    
-    public CommandListener(MenuManager menuManager) {
-        this.menuManager = menuManager;
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent event) {
@@ -27,7 +21,7 @@ public class CommandListener implements Listener {
             return;
         }
 
-        InternalMenu menu = menuManager.getMenuByOpenCommand(command);
+        InternalMenu menu = MenuManager.getMenuByOpenCommand(command);
         if (menu == null) {
             return;
         }
