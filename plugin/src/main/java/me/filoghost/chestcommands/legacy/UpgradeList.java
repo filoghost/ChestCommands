@@ -20,6 +20,7 @@ import me.filoghost.fcommons.collection.CollectionUtils;
 import me.filoghost.fcommons.config.ConfigLoader;
 import me.filoghost.fcommons.config.exception.ConfigException;
 import me.filoghost.fcommons.logging.Log;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -73,7 +74,7 @@ public class UpgradeList {
         }
     }
 
-    private static String readLegacyCommandSeparator(ConfigManager configManager) {
+    private static @Nullable String readLegacyCommandSeparator(ConfigManager configManager) {
         ConfigLoader settingsConfigLoader = configManager.getConfigLoader("config.yml");
 
         if (!settingsConfigLoader.fileExists()) {

@@ -6,6 +6,7 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import org.bukkit.event.block.Action;
+import org.jetbrains.annotations.Nullable;
 
 public enum ClickType {
 
@@ -13,7 +14,7 @@ public enum ClickType {
     RIGHT,
     BOTH;
 
-    public static ClickType fromOptions(boolean left, boolean right) {
+    public static @Nullable ClickType fromOptions(boolean left, boolean right) {
         if (left && right) {
             return BOTH;
         } else if (left) {

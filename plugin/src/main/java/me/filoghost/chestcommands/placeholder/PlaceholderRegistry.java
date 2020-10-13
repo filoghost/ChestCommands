@@ -5,12 +5,14 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class PlaceholderRegistry {
 
@@ -27,7 +29,7 @@ public class PlaceholderRegistry {
                 .put(plugin.getName(), placeholderReplacer);
     }
 
-    public PlaceholderReplacer getPlaceholderReplacer(PlaceholderMatch placeholderMatch) {
+    public @Nullable PlaceholderReplacer getPlaceholderReplacer(PlaceholderMatch placeholderMatch) {
         if (placeholderMatch.getPluginNamespace() == null) {
             PlaceholderReplacer internalReplacer = internalPlaceholders.get(placeholderMatch.getIdentifier());
             if (internalReplacer != null) {

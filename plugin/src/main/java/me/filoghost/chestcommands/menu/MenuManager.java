@@ -18,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -95,7 +96,7 @@ public class MenuManager {
         }
     }
 
-    public static DefaultMenuView getOpenMenuView(Player player) {
+    public static @Nullable DefaultMenuView getOpenMenuView(Player player) {
         InventoryView inventoryView = player.getOpenInventory();
         if (inventoryView == null) {
             return null;
@@ -110,7 +111,7 @@ public class MenuManager {
     }
 
 
-    public static DefaultMenuView getOpenMenuView(Inventory inventory) {
+    public static @Nullable DefaultMenuView getOpenMenuView(Inventory inventory) {
         MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
         if (inventoryHolder != null) {
             return inventoryHolder.getMenuView();
@@ -119,7 +120,7 @@ public class MenuManager {
         }
     }
 
-    private static MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
+    private static @Nullable MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
         if (inventory.getHolder() instanceof MenuInventoryHolder) {
             return (MenuInventoryHolder) inventory.getHolder();
         } else {

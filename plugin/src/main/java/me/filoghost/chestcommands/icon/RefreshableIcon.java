@@ -7,9 +7,10 @@ package me.filoghost.chestcommands.icon;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public interface RefreshableIcon {
 
-    ItemStack updateRendering(Player viewer, ItemStack currentRendering);
+    @Nullable ItemStack updateRendering(Player viewer, @Nullable ItemStack currentRendering);
 
 }

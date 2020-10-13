@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -166,7 +167,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public ItemStack updateRendering(Player viewer, ItemStack currentRendering) {
+    public @Nullable ItemStack updateRendering(Player viewer, @Nullable ItemStack currentRendering) {
         if (currentRendering != null && shouldCacheRendering()) {
             // Internal icons do not change, no need to update if the item is already rendered
             return currentRendering;

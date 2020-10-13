@@ -5,8 +5,6 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
@@ -14,6 +12,10 @@ import me.filoghost.chestcommands.placeholder.scanner.PlaceholderScanner;
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlaceholderManager {
 
@@ -62,7 +64,7 @@ public class PlaceholderManager {
         return relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch) != null;
     }
 
-    private static String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
+    private static @Nullable String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
         PlaceholderReplacer placeholderReplacer = relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch);
 
         if (placeholderReplacer == null) {

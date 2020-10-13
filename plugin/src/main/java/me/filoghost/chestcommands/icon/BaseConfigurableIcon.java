@@ -233,7 +233,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
-    public String renderName(Player viewer) {
+    public @Nullable String renderName(Player viewer) {
         if (name == null) {
             return null;
         }
@@ -251,7 +251,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
     }
 
-    public List<String> renderLore(Player viewer) {
+    public @Nullable List<String> renderLore(Player viewer) {
         if (lore == null) {
             return null;
         }

@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandListener implements Listener {
 
@@ -30,7 +31,7 @@ public class CommandListener implements Listener {
         menu.openCheckingPermission(event.getPlayer());
     }
     
-    private static String getCommandName(String fullCommand) {
+    private static @Nullable String getCommandName(String fullCommand) {
         if (!fullCommand.startsWith("/")) {
             return null;
         }
