@@ -65,7 +65,7 @@ public abstract class BaseMenu implements Menu {
         Preconditions.notNull(player, "player");
 
         DefaultMenuView menuView = new DefaultMenuView(this, player);
-        menuView.open(player);
+        menuView.open();
         return menuView;
     }
 

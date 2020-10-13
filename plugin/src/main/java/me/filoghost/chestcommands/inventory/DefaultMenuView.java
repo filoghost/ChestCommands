@@ -19,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class DefaultMenuView implements MenuView {
 
     private final BaseMenu menu;
-    private final InventoryGrid bukkitInventory;
     private final Player viewer;
+    private final InventoryGrid bukkitInventory;
 
     public DefaultMenuView(BaseMenu menu, Player viewer) {
         this.menu = menu;
@@ -45,7 +45,7 @@ public class DefaultMenuView implements MenuView {
         }
     }
 
-    public void open(Player viewer) {
+    public void open() {
         viewer.openInventory(bukkitInventory.getInventory());
     }
 
