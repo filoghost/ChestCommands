@@ -10,28 +10,34 @@ import me.filoghost.chestcommands.hook.ItemsAdderHook;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.parsing.ParseException;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class CustomModelDataAutomaticAttribute implements IconAttribute {
-    private final int customModelData;
+public class CustomItemAttribute implements IconAttribute {
+    ItemStack item;
 
-    public CustomModelDataAutomaticAttribute(String customItemName, AttributeErrorHandler errorHandler) throws ParseException
+    public CustomItemAttribute(String customItemName, AttributeErrorHandler errorHandler) throws ParseException
     {
         if(ItemsAdderHook.INSTANCE.isEnabled())
         {
             if(ItemsAdder.isCustomItem(customItemName))
             {
-                ItemStack tmp = ItemsAdder.getCustomItem(customItemName);
-                this.customModelData = tmp.getItemMeta().getCustomModelData();
+                this.item = ItemsAdder.getCustomItem(customItemName);
                 return;
             }
         }
-        this.customModelData = 0;
+        //....other plugins
     }
 
     @Override
     public void apply(InternalConfigurableIcon icon) {
-        if(customModelData != 0)
-            icon.setNBTData("{CustomModelData:" + customModelData + "}");
+        if(item != null)
+        {
+            icon.setMaterial(item.getType());
+            ItemMeta meta = item.getItemMeta();
+            icon.setCustomModelData(meta.getCustomModelData());
+            icon.setLore(meta.getLore());
+            icon.setName(meta.getDisplayName());
+        }
     }
 
 }

@@ -38,6 +38,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     private Material material;
     private int amount;
     private short durability;
+    private int customModelData;
 
     private String nbtData;
     private PlaceholderString name;
@@ -97,6 +98,18 @@ public abstract class BaseConfigurableIcon implements Icon {
 
     public short getDurability() {
         return durability;
+    }
+
+    public void setCustomModelData(int customModelData)
+    {
+        Preconditions.checkArgument(customModelData >= 0, "durability must be 0 or greater");
+        this.customModelData = customModelData;
+        cachedRendering = null;
+    }
+
+    public int getCustomModelData()
+    {
+        return customModelData;
     }
 
     public void setNBTData(String nbtData) {

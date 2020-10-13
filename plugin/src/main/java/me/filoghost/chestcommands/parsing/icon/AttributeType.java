@@ -37,7 +37,8 @@ public enum AttributeType {
     ACTIONS("ACTIONS", ConfigValueType.STRING_LIST, ActionsAttribute::new),
     ENCHANTMENTS("ENCHANTMENTS", ConfigValueType.STRING_LIST, EnchantmentsAttribute::new),
     REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new),
-    CUSTOM_ITEM("CUSTOM-ITEM", ConfigValueType.STRING, CustomModelDataAutomaticAttribute::new);
+    CUSTOM_ITEM("CUSTOM-ITEM", ConfigValueType.STRING, CustomItemAttribute::new),
+    CUSTOM_MODEL_DATA("CUSTOM-MODEL-DATA", ConfigValueType.INTEGER, CustomModelDataAttribute::new);
 
     private static final Map<String, AttributeType> parsersByAttributeName;
     static {
