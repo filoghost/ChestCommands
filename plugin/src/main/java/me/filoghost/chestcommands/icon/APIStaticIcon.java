@@ -10,6 +10,8 @@ import me.filoghost.chestcommands.api.StaticIcon;
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class APIStaticIcon implements StaticIcon {
 
@@ -22,28 +24,28 @@ public class APIStaticIcon implements StaticIcon {
     }
 
     @Override
-    public ItemStack getItemStack() {
+    public @NotNull ItemStack getItemStack() {
         return itemStack;
     }
 
     @Override
-    public void setItemStack(ItemStack itemStack) {
+    public void setItemStack(@NotNull ItemStack itemStack) {
         Preconditions.notNull(itemStack, "itemStack");
         this.itemStack = itemStack;
     }
 
     @Override
-    public ClickHandler getClickHandler() {
+    public @Nullable ClickHandler getClickHandler() {
         return clickHandler;
     }
 
     @Override
-    public void setClickHandler(ClickHandler clickHandler) {
+    public void setClickHandler(@Nullable ClickHandler clickHandler) {
         this.clickHandler = clickHandler;
     }
 
     @Override
-    public ItemStack render(Player viewer) {
+    public ItemStack render(@NotNull Player viewer) {
         return itemStack;
     }
 

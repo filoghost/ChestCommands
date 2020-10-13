@@ -11,6 +11,7 @@ import me.filoghost.chestcommands.icon.RefreshableIcon;
 import me.filoghost.chestcommands.menu.BaseMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a particular view of a menu.
@@ -57,12 +58,12 @@ public class DefaultMenuView implements MenuView {
     }
 
     @Override
-    public BaseMenu getMenu() {
+    public @NotNull BaseMenu getMenu() {
         return menu;
     }
 
     @Override
-    public Player getViewer() {
+    public @NotNull Player getViewer() {
         return viewer;
     }
 

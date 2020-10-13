@@ -14,6 +14,8 @@ import me.filoghost.chestcommands.inventory.Grid;
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseMenu implements Menu {
 
@@ -30,12 +32,12 @@ public abstract class BaseMenu implements Menu {
     }
 
     @Override
-    public void setIcon(int row, int column, Icon icon) {
+    public void setIcon(int row, int column, @Nullable Icon icon) {
         icons.set(row, column, icon);
     }
 
     @Override
-    public Icon getIcon(int row, int column) {
+    public @Nullable Icon getIcon(int row, int column) {
         return icons.get(row, column);
     }
 
@@ -50,7 +52,7 @@ public abstract class BaseMenu implements Menu {
     }
 
     @Override
-    public String getTitle() {
+    public @NotNull String getTitle() {
         return title;
     }
 
@@ -59,7 +61,7 @@ public abstract class BaseMenu implements Menu {
     }
 
     @Override
-    public MenuView open(Player player) {
+    public @NotNull MenuView open(@NotNull Player player) {
         Preconditions.notNull(player, "player");
 
         DefaultMenuView menuView = new DefaultMenuView(this, player);

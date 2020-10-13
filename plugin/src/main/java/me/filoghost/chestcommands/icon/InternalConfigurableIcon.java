@@ -6,7 +6,6 @@
 package me.filoghost.chestcommands.icon;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
 import me.filoghost.chestcommands.api.ClickResult;
@@ -23,6 +22,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class InternalConfigurableIcon extends BaseConfigurableIcon implements RefreshableIcon {
 
@@ -93,7 +95,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     
     
     @Override
-    public ItemStack render(Player viewer) {
+    public ItemStack render(@NotNull Player viewer) {
         if (canViewIcon(viewer)) {
             return super.render(viewer);
         } else {
@@ -113,7 +115,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public ClickResult onClick(MenuView menuView, Player player) {
+    public @NotNull ClickResult onClick(@NotNull MenuView menuView, @NotNull Player player) {
         if (!IconPermission.hasPermission(player, viewPermission)) {
             return ClickResult.KEEP_OPEN;
         }

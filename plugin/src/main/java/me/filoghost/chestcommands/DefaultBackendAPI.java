@@ -20,18 +20,19 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class DefaultBackendAPI extends BackendAPI {
 
     @Override
-    public boolean pluginMenuExists(String menuFileName) {
+    public boolean pluginMenuExists(@NotNull String menuFileName) {
         Preconditions.notNull(menuFileName, "menuFileName");
 
         return ChestCommands.getMenuManager().getMenuByFileName(menuFileName) != null;
     }
 
     @Override
-    public boolean openPluginMenu(Player player, String menuFileName) {
+    public boolean openPluginMenu(@NotNull Player player, @NotNull String menuFileName) {
         Preconditions.notNull(player, "player");
         Preconditions.notNull(menuFileName, "menuFileName");
 
@@ -46,22 +47,22 @@ public class DefaultBackendAPI extends BackendAPI {
     }
 
     @Override
-    public ConfigurableIcon createConfigurableIcon(Material material) {
+    public @NotNull ConfigurableIcon createConfigurableIcon(@NotNull Material material) {
         return new APIConfigurableIcon(material);
     }
 
     @Override
-    public Menu createMenu(Plugin owner, String title, int rows) {
+    public @NotNull Menu createMenu(@NotNull Plugin owner, @NotNull String title, int rows) {
         return new APIMenu(owner, title, rows);
     }
 
     @Override
-    public StaticIcon createStaticIcon(ItemStack itemStack) {
+    public @NotNull StaticIcon createStaticIcon(@NotNull ItemStack itemStack) {
         return new APIStaticIcon(itemStack);
     }
 
     @Override
-    public void registerPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
+    public void registerPlaceholder(@NotNull Plugin plugin, @NotNull String identifier, @NotNull PlaceholderReplacer placeholderReplacer) {
         PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
     }
 

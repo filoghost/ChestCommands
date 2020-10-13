@@ -6,8 +6,6 @@
 package me.filoghost.chestcommands.menu;
 
 import com.google.common.collect.ImmutableList;
-import java.nio.file.Path;
-import java.util.List;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuView;
@@ -15,6 +13,10 @@ import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class InternalMenu extends BaseMenu {
 
@@ -51,7 +53,7 @@ public class InternalMenu extends BaseMenu {
     }
 
     @Override
-    public MenuView open(Player player) {
+    public @NotNull MenuView open(@NotNull Player player) {
         if (openActions != null) {
             for (Action openAction : openActions) {
                 openAction.execute(player);
