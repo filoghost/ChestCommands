@@ -9,6 +9,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.chestcommands.menucreator.MenuCreatorInventoryHolder;
 import me.filoghost.chestcommands.util.Utils;
 import me.filoghost.fcommons.command.CommandException;
 import me.filoghost.fcommons.command.CommandValidate;
@@ -25,9 +26,11 @@ import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.chestcommands.menucreator.MenuCreatorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 public class CommandHandler extends MultiCommandManager {
 
@@ -162,7 +165,7 @@ public class CommandHandler extends MultiCommandManager {
         menu.open(target);
     }
 
-    @Name("edit")
+    /*@Name("edit")
     @Description("Create/edit a custom gui.")
     @Permission(Permissions.COMMAND_PREFIX + "edit")
     @DisplayPriority(100)
@@ -181,29 +184,22 @@ public class CommandHandler extends MultiCommandManager {
             return;
         }
 
+        Player player = (Player) sender;
+
+        if(player.getGameMode() != GameMode.CREATIVE)
+        {
+            player.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "You must be in creative mode to edit the menu.");
+            return;
+        }
+
         String menuName = Utils.addYamlExtension(args[0]);
         InternalMenu menu = menuManager.getMenuByFileName(menuName);
         if(menu == null)
         {
-            sender.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The menu \"" + menuName + "\" was not found.");
+            player.sendMessage(ChestCommands.CHAT_PREFIX + ChatColor.RED + "The menu \"" + menuName + "\" was not found.");
             return;
         }
-
-        /*for (int i = 0; i < menu.getIcons().getSize(); i++) {
-            Icon icon = menu.getIcons().getByIndex(i);
-
-            if (icon == null) {
-                bukkitInventory.setByIndex(i, null);
-            } else if (icon instanceof RefreshableIcon) {
-                ItemStack newItemStack = ((RefreshableIcon) icon).updateRendering(viewer, bukkitInventory.getByIndex(i));
-                bukkitInventory.setByIndex(i, newItemStack);
-            } else {
-                bukkitInventory.setByIndex(i, icon.render(viewer));
-            }
-        }*/
-        menu.getIcons();
-
-        MenuCreatorListener.getInstance().openGuiEditor((Player) sender);
-    }
+        MenuCreatorListener.getInstance().openGuiEditor((Player) sender, menu);
+    }*/
 
 }

@@ -71,10 +71,10 @@ public class ChestCommands extends BaseJavaPlugin {
             }
         }
 
-        if (pluginInstance != null || System.getProperty("ChestCommandsLoaded") != null) {
+        /*if (pluginInstance != null || System.getProperty("ChestCommandsLoaded") != null) {
             Log.warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
             return;
-        }
+        }*/
 
         System.setProperty("ChestCommandsLoaded", "true");
 
