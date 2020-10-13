@@ -7,18 +7,19 @@ package me.filoghost.chestcommands.menu;
 
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class APIMenu extends BaseMenu {
 
     private final Plugin owner;
     
-    public APIMenu(Plugin owner, String title, int rows) {
+    public APIMenu(@NotNull Plugin owner, @NotNull String title, int rows) {
         super(title, rows);
         Preconditions.notNull(owner, "owner");
         this.owner = owner;
     }
 
-    public Plugin getOwner() {
+    public @NotNull Plugin getOwner() {
         return owner;
     }
 

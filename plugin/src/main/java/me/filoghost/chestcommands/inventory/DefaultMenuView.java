@@ -12,6 +12,7 @@ import me.filoghost.chestcommands.menu.BaseMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a particular view of a menu.
@@ -22,7 +23,7 @@ public class DefaultMenuView implements MenuView {
     private final Player viewer;
     private final InventoryGrid bukkitInventory;
 
-    public DefaultMenuView(BaseMenu menu, Player viewer) {
+    public DefaultMenuView(@NotNull BaseMenu menu, @NotNull Player viewer) {
         this.menu = menu;
         this.viewer = viewer;
         this.bukkitInventory = new InventoryGrid(new MenuInventoryHolder(this), menu.getRowCount(), menu.getTitle());
@@ -49,7 +50,7 @@ public class DefaultMenuView implements MenuView {
         viewer.openInventory(bukkitInventory.getInventory());
     }
 
-    public Icon getIcon(int slot) {
+    public @Nullable Icon getIcon(int slot) {
         if (slot < 0 || slot >= bukkitInventory.getSize()) {
             return null;
         }

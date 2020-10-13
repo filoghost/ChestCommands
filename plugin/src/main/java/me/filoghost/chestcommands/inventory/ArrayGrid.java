@@ -5,6 +5,8 @@
  */
 package me.filoghost.chestcommands.inventory;
 
+import org.jetbrains.annotations.Nullable;
+
 public class ArrayGrid<T> extends Grid<T> {
 
     private final T[] elements;
@@ -16,12 +18,12 @@ public class ArrayGrid<T> extends Grid<T> {
     }
 
     @Override
-    protected T getByIndex0(int ordinalIndex) {
+    protected @Nullable T getByIndex0(int ordinalIndex) {
         return elements[ordinalIndex];
     }
 
     @Override
-    protected void setByIndex0(int ordinalIndex, T element) {
+    protected void setByIndex0(int ordinalIndex, @Nullable T element) {
         elements[ordinalIndex] = element;
     }
 

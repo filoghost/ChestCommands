@@ -24,7 +24,7 @@ public abstract class BaseMenu implements Menu {
     private final Grid<Icon> icons;
 
 
-    public BaseMenu(String title, int rows) {
+    public BaseMenu(@NotNull String title, int rows) {
         Preconditions.notNull(title, "title");
         Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
         this.title = title;
@@ -56,7 +56,7 @@ public abstract class BaseMenu implements Menu {
         return title;
     }
 
-    public Grid<Icon> getIcons() {
+    public @NotNull Grid<Icon> getIcons() {
         return icons;
     }
 

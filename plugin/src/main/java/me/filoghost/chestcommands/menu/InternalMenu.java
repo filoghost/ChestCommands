@@ -26,13 +26,13 @@ public class InternalMenu extends BaseMenu {
     private ImmutableList<Action> openActions;
     private int refreshTicks;
 
-    public InternalMenu(String title, int rows, Path sourceFile) {
+    public InternalMenu(@NotNull String title, int rows, @NotNull Path sourceFile) {
         super(title, rows);
         this.sourceFile = sourceFile;
         this.openPermission = Permissions.OPEN_MENU_PREFIX + sourceFile.getFileName();
     }
 
-    public Path getSourceFile() {
+    public @NotNull Path getSourceFile() {
         return sourceFile;
     }
 
