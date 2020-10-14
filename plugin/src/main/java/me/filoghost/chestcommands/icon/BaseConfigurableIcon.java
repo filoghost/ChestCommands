@@ -35,6 +35,8 @@ import java.util.Map;
 
 public abstract class BaseConfigurableIcon implements Icon {
 
+    private boolean isBlank;
+
     private Material material;
     private int amount;
     private short durability;
@@ -275,6 +277,9 @@ public abstract class BaseConfigurableIcon implements Icon {
             return cachedRendering;
         }
 
+        if(isBlank)
+            return null;
+
         ItemStack itemStack = new ItemStack(material, amount, durability);
 
         // First try to apply NBT data
@@ -288,6 +293,10 @@ public abstract class BaseConfigurableIcon implements Icon {
         if (itemMeta != null) {
             itemMeta.setDisplayName(renderName(viewer));
             itemMeta.setLore(renderLore(viewer));
+
+            if(customModelData != 0) {
+                itemMeta.setCustomModelData(customModelData);
+            }
 
             if (leatherColor != null && itemMeta instanceof LeatherArmorMeta) {
                 ((LeatherArmorMeta) itemMeta).setColor(leatherColor);
@@ -328,4 +337,14 @@ public abstract class BaseConfigurableIcon implements Icon {
         return itemStack;
     }
 
+    public void setBlank(boolean isBlank)
+    {
+        this.isBlank = isBlank;
+    }
+
+    @Override
+    public boolean isBlank()
+    {
+        return isBlank;
+    }
 }

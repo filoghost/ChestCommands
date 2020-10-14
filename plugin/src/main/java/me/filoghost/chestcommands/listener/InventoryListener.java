@@ -20,6 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -27,12 +28,25 @@ public class InventoryListener implements Listener {
 
     private final MenuManager menuManager;
     private final Map<Player, Long> antiClickSpam;
+    private static final Map<Player, Boolean> playerClosedMenuPressingIcon = new WeakHashMap<>();
 
     public InventoryListener(MenuManager menuManager) {
         this.menuManager = menuManager;
         this.antiClickSpam = new WeakHashMap<>();
     }
 
+    public static boolean canPlayerClose_AutoOpenMenu(Player player)
+    {
+        return playerClosedMenuPressingIcon.containsKey(player);
+    }
+
+    public static void setCanPlayerClose_AutoOpenMenu(Player player, boolean value)
+    {
+        if(value)
+            playerClosedMenuPressingIcon.put(player, true);
+        else
+            playerClosedMenuPressingIcon.remove(player);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent event) {
@@ -87,6 +101,29 @@ public class InventoryListener implements Listener {
                 clicker.closeInventory();
             }
         });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInventoryClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+        DefaultMenuView menuView = MenuManager.getOpenMenuView(inventory);
+        if (menuView == null) {
+            return;
+        }
+
+        if(!menuView.getMenu().isAutoReopen())
+            return;
+
+        if(canPlayerClose_AutoOpenMenu((Player) event.getPlayer()))
+        {
+            setCanPlayerClose_AutoOpenMenu((Player) event.getPlayer(), false);
+            return;
+        }
+
+        // Only handle the click AFTER the event has finished
+        Bukkit.getScheduler().runTaskLater(ChestCommands.getPluginInstance(), () -> {
+            menuView.getMenu().open((Player) event.getPlayer());
+        }, 1L);
     }
 
 }

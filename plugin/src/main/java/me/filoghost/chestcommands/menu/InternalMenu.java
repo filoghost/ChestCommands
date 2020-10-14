@@ -23,6 +23,7 @@ public class InternalMenu extends BaseMenu {
 
     private ImmutableList<Action> openActions;
     private int refreshTicks;
+    private int autoCloseTicks;
 
     public InternalMenu(String title, int rows, Path sourceFile) {
         super(title, rows);
@@ -48,6 +49,16 @@ public class InternalMenu extends BaseMenu {
 
     public void setRefreshTicks(int refreshTicks) {
         this.refreshTicks = refreshTicks;
+    }
+
+    public int getAutoCloseTicks()
+    {
+        return autoCloseTicks;
+    }
+
+    public void setAutoCloseTicks(int autoCloseTicks)
+    {
+        this.autoCloseTicks = autoCloseTicks;
     }
 
     @Override

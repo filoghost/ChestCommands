@@ -16,6 +16,8 @@ public class MenuSettingsNode {
             COMMANDS = "commands",
             OPEN_ACTIONS = "open-actions",
             AUTO_REFRESH = "auto-refresh",
+            AUTO_REOPEN = "auto-reopen",
+            AUTO_CLOSE = "auto-close",
 
             OPEN_ITEM_MATERIAL = "open-with-item.material",
             OPEN_ITEM_LEFT_CLICK = "open-with-item.left-click",

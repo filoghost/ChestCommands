@@ -134,23 +134,31 @@ public class ChestCommands extends BaseJavaPlugin {
 
         new CommandHandler(menuManager, "chestcommands").register(this);
 
-        ErrorCollector errorCollector = load();
-
-        if (errorCollector.hasErrors()) {
-            errorCollector.logToConsole();
-            Bukkit.getScheduler().runTaskLater(this, () -> {
-                Bukkit.getConsoleSender().sendMessage(
-                        ChestCommands.CHAT_PREFIX + ChatColor.RED + "Encountered " + errorCollector.getErrorsCount() + " error(s) on load. "
-                        + "Check previous console logs or run \"/chestcommands errors\" to see them again.");
-            }, 10L);
+        if(!ItemsAdderHook.INSTANCE.isEnabled())
+        {
+            loadAll();
         }
-
-        Bukkit.getScheduler().runTaskTimer(this, new TickingTask(), 1L, 1L);
     }
 
     @Override
     public void onDisable() {
         closeAllMenus();
+    }
+
+    public static void loadAll()
+    {
+        ErrorCollector errorCollector = load();
+
+        if (errorCollector.hasErrors()) {
+            errorCollector.logToConsole();
+            Bukkit.getScheduler().runTaskLater(getPluginInstance(), () -> {
+                Bukkit.getConsoleSender().sendMessage(
+                        ChestCommands.CHAT_PREFIX + ChatColor.RED + "Encountered " + errorCollector.getErrorsCount() + " error(s) on load. "
+                                + "Check previous console logs or run \"/chestcommands errors\" to see them again.");
+            }, 10L);
+        }
+
+        Bukkit.getScheduler().runTaskTimer(getPluginInstance(), new TickingTask(), 1L, 1L);
     }
 
     public static ErrorCollector load() {

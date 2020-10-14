@@ -20,7 +20,7 @@ public abstract class BaseMenu implements Menu {
     
     private final String title;
     private final Grid<Icon> icons;
-
+    private boolean autoReopen;
 
     public BaseMenu(String title, int rows) {
         Preconditions.notNull(title, "title");
@@ -67,7 +67,7 @@ public abstract class BaseMenu implements Menu {
         return menuView;
     }
 
-    //@Override
+    @Override
     public void refreshMenuViews() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
@@ -75,5 +75,15 @@ public abstract class BaseMenu implements Menu {
                 menuView.refresh();
             }
         }
+    }
+
+    public void setAutoReopen(boolean autoReopen)
+    {
+        this.autoReopen = autoReopen;
+    }
+
+    public boolean isAutoReopen()
+    {
+        return autoReopen;
     }
 }

@@ -7,18 +7,8 @@ package me.filoghost.chestcommands.parsing;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import me.filoghost.chestcommands.action.Action;
-import me.filoghost.chestcommands.action.BroadcastAction;
-import me.filoghost.chestcommands.action.ChangeServerAction;
-import me.filoghost.chestcommands.action.ConsoleCommandAction;
-import me.filoghost.chestcommands.action.DragonBarAction;
-import me.filoghost.chestcommands.action.GiveItemAction;
-import me.filoghost.chestcommands.action.GiveMoneyAction;
-import me.filoghost.chestcommands.action.OpCommandAction;
-import me.filoghost.chestcommands.action.OpenMenuAction;
-import me.filoghost.chestcommands.action.PlaySoundAction;
-import me.filoghost.chestcommands.action.PlayerCommandAction;
-import me.filoghost.chestcommands.action.SendMessageAction;
+
+import me.filoghost.chestcommands.action.*;
 
 public class ActionParser {
 
@@ -41,6 +31,7 @@ public class ActionParser {
         CONSOLE_COMMAND("console", ConsoleCommandAction::new),
         OP_COMMAND("op", OpCommandAction::new),
         OPEN("open", OpenMenuAction::new),
+        CLOSE_THIS("close-this", CloseThisMenuAction::new),
         SERVER("server", ChangeServerAction::new), // The colon is optional
         TELL("tell", SendMessageAction::new),
         BROADCAST("broadcast", BroadcastAction::new),

@@ -20,6 +20,8 @@ public class MenuSettings {
     private ImmutableList<String> commands;
     private ImmutableList<Action> openActions;
     private int refreshTicks;
+    private boolean autoReopen;
+    private int autoCloseTicks;
 
     private MenuOpenItem openItem;
 
@@ -68,4 +70,23 @@ public class MenuSettings {
         this.openItem = openItem;
     }
 
+    public void setAutoReopen(boolean autoReopen)
+    {
+        this.autoReopen = autoReopen;
+    }
+
+    public boolean isAutoReopen()
+    {
+        return autoReopen;
+    }
+
+    public int getAutoCloseTicks()
+    {
+        return autoCloseTicks;
+    }
+
+    public void setAutoCloseTicks(int autoCloseTicks)
+    {
+        this.autoCloseTicks = autoCloseTicks;
+    }
 }

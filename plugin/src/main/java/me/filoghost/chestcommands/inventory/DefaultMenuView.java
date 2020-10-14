@@ -33,7 +33,7 @@ public class DefaultMenuView implements MenuView {
         for (int i = 0; i < menu.getIcons().getSize(); i++) {
             Icon icon = menu.getIcons().getByIndex(i);
 
-            if (icon == null) {
+            if (icon == null || icon.isBlank()) {
                 bukkitInventory.setByIndex(i, null);
             } else if (icon instanceof RefreshableIcon) {
                 ItemStack newItemStack = ((RefreshableIcon) icon).updateRendering(viewer, bukkitInventory.getByIndex(i));
@@ -45,6 +45,8 @@ public class DefaultMenuView implements MenuView {
     }
 
     public void open(Player viewer) {
+        if(viewer == null || bukkitInventory == null || bukkitInventory.getInventory() == null)
+            return;
         viewer.openInventory(bukkitInventory.getInventory());
     }
 

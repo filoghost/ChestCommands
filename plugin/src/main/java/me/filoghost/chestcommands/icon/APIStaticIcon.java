@@ -43,6 +43,12 @@ public class APIStaticIcon implements StaticIcon {
     }
 
     @Override
+    public boolean isBlank()
+    {
+        return itemStack != null;
+    }
+
+    @Override
     public ItemStack render(Player viewer) {
         return itemStack;
     }

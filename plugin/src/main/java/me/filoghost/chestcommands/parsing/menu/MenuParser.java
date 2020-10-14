@@ -42,7 +42,9 @@ public class MenuParser {
         }
 
         menu.setRefreshTicks(menuSettings.getRefreshTicks());
+        menu.setAutoCloseTicks(menuSettings.getAutoCloseTicks());
         menu.setOpenActions(menuSettings.getOpenActions());
+        menu.setAutoReopen(menuSettings.isAutoReopen());
 
         return new LoadedMenu(menu, menuConfig.getSourceFile(), menuSettings.getCommands(), menuSettings.getOpenItem());
     }
@@ -82,7 +84,9 @@ public class MenuParser {
             errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
         }
 
-        if (iconSettings.getAttributeValue(AttributeType.MATERIAL) == null) {
+        if ((iconSettings.getAttributeValue(AttributeType.BLANK) == null || iconSettings.getAttributeValue(AttributeType.BLANK).equals(false))
+                && iconSettings.getAttributeValue(AttributeType.MATERIAL) == null
+                && iconSettings.getAttributeValue(AttributeType.CUSTOM_ITEM) == null) {
             errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
         }
 
@@ -123,6 +127,8 @@ public class MenuParser {
         }
 
         MenuSettings menuSettings = new MenuSettings(title, rows);
+
+        menuSettings.setAutoReopen(settingsSection.getBoolean(MenuSettingsNode.AUTO_REOPEN, false));
 
         List<String> openCommands = settingsSection.getStringList(MenuSettingsNode.COMMANDS);
         menuSettings.setCommands(openCommands);
@@ -179,6 +185,14 @@ public class MenuParser {
                 refreshTicks = 1;
             }
             menuSettings.setRefreshTicks(refreshTicks);
+        }
+
+        if (settingsSection.contains(MenuSettingsNode.AUTO_CLOSE)) {
+            int autoCloseTicks = (int) (settingsSection.getDouble(MenuSettingsNode.AUTO_CLOSE) * 20.0);
+            if (autoCloseTicks < 1) {
+                autoCloseTicks = 1;
+            }
+            menuSettings.setAutoCloseTicks(autoCloseTicks);
         }
 
         return menuSettings;

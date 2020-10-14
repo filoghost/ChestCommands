@@ -35,8 +35,10 @@ public class CustomItemAttribute implements IconAttribute {
             icon.setMaterial(item.getType());
             ItemMeta meta = item.getItemMeta();
             icon.setCustomModelData(meta.getCustomModelData());
-            icon.setLore(meta.getLore());
-            icon.setName(meta.getDisplayName());
+            if(icon.getLore() == null)
+                icon.setLore(meta.getLore());
+            if(icon.getName() == null)
+                icon.setName(meta.getDisplayName());
         }
     }
 

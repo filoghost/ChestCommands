@@ -6,6 +6,7 @@
 package me.filoghost.chestcommands.task;
 
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
+import me.filoghost.chestcommands.listener.InventoryListener;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
@@ -32,8 +33,13 @@ public class TickingTask implements Runnable {
                 continue;
             }
 
-            int refreshTicks = ((InternalMenu) menuView.getMenu()).getRefreshTicks();
+            int autoCloseTicks = ((InternalMenu) menuView.getMenu()).getAutoCloseTicks();
+            if (autoCloseTicks > 0 && currentTick % autoCloseTicks == 0) {
+                InventoryListener.setCanPlayerClose_AutoOpenMenu(player, true);
+                player.closeInventory();
+            }
 
+            int refreshTicks = ((InternalMenu) menuView.getMenu()).getRefreshTicks();
             if (refreshTicks > 0 && currentTick % refreshTicks == 0) {
                 menuView.refresh();
             }

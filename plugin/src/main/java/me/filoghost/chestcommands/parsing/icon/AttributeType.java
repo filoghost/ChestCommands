@@ -18,6 +18,7 @@ public enum AttributeType {
 
     POSITION_X("POSITION-X", ConfigValueType.INTEGER, PositionAttribute::new),
     POSITION_Y("POSITION-Y", ConfigValueType.INTEGER, PositionAttribute::new),
+    BLANK("BLANK", ConfigValueType.BOOLEAN, BlankAttribute::new),
     MATERIAL("MATERIAL", ConfigValueType.STRING, MaterialAttribute::new),
     DURABILITY("DURABILITY", ConfigValueType.SHORT, DurabilityAttribute::new),
     AMOUNT("AMOUNT", ConfigValueType.INTEGER, AmountAttribute::new),
@@ -38,7 +39,8 @@ public enum AttributeType {
     ENCHANTMENTS("ENCHANTMENTS", ConfigValueType.STRING_LIST, EnchantmentsAttribute::new),
     REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new),
     CUSTOM_ITEM("CUSTOM-ITEM", ConfigValueType.STRING, CustomItemAttribute::new),
-    CUSTOM_MODEL_DATA("CUSTOM-MODEL-DATA", ConfigValueType.INTEGER, CustomModelDataAttribute::new);
+    CUSTOM_MODEL_DATA("CUSTOM-MODEL-DATA", ConfigValueType.INTEGER, CustomModelDataAttribute::new)
+    ;
 
     private static final Map<String, AttributeType> parsersByAttributeName;
     static {
