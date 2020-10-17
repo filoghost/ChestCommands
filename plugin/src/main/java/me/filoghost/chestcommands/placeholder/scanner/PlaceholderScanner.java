@@ -8,7 +8,6 @@ package me.filoghost.chestcommands.placeholder.scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class PlaceholderScanner {
 
@@ -25,17 +24,15 @@ public class PlaceholderScanner {
         this.inputLength = input.length();
     }
 
-    public boolean anyMatch(Predicate<PlaceholderMatch> predicate) {
-        AtomicBoolean matchFound = new AtomicBoolean(false);
+    public boolean containsAny() {
+        AtomicBoolean placeholderFound = new AtomicBoolean(false);
 
         scan(identifier -> {
-            if (predicate.test(identifier)) {
-                matchFound.set(true);
-                stopExecution = true;
-            }
+            stopExecution = true;
+            placeholderFound.set(true);
         });
 
-        return matchFound.get();
+        return placeholderFound.get();
     }
 
     public String replace(Function<PlaceholderMatch, String> replaceFunction) {

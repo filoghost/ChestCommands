@@ -39,7 +39,7 @@ public class PlaceholderManager {
     }
 
     public static boolean hasDynamicPlaceholders(String text) {
-        if (new PlaceholderScanner(text).anyMatch(PlaceholderManager::isValidPlaceholder)) {
+        if (new PlaceholderScanner(text).containsAny()) {
             return true;
         }
 
@@ -58,10 +58,6 @@ public class PlaceholderManager {
         }
 
         return text;
-    }
-
-    private static boolean isValidPlaceholder(PlaceholderMatch placeholderMatch) {
-        return relativePlaceholderRegistry.getPlaceholder(placeholderMatch) != null;
     }
 
     private static @Nullable String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
