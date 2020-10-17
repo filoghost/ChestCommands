@@ -16,6 +16,7 @@ import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.fcommons.logging.Log;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -87,12 +88,13 @@ public class InventoryListener implements Listener {
                     clicker.closeInventory();
                 }
             } catch (Throwable t) {
-                handleIconClickException(menuView.getMenu(), t);
+                handleIconClickException(clicker, menuView.getMenu(), t);
+                clicker.closeInventory();
             }
         });
     }
 
-    private void handleIconClickException(Menu menu, Throwable throwable) {
+    private void handleIconClickException(Player clicker, Menu menu, Throwable throwable) {
         String menuDescription;
         if (menu.getPlugin() == ChestCommands.getInstance()) {
             menuDescription = "the menu \"" + Errors.formatPath(((InternalMenu) menu).getSourceFile()) + "\"";
@@ -101,6 +103,7 @@ public class InventoryListener implements Listener {
         }
 
         Log.severe("Encountered exception while handling a click inside " + menuDescription, throwable);
+        clicker.sendMessage(ChatColor.RED + "An internal error occurred when you clicked on the item.");
     }
 
 }
