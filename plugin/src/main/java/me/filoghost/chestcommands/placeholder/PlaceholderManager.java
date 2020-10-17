@@ -75,9 +75,9 @@ public class PlaceholderManager {
             try {
                 return placeholder.getReplacer().getReplacement(player, placeholderMatch.getArgument());
             } catch (Throwable t) {
-                Log.severe("Encountered exception while replacing the placeholder \"" + placeholderMatch
+                Log.severe("Encountered an exception while replacing the placeholder \"" + placeholderMatch.getIdentifier()
                         + "\" registered by the plugin \"" + placeholder.getPlugin().getName() + "\"", t);
-                return "[ERROR]";
+                return "[PLACEHOLDER ERROR]";
             }
         });
     }

@@ -102,7 +102,7 @@ public class InventoryListener implements Listener {
             menuDescription = "a menu created by the plugin \"" + menu.getPlugin().getName() + "\"";
         }
 
-        Log.severe("Encountered exception while handling a click inside " + menuDescription, throwable);
+        Log.severe("Encountered an exception while handling a click inside " + menuDescription, throwable);
         clicker.sendMessage(ChatColor.RED + "An internal error occurred when you clicked on the item.");
     }
 
