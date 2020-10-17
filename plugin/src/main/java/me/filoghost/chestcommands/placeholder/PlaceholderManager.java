@@ -21,24 +21,24 @@ import java.util.List;
 public class PlaceholderManager {
 
     private static final List<StaticPlaceholder> staticPlaceholders = new ArrayList<>();
-    private static final PlaceholderRegistry relativePlaceholderRegistry = new PlaceholderRegistry();
+    private static final PlaceholderRegistry dynamicPlaceholderRegistry = new PlaceholderRegistry();
     private static final PlaceholderCache placeholderCache = new PlaceholderCache();
     static {
         for (DefaultPlaceholder placeholder : DefaultPlaceholder.values()) {
-            relativePlaceholderRegistry.registerInternalPlaceholder(placeholder.getIdentifier(), placeholder.getReplacer());
+            dynamicPlaceholderRegistry.registerInternalPlaceholder(placeholder.getIdentifier(), placeholder.getReplacer());
         }
     }
 
-    public static boolean hasRelativePlaceholders(List<String> list) {
+    public static boolean hasDynamicPlaceholders(List<String> list) {
         for (String element : list) {
-            if (hasRelativePlaceholders(element)) {
+            if (hasDynamicPlaceholders(element)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean hasRelativePlaceholders(String text) {
+    public static boolean hasDynamicPlaceholders(String text) {
         if (new PlaceholderScanner(text).anyMatch(PlaceholderManager::isValidPlaceholder)) {
             return true;
         }
@@ -50,7 +50,7 @@ public class PlaceholderManager {
         return false;
     }
 
-    public static String replaceRelativePlaceholders(String text, Player player) {
+    public static String replaceDynamicPlaceholders(String text, Player player) {
         text = new PlaceholderScanner(text).replace(match -> getReplacement(match, player));
 
         if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
@@ -65,7 +65,7 @@ public class PlaceholderManager {
     }
 
     private static @Nullable String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
-        Placeholder placeholder = relativePlaceholderRegistry.getPlaceholder(placeholderMatch);
+        Placeholder placeholder = dynamicPlaceholderRegistry.getPlaceholder(placeholderMatch);
 
         if (placeholder == null) {
             return null; // Placeholder not found
@@ -117,14 +117,14 @@ public class PlaceholderManager {
         checkIdentifierArgument(identifier);
         Preconditions.notNull(placeholderReplacer, "placeholderReplacer");
 
-        relativePlaceholderRegistry.registerExternalPlaceholder(plugin, identifier, placeholderReplacer);
+        dynamicPlaceholderRegistry.registerExternalPlaceholder(plugin, identifier, placeholderReplacer);
     }
 
     public static boolean unregisterPluginPlaceholder(Plugin plugin, String identifier) {
         Preconditions.notNull(plugin, "plugin");
         checkIdentifierArgument(identifier);
 
-        return relativePlaceholderRegistry.unregisterExternalPlaceholder(plugin, identifier);
+        return dynamicPlaceholderRegistry.unregisterExternalPlaceholder(plugin, identifier);
     }
 
     private static void checkIdentifierArgument(String identifier) {

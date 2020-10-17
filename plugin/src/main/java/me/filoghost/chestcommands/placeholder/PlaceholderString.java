@@ -25,12 +25,12 @@ public class PlaceholderString {
     private PlaceholderString(String originalString) {
         this.originalString = originalString;
         this.stringWithStaticPlaceholders = PlaceholderManager.replaceStaticPlaceholders(originalString);
-        this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(stringWithStaticPlaceholders);
+        this.hasDynamicPlaceholders = PlaceholderManager.hasDynamicPlaceholders(stringWithStaticPlaceholders);
     }
     
     public String getValue(Player player) {
         if (hasDynamicPlaceholders) {
-            return PlaceholderManager.replaceRelativePlaceholders(stringWithStaticPlaceholders, player);
+            return PlaceholderManager.replaceDynamicPlaceholders(stringWithStaticPlaceholders, player);
         } else {
             return stringWithStaticPlaceholders;
         }

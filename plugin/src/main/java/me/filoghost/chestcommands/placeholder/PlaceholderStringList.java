@@ -6,10 +6,11 @@
 package me.filoghost.chestcommands.placeholder;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
 import me.filoghost.fcommons.Preconditions;
 import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class PlaceholderStringList {
 
@@ -29,7 +30,7 @@ public class PlaceholderStringList {
             this.listWithStaticPlaceholders = originalList;
         }
 
-        this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(listWithStaticPlaceholders);
+        this.hasDynamicPlaceholders = PlaceholderManager.hasDynamicPlaceholders(listWithStaticPlaceholders);
         if (hasDynamicPlaceholders) {
             this.placeholderStringList = CollectionUtils.transformImmutable(listWithStaticPlaceholders, PlaceholderString::of);
         } else {
