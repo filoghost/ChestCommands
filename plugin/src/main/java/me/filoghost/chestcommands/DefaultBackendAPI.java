@@ -69,4 +69,9 @@ public class DefaultBackendAPI extends BackendAPI {
         PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
     }
 
+    @Override
+    public boolean unregisterPlaceholder(@NotNull Plugin plugin, @NotNull String identifier) {
+        return PlaceholderManager.unregisterPluginPlaceholder(plugin, identifier);
+    }
+
 }

@@ -52,4 +52,6 @@ public abstract class BackendAPI {
                                              @NotNull String identifier,
                                              @NotNull PlaceholderReplacer placeholderReplacer);
 
+    public abstract boolean unregisterPlaceholder(@NotNull Plugin plugin, @NotNull String identifier);
+
 }

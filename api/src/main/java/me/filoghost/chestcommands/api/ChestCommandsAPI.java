@@ -60,17 +60,19 @@ public class ChestCommandsAPI {
      *     <li>{test: argument}
      *     <li>{pluginName/test}
      *     <li>{pluginName/test: argument}
+     *     <li>{PLUGINNAME/TEST: abc}
+     *     <li>...
      * </ul>
      * The plugin name is used as optional namespace, to distinguish two placeholders with the same identifier but
      * registered by distinct plugins.
      * <p>
-     * This replaces any currently registered placeholder with the same plugin and identifier.
+     * This method replaces any currently registered placeholder with the same plugin and identifier (case insensitive).
      *
      * @param plugin              the plugin registering the placeholder
-     * @param identifier          the identifier of the placeholder, which can only contain letters, digits and
-     *                            underscores
+     * @param identifier          the case-insensitive identifier of the placeholder, which can only contain letters,
+     *                            digits and underscores; its length must be between 1 and 30 characters
      * @param placeholderReplacer the callback that returns the displayed value
-     * @throws IllegalArgumentException if the identifier contains invalid characters
+     * @throws IllegalArgumentException if the identifier contains invalid characters, is too short or too long
      * @see PlaceholderReplacer#getReplacement(Player, String)
      * @since 1
      */
@@ -78,6 +80,20 @@ public class ChestCommandsAPI {
                                            @NotNull String identifier,
                                            @NotNull PlaceholderReplacer placeholderReplacer) {
         BackendAPI.getImplementation().registerPlaceholder(plugin, identifier, placeholderReplacer);
+    }
+
+    /**
+     * Unregisters a placeholder.
+     *
+     * @param plugin     the plugin that previously registered the placeholder
+     * @param identifier the case-insensitive identifier of the placeholder, which can only contain letters, digits and
+     *                   underscores; length must be between 1 and 30 characters
+     * @return true if the placeholder existed and was removed, false otherwise
+     * @throws IllegalArgumentException if the identifier contains invalid characters, is too short or too long
+     * @since 1
+     */
+    public static boolean unregisterPlaceholder(@NotNull Plugin plugin, @NotNull String identifier) {
+        return BackendAPI.getImplementation().unregisterPlaceholder(plugin, identifier);
     }
 
     /**

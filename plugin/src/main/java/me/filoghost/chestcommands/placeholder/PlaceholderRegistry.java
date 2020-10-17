@@ -33,6 +33,22 @@ public class PlaceholderRegistry {
                 .put(plugin.getName(), new Placeholder(plugin, placeholderReplacer));
     }
 
+    public boolean unregisterExternalPlaceholder(Plugin plugin, String identifier) {
+        Map<String, Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+
+        if (externalPlaceholdersByPlugin == null) {
+            return false;
+        }
+
+        boolean removed = externalPlaceholdersByPlugin.remove(plugin.getName()) != null;
+
+        if (externalPlaceholdersByPlugin.isEmpty()) {
+            externalPlaceholders.remove(identifier);
+        }
+
+        return removed;
+    }
+
     public @Nullable Placeholder getPlaceholder(PlaceholderMatch placeholderMatch) {
         String identifier = placeholderMatch.getIdentifier();
 
