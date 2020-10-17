@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseMenu implements Menu {
 
-    
+
     private final String title;
     private final Grid<Icon> icons;
 
@@ -42,12 +42,31 @@ public abstract class BaseMenu implements Menu {
     }
 
     @Override
-    public int getRowCount() {
+    public @NotNull MenuView open(@NotNull Player player) {
+        Preconditions.notNull(player, "player");
+
+        DefaultMenuView menuView = new DefaultMenuView(this, player);
+        menuView.open();
+        return menuView;
+    }
+
+    @Override
+    public void refreshOpenViews() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
+            if (menuView != null && menuView.getMenu() == this) {
+                menuView.refresh();
+            }
+        }
+    }
+
+    @Override
+    public int getRows() {
         return icons.getRows();
     }
-    
+
     @Override
-    public int getColumnCount() {
+    public int getColumns() {
         return icons.getColumns();
     }
 
@@ -60,22 +79,4 @@ public abstract class BaseMenu implements Menu {
         return icons;
     }
 
-    @Override
-    public @NotNull MenuView open(@NotNull Player player) {
-        Preconditions.notNull(player, "player");
-
-        DefaultMenuView menuView = new DefaultMenuView(this, player);
-        menuView.open();
-        return menuView;
-    }
-
-    @Override
-    public void refreshOpenMenuViews() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
-            if (menuView != null && menuView.getMenu() == this) {
-                menuView.refresh();
-            }
-        }
-    }
 }

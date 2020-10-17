@@ -184,7 +184,7 @@ public class ChestCommands extends BaseJavaPlugin {
     }
 
 
-    public static Plugin getPluginInstance() {
+    public static Plugin getInstance() {
         return pluginInstance;
     }
 

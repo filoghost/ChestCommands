@@ -42,7 +42,7 @@ public abstract class BackendAPI {
 
     public abstract boolean openPluginMenu(@NotNull Player player, @NotNull String menuFileName);
 
-    public abstract @NotNull Menu createMenu(@NotNull Plugin owner, @NotNull String title, int rows);
+    public abstract @NotNull Menu createMenu(@NotNull Plugin plugin, @NotNull String title, int rows);
     
     public abstract @NotNull ConfigurableIcon createConfigurableIcon(@NotNull Material material);
 

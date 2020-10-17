@@ -53,18 +53,24 @@ public class ChestCommandsAPI {
      * Menus loaded by Chest Commands from the menus folder always display placeholders, including those registered
      * through this method.
      * <p>
-     * The identifier is automatically converted to the appropriate placeholder format. For example, given the
-     * identifier "test", the callback would be invoked to replace the the following placeholders:
+     * The identifier is used to compute which placeholder formats will invoke the replacer callback. For example, given
+     * the identifier "test", the callback would be invoked to replace the following placeholders (case insensitive):
      * <ul>
      *     <li>{test}
-     *     <li>{test: 123}
-     *     <li>{test: hello world}
+     *     <li>{test: argument}
+     *     <li>{pluginName/test}
+     *     <li>{pluginName/test: argument}
      * </ul>
+     * The plugin name is used as optional namespace, to distinguish two placeholders with the same identifier but
+     * registered by distinct plugins.
+     * <p>
+     * This replaces any currently registered placeholder with the same plugin and identifier.
      *
      * @param plugin              the plugin registering the placeholder
      * @param identifier          the identifier of the placeholder, which can only contain letters, digits and
      *                            underscores
      * @param placeholderReplacer the callback that returns the displayed value
+     * @throws IllegalArgumentException if the identifier contains invalid characters
      * @see PlaceholderReplacer#getReplacement(Player, String)
      * @since 1
      */
@@ -74,12 +80,11 @@ public class ChestCommandsAPI {
         BackendAPI.getImplementation().registerPlaceholder(plugin, identifier, placeholderReplacer);
     }
 
-
     /**
      * Returns if a menu with a given file name exists and was loaded successfully by Chest Commands from the menus
      * folder.
      *
-     * @param menuFileName the file name of the menu to check
+     * @param menuFileName the file name of the menu to check, including the {@code .yml} file extension
      * @return true if the menu exists, false otherwise
      * @since 1
      */
@@ -94,7 +99,7 @@ public class ChestCommandsAPI {
      * <b>WARNING</b>: this method opens the menu without checking the permissions of the player.
      *
      * @param player       the player that will see the menu
-     * @param menuFileName the file name of the menu to open
+     * @param menuFileName the file name of the menu to open, including the {@code .yml} file extension
      * @return true if the menu was found and opened successfully, false otherwise
      * @since 1
      */

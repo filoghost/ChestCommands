@@ -5,47 +5,54 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
+import me.filoghost.fcommons.collection.CaseInsensitiveMap;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PlaceholderRegistry {
 
-    private final Map<String, PlaceholderReplacer> internalPlaceholders = new HashMap<>();
-    private final Map<String, Map<String, PlaceholderReplacer>> externalPlaceholders = new HashMap<>();
+    // <identifier, placeholder>
+    private final Map<String, Placeholder> internalPlaceholders = new CaseInsensitiveMap<>();
+
+    // <identifier, <pluginName, placeholder>>
+    private final Map<String, Map<String, Placeholder>> externalPlaceholders = new CaseInsensitiveMap<>();
 
     public void registerInternalPlaceholder(String identifier, PlaceholderReplacer replacer) {
-        internalPlaceholders.put(identifier, replacer);
+        internalPlaceholders.put(identifier, new Placeholder(ChestCommands.getInstance(), replacer));
     }
 
     public void registerExternalPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
         externalPlaceholders
-                .computeIfAbsent(identifier, key -> new LinkedHashMap<>())
-                .put(plugin.getName(), placeholderReplacer);
+                .computeIfAbsent(identifier, key -> new CaseInsensitiveMap<>(new LinkedHashMap<>()))
+                .put(plugin.getName(), new Placeholder(plugin, placeholderReplacer));
     }
 
-    public @Nullable PlaceholderReplacer getPlaceholderReplacer(PlaceholderMatch placeholderMatch) {
+    public @Nullable Placeholder getPlaceholder(PlaceholderMatch placeholderMatch) {
+        String identifier = placeholderMatch.getIdentifier();
+
         if (placeholderMatch.getPluginNamespace() == null) {
-            PlaceholderReplacer internalReplacer = internalPlaceholders.get(placeholderMatch.getIdentifier());
-            if (internalReplacer != null) {
-                return internalReplacer;
+            Placeholder internalPlaceholder = internalPlaceholders.get(identifier);
+            if (internalPlaceholder != null) {
+                return internalPlaceholder;
             }
         }
 
-        Map<String, PlaceholderReplacer> externalReplacers = externalPlaceholders.get(placeholderMatch.getIdentifier());
+        Map<String, Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
 
         // Find exact replacer if plugin name is specified
         if (placeholderMatch.getPluginNamespace() != null) {
-            return externalReplacers.get(placeholderMatch.getPluginNamespace());
+            return externalPlaceholdersByPlugin.get(placeholderMatch.getPluginNamespace());
         }
 
-        if (externalReplacers != null && !externalReplacers.isEmpty()) {
-            return externalReplacers.values().iterator().next();
+        // Otherwise try find the first one registered
+        if (externalPlaceholdersByPlugin != null && !externalPlaceholdersByPlugin.isEmpty()) {
+            return externalPlaceholdersByPlugin.values().iterator().next();
         }
 
         return null;

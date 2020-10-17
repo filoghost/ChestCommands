@@ -11,16 +11,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class APIMenu extends BaseMenu {
 
-    private final Plugin owner;
-    
-    public APIMenu(@NotNull Plugin owner, @NotNull String title, int rows) {
+    private final Plugin plugin;
+
+    public APIMenu(@NotNull Plugin plugin, @NotNull String title, int rows) {
         super(title, rows);
-        Preconditions.notNull(owner, "owner");
-        this.owner = owner;
+        Preconditions.notNull(plugin, "plugin");
+        this.plugin = plugin;
     }
 
-    public @NotNull Plugin getOwner() {
-        return owner;
+    @Override
+    public Plugin getPlugin() {
+        return plugin;
     }
 
 }

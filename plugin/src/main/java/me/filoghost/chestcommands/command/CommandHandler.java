@@ -42,7 +42,7 @@ public class CommandHandler extends MultiCommandManager {
     @Override
     protected void sendNoArgsMessage(CommandSender sender, String rootCommandLabel) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX);
-        sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getPluginInstance().getDescription().getVersion());
+        sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getInstance().getDescription().getVersion());
         sender.sendMessage(ChatColor.GREEN + "Developer: " + ChatColor.GRAY + "filoghost");
         sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + rootCommandLabel + " help");
     }

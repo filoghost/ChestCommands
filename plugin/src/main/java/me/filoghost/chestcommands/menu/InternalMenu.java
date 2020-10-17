@@ -6,6 +6,7 @@
 package me.filoghost.chestcommands.menu;
 
 import com.google.common.collect.ImmutableList;
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuView;
@@ -13,6 +14,7 @@ import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -61,6 +63,11 @@ public class InternalMenu extends BaseMenu {
         }
 
         return super.open(player);
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return ChestCommands.getInstance();
     }
 
     public void openCheckingPermission(Player player) {

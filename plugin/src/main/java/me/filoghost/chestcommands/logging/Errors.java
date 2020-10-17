@@ -215,7 +215,7 @@ public class Errors {
 
     }
 
-    private static String formatPath(Path path) {
+    public static String formatPath(Path path) {
         return ConfigErrors.formatPath(ChestCommands.getDataFolderPath(), path);
     }
 

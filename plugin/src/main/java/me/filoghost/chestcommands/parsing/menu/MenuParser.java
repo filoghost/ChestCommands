@@ -63,16 +63,16 @@ public class MenuParser {
         int row = positionY.getPosition() - 1;
         int column = positionX.getPosition() - 1;
 
-        if (row < 0 || row >= menu.getRowCount()) {
+        if (row < 0 || row >= menu.getRows()) {
             errorCollector.add(
                     Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
-                    "it must be between 1 and " + menu.getRowCount());
+                    "it must be between 1 and " + menu.getRows());
             return;
         }
-        if (column < 0 || column >= menu.getColumnCount()) {
+        if (column < 0 || column >= menu.getColumns()) {
             errorCollector.add(
                     Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
-                    "it must be between 1 and " + menu.getColumnCount());
+                    "it must be between 1 and " + menu.getColumns());
             return;
         }
 

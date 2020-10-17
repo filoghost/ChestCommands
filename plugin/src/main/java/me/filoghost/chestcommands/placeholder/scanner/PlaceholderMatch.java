@@ -35,9 +35,10 @@ public class PlaceholderMatch {
 
     /*
      * Valid formats:
-     * {pluginName/placeholder: argument}
-     * {placeholder: argument}
      * {placeholder}
+     * {placeholder: argument}
+     * {pluginName/identifier}
+     * {pluginName/identifier: argument}
      */
     public static PlaceholderMatch parse(String placeholderContent) {
         String explicitPluginName = null;

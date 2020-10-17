@@ -27,6 +27,8 @@ public interface PlaceholderReplacer {
      * <p>
      * If this method returns null, the placeholder is not replaced. It is preferred to return a descriptive error
      * message rather than returning null.
+     * <p>
+     * <b>Warning</b>: this method should be performance efficient, as it may be invoked quite often.
      *
      * @param player   the player viewing the placeholder
      * @param argument the argument inside the placeholder, if present

@@ -10,6 +10,7 @@ import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderScanner;
 import me.filoghost.fcommons.Preconditions;
+import me.filoghost.fcommons.logging.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
@@ -21,13 +22,12 @@ public class PlaceholderManager {
 
     private static final List<StaticPlaceholder> staticPlaceholders = new ArrayList<>();
     private static final PlaceholderRegistry relativePlaceholderRegistry = new PlaceholderRegistry();
+    private static final PlaceholderCache placeholderCache = new PlaceholderCache();
     static {
         for (DefaultPlaceholder placeholder : DefaultPlaceholder.values()) {
             relativePlaceholderRegistry.registerInternalPlaceholder(placeholder.getIdentifier(), placeholder.getReplacer());
         }
     }
-
-    private static final PlaceholderCache placeholderCache = new PlaceholderCache();
 
     public static boolean hasRelativePlaceholders(List<String> list) {
         for (String element : list) {
@@ -61,18 +61,24 @@ public class PlaceholderManager {
     }
 
     private static boolean isValidPlaceholder(PlaceholderMatch placeholderMatch) {
-        return relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch) != null;
+        return relativePlaceholderRegistry.getPlaceholder(placeholderMatch) != null;
     }
 
     private static @Nullable String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
-        PlaceholderReplacer placeholderReplacer = relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch);
+        Placeholder placeholder = relativePlaceholderRegistry.getPlaceholder(placeholderMatch);
 
-        if (placeholderReplacer == null) {
+        if (placeholder == null) {
             return null; // Placeholder not found
         }
 
         return placeholderCache.computeIfAbsent(placeholderMatch, player, () -> {
-            return placeholderReplacer.getReplacement(player, placeholderMatch.getArgument());
+            try {
+                return placeholder.getReplacer().getReplacement(player, placeholderMatch.getArgument());
+            } catch (Throwable t) {
+                Log.severe("Encountered exception while replacing the placeholder \"" + placeholderMatch
+                        + "\" registered by the plugin \"" + placeholder.getPlugin().getName() + "\"", t);
+                return "[ERROR]";
+            }
         });
     }
 

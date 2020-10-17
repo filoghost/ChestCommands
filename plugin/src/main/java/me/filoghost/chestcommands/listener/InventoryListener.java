@@ -8,9 +8,13 @@ package me.filoghost.chestcommands.listener;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
+import me.filoghost.chestcommands.api.Menu;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
+import me.filoghost.chestcommands.logging.Errors;
+import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.fcommons.logging.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,13 +79,28 @@ public class InventoryListener implements Listener {
         }
 
         // Only handle the click AFTER the event has finished
-        Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
-            ClickResult result = icon.onClick(menuView, clicker);
+        Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
+            try {
+                ClickResult result = icon.onClick(menuView, clicker);
 
-            if (result == ClickResult.CLOSE) {
-                clicker.closeInventory();
+                if (result == ClickResult.CLOSE) {
+                    clicker.closeInventory();
+                }
+            } catch (Throwable t) {
+                handleIconClickException(menuView.getMenu(), t);
             }
         });
+    }
+
+    private void handleIconClickException(Menu menu, Throwable throwable) {
+        String menuDescription;
+        if (menu.getPlugin() == ChestCommands.getInstance()) {
+            menuDescription = "the menu \"" + Errors.formatPath(((InternalMenu) menu).getSourceFile()) + "\"";
+        } else {
+            menuDescription = "a menu created by the plugin \"" + menu.getPlugin().getName() + "\"";
+        }
+
+        Log.severe("Encountered exception while handling a click inside " + menuDescription, throwable);
     }
 
 }

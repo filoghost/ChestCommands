@@ -53,8 +53,8 @@ public class DefaultBackendAPI extends BackendAPI {
     }
 
     @Override
-    public @NotNull Menu createMenu(@NotNull Plugin owner, @NotNull String title, int rows) {
-        return new APIMenu(owner, title, rows);
+    public @NotNull Menu createMenu(@NotNull Plugin plugin, @NotNull String title, int rows) {
+        return new APIMenu(plugin, title, rows);
     }
 
     @Override
@@ -63,7 +63,9 @@ public class DefaultBackendAPI extends BackendAPI {
     }
 
     @Override
-    public void registerPlaceholder(@NotNull Plugin plugin, @NotNull String identifier, @NotNull PlaceholderReplacer placeholderReplacer) {
+    public void registerPlaceholder(@NotNull Plugin plugin,
+                                    @NotNull String identifier,
+                                    @NotNull PlaceholderReplacer placeholderReplacer) {
         PlaceholderManager.registerPluginPlaceholder(plugin, identifier, placeholderReplacer);
     }
 

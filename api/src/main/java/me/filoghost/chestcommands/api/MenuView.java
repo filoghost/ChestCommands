@@ -29,7 +29,7 @@ public interface MenuView {
      * player and you want to refresh the money placeholder instantly.
      * <p>
      * Note that {@link ClickHandler} exposes the menu view being interacted with, so you don't need to refresh all the
-     * views of a menu through {@link Menu#refreshOpenMenuViews()}.
+     * views of a menu through {@link Menu#refreshOpenViews()}.
      *
      * @since 1
      */

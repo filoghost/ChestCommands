@@ -22,8 +22,8 @@ public enum BungeeCordHook implements PluginHook {
 
     @Override
     public void setup() {
-        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(ChestCommands.getPluginInstance(), BUNGEE_CORD_CHANNEL)) {
-            Bukkit.getMessenger().registerOutgoingPluginChannel(ChestCommands.getPluginInstance(), BUNGEE_CORD_CHANNEL);
+        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL)) {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL);
         }
     }
 
@@ -50,7 +50,7 @@ public enum BungeeCordHook implements PluginHook {
             throw new AssertionError();
         }
 
-        player.sendPluginMessage(ChestCommands.getPluginInstance(), BUNGEE_CORD_CHANNEL, byteArrayOutputStream.toByteArray());
+        player.sendPluginMessage(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL, byteArrayOutputStream.toByteArray());
     }
 
 }
