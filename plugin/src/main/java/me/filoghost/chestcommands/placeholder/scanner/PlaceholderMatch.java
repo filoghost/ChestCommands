@@ -55,8 +55,8 @@ public class PlaceholderMatch {
 
         if (identifier.contains("/")) {
             String[] parts = Strings.trimmedSplit(identifier, "\\/", 2);
-            identifier = parts[0];
-            explicitPluginName = parts[1];
+            explicitPluginName = parts[0];
+            identifier = parts[1];
         }
 
         return new PlaceholderMatch(explicitPluginName, identifier, argument);
