@@ -60,6 +60,9 @@ public class PlaceholderRegistry {
         }
 
         Map<String, Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+        if (externalPlaceholdersByPlugin == null) {
+            return null;
+        }
 
         // Find exact replacer if plugin name is specified
         if (placeholderMatch.getPluginNamespace() != null) {
@@ -67,7 +70,7 @@ public class PlaceholderRegistry {
         }
 
         // Otherwise try find the first one registered
-        if (externalPlaceholdersByPlugin != null && !externalPlaceholdersByPlugin.isEmpty()) {
+        if (!externalPlaceholdersByPlugin.isEmpty()) {
             return externalPlaceholdersByPlugin.values().iterator().next();
         }
 
