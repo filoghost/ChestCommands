@@ -8,7 +8,6 @@ package me.filoghost.chestcommands.icon;
 import com.google.common.collect.ImmutableList;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
@@ -116,7 +115,14 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public @NotNull ClickResult onClick(@NotNull MenuView menuView, @NotNull Player player) {
+    public void onClick(@NotNull MenuView menuView, @NotNull Player player) {
+        ClickResult clickResult = onClickGetResult(menuView, player);
+        if (clickResult == ClickResult.CLOSE) {
+            menuView.close();
+        }
+    }
+
+    private ClickResult onClickGetResult(@NotNull MenuView menuView, @NotNull Player player) {
         if (!IconPermission.hasPermission(player, viewPermission)) {
             return ClickResult.KEEP_OPEN;
         }
@@ -142,13 +148,13 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         if (!takenAllCosts) {
             return clickResult;
         }
-        
+
         boolean hasOpenMenuAction = false;
-        
+
         if (clickActions != null) {
             for (Action action : clickActions) {
                 action.execute(player);
-                
+
                 if (action instanceof OpenMenuAction) {
                     hasOpenMenuAction = true;
                 }
@@ -157,7 +163,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 
         // Update the menu after taking requirement costs and executing all actions
         menuView.refresh();
-        
+
         // Force menu to stay open if actions open another menu
         if (hasOpenMenuAction) {
             return ClickResult.KEEP_OPEN;

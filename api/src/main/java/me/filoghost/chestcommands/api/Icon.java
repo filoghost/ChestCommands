@@ -36,9 +36,8 @@ public interface Icon {
      *
      * @param menuView the menu view associated with the player that clicked an icon
      * @param clicker  the player that clicked an icon
-     * @return the result of the interaction: whether the menu should be closed or kept open
      * @since 1
      */
-    @NotNull ClickResult onClick(@NotNull MenuView menuView, @NotNull Player clicker);
+    void onClick(@NotNull MenuView menuView, @NotNull Player clicker);
 
 }

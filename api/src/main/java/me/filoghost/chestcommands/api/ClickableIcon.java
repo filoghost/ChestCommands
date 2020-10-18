@@ -45,11 +45,9 @@ public interface ClickableIcon extends Icon {
      * @since 1
      */
     @Override
-    default @NotNull ClickResult onClick(@NotNull MenuView menuView, @NotNull Player clicker) {
+    default void onClick(@NotNull MenuView menuView, @NotNull Player clicker) {
         if (getClickHandler() != null) {
-            return getClickHandler().onClick(menuView, clicker);
-        } else {
-            return ClickResult.KEEP_OPEN;
+            getClickHandler().onClick(menuView, clicker);
         }
     }
 

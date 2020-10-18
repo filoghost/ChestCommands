@@ -6,7 +6,6 @@
 package me.filoghost.chestcommands.listener;
 
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.Menu;
 import me.filoghost.chestcommands.config.Settings;
@@ -82,14 +81,10 @@ public class InventoryListener implements Listener {
         // Only handle the click AFTER the event has finished
         Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
             try {
-                ClickResult result = icon.onClick(menuView, clicker);
-
-                if (result == ClickResult.CLOSE) {
-                    clicker.closeInventory();
-                }
+                icon.onClick(menuView, clicker);
             } catch (Throwable t) {
                 handleIconClickException(clicker, menuView.getMenu(), t);
-                clicker.closeInventory();
+                menuView.close();
             }
         });
     }

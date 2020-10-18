@@ -36,6 +36,13 @@ public interface MenuView {
     void refresh();
 
     /**
+     * Closes the current view for the viewer, if not already closed.
+     *
+     * @since 1
+     */
+    void close();
+
+    /**
      * Returns the player linked to this view.
      *
      * @return the player

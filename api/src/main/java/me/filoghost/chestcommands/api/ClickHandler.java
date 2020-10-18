@@ -21,9 +21,8 @@ public interface ClickHandler {
      *
      * @param menuView the menu view inside which the icon was clicked
      * @param clicker  the player that clicked an icon (identical to {@link MenuView#getViewer()})
-     * @return the result of this interaction: whether the menu should be closed or kept open
      * @since 1
      */
-    @NotNull ClickResult onClick(@NotNull MenuView menuView, @NotNull Player clicker);
+    void onClick(@NotNull MenuView menuView, @NotNull Player clicker);
 
 }

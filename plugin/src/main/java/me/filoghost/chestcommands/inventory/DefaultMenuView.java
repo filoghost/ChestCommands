@@ -43,6 +43,13 @@ public class DefaultMenuView implements MenuView {
         }
     }
 
+    @Override
+    public void close() {
+        if (viewer.isOnline()) {
+            viewer.closeInventory();
+        }
+    }
+
     public void open() {
         viewer.openInventory(bukkitInventory.getInventory());
     }

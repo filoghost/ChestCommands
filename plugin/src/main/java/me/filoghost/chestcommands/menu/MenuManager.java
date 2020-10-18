@@ -90,8 +90,9 @@ public class MenuManager {
 
     public static void closeAllOpenMenuViews() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (getOpenMenuView(player) != null) {
-                player.closeInventory();
+            DefaultMenuView openMenuView = getOpenMenuView(player);
+            if (openMenuView != null) {
+                openMenuView.close();
             }
         }
     }
