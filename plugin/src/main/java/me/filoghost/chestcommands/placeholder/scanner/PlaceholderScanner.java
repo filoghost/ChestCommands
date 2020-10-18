@@ -74,7 +74,7 @@ public class PlaceholderScanner {
                     // If the placeholder is "{player}" then the identifier is "player"
                     String placeholderContent = input.substring(placeholderStartIndex + 1, index); // Skip the opening tag
                     matchCallback.accept(PlaceholderMatch.parse(placeholderContent));
-                    if (!stopExecution) {
+                    if (stopExecution) {
                         return;
                     }
 
