@@ -26,14 +26,14 @@ import org.jetbrains.annotations.NotNull;
 public class DefaultBackendAPI extends BackendAPI {
 
     @Override
-    public boolean pluginMenuExists(@NotNull String menuFileName) {
+    public boolean isInternalMenuLoaded(@NotNull String menuFileName) {
         Preconditions.notNull(menuFileName, "menuFileName");
 
         return MenuManager.getMenuByFileName(menuFileName) != null;
     }
 
     @Override
-    public boolean openPluginMenu(@NotNull Player player, @NotNull String menuFileName) {
+    public boolean openInternalMenu(@NotNull Player player, @NotNull String menuFileName) {
         Preconditions.notNull(player, "player");
         Preconditions.notNull(menuFileName, "menuFileName");
 

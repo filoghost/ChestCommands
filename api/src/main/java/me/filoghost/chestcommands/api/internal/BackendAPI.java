@@ -38,9 +38,9 @@ public abstract class BackendAPI {
         return implementation;
     }
     
-    public abstract boolean pluginMenuExists(@NotNull String menuFileName);
+    public abstract boolean isInternalMenuLoaded(@NotNull String menuFileName);
 
-    public abstract boolean openPluginMenu(@NotNull Player player, @NotNull String menuFileName);
+    public abstract boolean openInternalMenu(@NotNull Player player, @NotNull String menuFileName);
 
     public abstract @NotNull Menu createMenu(@NotNull Plugin plugin, @NotNull String title, int rows);
     

@@ -104,8 +104,8 @@ public class ChestCommandsAPI {
      * @return true if the menu exists, false otherwise
      * @since 1
      */
-    public static boolean pluginMenuExists(@NotNull String menuFileName) {
-        return BackendAPI.getImplementation().pluginMenuExists(menuFileName);
+    public static boolean isInternalMenuLoaded(@NotNull String menuFileName) {
+        return BackendAPI.getImplementation().isInternalMenuLoaded(menuFileName);
     }
 
 
@@ -119,8 +119,8 @@ public class ChestCommandsAPI {
      * @return true if the menu was found and opened successfully, false otherwise
      * @since 1
      */
-    public static boolean openPluginMenu(@NotNull Player player, @NotNull String menuFileName) {
-        return BackendAPI.getImplementation().openPluginMenu(player, menuFileName);
+    public static boolean openInternalMenu(@NotNull Player player, @NotNull String menuFileName) {
+        return BackendAPI.getImplementation().openInternalMenu(player, menuFileName);
     }
 
 }
