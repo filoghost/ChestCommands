@@ -197,6 +197,10 @@ public class MenuParser {
             }
 
             ConfigSection iconSection = config.getConfigSection(iconSectionName);
+            if (iconSection == null) {
+                continue;
+            }
+
             IconSettings iconSettings = new IconSettings(config.getSourceFile(), iconSectionName);
             iconSettings.loadFrom(iconSection, errorCollector);
             iconSettingsList.add(iconSettings);
