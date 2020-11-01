@@ -18,8 +18,8 @@ public class Settings implements MappedConfig {
 
     public static String default_color__name = "&f";
     public static String default_color__lore = "&7";
-    public static boolean update_notifications = true;
     public static int anti_click_spam_delay = 200;
+    public static boolean update_notifications = true;
 
     @Override
     public List<String> getHeader() {
