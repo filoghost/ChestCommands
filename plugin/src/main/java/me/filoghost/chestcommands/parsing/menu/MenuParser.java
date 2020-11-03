@@ -47,41 +47,47 @@ public class MenuParser {
 
 
     private static void tryAddIconToMenu(InternalMenu menu, IconSettings iconSettings, ErrorCollector errorCollector) {
+        if (iconSettings.isMissingAttribute(AttributeType.POSITION_X)) {
+            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_X));
+        }
+        if (iconSettings.isMissingAttribute(AttributeType.POSITION_Y)) {
+            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
+        }
+        if (iconSettings.isMissingAttribute(AttributeType.MATERIAL)) {
+            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
+        }
+
         PositionAttribute positionX = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_X);
         PositionAttribute positionY = (PositionAttribute) iconSettings.getAttributeValue(AttributeType.POSITION_Y);
 
-        if (positionX == null) {
-            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_X));
-            return;
-        }
-
-        if (positionY == null) {
-            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
+        if (positionX == null || positionY == null) {
             return;
         }
 
         int row = positionY.getPosition() - 1;
         int column = positionX.getPosition() - 1;
 
+        boolean invalidPosition = false;
+
         if (row < 0 || row >= menu.getRows()) {
             errorCollector.add(
                     Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_Y),
                     "it must be between 1 and " + menu.getRows());
-            return;
+            invalidPosition = true;
         }
         if (column < 0 || column >= menu.getColumns()) {
             errorCollector.add(
                     Errors.Menu.invalidAttribute(iconSettings, AttributeType.POSITION_X),
                     "it must be between 1 and " + menu.getColumns());
+            invalidPosition = true;
+        }
+
+        if (invalidPosition) {
             return;
         }
 
         if (menu.getIcon(row, column) != null) {
             errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
-        }
-
-        if (iconSettings.getAttributeValue(AttributeType.MATERIAL) == null) {
-            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
         }
 
         menu.setIcon(row, column, iconSettings.createIcon());
