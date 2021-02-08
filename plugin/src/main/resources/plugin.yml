@@ -3,7 +3,7 @@ main: me.filoghost.chestcommands.ChestCommands
 version: ${pluginVersion}
 api-version: 1.13
 
-softdepend: [Vault, BarAPI, PlaceholderAPI]
+softdepend: [Vault, PlayerPoints, BarAPI, PlaceholderAPI]
 
 commands:
    chestcommands:

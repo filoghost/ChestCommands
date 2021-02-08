@@ -27,6 +27,7 @@ import me.filoghost.chestcommands.attribute.PriceAttribute;
 import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
 import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
 import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
+import me.filoghost.chestcommands.attribute.PointsAttribute;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.fcommons.config.ConfigValue;
 import me.filoghost.fcommons.config.ConfigValueType;
@@ -50,6 +51,7 @@ public enum AttributeType {
     BANNER_COLOR("BANNER-COLOR", ConfigValueType.STRING, BannerColorAttribute::new),
     BANNER_PATTERNS("BANNER-PATTERNS", ConfigValueType.STRING_LIST, BannerPatternsAttribute::new),
     PRICE("PRICE", ConfigValueType.DOUBLE, PriceAttribute::new),
+    POINTS("POINTS", ConfigValueType.INTEGER, PointsAttribute::new),
     EXP_LEVELS("LEVELS", ConfigValueType.INTEGER, ExpLevelsAttribute::new),
     CLICK_PERMISSION("PERMISSION", ConfigValueType.STRING, ClickPermissionAttribute::new),
     CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ConfigValueType.STRING, ClickPermissionMessageAttribute::new),
