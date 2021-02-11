@@ -8,7 +8,6 @@ package me.filoghost.chestcommands.icon.requirement;
 import com.google.common.base.Preconditions;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.hook.PlayerPointsHook;
-import me.filoghost.chestcommands.hook.VaultEconomyHook;
 import me.filoghost.chestcommands.logging.Errors;
 import org.bukkit.entity.Player;
 
@@ -23,7 +22,7 @@ public class RequiredPoints implements Requirement {
 
     @Override
     public boolean hasCost(Player player) {
-        if (!VaultEconomyHook.INSTANCE.isEnabled()) {
+        if (!PlayerPointsHook.INSTANCE.isEnabled()) {
             player.sendMessage(Errors.User.configurationError(
                     "This item requires player points, but PlayerPoints plugin was not found. "
                             + "For security, the action has been blocked"));
