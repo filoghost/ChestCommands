@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) filoghost and contributors
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 package me.filoghost.chestcommands.hook;
 
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -7,7 +12,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
-public class PlayerPointsHook implements PluginHook {
+public enum PlayerPointsHook implements PluginHook {
+
+    INSTANCE;
 
     private PlayerPointsAPI pointsApi;
 

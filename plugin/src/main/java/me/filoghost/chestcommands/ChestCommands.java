@@ -14,6 +14,7 @@ import me.filoghost.chestcommands.hook.BarAPIHook;
 import me.filoghost.chestcommands.hook.BungeeCordHook;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.hook.VaultEconomyHook;
+import me.filoghost.chestcommands.hook.PlayerPointsHook;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.UpgradesExecutor;
 import me.filoghost.chestcommands.listener.CommandListener;
@@ -82,6 +83,7 @@ public class ChestCommands extends BaseJavaPlugin {
         BackendAPI.setImplementation(new DefaultBackendAPI());
 
         VaultEconomyHook.INSTANCE.setup();
+        PlayerPointsHook.INSTANCE.setup();
         BarAPIHook.INSTANCE.setup();
         PlaceholderAPIHook.INSTANCE.setup();
         BungeeCordHook.INSTANCE.setup();
