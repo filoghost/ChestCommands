@@ -12,6 +12,8 @@ import me.filoghost.chestcommands.attribute.BannerColorAttribute;
 import me.filoghost.chestcommands.attribute.BannerPatternsAttribute;
 import me.filoghost.chestcommands.attribute.ClickPermissionAttribute;
 import me.filoghost.chestcommands.attribute.ClickPermissionMessageAttribute;
+import me.filoghost.chestcommands.attribute.ClickPermissionsAttribute;
+import me.filoghost.chestcommands.attribute.ClickPermissionMessagesAttribute;
 import me.filoghost.chestcommands.attribute.DurabilityAttribute;
 import me.filoghost.chestcommands.attribute.EnchantmentsAttribute;
 import me.filoghost.chestcommands.attribute.ExpLevelsAttribute;
@@ -53,6 +55,8 @@ public enum AttributeType {
     EXP_LEVELS("LEVELS", ConfigValueType.INTEGER, ExpLevelsAttribute::new),
     CLICK_PERMISSION("PERMISSION", ConfigValueType.STRING, ClickPermissionAttribute::new),
     CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ConfigValueType.STRING, ClickPermissionMessageAttribute::new),
+    CLICK_PERMISSIONS("PERMISSIONS", ConfigValueType.STRING_LIST, ClickPermissionsAttribute::new),
+    CLICK_PERMISSION_MESSAGES("PERMISSION-MESSAGES", ConfigValueType.STRING_LIST, ClickPermissionMessagesAttribute::new),
     VIEW_PERMISSION("VIEW-PERMISSION", ConfigValueType.STRING, ViewPermissionAttribute::new),
     KEEP_OPEN("KEEP-OPEN", ConfigValueType.BOOLEAN, KeepOpenAttribute::new),
     ACTIONS("ACTIONS", ConfigValueType.STRING_LIST, ActionsAttribute::new),
