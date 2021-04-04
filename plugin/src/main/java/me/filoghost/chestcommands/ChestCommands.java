@@ -58,6 +58,8 @@ public class ChestCommands extends BaseJavaPlugin {
 
     @Override
     protected void onCheckedEnable() throws PluginEnableException {
+        Log.setLogger(getLogger());
+        
         if (!ReflectionUtils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
             if (Bukkit.getVersion().contains("(MC: 1.8)")) {
                 throw new PluginEnableException("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
@@ -75,7 +77,6 @@ public class ChestCommands extends BaseJavaPlugin {
 
         pluginInstance = this;
         dataFolderPath = getDataFolder().toPath();
-        Log.setLogger(getLogger());
         configManager = new ConfigManager(getDataFolderPath());
         placeholders = new CustomPlaceholders();
 
