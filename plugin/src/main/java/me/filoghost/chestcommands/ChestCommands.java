@@ -69,8 +69,9 @@ public class ChestCommands extends BaseJavaPlugin {
         }
 
         if (pluginInstance != null || System.getProperty("ChestCommandsLoaded") != null) {
-            Log.warning("Please do not use /reload or plugin reloaders. Use the command \"/cc reload\" instead.");
-            return;
+            throw new PluginEnableException("External plugin reloading is not supported:"
+                    + " avoid using /reload or plugin reloaders, and use the command \"/cc reload\" instead."
+                    + " Fully restart the server to enable ChestCommands again.");
         }
 
         System.setProperty("ChestCommandsLoaded", "true");
