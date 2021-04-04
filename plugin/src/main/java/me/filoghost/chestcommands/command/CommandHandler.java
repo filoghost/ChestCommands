@@ -150,9 +150,7 @@ public class CommandHandler extends MultiCommandManager {
             return;
         }
 
-        if (sender.getName().equalsIgnoreCase(target.getName())) {
-            sender.sendMessage(ChatColor.GREEN + "Opening the menu " + menuName + ".");
-        } else {
+        if (!sender.getName().equalsIgnoreCase(target.getName())) {
             sender.sendMessage(ChatColor.GREEN + "Opening the menu " + menuName + " to " + target.getName() + ".");
         }
 

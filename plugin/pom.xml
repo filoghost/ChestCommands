@@ -52,6 +52,14 @@
             <groupId>me.filoghost.fcommons</groupId>
             <artifactId>fcommons</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>PlayerPoints</artifactId>
+            <version>2.1.5-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../Libs/PlayerPoints.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>

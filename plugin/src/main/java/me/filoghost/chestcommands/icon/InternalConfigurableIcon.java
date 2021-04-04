@@ -12,6 +12,7 @@ import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
 import me.filoghost.chestcommands.icon.requirement.RequiredMoney;
+import me.filoghost.chestcommands.icon.requirement.RequiredPoints;
 import me.filoghost.chestcommands.icon.requirement.Requirement;
 import me.filoghost.chestcommands.icon.requirement.item.RequiredItem;
 import me.filoghost.chestcommands.icon.requirement.item.RequiredItems;
@@ -33,6 +34,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     private String noClickPermissionMessage;
 
     private RequiredMoney requiredMoney;
+    private RequiredPoints requiredPoints;
     private RequiredExpLevel requiredExpLevel;
     private RequiredItems requiredItems;
 
@@ -70,6 +72,14 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
             this.requiredMoney = new RequiredMoney(requiredMoney);
         } else {
             this.requiredMoney = null;
+        }
+    }
+
+    public void setRequiredPoints(int requiredPoints) {
+        if (requiredPoints > 0) {
+            this.requiredPoints = new RequiredPoints(requiredPoints);
+        } else {
+            this.requiredPoints = null;
         }
     }
 
@@ -137,7 +147,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         }
 
         // Check all the requirements
-        Requirement[] requirements = {requiredMoney, requiredExpLevel, requiredItems};
+        Requirement[] requirements = {requiredMoney, requiredPoints, requiredExpLevel, requiredItems};
         boolean hasAllRequirements = Requirement.hasAllCosts(player, requirements);
         if (!hasAllRequirements) {
             return clickResult;
