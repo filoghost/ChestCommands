@@ -145,7 +145,7 @@ public class ChestCommands extends FCommonsPlugin {
         MenuManager.reset();
         boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
         try {
-            Files.createDirectories(configManager.getRootDataFolder().toRealPath());
+            Files.createDirectories(configManager.getRootDataFolder());
         } catch (IOException e) {
             errorCollector.add(e, Errors.Config.createDataFolderIOException);
             return errorCollector;
