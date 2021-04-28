@@ -10,6 +10,7 @@ import me.filoghost.chestcommands.attribute.IconAttribute;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.fcommons.config.ConfigPath;
 import me.filoghost.fcommons.config.ConfigSection;
 import me.filoghost.fcommons.config.ConfigValue;
 import me.filoghost.fcommons.config.exception.ConfigValueException;
@@ -20,18 +21,19 @@ import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class IconSettings {
 
     private final Path menuFile;
-    private final String iconName;
+    private final ConfigPath configPath;
     private final Map<AttributeType, IconAttribute> validAttributes;
     private final Set<AttributeType> invalidAttributes;
 
-    public IconSettings(Path menuFile, String iconName) {
+    public IconSettings(Path menuFile, ConfigPath configPath) {
         this.menuFile = menuFile;
-        this.iconName = iconName;
+        this.configPath = configPath;
         this.validAttributes = new EnumMap<>(AttributeType.class);
         this.invalidAttributes = new HashSet<>();
     }
@@ -55,24 +57,25 @@ public class IconSettings {
     }
 
     public void loadFrom(ConfigSection config, ErrorCollector errorCollector) {
-        for (String attributeName : config.getKeys()) {
+        for (Entry<ConfigPath, ConfigValue> entry : config.toMap().entrySet()) {
+            ConfigPath configKey = entry.getKey();
             AttributeType attributeType = null;
             try {
-                attributeType = AttributeType.fromAttributeName(attributeName);
+                attributeType = AttributeType.fromConfigKey(configKey);
                 if (attributeType == null) {
                     throw new ParseException(Errors.Parsing.unknownAttribute);
                 }
 
                 AttributeErrorHandler errorHandler = (String listElement, ParseException e) -> {
-                    errorCollector.add(e, Errors.Menu.invalidAttributeListElement(this, attributeName, listElement));
+                    errorCollector.add(e, Errors.Menu.invalidAttributeListElement(this, configKey, listElement));
                 };
 
-                ConfigValue configValue = config.get(attributeName);
+                ConfigValue configValue = config.get(configKey);
                 IconAttribute iconAttribute = attributeType.getParser().parse(configValue, errorHandler);
                 validAttributes.put(attributeType, iconAttribute);
 
             } catch (ParseException | ConfigValueException e) {
-                errorCollector.add(e, Errors.Menu.invalidAttribute(this, attributeName));
+                errorCollector.add(e, Errors.Menu.invalidAttribute(this, configKey));
                 if (attributeType != null) {
                     invalidAttributes.add(attributeType);
                 }
@@ -84,8 +87,8 @@ public class IconSettings {
         return menuFile;
     }
 
-    public String getIconName() {
-        return iconName;
+    public ConfigPath getConfigPath() {
+        return configPath;
     }
 
 }

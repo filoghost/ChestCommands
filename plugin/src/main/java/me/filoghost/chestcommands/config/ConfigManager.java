@@ -41,19 +41,25 @@ public class ConfigManager extends BaseConfigManager {
     }
 
     public void tryLoadSettings(ErrorCollector errorCollector) {
+        Settings settings;
         try {
-            settingsConfigLoader.init();
+            settings = settingsConfigLoader.init();
         } catch (ConfigException e) {
             logConfigInitException(errorCollector, settingsConfigLoader.getFile(), e);
+            settings = new Settings();
         }
+        Settings.setInstance(settings);
     }
 
     public void tryLoadLang(ErrorCollector errorCollector) {
+        Lang lang;
         try {
-            langConfigLoader.init();
+            lang = langConfigLoader.init();
         } catch (ConfigException e) {
             logConfigInitException(errorCollector, langConfigLoader.getFile(), e);
+            lang = new Lang();
         }
+        Lang.setInstance(lang);
     }
 
     public CustomPlaceholders tryLoadCustomPlaceholders(ErrorCollector errorCollector) {

@@ -25,14 +25,14 @@ public class PlaceholderStringList {
 
         // Replace static placeholders only once, if present
         if (PlaceholderManager.hasStaticPlaceholders(originalList)) {
-            this.listWithStaticPlaceholders = CollectionUtils.transformImmutable(originalList, PlaceholderManager::replaceStaticPlaceholders);
+            this.listWithStaticPlaceholders = CollectionUtils.toImmutableList(originalList, PlaceholderManager::replaceStaticPlaceholders);
         } else {
             this.listWithStaticPlaceholders = originalList;
         }
 
         this.hasDynamicPlaceholders = PlaceholderManager.hasDynamicPlaceholders(listWithStaticPlaceholders);
         if (hasDynamicPlaceholders) {
-            this.placeholderStringList = CollectionUtils.transformImmutable(listWithStaticPlaceholders, PlaceholderString::of);
+            this.placeholderStringList = CollectionUtils.toImmutableList(listWithStaticPlaceholders, PlaceholderString::of);
         } else {
             this.placeholderStringList = null;
         }
@@ -44,7 +44,7 @@ public class PlaceholderStringList {
 
     public ImmutableList<String> getValue(Player player) {
         if (hasDynamicPlaceholders) {
-            return CollectionUtils.transformImmutable(placeholderStringList, element -> element.getValue(player));
+            return CollectionUtils.toImmutableList(placeholderStringList, element -> element.getValue(player));
         } else {
             return listWithStaticPlaceholders;
         }

@@ -10,7 +10,9 @@ import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuOpenItem;
+import me.filoghost.fcommons.collection.CaseInsensitiveHashMap;
 import me.filoghost.fcommons.collection.CaseInsensitiveMap;
+import me.filoghost.fcommons.collection.CaseInsensitiveString;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,14 +23,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MenuManager {
 
-    private static final Map<String, InternalMenu> menusByFile = new CaseInsensitiveMap<>();
-    private static final Map<String, InternalMenu> menusByOpenCommand = new CaseInsensitiveMap<>();
+    private static final CaseInsensitiveMap<InternalMenu> menusByFile = new CaseInsensitiveHashMap<>();
+    private static final CaseInsensitiveMap<InternalMenu> menusByOpenCommand = new CaseInsensitiveHashMap<>();
     private static final Map<MenuOpenItem, InternalMenu> menusByOpenItem = new HashMap<>();
 
     public static void reset() {
@@ -80,8 +81,8 @@ public class MenuManager {
         return menusByOpenCommand.get(openCommand);
     }
 
-    public static Collection<String> getMenuFileNames() {
-        return Collections.unmodifiableCollection(menusByFile.keySet());
+    public static Collection<CaseInsensitiveString> getMenuFileNames() {
+        return menusByFile.keySet();
     }
 
     public static boolean isMenuInventory(Inventory inventory) {

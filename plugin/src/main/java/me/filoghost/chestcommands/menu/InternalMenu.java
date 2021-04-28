@@ -39,7 +39,7 @@ public class InternalMenu extends BaseMenu {
     }
 
     public void setOpenActions(List<Action> openAction) {
-        this.openActions = CollectionUtils.immutableCopy(openAction);
+        this.openActions = CollectionUtils.newImmutableList(openAction);
     }
 
     public String getOpenPermission() {
@@ -79,7 +79,7 @@ public class InternalMenu extends BaseMenu {
     }
 
     public void sendNoOpenPermissionMessage(CommandSender sender) {
-        String noPermMessage = Lang.no_open_permission;
+        String noPermMessage = Lang.get().no_open_permission;
         if (noPermMessage != null && !noPermMessage.isEmpty()) {
             sender.sendMessage(noPermMessage.replace("{permission}", this.openPermission));
         }

@@ -8,20 +8,19 @@ package me.filoghost.chestcommands.placeholder;
 import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
+import me.filoghost.fcommons.collection.CaseInsensitiveHashMap;
+import me.filoghost.fcommons.collection.CaseInsensitiveLinkedHashMap;
 import me.filoghost.fcommons.collection.CaseInsensitiveMap;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class PlaceholderRegistry {
 
     // <identifier, placeholder>
-    private final Map<String, Placeholder> internalPlaceholders = new CaseInsensitiveMap<>();
+    private final CaseInsensitiveMap<Placeholder> internalPlaceholders = new CaseInsensitiveHashMap<>();
 
     // <identifier, <pluginName, placeholder>>
-    private final Map<String, Map<String, Placeholder>> externalPlaceholders = new CaseInsensitiveMap<>();
+    private final CaseInsensitiveMap<CaseInsensitiveMap<Placeholder>> externalPlaceholders = new CaseInsensitiveHashMap<>();
 
     public void registerInternalPlaceholder(String identifier, PlaceholderReplacer replacer) {
         internalPlaceholders.put(identifier, new Placeholder(ChestCommands.getInstance(), replacer));
@@ -29,12 +28,12 @@ public class PlaceholderRegistry {
 
     public void registerExternalPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
         externalPlaceholders
-                .computeIfAbsent(identifier, key -> new CaseInsensitiveMap<>(new LinkedHashMap<>()))
+                .computeIfAbsent(identifier, CaseInsensitiveLinkedHashMap::new)
                 .put(plugin.getName(), new Placeholder(plugin, placeholderReplacer));
     }
 
     public boolean unregisterExternalPlaceholder(Plugin plugin, String identifier) {
-        Map<String, Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+        CaseInsensitiveMap<Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
 
         if (externalPlaceholdersByPlugin == null) {
             return false;
@@ -59,7 +58,7 @@ public class PlaceholderRegistry {
             }
         }
 
-        Map<String, Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+        CaseInsensitiveMap<Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
         if (externalPlaceholdersByPlugin == null) {
             return null;
         }

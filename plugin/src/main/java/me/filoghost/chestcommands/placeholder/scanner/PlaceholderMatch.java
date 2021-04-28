@@ -46,7 +46,7 @@ public class PlaceholderMatch {
         String argument = null;
 
         if (placeholderContent.contains(":")) {
-            String[] parts = Strings.trimmedSplit(placeholderContent, ":", 2);
+            String[] parts = Strings.splitAndTrim(placeholderContent, ":", 2);
             identifier = parts[0];
             argument = parts[1];
         } else {
@@ -54,7 +54,7 @@ public class PlaceholderMatch {
         }
 
         if (identifier.contains("/")) {
-            String[] parts = Strings.trimmedSplit(identifier, "\\/", 2);
+            String[] parts = Strings.splitAndTrim(identifier, "/", 2);
             explicitPluginName = parts[0];
             identifier = parts[1];
         }

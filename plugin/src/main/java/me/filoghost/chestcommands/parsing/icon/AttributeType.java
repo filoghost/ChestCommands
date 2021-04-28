@@ -28,8 +28,9 @@ import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
 import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
 import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
 import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.fcommons.config.ConfigPath;
+import me.filoghost.fcommons.config.ConfigType;
 import me.filoghost.fcommons.config.ConfigValue;
-import me.filoghost.fcommons.config.ConfigValueType;
 import me.filoghost.fcommons.config.exception.ConfigValueException;
 
 import java.util.HashMap;
@@ -37,56 +38,56 @@ import java.util.Map;
 
 public enum AttributeType {
 
-    POSITION_X("POSITION-X", ConfigValueType.INTEGER, PositionAttribute::new),
-    POSITION_Y("POSITION-Y", ConfigValueType.INTEGER, PositionAttribute::new),
-    MATERIAL("MATERIAL", ConfigValueType.STRING, MaterialAttribute::new),
-    DURABILITY("DURABILITY", ConfigValueType.SHORT, DurabilityAttribute::new),
-    AMOUNT("AMOUNT", ConfigValueType.INTEGER, AmountAttribute::new),
-    NAME("NAME", ConfigValueType.STRING, NameAttribute::new),
-    LORE("LORE", ConfigValueType.STRING_LIST, LoreAttribute::new),
-    NBT_DATA("NBT-DATA", ConfigValueType.STRING, NBTDataAttribute::new),
-    LEATHER_COLOR("COLOR", ConfigValueType.STRING, LeatherColorAttribute::new),
-    SKULL_OWNER("SKULL-OWNER", ConfigValueType.STRING, SkullOwnerAttribute::new),
-    BANNER_COLOR("BANNER-COLOR", ConfigValueType.STRING, BannerColorAttribute::new),
-    BANNER_PATTERNS("BANNER-PATTERNS", ConfigValueType.STRING_LIST, BannerPatternsAttribute::new),
-    PRICE("PRICE", ConfigValueType.DOUBLE, PriceAttribute::new),
-    EXP_LEVELS("LEVELS", ConfigValueType.INTEGER, ExpLevelsAttribute::new),
-    CLICK_PERMISSION("PERMISSION", ConfigValueType.STRING, ClickPermissionAttribute::new),
-    CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ConfigValueType.STRING, ClickPermissionMessageAttribute::new),
-    VIEW_PERMISSION("VIEW-PERMISSION", ConfigValueType.STRING, ViewPermissionAttribute::new),
-    KEEP_OPEN("KEEP-OPEN", ConfigValueType.BOOLEAN, KeepOpenAttribute::new),
-    ACTIONS("ACTIONS", ConfigValueType.STRING_LIST, ActionsAttribute::new),
-    ENCHANTMENTS("ENCHANTMENTS", ConfigValueType.STRING_LIST, EnchantmentsAttribute::new),
-    REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigValueType.STRING_LIST, RequiredItemsAttribute::new);
+    POSITION_X("POSITION-X", ConfigType.INTEGER, PositionAttribute::new),
+    POSITION_Y("POSITION-Y", ConfigType.INTEGER, PositionAttribute::new),
+    MATERIAL("MATERIAL", ConfigType.STRING, MaterialAttribute::new),
+    DURABILITY("DURABILITY", ConfigType.SHORT, DurabilityAttribute::new),
+    AMOUNT("AMOUNT", ConfigType.INTEGER, AmountAttribute::new),
+    NAME("NAME", ConfigType.STRING, NameAttribute::new),
+    LORE("LORE", ConfigType.STRING_LIST, LoreAttribute::new),
+    NBT_DATA("NBT-DATA", ConfigType.STRING, NBTDataAttribute::new),
+    LEATHER_COLOR("COLOR", ConfigType.STRING, LeatherColorAttribute::new),
+    SKULL_OWNER("SKULL-OWNER", ConfigType.STRING, SkullOwnerAttribute::new),
+    BANNER_COLOR("BANNER-COLOR", ConfigType.STRING, BannerColorAttribute::new),
+    BANNER_PATTERNS("BANNER-PATTERNS", ConfigType.STRING_LIST, BannerPatternsAttribute::new),
+    PRICE("PRICE", ConfigType.DOUBLE, PriceAttribute::new),
+    EXP_LEVELS("LEVELS", ConfigType.INTEGER, ExpLevelsAttribute::new),
+    CLICK_PERMISSION("PERMISSION", ConfigType.STRING, ClickPermissionAttribute::new),
+    CLICK_PERMISSION_MESSAGE("PERMISSION-MESSAGE", ConfigType.STRING, ClickPermissionMessageAttribute::new),
+    VIEW_PERMISSION("VIEW-PERMISSION", ConfigType.STRING, ViewPermissionAttribute::new),
+    KEEP_OPEN("KEEP-OPEN", ConfigType.BOOLEAN, KeepOpenAttribute::new),
+    ACTIONS("ACTIONS", ConfigType.STRING_LIST, ActionsAttribute::new),
+    ENCHANTMENTS("ENCHANTMENTS", ConfigType.STRING_LIST, EnchantmentsAttribute::new),
+    REQUIRED_ITEMS("REQUIRED-ITEMS", ConfigType.STRING_LIST, RequiredItemsAttribute::new);
 
-    private static final Map<String, AttributeType> parsersByAttributeName;
+    private static final Map<ConfigPath, AttributeType> attributeTypeByConfigKey;
     static {
-        parsersByAttributeName = new HashMap<>();
+        attributeTypeByConfigKey = new HashMap<>();
         for (AttributeType attributeParser : values()) {
-            parsersByAttributeName.put(attributeParser.getAttributeName(), attributeParser);
+            attributeTypeByConfigKey.put(attributeParser.getConfigKey(), attributeParser);
         }
     }
 
-    private final String attributeName;
+    private final ConfigPath configKey;
     private final AttributeParser attributeParser;
 
-    <V> AttributeType(String attributeName, ConfigValueType<V> configValueType, AttributeFactory<V, ?> attributeFactory) {
-        this.attributeName = attributeName;
+    <V> AttributeType(String configKey, ConfigType<V> configType, AttributeFactory<V, ?> attributeFactory) {
+        this.configKey = ConfigPath.literal(configKey);
         this.attributeParser = (ConfigValue configValue, AttributeErrorHandler errorHandler) -> {
-            return attributeFactory.create(configValue.asRequired(configValueType), errorHandler);
+            return attributeFactory.create(configValue.asRequired(configType), errorHandler);
         };
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public ConfigPath getConfigKey() {
+        return configKey;
     }
 
     public AttributeParser getParser() {
         return attributeParser;
     }
 
-    public static AttributeType fromAttributeName(String attributeName) {
-        return parsersByAttributeName.get(attributeName);
+    public static AttributeType fromConfigKey(ConfigPath configKey) {
+        return attributeTypeByConfigKey.get(configKey);
     }
 
 

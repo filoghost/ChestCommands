@@ -68,7 +68,7 @@ public class InventoryListener implements Listener {
 
         Long cooldownUntil = antiClickSpam.get(clicker);
         long now = System.currentTimeMillis();
-        int minDelay = Settings.anti_click_spam_delay;
+        int minDelay = Settings.get().anti_click_spam_delay;
 
         if (minDelay > 0) {
             if (cooldownUntil != null && cooldownUntil > now) {

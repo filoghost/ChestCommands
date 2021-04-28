@@ -22,13 +22,17 @@ public class V4_0_MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
         replaceSubNode("open-action", "open-actions");
         replaceSubNode("id", "material");
 
-        replaceSubNode("ID", AttributeType.MATERIAL.getAttributeName());
-        replaceSubNode("DATA-VALUE", AttributeType.DURABILITY.getAttributeName());
-        replaceSubNode("NBT", AttributeType.NBT_DATA.getAttributeName());
-        replaceSubNode("ENCHANTMENT", AttributeType.ENCHANTMENTS.getAttributeName());
-        replaceSubNode("COMMAND", AttributeType.ACTIONS.getAttributeName());
-        replaceSubNode("COMMANDS", AttributeType.ACTIONS.getAttributeName());
-        replaceSubNode("REQUIRED-ITEM", AttributeType.REQUIRED_ITEMS.getAttributeName());
+        replaceOldAttribute("ID", AttributeType.MATERIAL);
+        replaceOldAttribute("DATA-VALUE", AttributeType.DURABILITY);
+        replaceOldAttribute("NBT", AttributeType.NBT_DATA);
+        replaceOldAttribute("ENCHANTMENT", AttributeType.ENCHANTMENTS);
+        replaceOldAttribute("COMMAND", AttributeType.ACTIONS);
+        replaceOldAttribute("COMMANDS", AttributeType.ACTIONS);
+        replaceOldAttribute("REQUIRED-ITEM", AttributeType.REQUIRED_ITEMS);
+    }
+
+    private void replaceOldAttribute(String oldNode, AttributeType newAttribute) {
+        replaceSubNode(oldNode, newAttribute.getConfigKey().asRawKey());
     }
 
 }

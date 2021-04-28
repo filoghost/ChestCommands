@@ -9,6 +9,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
 import me.filoghost.chestcommands.parsing.icon.IconSettings;
 import me.filoghost.fcommons.config.ConfigErrors;
+import me.filoghost.fcommons.config.ConfigPath;
 import org.bukkit.ChatColor;
 
 import java.nio.file.Path;
@@ -145,11 +146,11 @@ public class Errors {
 
     public static class Menu {
 
-        public static String invalidSetting(Path menuFile, String invalidSetting) {
+        public static String invalidSetting(Path menuFile, ConfigPath invalidSetting) {
             return menuError(menuFile, "has an invalid menu setting \"" + invalidSetting + "\"");
         }
 
-        public static String missingSetting(Path menuFile, String missingSetting) {
+        public static String missingSetting(Path menuFile, ConfigPath missingSetting) {
             return menuError(menuFile, "is missing the menu setting \"" + missingSetting + "\"");
         }
 
@@ -157,7 +158,7 @@ public class Errors {
             return menuError(menuFile, "is missing the menu setting section");
         }
 
-        public static String invalidSettingListElement(Path menuFile, String invalidSetting, String listElement) {
+        public static String invalidSettingListElement(Path menuFile, ConfigPath invalidSetting, String listElement) {
             return menuError(menuFile,
                     "contains an invalid list element (\"" + listElement + "\") "
                             + "in the menu setting \"" + invalidSetting + "\"");
@@ -168,21 +169,21 @@ public class Errors {
         }
 
         public static String invalidAttribute(IconSettings iconSettings, AttributeType attributeType) {
-            return invalidAttribute(iconSettings, attributeType.getAttributeName());
+            return invalidAttribute(iconSettings, attributeType.getConfigKey());
         }
 
-        public static String invalidAttribute(IconSettings iconSettings, String attributeName) {
-            return iconError(iconSettings, "has an invalid attribute \"" + attributeName + "\"");
+        public static String invalidAttribute(IconSettings iconSettings, ConfigPath attributeConfigKey) {
+            return iconError(iconSettings, "has an invalid attribute \"" + attributeConfigKey + "\"");
         }
 
         public static String missingAttribute(IconSettings iconSettings, AttributeType attributeType) {
-            return iconError(iconSettings, "is missing the attribute \"" + attributeType.getAttributeName() + "\"");
+            return iconError(iconSettings, "is missing the attribute \"" + attributeType.getConfigKey() + "\"");
         }
 
-        public static String invalidAttributeListElement(IconSettings iconSettings, String attributeName, String listElement) {
+        public static String invalidAttributeListElement(IconSettings iconSettings, ConfigPath attributeConfigKey, String listElement) {
             return iconError(iconSettings,
                     "contains an invalid list element (\"" + listElement + "\") "
-                    + "in the attribute \"" + attributeName + "\"");
+                    + "in the attribute \"" + attributeConfigKey + "\"");
         }
 
         public static String iconOverridesAnother(IconSettings iconSettings) {
@@ -190,7 +191,7 @@ public class Errors {
         }
 
         private static String iconError(IconSettings iconSettings, String errorMessage) {
-            return "the icon \"" + iconSettings.getIconName() + "\" in the menu \""
+            return "the icon \"" + iconSettings.getConfigPath() + "\" in the menu \""
                     + formatPath(iconSettings.getMenuFile()) + "\" " + errorMessage;
         }
 

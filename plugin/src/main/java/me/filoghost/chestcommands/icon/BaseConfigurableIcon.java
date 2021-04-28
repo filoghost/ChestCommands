@@ -136,7 +136,9 @@ public abstract class BaseConfigurableIcon implements Icon {
 
     public void setLore(@Nullable List<String> lore) {
         if (lore != null) {
-            this.lore = new PlaceholderStringList(CollectionUtils.replaceNulls(lore, ""));
+            this.lore = new PlaceholderStringList(CollectionUtils.toArrayList(lore, element -> {
+                return element != null ? element : "";
+            }));
         } else {
             this.lore = null;
         }
@@ -152,12 +154,12 @@ public abstract class BaseConfigurableIcon implements Icon {
     }
 
     public void setEnchantments(@Nullable Map<Enchantment, Integer> enchantments) {
-        this.enchantments = CollectionUtils.copy(enchantments);
+        this.enchantments = CollectionUtils.newHashMap(enchantments);
         cachedRendering = null;
     }
 
     public @Nullable Map<Enchantment, Integer> getEnchantments() {
-        return CollectionUtils.copy(enchantments);
+        return CollectionUtils.newHashMap(enchantments);
     }
 
     public void addEnchantment(@NotNull Enchantment enchantment) {
@@ -212,7 +214,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     }
 
     public @Nullable List<Pattern> getBannerPatterns() {
-        return CollectionUtils.copy(bannerPatterns);
+        return CollectionUtils.newArrayList(bannerPatterns);
     }
 
     public void setBannerPatterns(@Nullable Pattern... bannerPatterns) {
@@ -220,7 +222,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     }
 
     public void setBannerPatterns(@Nullable List<Pattern> bannerPatterns) {
-        this.bannerPatterns = CollectionUtils.copy(bannerPatterns);
+        this.bannerPatterns = CollectionUtils.newArrayList(bannerPatterns);
         cachedRendering = null;
     }
 

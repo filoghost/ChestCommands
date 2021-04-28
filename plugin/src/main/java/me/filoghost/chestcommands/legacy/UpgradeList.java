@@ -63,7 +63,7 @@ public class UpgradeList {
 
     private static List<UpgradeTask> createMenuTasks(ConfigManager configManager, Function<Path, UpgradeTask> menuTaskSupplier) throws UpgradeTaskException {
         List<Path> menuFiles = getMenuFiles(configManager);
-        return CollectionUtils.transform(menuFiles, menuTaskSupplier);
+        return CollectionUtils.toArrayList(menuFiles, menuTaskSupplier);
     }
 
     private static List<Path> getMenuFiles(ConfigManager configManager) throws UpgradeTaskException {

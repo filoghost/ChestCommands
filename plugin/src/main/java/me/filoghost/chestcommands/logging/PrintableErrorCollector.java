@@ -9,7 +9,7 @@ import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.legacy.UpgradeExecutorException;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.fcommons.CommonsUtil;
+import me.filoghost.fcommons.ExceptionUtils;
 import me.filoghost.fcommons.config.exception.ConfigException;
 import me.filoghost.fcommons.config.exception.ConfigSyntaxException;
 import me.filoghost.fcommons.logging.ErrorCollector;
@@ -80,7 +80,7 @@ public class PrintableErrorCollector extends ErrorCollector {
         if (error.getCause() != null) {
             output.append(ChatColor.DARK_GRAY);
             output.append("--------[ Exception details ]--------\n");
-            output.append(CommonsUtil.getStackTraceString(error.getCause()));
+            output.append(ExceptionUtils.getStackTraceOutput(error.getCause()));
             output.append("-------------------------------------\n");
         }
         output.append(" \n");

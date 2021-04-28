@@ -26,11 +26,11 @@ import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.placeholder.PlaceholderManager;
 import me.filoghost.chestcommands.task.TickingTask;
-import me.filoghost.fcommons.BaseJavaPlugin;
+import me.filoghost.fcommons.FCommonsPlugin;
 import me.filoghost.fcommons.config.ConfigLoader;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.fcommons.logging.Log;
-import me.filoghost.fcommons.reflection.ReflectionUtils;
+import me.filoghost.fcommons.reflection.ReflectUtils;
 import me.filoghost.updatechecker.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class ChestCommands extends BaseJavaPlugin {
+public class ChestCommands extends FCommonsPlugin {
 
 
     public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
@@ -58,9 +58,7 @@ public class ChestCommands extends BaseJavaPlugin {
 
     @Override
     protected void onCheckedEnable() throws PluginEnableException {
-        Log.setLogger(getLogger());
-        
-        if (!ReflectionUtils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
+        if (!ReflectUtils.isClassLoaded("org.bukkit.inventory.ItemFlag")) { // ItemFlag was added in 1.8
             if (Bukkit.getVersion().contains("(MC: 1.8)")) {
                 throw new PluginEnableException("ChestCommands requires a more recent version of Bukkit 1.8 to run.");
             } else {
@@ -102,7 +100,7 @@ public class ChestCommands extends BaseJavaPlugin {
             Log.info("Hooked PlaceholderAPI");
         }
 
-        if (Settings.update_notifications) {
+        if (Settings.get().update_notifications) {
             UpdateChecker.run(this, 56919, (String newVersion) -> {
                 ChestCommands.newVersion = newVersion;
 

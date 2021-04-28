@@ -54,7 +54,7 @@ public class SignListener implements Listener {
         InternalMenu menu = MenuManager.getMenuByFileName(menuFileName);
         
         if (menu == null) {
-            event.getPlayer().sendMessage(Lang.menu_not_found);
+            event.getPlayer().sendMessage(Lang.get().menu_not_found);
             return;
         }
         

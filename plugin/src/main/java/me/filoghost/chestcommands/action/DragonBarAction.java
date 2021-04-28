@@ -22,7 +22,7 @@ public class DragonBarAction implements Action {
     public DragonBarAction(String serialiazedAction) throws ParseException {
         String message;
 
-        String[] split = Strings.trimmedSplit(serialiazedAction, "\\|", 2); // Max of 2 pieces
+        String[] split = Strings.splitAndTrim(serialiazedAction, "|", 2); // Max of 2 pieces
         if (split.length > 1) {
             try {
                 seconds = NumberParser.getStrictlyPositiveInteger(split[0]);

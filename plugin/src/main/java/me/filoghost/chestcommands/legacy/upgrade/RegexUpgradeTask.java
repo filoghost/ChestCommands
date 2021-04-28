@@ -5,6 +5,10 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
+import me.filoghost.fcommons.config.ConfigErrors;
+import me.filoghost.fcommons.config.exception.ConfigLoadException;
+import me.filoghost.fcommons.config.exception.ConfigSaveException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,9 +18,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import me.filoghost.fcommons.config.ConfigErrors;
-import me.filoghost.fcommons.config.exception.ConfigLoadException;
-import me.filoghost.fcommons.config.exception.ConfigSaveException;
 
 public abstract class RegexUpgradeTask extends UpgradeTask {
 
@@ -27,6 +28,8 @@ public abstract class RegexUpgradeTask extends UpgradeTask {
     public RegexUpgradeTask(Path file) {
         this.file = file;
     }
+
+    protected abstract void computeRegexChanges();
 
     @Override
     public final Path getOriginalFile() {
@@ -68,15 +71,6 @@ public abstract class RegexUpgradeTask extends UpgradeTask {
         } catch (IOException e) {
             throw new ConfigSaveException(ConfigErrors.writeDataIOException, e);
         }
-    }
-
-    protected abstract void computeRegexChanges();
-
-    protected void replaceString(String target, String replacement) {
-        replaceRegex(
-                Pattern.compile(Pattern.quote(target)),
-                matcher -> replacement
-        );
     }
 
     protected void replaceSubNode(String oldNode, String newNode) {

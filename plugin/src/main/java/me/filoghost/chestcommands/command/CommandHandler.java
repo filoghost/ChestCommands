@@ -10,17 +10,19 @@ import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.fcommons.command.CommandException;
-import me.filoghost.fcommons.command.CommandValidate;
-import me.filoghost.fcommons.command.annotation.Description;
-import me.filoghost.fcommons.command.annotation.DisplayPriority;
-import me.filoghost.fcommons.command.annotation.MinArgs;
-import me.filoghost.fcommons.command.annotation.Name;
-import me.filoghost.fcommons.command.annotation.Permission;
-import me.filoghost.fcommons.command.annotation.UsageArgs;
-import me.filoghost.fcommons.command.multi.MultiCommandManager;
-import me.filoghost.fcommons.command.multi.SubCommand;
-import me.filoghost.fcommons.command.multi.SubCommandSession;
+import me.filoghost.fcommons.collection.CaseInsensitiveString;
+import me.filoghost.fcommons.command.CommandContext;
+import me.filoghost.fcommons.command.sub.SubCommandContext;
+import me.filoghost.fcommons.command.sub.annotated.AnnotatedSubCommand;
+import me.filoghost.fcommons.command.sub.annotated.AnnotatedSubCommandManager;
+import me.filoghost.fcommons.command.sub.annotated.Description;
+import me.filoghost.fcommons.command.sub.annotated.DisplayPriority;
+import me.filoghost.fcommons.command.sub.annotated.MinArgs;
+import me.filoghost.fcommons.command.sub.annotated.Name;
+import me.filoghost.fcommons.command.sub.annotated.Permission;
+import me.filoghost.fcommons.command.sub.annotated.UsageArgs;
+import me.filoghost.fcommons.command.validation.CommandException;
+import me.filoghost.fcommons.command.validation.CommandValidate;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,40 +30,41 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandHandler extends MultiCommandManager {
+public class CommandHandler extends AnnotatedSubCommandManager {
 
     public CommandHandler(String label) {
-        super(label);
+        setName(label);
     }
 
     @Override
-    protected String getSubCommandDefaultPermission(SubCommand subCommand) {
+    protected String getDefaultSubCommandPermission(AnnotatedSubCommand subCommand) {
         return Permissions.COMMAND_PREFIX + "." + subCommand.getName();
     }
 
     @Override
-    protected void sendNoArgsMessage(CommandSender sender, String rootCommandLabel) {
+    protected void sendNoArgsMessage(CommandContext context) {
+        CommandSender sender = context.getSender();
         sender.sendMessage(ChestCommands.CHAT_PREFIX);
         sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getInstance().getDescription().getVersion());
         sender.sendMessage(ChatColor.GREEN + "Developer: " + ChatColor.GRAY + "filoghost");
-        sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + rootCommandLabel + " help");
+        sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + context.getRootLabel() + " help");
     }
-
+    
     @Override
-    protected void sendUnknownSubCommandMessage(SubCommandSession session) {
-        session.getSender().sendMessage(ChatColor.RED + "Unknown sub-command \"" + session.getSubLabelUsed() + "\". "
-                + "Use \"/" + session.getRootLabelUsed() + " help\" to see available commands.");
+    protected void sendUnknownSubCommandMessage(SubCommandContext context) {
+        context.getSender().sendMessage(ChatColor.RED + "Unknown sub-command \"" + context.getSubLabel() + "\". "
+                + "Use \"/" + context.getRootLabel() + " help\" to see available commands.");
     }
 
     @Name("help")
     @Permission(Permissions.COMMAND_PREFIX + "help")
-    public void help(CommandSender sender, SubCommandSession session) {
+    public void help(CommandSender sender, SubCommandContext context) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX + "Commands:");
-        for (SubCommand subCommand : getAllSubCommands()) {
-            if (subCommand == session.getSubCommand()) {
+        for (AnnotatedSubCommand subCommand : getSubCommands()) {
+            if (subCommand == context.getSubCommand()) {
                 continue;
             }
-            String usageText = getUsageText(session.getRootLabelUsed(), subCommand);
+            String usageText = getUsageText(context, subCommand);
             sender.sendMessage(ChatColor.WHITE + usageText + ChatColor.GRAY + " - " + subCommand.getDescription());
         }
     }
@@ -111,8 +114,8 @@ public class CommandHandler extends MultiCommandManager {
     @DisplayPriority(2)
     public void list(CommandSender sender) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX + "Loaded menus:");
-        for (String file : MenuManager.getMenuFileNames()) {
-            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
+        for (CaseInsensitiveString name : MenuManager.getMenuFileNames()) {
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + name);
         }
     }
 

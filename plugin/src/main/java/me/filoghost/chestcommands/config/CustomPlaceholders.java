@@ -8,12 +8,15 @@ package me.filoghost.chestcommands.config;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.placeholder.StaticPlaceholder;
 import me.filoghost.fcommons.Colors;
+import me.filoghost.fcommons.config.ConfigPath;
 import me.filoghost.fcommons.config.ConfigSection;
+import me.filoghost.fcommons.config.ConfigType;
 import me.filoghost.fcommons.config.FileConfig;
 import me.filoghost.fcommons.logging.ErrorCollector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class CustomPlaceholders {
 
@@ -27,13 +30,11 @@ public class CustomPlaceholders {
             return;
         }
 
-        for (String placeholder : placeholdersSection.getKeys()) {
-            String replacement = Colors.addColors(placeholdersSection.getString(placeholder));
-            if (replacement == null) {
-                return;
-            }
-
-            if (placeholder.length() == 0) {
+        for (Entry<ConfigPath, String> entry : placeholdersSection.toMap(ConfigType.STRING).entrySet()) {
+            String placeholder = entry.getKey().asRawKey();
+            String replacement = Colors.addColors(entry.getValue());
+            
+            if (placeholder == null || placeholder.length() == 0) {
                 errorCollector.add(Errors.Config.emptyPlaceholder(config.getSourceFile()));
                 continue;
             }

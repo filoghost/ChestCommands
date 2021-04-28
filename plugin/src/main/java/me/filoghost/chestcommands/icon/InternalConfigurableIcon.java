@@ -90,7 +90,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     public void setClickActions(List<Action> clickActions) {
-        this.clickActions = CollectionUtils.immutableCopy(clickActions);
+        this.clickActions = CollectionUtils.newImmutableList(clickActions);
     }
     
     
@@ -131,7 +131,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
             if (noClickPermissionMessage != null) {
                 player.sendMessage(noClickPermissionMessage);
             } else {
-                player.sendMessage(Lang.default_no_icon_permission);
+                player.sendMessage(Lang.get().default_no_icon_permission);
             }
             return clickResult;
         }
