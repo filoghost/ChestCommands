@@ -100,20 +100,6 @@ public class ChestCommands extends FCommonsPlugin {
             Log.info("Hooked PlaceholderAPI");
         }
 
-        if (Settings.get().update_notifications) {
-            UpdateChecker.run(this, 56919, (String newVersion) -> {
-                ChestCommands.newVersion = newVersion;
-
-                Log.info("Found a new version: " + newVersion + " (yours: v" + getDescription().getVersion() + ")");
-                Log.info("Download the update on Bukkit Dev:");
-                Log.info("https://dev.bukkit.org/projects/chest-commands");
-            });
-        }
-
-        // Start bStats metrics
-        int pluginID = 3658;
-        new MetricsLite(this, pluginID);
-
         Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
@@ -132,6 +118,20 @@ public class ChestCommands extends FCommonsPlugin {
             }, 10L);
         }
 
+        if (Settings.get().update_notifications) {
+            UpdateChecker.run(this, 56919, (String newVersion) -> {
+                ChestCommands.newVersion = newVersion;
+
+                Log.info("Found a new version: " + newVersion + " (yours: v" + getDescription().getVersion() + ")");
+                Log.info("Download the update on Bukkit Dev:");
+                Log.info("https://dev.bukkit.org/projects/chest-commands");
+            });
+        }
+
+        // Start bStats metrics
+        int pluginID = 3658;
+        new MetricsLite(this, pluginID);
+
         Bukkit.getScheduler().runTaskTimer(this, new TickingTask(), 1L, 1L);
     }
 
@@ -145,7 +145,7 @@ public class ChestCommands extends FCommonsPlugin {
         MenuManager.reset();
         boolean isFreshInstall = !Files.isDirectory(configManager.getRootDataFolder());
         try {
-            Files.createDirectories(configManager.getRootDataFolder());
+            Files.createDirectories(configManager.getRootDataFolder().toRealPath());
         } catch (IOException e) {
             errorCollector.add(e, Errors.Config.createDataFolderIOException);
             return errorCollector;
