@@ -73,7 +73,7 @@ public abstract class RegexUpgradeTask extends UpgradeTask {
         }
     }
 
-    protected void replaceSubNode(String oldNode, String newNode) {
+    protected void renameInnerNode(String oldNode, String newNode) {
         replaceRegex(
                 Pattern.compile("(^\\s+)" + Pattern.quote(oldNode) + "(:)"),
                 matcher -> matcher.group(1) + newNode + matcher.group(2)

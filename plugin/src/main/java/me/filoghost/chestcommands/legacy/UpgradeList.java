@@ -11,8 +11,8 @@ import me.filoghost.chestcommands.legacy.upgrade.Upgrade;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTask;
 import me.filoghost.chestcommands.legacy.upgrade.UpgradeTaskException;
 import me.filoghost.chestcommands.legacy.v4_0.V4_0_LangUpgradeTask;
-import me.filoghost.chestcommands.legacy.v4_0.V4_0_MenuNodeRenameUpgradeTask;
-import me.filoghost.chestcommands.legacy.v4_0.V4_0_MenuReformatUpgradeTask;
+import me.filoghost.chestcommands.legacy.v4_0.V4_0_MenuConfigUpgradeTask;
+import me.filoghost.chestcommands.legacy.v4_0.V4_0_MenuRawTextFileUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.V4_0_PlaceholdersUpgradeTask;
 import me.filoghost.chestcommands.legacy.v4_0.V4_0_SettingsUpgradeTask;
 import me.filoghost.chestcommands.logging.Errors;
@@ -34,15 +34,16 @@ public class UpgradeList {
      * Note: order of declaration determines order of execution
      */
     private static final ImmutableList<Upgrade> orderedUpgrades = ImmutableList.of(
+            // Edit the raw text first
             multiTaskUpgrade("v4.0-menus-rename", (configManager) -> {
-                return createMenuTasks(configManager, V4_0_MenuNodeRenameUpgradeTask::new);
+                return createMenuTasks(configManager, V4_0_MenuRawTextFileUpgradeTask::new);
             }),
 
-            // Reformat after nodes have already been renamed
+            // Manipulate the configuration after editing the raw text
             multiTaskUpgrade("v4.0-menus-reformat", (configManager) -> {
                 String legacyCommandSeparator = readLegacyCommandSeparator(configManager);
                 return createMenuTasks(configManager,
-                        file -> new V4_0_MenuReformatUpgradeTask(configManager, file, legacyCommandSeparator));
+                        file -> new V4_0_MenuConfigUpgradeTask(configManager, file, legacyCommandSeparator));
             }),
 
             // Upgrade config after reading the command separator for menus

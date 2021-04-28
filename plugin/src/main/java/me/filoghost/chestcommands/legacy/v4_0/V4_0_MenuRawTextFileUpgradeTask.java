@@ -10,17 +10,20 @@ import me.filoghost.chestcommands.parsing.icon.AttributeType;
 
 import java.nio.file.Path;
 
-public class V4_0_MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
+/*
+ * All the changes that can be done by searching and replacing the raw text inside the files
+ */
+public class V4_0_MenuRawTextFileUpgradeTask extends RegexUpgradeTask {
 
-    public V4_0_MenuNodeRenameUpgradeTask(Path menuFile) {
+    public V4_0_MenuRawTextFileUpgradeTask(Path menuFile) {
         super(menuFile);
     }
 
     @Override
     protected void computeRegexChanges() {
-        replaceSubNode("command", "commands");
-        replaceSubNode("open-action", "open-actions");
-        replaceSubNode("id", "material");
+        renameInnerNode("command", "commands");
+        renameInnerNode("open-action", "open-actions");
+        renameInnerNode("id", "material");
 
         replaceOldAttribute("ID", AttributeType.MATERIAL);
         replaceOldAttribute("DATA-VALUE", AttributeType.DURABILITY);
@@ -31,8 +34,8 @@ public class V4_0_MenuNodeRenameUpgradeTask extends RegexUpgradeTask {
         replaceOldAttribute("REQUIRED-ITEM", AttributeType.REQUIRED_ITEMS);
     }
 
-    private void replaceOldAttribute(String oldNode, AttributeType newAttribute) {
-        replaceSubNode(oldNode, newAttribute.getConfigKey().asRawKey());
+    private void replaceOldAttribute(String oldConfigKey, AttributeType newAttribute) {
+        renameInnerNode(oldConfigKey, newAttribute.getConfigKey().asRawKey());
     }
 
 }

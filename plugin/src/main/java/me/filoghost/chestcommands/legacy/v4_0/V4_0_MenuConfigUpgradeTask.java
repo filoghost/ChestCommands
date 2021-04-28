@@ -21,11 +21,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
+/*
+ * All the changes that are not easy to make without parsing the YML file
+ */
+public class V4_0_MenuConfigUpgradeTask extends YamlUpgradeTask {
 
     private final String legacyCommandSeparator;
 
-    public V4_0_MenuReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+    public V4_0_MenuConfigUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
         super(configManager.getConfigLoader(menuFile));
         this.legacyCommandSeparator = legacyCommandSeparator;
     }
@@ -63,8 +66,8 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
         expandInlineItemstack(section);
     }
 
-    private void updateActionPrefixes(ConfigSection config, ConfigPath node) {
-        List<String> actions = config.getStringList(node);
+    private void updateActionPrefixes(ConfigSection config, ConfigPath configPath) {
+        List<String> actions = config.getStringList(configPath);
         if (actions == null) {
             return;
         }
@@ -83,7 +86,7 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
             }
         }
 
-        config.setStringList(node, actions);
+        config.setStringList(configPath, actions);
     }
 
     private String replacePrefix(String action, String oldPrefix, String newPrefix) {

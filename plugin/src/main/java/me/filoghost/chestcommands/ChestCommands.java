@@ -150,10 +150,9 @@ public class ChestCommands extends FCommonsPlugin {
             errorCollector.add(e, Errors.Config.createDataFolderIOException);
             return errorCollector;
         }
-
-        UpgradesExecutor upgradeExecutor = new UpgradesExecutor(configManager);
-
+        
         try {
+            UpgradesExecutor upgradeExecutor = new UpgradesExecutor(configManager);
             boolean allUpgradesSuccessful = upgradeExecutor.run(isFreshInstall, errorCollector);
             if (!allUpgradesSuccessful) {
                 errorCollector.add(Errors.Upgrade.failedSomeUpgrades);

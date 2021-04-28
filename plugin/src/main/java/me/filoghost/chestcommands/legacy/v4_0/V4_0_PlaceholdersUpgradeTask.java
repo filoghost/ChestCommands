@@ -43,7 +43,7 @@ public class V4_0_PlaceholdersUpgradeTask extends UpgradeTask {
 
     @Override
     public void computeChanges() throws ConfigLoadException {
-        if (!Files.isRegularFile(oldPlaceholdersFile)) {
+        if (!Files.isRegularFile(getOriginalFile()) || Files.isRegularFile(getUpgradedFile())) {
             return;
         }
 
