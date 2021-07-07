@@ -9,6 +9,7 @@ import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderScanner;
+import me.filoghost.fcommons.Colors;
 import me.filoghost.fcommons.Preconditions;
 import me.filoghost.fcommons.logging.Log;
 import org.bukkit.entity.Player;
@@ -105,7 +106,7 @@ public class PlaceholderManager {
         for (StaticPlaceholder staticPlaceholder : staticPlaceholders) {
             text = text.replace(staticPlaceholder.getIdentifier(), staticPlaceholder.getReplacement());
         }
-        return text;
+        return Colors.addColors(text);
     }
 
     public static void registerPluginPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
