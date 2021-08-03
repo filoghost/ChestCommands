@@ -30,7 +30,7 @@ public class RequiredMoney implements Requirement {
         }
 
         if (!VaultEconomyHook.hasMoney(player, moneyAmount)) {
-            player.sendMessage(Lang.no_money.replace("{money}", VaultEconomyHook.formatMoney(moneyAmount)));
+            player.sendMessage(Lang.get().no_money.replace("{money}", VaultEconomyHook.formatMoney(moneyAmount)));
             return false;
         }
 

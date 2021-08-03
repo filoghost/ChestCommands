@@ -6,9 +6,10 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.fcommons.collection.CollectionUtils;
+
+import java.util.List;
 
 public class MenuSettings {
 
@@ -39,7 +40,7 @@ public class MenuSettings {
     }
 
     public void setCommands(List<String> commands) {
-        this.commands = CollectionUtils.immutableCopy(commands);
+        this.commands = CollectionUtils.newImmutableList(commands);
     }
 
     public ImmutableList<String> getCommands() {
@@ -51,7 +52,7 @@ public class MenuSettings {
     }
 
     public void setOpenActions(List<Action> openAction) {
-        this.openActions = CollectionUtils.immutableCopy(openAction);
+        this.openActions = CollectionUtils.newImmutableList(openAction);
     }
 
     public int getRefreshTicks() {

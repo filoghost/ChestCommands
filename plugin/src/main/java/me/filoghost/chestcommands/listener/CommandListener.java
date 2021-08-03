@@ -11,14 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandListener implements Listener {
-    
-    private final MenuManager menuManager;
-    
-    public CommandListener(MenuManager menuManager) {
-        this.menuManager = menuManager;
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent event) {
@@ -27,7 +22,7 @@ public class CommandListener implements Listener {
             return;
         }
 
-        InternalMenu menu = menuManager.getMenuByOpenCommand(command);
+        InternalMenu menu = MenuManager.getMenuByOpenCommand(command);
         if (menu == null) {
             return;
         }
@@ -36,7 +31,7 @@ public class CommandListener implements Listener {
         menu.openCheckingPermission(event.getPlayer());
     }
     
-    private static String getCommandName(String fullCommand) {
+    private static @Nullable String getCommandName(String fullCommand) {
         if (!fullCommand.startsWith("/")) {
             return null;
         }

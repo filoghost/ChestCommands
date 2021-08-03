@@ -5,11 +5,12 @@
  */
 package me.filoghost.chestcommands.attribute;
 
-import java.util.List;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 import me.filoghost.fcommons.Colors;
 import me.filoghost.fcommons.collection.CollectionUtils;
+
+import java.util.List;
 
 public class LoreAttribute implements IconAttribute {
 
@@ -20,9 +21,9 @@ public class LoreAttribute implements IconAttribute {
     }
 
     private List<String> colorLore(List<String> input) {
-        return CollectionUtils.transform(input, line -> {
+        return CollectionUtils.toArrayList(input, line -> {
             if (!line.isEmpty()) {
-                return Settings.default_color__lore + Colors.addColors(line);
+                return Settings.get().default_color__lore + Colors.addColors(line);
             } else {
                 return line;
             }

@@ -1,0 +1,67 @@
+name: 🐞 Bug Report
+description: "Report a bug or some unexpected behavior."
+labels:
+ - "Bug"
+body:
+ - type: markdown
+   attributes:
+    value: |-
+     Please fill this form carefully and provide the requested details. Thank you for contributing to the project.
+
+ - type: checkboxes
+   attributes:
+    label: "Confirmation"
+    description: "Please confirm to have done the following checks before opening a new issue."
+    options:
+     - label: "I have read the [FAQ](https://filoghost.me/docs/chest-commands/faq)."
+       required: true
+     - label: "I have tested the [latest development build](https://ci.codemc.io/job/filoghost/job/ChestCommands) of Chest Commands and the bug is still present."
+       required: true
+     - label: "I have updated **Spigot** to the latest release for my particular Minecraft version."
+       required: true
+     - label: "I made sure the bug hasn't already been reported on the [issue tracker](https://github.com/filoghost/ChestCommands/issues?q=is%3Aissue)."
+       required: true
+
+ - type: textarea
+   attributes:
+    label: "Description"
+    description: |-
+     Clear and concise description of the bug.
+     <ins>**Avoid long error logs**</ins>, add them in the "Addition information" area at the bottom of this form.
+    placeholder: "What happened? What did you expect to happen instead?"
+   validations:
+    required: true
+
+ - type: textarea
+   attributes:
+    label: "How to reproduce"
+    description: "List of steps to reproduce the bug."
+    placeholder: |-
+     1.
+     2.
+     3.
+   validations:
+    required: true
+
+ - type: input
+   attributes:
+    label: "Server version"
+    description: "Output of the command `/version`."
+    placeholder: "This server is running CraftBukkit version 3132-Spigot-66f9d3c-40caacc (MC: 1.17) (Implementing API version 1.17-R0.1-SNAPSHOT)"
+   validations:
+    required: true
+
+ - type: input
+   attributes:
+    label: "Chest Commands version"
+    description: "Output of the command `/version ChestCommands`."
+    placeholder: "ChestCommands version 4.0.4-SNAPSHOT-b75"
+   validations:
+    required: true
+
+ - type: textarea
+   attributes:
+    label: Additional information
+    description: |-
+     Relevant attachments such as **screenshots**, **server logs**, **configurations files** or any other additional information that might be useful.
+     Text files can also be uploaded to [Pastebin](https://pastebin.com) and shared through the generated link.

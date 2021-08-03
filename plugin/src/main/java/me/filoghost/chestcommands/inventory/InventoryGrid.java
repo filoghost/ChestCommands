@@ -8,6 +8,7 @@ package me.filoghost.chestcommands.inventory;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class InventoryGrid extends Grid<ItemStack> {
 
@@ -23,12 +24,12 @@ public class InventoryGrid extends Grid<ItemStack> {
     }
 
     @Override
-    protected ItemStack getByIndex0(int ordinalIndex) {
+    protected @Nullable ItemStack getByIndex0(int ordinalIndex) {
         return inventory.getItem(ordinalIndex);
     }
 
     @Override
-    protected void setByIndex0(int ordinalIndex, ItemStack element) {
+    protected void setByIndex0(int ordinalIndex, @Nullable ItemStack element) {
         inventory.setItem(ordinalIndex, element);
     }
 

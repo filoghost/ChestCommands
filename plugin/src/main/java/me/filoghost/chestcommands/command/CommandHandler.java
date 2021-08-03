@@ -11,17 +11,19 @@ import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
 import me.filoghost.chestcommands.menucreator.MenuCreatorInventoryHolder;
 import me.filoghost.chestcommands.util.Utils;
-import me.filoghost.fcommons.command.CommandException;
-import me.filoghost.fcommons.command.CommandValidate;
-import me.filoghost.fcommons.command.annotation.Description;
-import me.filoghost.fcommons.command.annotation.DisplayPriority;
-import me.filoghost.fcommons.command.annotation.MinArgs;
-import me.filoghost.fcommons.command.annotation.Name;
-import me.filoghost.fcommons.command.annotation.Permission;
-import me.filoghost.fcommons.command.annotation.UsageArgs;
-import me.filoghost.fcommons.command.multi.MultiCommandManager;
-import me.filoghost.fcommons.command.multi.SubCommand;
-import me.filoghost.fcommons.command.multi.SubCommandSession;
+import me.filoghost.fcommons.collection.CaseInsensitiveString;
+import me.filoghost.fcommons.command.CommandContext;
+import me.filoghost.fcommons.command.sub.SubCommandContext;
+import me.filoghost.fcommons.command.sub.annotated.AnnotatedSubCommand;
+import me.filoghost.fcommons.command.sub.annotated.AnnotatedSubCommandManager;
+import me.filoghost.fcommons.command.sub.annotated.Description;
+import me.filoghost.fcommons.command.sub.annotated.DisplayPriority;
+import me.filoghost.fcommons.command.sub.annotated.MinArgs;
+import me.filoghost.fcommons.command.sub.annotated.Name;
+import me.filoghost.fcommons.command.sub.annotated.Permission;
+import me.filoghost.fcommons.command.sub.annotated.UsageArgs;
+import me.filoghost.fcommons.command.validation.CommandException;
+import me.filoghost.fcommons.command.validation.CommandValidate;
 import me.filoghost.fcommons.logging.ErrorCollector;
 import me.filoghost.chestcommands.menucreator.MenuCreatorListener;
 import org.bukkit.Bukkit;
@@ -32,43 +34,41 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-public class CommandHandler extends MultiCommandManager {
+public class CommandHandler extends AnnotatedSubCommandManager {
 
-    private final MenuManager menuManager;
-
-    public CommandHandler(MenuManager menuManager, String label) {
-        super(label);
-        this.menuManager = menuManager;
+    public CommandHandler(String label) {
+        setName(label);
     }
 
     @Override
-    protected String getSubCommandDefaultPermission(SubCommand subCommand) {
+    protected String getDefaultSubCommandPermission(AnnotatedSubCommand subCommand) {
         return Permissions.COMMAND_PREFIX + "." + subCommand.getName();
     }
 
     @Override
-    protected void sendNoArgsMessage(CommandSender sender, String rootCommandLabel) {
+    protected void sendNoArgsMessage(CommandContext context) {
+        CommandSender sender = context.getSender();
         sender.sendMessage(ChestCommands.CHAT_PREFIX);
-        sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getPluginInstance().getDescription().getVersion());
+        sender.sendMessage(ChatColor.GREEN + "Version: " + ChatColor.GRAY + ChestCommands.getInstance().getDescription().getVersion());
         sender.sendMessage(ChatColor.GREEN + "Developer: " + ChatColor.GRAY + "filoghost");
-        sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + rootCommandLabel + " help");
+        sender.sendMessage(ChatColor.GREEN + "Commands: " + ChatColor.GRAY + "/" + context.getRootLabel() + " help");
     }
-
+    
     @Override
-    protected void sendUnknownSubCommandMessage(SubCommandSession session) {
-        session.getSender().sendMessage(ChatColor.RED + "Unknown sub-command \"" + session.getSubLabelUsed() + "\". "
-                + "Use \"/" + session.getRootLabelUsed() + " help\" to see available commands.");
+    protected void sendUnknownSubCommandMessage(SubCommandContext context) {
+        context.getSender().sendMessage(ChatColor.RED + "Unknown sub-command \"" + context.getSubLabel() + "\". "
+                + "Use \"/" + context.getRootLabel() + " help\" to see available commands.");
     }
 
     @Name("help")
     @Permission(Permissions.COMMAND_PREFIX + "help")
-    public void help(CommandSender sender, SubCommandSession session) {
+    public void help(CommandSender sender, SubCommandContext context) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX + "Commands:");
-        for (SubCommand subCommand : getAllSubCommands()) {
-            if (subCommand == session.getSubCommand()) {
+        for (AnnotatedSubCommand subCommand : getSubCommands()) {
+            if (subCommand == context.getSubCommand()) {
                 continue;
             }
-            String usageText = getUsageText(session.getRootLabelUsed(), subCommand);
+            String usageText = getUsageText(context, subCommand);
             sender.sendMessage(ChatColor.WHITE + usageText + ChatColor.GRAY + " - " + subCommand.getDescription());
         }
     }
@@ -78,7 +78,7 @@ public class CommandHandler extends MultiCommandManager {
     @Permission(Permissions.COMMAND_PREFIX + "reload")
     @DisplayPriority(100)
     public void reload(CommandSender sender) {
-        ChestCommands.closeAllMenus();
+        MenuManager.closeAllOpenMenuViews();
 
         ErrorCollector errorCollector = ChestCommands.load();
 
@@ -118,8 +118,8 @@ public class CommandHandler extends MultiCommandManager {
     @DisplayPriority(2)
     public void list(CommandSender sender) {
         sender.sendMessage(ChestCommands.CHAT_PREFIX + "Loaded menus:");
-        for (String file : menuManager.getMenuFileNames()) {
-            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + file);
+        for (CaseInsensitiveString name : MenuManager.getMenuFileNames()) {
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + name);
         }
     }
 
@@ -129,6 +129,7 @@ public class CommandHandler extends MultiCommandManager {
     @MinArgs(1)
     @UsageArgs("<menu> [player]")
     @DisplayPriority(1)
+    @SuppressWarnings("deprecation")
     public void open(CommandSender sender, String[] args) throws CommandException {
         Player target;
 
@@ -148,7 +149,7 @@ public class CommandHandler extends MultiCommandManager {
         CommandValidate.notNull(target, "That player is not online.");
 
         String menuName = Utils.addYamlExtension(args[0]);
-        InternalMenu menu = menuManager.getMenuByFileName(menuName);
+        InternalMenu menu = MenuManager.getMenuByFileName(menuName);
         CommandValidate.notNull(menu, "The menu \"" + menuName + "\" was not found.");
 
         if (!sender.hasPermission(menu.getOpenPermission())) {

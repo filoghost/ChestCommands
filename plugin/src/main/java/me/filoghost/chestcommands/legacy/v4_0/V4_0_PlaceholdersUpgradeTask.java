@@ -43,7 +43,7 @@ public class V4_0_PlaceholdersUpgradeTask extends UpgradeTask {
 
     @Override
     public void computeChanges() throws ConfigLoadException {
-        if (!Files.isRegularFile(oldPlaceholdersFile)) {
+        if (!Files.isRegularFile(getOriginalFile()) || Files.isRegularFile(getUpgradedFile())) {
             return;
         }
 
@@ -67,7 +67,7 @@ public class V4_0_PlaceholdersUpgradeTask extends UpgradeTask {
                 continue;
             }
 
-            String[] parts = Strings.trimmedSplit(line, ":", 2);
+            String[] parts = Strings.splitAndTrim(line, ":", 2);
             String placeholder = unquote(parts[0]);
             String replacement = StringEscapeUtils.unescapeJava(unquote(parts[1]));
 

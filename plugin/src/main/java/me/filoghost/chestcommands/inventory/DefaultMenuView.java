@@ -11,20 +11,19 @@ import me.filoghost.chestcommands.icon.RefreshableIcon;
 import me.filoghost.chestcommands.menu.BaseMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents a particular view of a menu.
- */
 public class DefaultMenuView implements MenuView {
 
     private final BaseMenu menu;
-    private final InventoryGrid bukkitInventory;
     private final Player viewer;
+    private final InventoryGrid bukkitInventory;
 
-    public DefaultMenuView(BaseMenu menu, Player viewer) {
+    public DefaultMenuView(@NotNull BaseMenu menu, @NotNull Player viewer) {
         this.menu = menu;
         this.viewer = viewer;
-        this.bukkitInventory = new InventoryGrid(new MenuInventoryHolder(this), menu.getRowCount(), menu.getTitle());
+        this.bukkitInventory = new InventoryGrid(new MenuInventoryHolder(this), menu.getRows(), menu.getTitle());
         refresh();
     }
 
@@ -44,13 +43,18 @@ public class DefaultMenuView implements MenuView {
         }
     }
 
-    public void open(Player viewer) {
-        if(viewer == null || bukkitInventory == null || bukkitInventory.getInventory() == null)
-            return;
+    @Override
+    public void close() {
+        if (viewer.isOnline()) {
+            viewer.closeInventory();
+        }
+    }
+
+    public void open() {
         viewer.openInventory(bukkitInventory.getInventory());
     }
 
-    public Icon getIcon(int slot) {
+    public @Nullable Icon getIcon(int slot) {
         if (slot < 0 || slot >= bukkitInventory.getSize()) {
             return null;
         }
@@ -59,12 +63,12 @@ public class DefaultMenuView implements MenuView {
     }
 
     @Override
-    public BaseMenu getMenu() {
+    public @NotNull BaseMenu getMenu() {
         return menu;
     }
 
     @Override
-    public Player getViewer() {
+    public @NotNull Player getViewer() {
         return viewer;
     }
 }

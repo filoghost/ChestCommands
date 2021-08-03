@@ -5,18 +5,17 @@
  */
 package me.filoghost.chestcommands.parsing;
 
-import java.util.Optional;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.fcommons.Strings;
-import me.filoghost.fcommons.collection.Registry;
+import me.filoghost.fcommons.collection.LookupRegistry;
 import org.bukkit.enchantments.Enchantment;
 
 public class EnchantmentParser {
 
-    private static final Registry<Enchantment> ENCHANTMENTS_REGISTRY;
+    private static final LookupRegistry<Enchantment> ENCHANTMENTS_REGISTRY;
 
     static {
-        ENCHANTMENTS_REGISTRY = Registry.fromValues(Enchantment.values(), Enchantment::getName);
+        ENCHANTMENTS_REGISTRY = LookupRegistry.fromValues(Enchantment.values(), Enchantment::getName);
 
         // Add aliases
         ENCHANTMENTS_REGISTRY.put("Protection", Enchantment.PROTECTION_ENVIRONMENTAL);
@@ -49,7 +48,7 @@ public class EnchantmentParser {
         int level = 1;
 
         if (input.contains(",")) {
-            String[] levelSplit = Strings.trimmedSplit(input, ",", 2);
+            String[] levelSplit = Strings.splitAndTrim(input, ",", 2);
 
             try {
                 level = NumberParser.getStrictlyPositiveInteger(levelSplit[1]);
@@ -59,10 +58,10 @@ public class EnchantmentParser {
             input = levelSplit[0];
         }
 
-        Optional<Enchantment> enchantment = ENCHANTMENTS_REGISTRY.find(input);
+        Enchantment enchantment = ENCHANTMENTS_REGISTRY.lookup(input);
 
-        if (enchantment.isPresent()) {
-            return new EnchantmentDetails(enchantment.get(), level);
+        if (enchantment != null) {
+            return new EnchantmentDetails(enchantment, level);
         } else {
             throw new ParseException(Errors.Parsing.unknownEnchantmentType(input));
         }

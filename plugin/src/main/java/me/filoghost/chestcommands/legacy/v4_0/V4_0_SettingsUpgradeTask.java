@@ -17,9 +17,9 @@ public class V4_0_SettingsUpgradeTask extends YamlUpgradeTask {
 
     @Override
     public void computeYamlChanges(Config settingsConfig) {
-        removeNode(settingsConfig, "use-only-commands-without-args");
-        removeNode(settingsConfig, "use-console-colors");
-        removeNode(settingsConfig, "multiple-commands-separator");
+        removeValue(settingsConfig, "use-only-commands-without-args");
+        removeValue(settingsConfig, "use-console-colors");
+        removeValue(settingsConfig, "multiple-commands-separator");
     }
 
 }

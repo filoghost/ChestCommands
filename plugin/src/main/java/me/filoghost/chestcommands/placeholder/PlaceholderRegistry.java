@@ -5,45 +5,72 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
+import me.filoghost.fcommons.collection.CaseInsensitiveHashMap;
+import me.filoghost.fcommons.collection.CaseInsensitiveLinkedHashMap;
+import me.filoghost.fcommons.collection.CaseInsensitiveMap;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 public class PlaceholderRegistry {
 
-    private final Map<String, PlaceholderReplacer> internalPlaceholders = new HashMap<>();
-    private final Map<String, Map<String, PlaceholderReplacer>> externalPlaceholders = new HashMap<>();
+    // <identifier, placeholder>
+    private final CaseInsensitiveMap<Placeholder> internalPlaceholders = new CaseInsensitiveHashMap<>();
+
+    // <identifier, <pluginName, placeholder>>
+    private final CaseInsensitiveMap<CaseInsensitiveMap<Placeholder>> externalPlaceholders = new CaseInsensitiveHashMap<>();
 
     public void registerInternalPlaceholder(String identifier, PlaceholderReplacer replacer) {
-        internalPlaceholders.put(identifier, replacer);
+        internalPlaceholders.put(identifier, new Placeholder(ChestCommands.getInstance(), replacer));
     }
 
     public void registerExternalPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
         externalPlaceholders
-                .computeIfAbsent(identifier, key -> new LinkedHashMap<>())
-                .put(plugin.getName(), placeholderReplacer);
+                .computeIfAbsent(identifier, CaseInsensitiveLinkedHashMap::new)
+                .put(plugin.getName(), new Placeholder(plugin, placeholderReplacer));
     }
 
-    public PlaceholderReplacer getPlaceholderReplacer(PlaceholderMatch placeholderMatch) {
+    public boolean unregisterExternalPlaceholder(Plugin plugin, String identifier) {
+        CaseInsensitiveMap<Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+
+        if (externalPlaceholdersByPlugin == null) {
+            return false;
+        }
+
+        boolean removed = externalPlaceholdersByPlugin.remove(plugin.getName()) != null;
+
+        if (externalPlaceholdersByPlugin.isEmpty()) {
+            externalPlaceholders.remove(identifier);
+        }
+
+        return removed;
+    }
+
+    public @Nullable Placeholder getPlaceholder(PlaceholderMatch placeholderMatch) {
+        String identifier = placeholderMatch.getIdentifier();
+
         if (placeholderMatch.getPluginNamespace() == null) {
-            PlaceholderReplacer internalReplacer = internalPlaceholders.get(placeholderMatch.getIdentifier());
-            if (internalReplacer != null) {
-                return internalReplacer;
+            Placeholder internalPlaceholder = internalPlaceholders.get(identifier);
+            if (internalPlaceholder != null) {
+                return internalPlaceholder;
             }
         }
 
-        Map<String, PlaceholderReplacer> externalReplacers = externalPlaceholders.get(placeholderMatch.getIdentifier());
+        CaseInsensitiveMap<Placeholder> externalPlaceholdersByPlugin = externalPlaceholders.get(identifier);
+        if (externalPlaceholdersByPlugin == null) {
+            return null;
+        }
 
         // Find exact replacer if plugin name is specified
         if (placeholderMatch.getPluginNamespace() != null) {
-            return externalReplacers.get(placeholderMatch.getPluginNamespace());
+            return externalPlaceholdersByPlugin.get(placeholderMatch.getPluginNamespace());
         }
 
-        if (externalReplacers != null && !externalReplacers.isEmpty()) {
-            return externalReplacers.values().iterator().next();
+        // Otherwise try find the first one registered
+        if (!externalPlaceholdersByPlugin.isEmpty()) {
+            return externalPlaceholdersByPlugin.values().iterator().next();
         }
 
         return null;

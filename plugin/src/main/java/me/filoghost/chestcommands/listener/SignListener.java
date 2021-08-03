@@ -30,12 +30,7 @@ public class SignListener implements Listener {
     
     private static final ChatColor VALID_SIGN_COLOR = ChatColor.DARK_BLUE;
     private static final String VALID_SIGN_HEADER = VALID_SIGN_COLOR + SIGN_CREATION_TRIGGER;
-    
-    private final MenuManager menuManager;
-    
-    public SignListener(MenuManager menuManager) {
-        this.menuManager = menuManager;
-    }
+
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSignClick(PlayerInteractEvent event) {
@@ -56,10 +51,10 @@ public class SignListener implements Listener {
         }
 
         String menuFileName = Utils.addYamlExtension(sign.getLine(FILENAME_LINE).trim());
-        InternalMenu menu = menuManager.getMenuByFileName(menuFileName);
+        InternalMenu menu = MenuManager.getMenuByFileName(menuFileName);
         
         if (menu == null) {
-            event.getPlayer().sendMessage(Lang.menu_not_found);
+            event.getPlayer().sendMessage(Lang.get().menu_not_found);
             return;
         }
         
@@ -81,7 +76,7 @@ public class SignListener implements Listener {
             
             menuFileName = Utils.addYamlExtension(menuFileName);
     
-            InternalMenu menu = menuManager.getMenuByFileName(menuFileName);
+            InternalMenu menu = MenuManager.getMenuByFileName(menuFileName);
             if (menu == null) {
                 event.setCancelled(true);
                 player.sendMessage(ChatColor.RED + "Menu \"" + menuFileName + "\" was not found.");

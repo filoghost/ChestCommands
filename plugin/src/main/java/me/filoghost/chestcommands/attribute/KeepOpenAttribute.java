@@ -5,7 +5,7 @@
  */
 package me.filoghost.chestcommands.attribute;
 
-import me.filoghost.chestcommands.api.ClickResult;
+import me.filoghost.chestcommands.icon.ClickResult;
 import me.filoghost.chestcommands.icon.InternalConfigurableIcon;
 
 public class KeepOpenAttribute implements IconAttribute {

@@ -6,6 +6,7 @@
 package me.filoghost.chestcommands.placeholder;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class PlaceholderString {
 
@@ -13,7 +14,7 @@ public class PlaceholderString {
     private final String stringWithStaticPlaceholders;
     private final boolean hasDynamicPlaceholders;
 
-    public static PlaceholderString of(String string) {
+    public static @Nullable PlaceholderString of(String string) {
         if (string != null) {
             return new PlaceholderString(string);
         } else {
@@ -24,12 +25,12 @@ public class PlaceholderString {
     private PlaceholderString(String originalString) {
         this.originalString = originalString;
         this.stringWithStaticPlaceholders = PlaceholderManager.replaceStaticPlaceholders(originalString);
-        this.hasDynamicPlaceholders = PlaceholderManager.hasRelativePlaceholders(stringWithStaticPlaceholders);
+        this.hasDynamicPlaceholders = PlaceholderManager.hasDynamicPlaceholders(stringWithStaticPlaceholders);
     }
     
     public String getValue(Player player) {
         if (hasDynamicPlaceholders) {
-            return PlaceholderManager.replaceRelativePlaceholders(stringWithStaticPlaceholders, player);
+            return PlaceholderManager.replaceDynamicPlaceholders(stringWithStaticPlaceholders, player);
         } else {
             return stringWithStaticPlaceholders;
         }

@@ -8,23 +8,27 @@ package me.filoghost.chestcommands.legacy.v4_0;
 import me.filoghost.chestcommands.config.ConfigManager;
 import me.filoghost.chestcommands.legacy.upgrade.YamlUpgradeTask;
 import me.filoghost.chestcommands.parsing.icon.AttributeType;
-import me.filoghost.chestcommands.parsing.menu.MenuSettingsNode;
+import me.filoghost.chestcommands.parsing.menu.MenuSettingsPath;
 import me.filoghost.fcommons.Strings;
 import me.filoghost.fcommons.config.Config;
+import me.filoghost.fcommons.config.ConfigPath;
 import me.filoghost.fcommons.config.ConfigSection;
-import me.filoghost.fcommons.config.ConfigValueType;
+import me.filoghost.fcommons.config.ConfigType;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Map.Entry;
 
-public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
+/*
+ * All the changes that are not easy to make without parsing the YML file
+ */
+public class V4_0_MenuConfigUpgradeTask extends YamlUpgradeTask {
 
     private final String legacyCommandSeparator;
 
-    public V4_0_MenuReformatUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
+    public V4_0_MenuConfigUpgradeTask(ConfigManager configManager, Path menuFile, String legacyCommandSeparator) {
         super(configManager.getConfigLoader(menuFile));
         this.legacyCommandSeparator = legacyCommandSeparator;
     }
@@ -33,13 +37,14 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
     public void computeYamlChanges(Config menuConfig) {
         menuConfig.setHeader();
 
-        for (String key : menuConfig.getKeys()) {
+        for (Entry<ConfigPath, ConfigSection> entry : menuConfig.toMap(ConfigType.SECTION).entrySet()) {
+            ConfigPath key = entry.getKey();
             ConfigSection section = menuConfig.getConfigSection(key);
             if (section == null) {
                 continue;
             }
 
-            if (key.equals(MenuSettingsNode.ROOT_SECTION)) {
+            if (key.equals(MenuSettingsPath.ROOT_SECTION)) {
                 upgradeMenuSettings(section);
             } else {
                 upgradeIcon(section);
@@ -48,21 +53,21 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
     }
 
     private void upgradeMenuSettings(ConfigSection section) {
-        expandInlineList(section, MenuSettingsNode.COMMANDS, ";");
-        expandInlineList(section, MenuSettingsNode.OPEN_ACTIONS, legacyCommandSeparator);
-        updateActionPrefixes(section, MenuSettingsNode.OPEN_ACTIONS);
+        expandInlineList(section, MenuSettingsPath.COMMANDS, ";");
+        expandInlineList(section, MenuSettingsPath.OPEN_ACTIONS, legacyCommandSeparator);
+        updateActionPrefixes(section, MenuSettingsPath.OPEN_ACTIONS);
     }
 
     private void upgradeIcon(ConfigSection section) {
-        expandInlineList(section, AttributeType.ENCHANTMENTS.getAttributeName(), ";");
-        expandInlineList(section, AttributeType.ACTIONS.getAttributeName(), legacyCommandSeparator);
-        updateActionPrefixes(section, AttributeType.ACTIONS.getAttributeName());
-        expandSingletonList(section, AttributeType.REQUIRED_ITEMS.getAttributeName());
+        expandInlineList(section, AttributeType.ENCHANTMENTS.getConfigKey(), ";");
+        expandInlineList(section, AttributeType.ACTIONS.getConfigKey(), legacyCommandSeparator);
+        updateActionPrefixes(section, AttributeType.ACTIONS.getConfigKey());
+        expandSingletonList(section, AttributeType.REQUIRED_ITEMS.getConfigKey());
         expandInlineItemstack(section);
     }
 
-    private void updateActionPrefixes(ConfigSection config, String node) {
-        List<String> actions = config.getStringList(node);
+    private void updateActionPrefixes(ConfigSection config, ConfigPath configPath) {
+        List<String> actions = config.getStringList(configPath);
         if (actions == null) {
             return;
         }
@@ -81,7 +86,7 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
             }
         }
 
-        config.setStringList(node, actions);
+        config.setStringList(configPath, actions);
     }
 
     private String replacePrefix(String action, String oldPrefix, String newPrefix) {
@@ -94,50 +99,50 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
     }
 
     private void expandInlineItemstack(ConfigSection section) {
-        String material = section.getString(AttributeType.MATERIAL.getAttributeName());
+        String material = section.getString(AttributeType.MATERIAL.getConfigKey());
         if (material == null) {
             return;
         }
 
         if (material.contains(",")) {
-            String[] parts = Strings.trimmedSplit(material, ",", 2);
-            if (!section.contains(AttributeType.AMOUNT.getAttributeName())) {
+            String[] parts = Strings.splitAndTrim(material, ",", 2);
+            if (!section.contains(AttributeType.AMOUNT.getConfigKey())) {
                 try {
-                    section.setInt(AttributeType.AMOUNT.getAttributeName(), Integer.parseInt(parts[1]));
+                    section.setInt(AttributeType.AMOUNT.getConfigKey(), Integer.parseInt(parts[1]));
                 } catch (NumberFormatException e) {
-                    section.setString(AttributeType.AMOUNT.getAttributeName(), parts[1]);
+                    section.setString(AttributeType.AMOUNT.getConfigKey(), parts[1]);
                 }
             }
             material = parts[0];
-            section.setString(AttributeType.MATERIAL.getAttributeName(), material);
+            section.setString(AttributeType.MATERIAL.getConfigKey(), material);
             setSaveRequired();
         }
 
         if (material.contains(":")) {
-            String[] parts = Strings.trimmedSplit(material, ":", 2);
-            if (!section.contains(AttributeType.DURABILITY.getAttributeName())) {
+            String[] parts = Strings.splitAndTrim(material, ":", 2);
+            if (!section.contains(AttributeType.DURABILITY.getConfigKey())) {
                 try {
-                    section.setInt(AttributeType.DURABILITY.getAttributeName(), Integer.parseInt(parts[1]));
+                    section.setInt(AttributeType.DURABILITY.getConfigKey(), Integer.parseInt(parts[1]));
                 } catch (NumberFormatException e) {
-                    section.setString(AttributeType.DURABILITY.getAttributeName(), parts[1]);
+                    section.setString(AttributeType.DURABILITY.getConfigKey(), parts[1]);
                 }
             }
             material = parts[0];
-            section.setString(AttributeType.MATERIAL.getAttributeName(), material);
+            section.setString(AttributeType.MATERIAL.getConfigKey(), material);
             setSaveRequired();
         }
     }
 
-    private void expandInlineList(ConfigSection config, String node, String separator) {
-        if (config.get(node).isPresentAs(ConfigValueType.STRING)) {
-            config.setStringList(node, splitListElements(config.getString(node), separator));
+    private void expandInlineList(ConfigSection config, ConfigPath path, String separator) {
+        if (config.get(path).isPresentAs(ConfigType.STRING)) {
+            config.setStringList(path, splitListElements(config.getString(path), separator));
             setSaveRequired();
         }
     }
 
-    private void expandSingletonList(ConfigSection config, String node) {
-        if (config.get(node).isPresentAs(ConfigValueType.STRING)) {
-            config.setStringList(node, Collections.singletonList(config.getString(node)));
+    private void expandSingletonList(ConfigSection config, ConfigPath path) {
+        if (config.get(path).isPresentAs(ConfigType.STRING)) {
+            config.setStringList(path, Collections.singletonList(config.getString(path)));
             setSaveRequired();
         }
     }
@@ -147,7 +152,7 @@ public class V4_0_MenuReformatUpgradeTask extends YamlUpgradeTask {
             separator = ";";
         }
 
-        String[] splitValues = Strings.trimmedSplit(input, Pattern.quote(separator));
+        String[] splitValues = Strings.splitAndTrim(input, separator);
         List<String> values = new ArrayList<>();
 
         for (String value : splitValues) {
