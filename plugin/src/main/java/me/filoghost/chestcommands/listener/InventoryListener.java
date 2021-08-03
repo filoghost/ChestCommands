@@ -122,7 +122,7 @@ public class InventoryListener implements Listener {
         }
 
         // Only handle the click AFTER the event has finished
-        Bukkit.getScheduler().runTaskLater(ChestCommands.getPluginInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(ChestCommands.getInstance(), () -> {
             menuView.getMenu().open((Player) event.getPlayer());
         }, 1L);
     }

@@ -40,7 +40,7 @@ public class MenuCreatorPlayerInstance
 
     public void openEditor()
     {
-        inventory = Bukkit.createInventory(new MenuCreatorInventoryHolder(), menu.getRowCount() * 9, menu.getTitle());
+        inventory = Bukkit.createInventory(new MenuCreatorInventoryHolder(), menu.getRows() * 9, menu.getTitle());
 
         for(int i=0; i<menu.getIcons().getSize(); i++)
         {

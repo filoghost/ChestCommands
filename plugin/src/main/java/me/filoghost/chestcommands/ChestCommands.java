@@ -49,7 +49,7 @@ public class ChestCommands extends FCommonsPlugin {
 
     public static final String CHAT_PREFIX = ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "ChestCommands" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
 
-    private static Plugin pluginInstance;
+    private static ChestCommands pluginInstance;
     private static Path dataFolderPath;
 
     private static ConfigManager configManager;
@@ -117,18 +117,13 @@ public class ChestCommands extends FCommonsPlugin {
         }
     }
 
-    @Override
-    public void onDisable() {
-        closeAllMenus();
-    }
-
-    public static void loadAll()
+    public void loadAll()
     {
         ErrorCollector errorCollector = load();
 
         if (errorCollector.hasErrors()) {
             errorCollector.logToConsole();
-            Bukkit.getScheduler().runTaskLater(getPluginInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(this, () -> {
                 Bukkit.getConsoleSender().sendMessage(
                         ChestCommands.CHAT_PREFIX + ChatColor.RED + "Encountered " + errorCollector.getErrorsCount() + " error(s) on load. "
                                 + "Check previous console logs or run \"/chestcommands errors\" to see them again.");
@@ -200,7 +195,7 @@ public class ChestCommands extends FCommonsPlugin {
     }
 
 
-    public static Plugin getInstance() {
+    public static ChestCommands getInstance() {
         return pluginInstance;
     }
 

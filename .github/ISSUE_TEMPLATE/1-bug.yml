@@ -55,7 +55,7 @@ body:
    attributes:
     label: "Chest Commands version"
     description: "Output of the command `/version ChestCommands`."
-    placeholder: "ChestCommands version 4.0.4-SNAPSHOT-b75"
+    placeholder: "ChestCommands version 4.0.4-SNAPSHOT-b75-unofficial"
    validations:
     required: true
 

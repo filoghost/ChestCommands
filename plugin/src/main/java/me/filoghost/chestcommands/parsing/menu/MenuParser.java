@@ -60,7 +60,9 @@ public class MenuParser {
         if (iconSettings.isMissingAttribute(AttributeType.POSITION_Y)) {
             errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.POSITION_Y));
         }
-        if (iconSettings.isMissingAttribute(AttributeType.MATERIAL)) {
+        if ((iconSettings.getAttributeValue(AttributeType.BLANK) == null || iconSettings.getAttributeValue(AttributeType.BLANK).equals(false))
+                && iconSettings.isMissingAttribute(AttributeType.MATERIAL)
+                && iconSettings.getAttributeValue(AttributeType.CUSTOM_ITEM) == null) {
             errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
         }
 
@@ -95,12 +97,6 @@ public class MenuParser {
 
         if (menu.getIcon(row, column) != null) {
             errorCollector.add(Errors.Menu.iconOverridesAnother(iconSettings));
-        }
-
-        if ((iconSettings.getAttributeValue(AttributeType.BLANK) == null || iconSettings.getAttributeValue(AttributeType.BLANK).equals(false))
-                && iconSettings.getAttributeValue(AttributeType.MATERIAL) == null
-                && iconSettings.getAttributeValue(AttributeType.CUSTOM_ITEM) == null) {
-            errorCollector.add(Errors.Menu.missingAttribute(iconSettings, AttributeType.MATERIAL));
         }
 
         menu.setIcon(row, column, iconSettings.createIcon());

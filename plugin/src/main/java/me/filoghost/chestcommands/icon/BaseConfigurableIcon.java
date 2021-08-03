@@ -106,7 +106,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
     public void setCustomModelData(int customModelData)
     {
-        Preconditions.checkArgument(customModelData >= 0, "durability must be 0 or greater");
+        Preconditions.checkArgument(customModelData >= 0, "CUSTOM-MODEL-DATA must be 0 or greater");
         this.customModelData = customModelData;
         cachedRendering = null;
     }
@@ -116,7 +116,6 @@ public abstract class BaseConfigurableIcon implements Icon {
         return customModelData;
     }
 
-    public void setNBTData(String nbtData) {
     public void setNBTData(@Nullable String nbtData) {
         if (nbtData != null) {
             try {
@@ -280,6 +279,17 @@ public abstract class BaseConfigurableIcon implements Icon {
         return lore.getValue(viewer);
     }
 
+    public void setBlank(boolean isBlank)
+    {
+        this.isBlank = isBlank;
+    }
+
+    @Override
+    public boolean isBlank()
+    {
+        return isBlank;
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public ItemStack render(@NotNull Player viewer) {
@@ -346,16 +356,5 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
 
         return itemStack;
-    }
-
-    public void setBlank(boolean isBlank)
-    {
-        this.isBlank = isBlank;
-    }
-
-    @Override
-    public boolean isBlank()
-    {
-        return isBlank;
     }
 }

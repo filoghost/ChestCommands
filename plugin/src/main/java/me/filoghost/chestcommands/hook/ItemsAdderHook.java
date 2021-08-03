@@ -24,9 +24,9 @@ public enum ItemsAdderHook implements PluginHook, Listener
     public void setup() {
         enabled = Bukkit.getPluginManager().getPlugin("ItemsAdder") != null;
         if(ItemsAdder.areItemsLoaded())
-            ChestCommands.loadAll();
+            ChestCommands.getInstance().loadAll();
         else
-            Bukkit.getPluginManager().registerEvents(this, ChestCommands.getPluginInstance());
+            Bukkit.getPluginManager().registerEvents(this, ChestCommands.getInstance());
     }
 
     @Override
@@ -37,6 +37,6 @@ public enum ItemsAdderHook implements PluginHook, Listener
     @EventHandler(priority = EventPriority.MONITOR)
     private void onItemsLoaded(ItemsAdderFirstLoadEvent e)
     {
-        ChestCommands.loadAll();
+        ChestCommands.getInstance().loadAll();
     }
 }
