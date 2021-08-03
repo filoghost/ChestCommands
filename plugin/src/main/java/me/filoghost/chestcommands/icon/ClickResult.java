@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-package me.filoghost.chestcommands.api;
+package me.filoghost.chestcommands.icon;
 
 public enum ClickResult {
 

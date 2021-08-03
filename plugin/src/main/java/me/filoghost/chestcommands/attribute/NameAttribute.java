@@ -19,7 +19,7 @@ public class NameAttribute implements IconAttribute {
 
     private String colorName(String name) {
         if (!name.isEmpty()) {
-            return Settings.default_color__name + Colors.addColors(name);
+            return Settings.get().default_color__name + Colors.addColors(name);
         } else {
             return name;
         }

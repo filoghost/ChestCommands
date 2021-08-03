@@ -14,15 +14,17 @@ import me.filoghost.chestcommands.inventory.Grid;
 import me.filoghost.fcommons.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseMenu implements Menu {
 
-    
+
     private final String title;
     private final Grid<Icon> icons;
     private boolean autoReopen;
 
-    public BaseMenu(String title, int rows) {
+    public BaseMenu(@NotNull String title, int rows) {
         Preconditions.notNull(title, "title");
         Preconditions.checkArgument(rows > 0, "rows must be greater than 0");
         this.title = title;
@@ -30,45 +32,26 @@ public abstract class BaseMenu implements Menu {
     }
 
     @Override
-    public void setIcon(int row, int column, Icon icon) {
+    public void setIcon(int row, int column, @Nullable Icon icon) {
         icons.set(row, column, icon);
     }
 
     @Override
-    public Icon getIcon(int row, int column) {
+    public @Nullable Icon getIcon(int row, int column) {
         return icons.get(row, column);
     }
 
     @Override
-    public int getRowCount() {
-        return icons.getRows();
-    }
-    
-    @Override
-    public int getColumnCount() {
-        return icons.getColumns();
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    public Grid<Icon> getIcons() {
-        return icons;
-    }
-
-    @Override
-    public MenuView open(Player player) {
+    public @NotNull MenuView open(@NotNull Player player) {
         Preconditions.notNull(player, "player");
 
         DefaultMenuView menuView = new DefaultMenuView(this, player);
-        menuView.open(player);
+        menuView.open();
         return menuView;
     }
 
     @Override
-    public void refreshMenuViews() {
+    public void refreshOpenViews() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             DefaultMenuView menuView = MenuManager.getOpenMenuView(player);
             if (menuView != null && menuView.getMenu() == this) {
@@ -86,4 +69,24 @@ public abstract class BaseMenu implements Menu {
     {
         return autoReopen;
     }
+    
+    @Override
+    public int getRows() {
+        return icons.getRows();
+    }
+
+    @Override
+    public int getColumns() {
+        return icons.getColumns();
+    }
+
+    @Override
+    public @NotNull String getTitle() {
+        return title;
+    }
+
+    public @NotNull Grid<Icon> getIcons() {
+        return icons;
+    }
+
 }

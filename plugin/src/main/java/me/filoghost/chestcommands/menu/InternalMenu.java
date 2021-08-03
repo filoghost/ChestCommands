@@ -6,8 +6,7 @@
 package me.filoghost.chestcommands.menu;
 
 import com.google.common.collect.ImmutableList;
-import java.nio.file.Path;
-import java.util.List;
+import me.filoghost.chestcommands.ChestCommands;
 import me.filoghost.chestcommands.Permissions;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.api.MenuView;
@@ -15,6 +14,11 @@ import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.fcommons.collection.CollectionUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class InternalMenu extends BaseMenu {
 
@@ -25,18 +29,18 @@ public class InternalMenu extends BaseMenu {
     private int refreshTicks;
     private int autoCloseTicks;
 
-    public InternalMenu(String title, int rows, Path sourceFile) {
+    public InternalMenu(@NotNull String title, int rows, @NotNull Path sourceFile) {
         super(title, rows);
         this.sourceFile = sourceFile;
         this.openPermission = Permissions.OPEN_MENU_PREFIX + sourceFile.getFileName();
     }
 
-    public Path getSourceFile() {
+    public @NotNull Path getSourceFile() {
         return sourceFile;
     }
 
     public void setOpenActions(List<Action> openAction) {
-        this.openActions = CollectionUtils.immutableCopy(openAction);
+        this.openActions = CollectionUtils.newImmutableList(openAction);
     }
 
     public String getOpenPermission() {
@@ -62,7 +66,7 @@ public class InternalMenu extends BaseMenu {
     }
 
     @Override
-    public MenuView open(Player player) {
+    public @NotNull MenuView open(@NotNull Player player) {
         if (openActions != null) {
             for (Action openAction : openActions) {
                 openAction.execute(player);
@@ -70,6 +74,11 @@ public class InternalMenu extends BaseMenu {
         }
 
         return super.open(player);
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return ChestCommands.getInstance();
     }
 
     public void openCheckingPermission(Player player) {
@@ -81,7 +90,7 @@ public class InternalMenu extends BaseMenu {
     }
 
     public void sendNoOpenPermissionMessage(CommandSender sender) {
-        String noPermMessage = Lang.no_open_permission;
+        String noPermMessage = Lang.get().no_open_permission;
         if (noPermMessage != null && !noPermMessage.isEmpty()) {
             sender.sendMessage(noPermMessage.replace("{permission}", this.openPermission));
         }

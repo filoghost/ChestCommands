@@ -5,11 +5,12 @@
  */
 package me.filoghost.chestcommands.legacy.upgrade;
 
-import java.nio.file.Path;
 import me.filoghost.fcommons.config.Config;
 import me.filoghost.fcommons.config.ConfigLoader;
 import me.filoghost.fcommons.config.exception.ConfigLoadException;
 import me.filoghost.fcommons.config.exception.ConfigSaveException;
+
+import java.nio.file.Path;
 
 public abstract class YamlUpgradeTask extends UpgradeTask {
 
@@ -47,17 +48,17 @@ public abstract class YamlUpgradeTask extends UpgradeTask {
 
     protected abstract void computeYamlChanges(Config config);
 
-    protected void removeNode(Config config, String node) {
-        if (config.contains(node)) {
-            config.remove(node);
+    protected void removeValue(Config config, String configPath) {
+        if (config.contains(configPath)) {
+            config.remove(configPath);
             setSaveRequired();
         }
     }
 
-    protected void replaceStringValue(Config settingsConfig, String node, String target, String replacement) {
-        String value = settingsConfig.getString(node);
+    protected void replaceStringValue(Config settingsConfig, String configPath, String target, String replacement) {
+        String value = settingsConfig.getString(configPath);
         if (value.contains(target)) {
-            settingsConfig.setString(node, value.replace(target, replacement));
+            settingsConfig.setString(configPath, value.replace(target, replacement));
             setSaveRequired();
         }
     }

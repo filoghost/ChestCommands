@@ -5,31 +5,30 @@
  */
 package me.filoghost.chestcommands.action;
 
-import java.util.Optional;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.NumberParser;
 import me.filoghost.chestcommands.parsing.ParseException;
 import me.filoghost.fcommons.Strings;
-import me.filoghost.fcommons.collection.Registry;
+import me.filoghost.fcommons.collection.EnumLookupRegistry;
+import me.filoghost.fcommons.collection.LookupRegistry;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class PlaySoundAction implements Action {
     
-    private static final Registry<Sound> SOUNDS_REGISTRY = Registry.fromEnumValues(Sound.class);
+    private static final LookupRegistry<Sound> SOUNDS_REGISTRY = EnumLookupRegistry.fromEnumValues(Sound.class);
 
     private final Sound sound;
     private final float pitch;
     private final float volume;
 
     public PlaySoundAction(String serializedAction) throws ParseException {
-        String[] split = Strings.trimmedSplit(serializedAction, ",", 3);
+        String[] split = Strings.splitAndTrim(serializedAction, ",", 3);
 
-        Optional<Sound> sound = SOUNDS_REGISTRY.find(split[0]);
-        if (!sound.isPresent()) {
+        sound = SOUNDS_REGISTRY.lookup(split[0]);
+        if (sound == null) {
             throw new ParseException(Errors.Parsing.unknownSound(split[0]));
         }
-        this.sound = sound.get();
 
         if (split.length > 1) {
             try {

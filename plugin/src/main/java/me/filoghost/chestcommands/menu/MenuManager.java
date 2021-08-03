@@ -5,46 +5,44 @@
  */
 package me.filoghost.chestcommands.menu;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
 import me.filoghost.chestcommands.inventory.MenuInventoryHolder;
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.chestcommands.parsing.menu.LoadedMenu;
 import me.filoghost.chestcommands.parsing.menu.MenuOpenItem;
+import me.filoghost.fcommons.collection.CaseInsensitiveHashMap;
 import me.filoghost.fcommons.collection.CaseInsensitiveMap;
+import me.filoghost.fcommons.collection.CaseInsensitiveString;
 import me.filoghost.fcommons.logging.ErrorCollector;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuManager {
 
-    private static Map<String, InternalMenu> menusByFile;
-    private static Map<String, InternalMenu> menusByOpenCommand;
-    private static Map<MenuOpenItem, InternalMenu> menusByOpenItem;
+    private static final CaseInsensitiveMap<InternalMenu> menusByFile = new CaseInsensitiveHashMap<>();
+    private static final CaseInsensitiveMap<InternalMenu> menusByOpenCommand = new CaseInsensitiveHashMap<>();
+    private static final Map<MenuOpenItem, InternalMenu> menusByOpenItem = new HashMap<>();
 
-    public MenuManager() {
-        menusByFile = new CaseInsensitiveMap<>();
-        menusByOpenCommand = new CaseInsensitiveMap<>();
-        menusByOpenItem = new HashMap<>();
-    }
-
-    public void clear() {
+    public static void reset() {
         menusByFile.clear();
         menusByOpenCommand.clear();
         menusByOpenItem.clear();
     }
 
-    public InternalMenu getMenuByFileName(String fileName) {
+    public static InternalMenu getMenuByFileName(String fileName) {
         return menusByFile.get(fileName);
     }
 
-    public void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
+    public static void registerMenu(LoadedMenu loadedMenu, ErrorCollector errorCollector) {
         InternalMenu menu = loadedMenu.getMenu();
 
         String fileName = loadedMenu.getSourceFile().getFileName().toString();
@@ -71,7 +69,7 @@ public class MenuManager {
         }
     }
 
-    public void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {
+    public static void openMenuByItem(Player player, ItemStack itemInHand, Action clickAction) {
         menusByOpenItem.forEach((openItem, menu) -> {
             if (openItem.matches(itemInHand, clickAction)) {
                 menu.openCheckingPermission(player);
@@ -79,34 +77,43 @@ public class MenuManager {
         });
     }
 
-    public InternalMenu getMenuByOpenCommand(String openCommand) {
+    public static InternalMenu getMenuByOpenCommand(String openCommand) {
         return menusByOpenCommand.get(openCommand);
     }
 
-    public Collection<String> getMenuFileNames() {
-        return Collections.unmodifiableCollection(menusByFile.keySet());
+    public static Collection<CaseInsensitiveString> getMenuFileNames() {
+        return menusByFile.keySet();
     }
 
     public static boolean isMenuInventory(Inventory inventory) {
         return getMenuInventoryHolder(inventory) != null;
     }
 
-    public static DefaultMenuView getOpenMenuView(Player player) {
-        InventoryView view = player.getOpenInventory();
-        if (view == null) {
+    public static void closeAllOpenMenuViews() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DefaultMenuView openMenuView = getOpenMenuView(player);
+            if (openMenuView != null) {
+                openMenuView.close();
+            }
+        }
+    }
+
+    public static @Nullable DefaultMenuView getOpenMenuView(Player player) {
+        InventoryView inventoryView = player.getOpenInventory();
+        if (inventoryView == null) {
             return null;
         }
 
-        DefaultMenuView menuView = getOpenMenuView(view.getTopInventory());
+        DefaultMenuView menuView = getOpenMenuView(inventoryView.getTopInventory());
         if (menuView == null) {
-            menuView = getOpenMenuView(view.getBottomInventory());
+            menuView = getOpenMenuView(inventoryView.getBottomInventory());
         }
 
         return menuView;
     }
 
 
-    public static DefaultMenuView getOpenMenuView(Inventory inventory) {
+    public static @Nullable DefaultMenuView getOpenMenuView(Inventory inventory) {
         MenuInventoryHolder inventoryHolder = getMenuInventoryHolder(inventory);
         if (inventoryHolder != null) {
             return inventoryHolder.getMenuView();
@@ -115,7 +122,7 @@ public class MenuManager {
         }
     }
 
-    private static MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
+    private static @Nullable MenuInventoryHolder getMenuInventoryHolder(Inventory inventory) {
         if (inventory.getHolder() instanceof MenuInventoryHolder) {
             return (MenuInventoryHolder) inventory.getHolder();
         } else {

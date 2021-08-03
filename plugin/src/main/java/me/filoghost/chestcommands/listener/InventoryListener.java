@@ -5,15 +5,17 @@
  */
 package me.filoghost.chestcommands.listener;
 
-import java.util.Map;
-import java.util.WeakHashMap;
 import me.filoghost.chestcommands.ChestCommands;
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.Icon;
+import me.filoghost.chestcommands.api.Menu;
 import me.filoghost.chestcommands.config.Settings;
 import me.filoghost.chestcommands.inventory.DefaultMenuView;
+import me.filoghost.chestcommands.logging.Errors;
+import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.chestcommands.menu.MenuManager;
+import me.filoghost.fcommons.logging.Log;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,16 +26,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class InventoryListener implements Listener {
 
-    private final MenuManager menuManager;
-    private final Map<Player, Long> antiClickSpam;
     private static final Map<Player, Boolean> playerClosedMenuPressingIcon = new WeakHashMap<>();
 
-    public InventoryListener(MenuManager menuManager) {
-        this.menuManager = menuManager;
-        this.antiClickSpam = new WeakHashMap<>();
-    }
+    private final Map<Player, Long> antiClickSpam = new WeakHashMap<>();
 
     public static boolean canPlayerClose_AutoOpenMenu(Player player)
     {
@@ -51,7 +51,7 @@ public class InventoryListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent event) {
         if (event.hasItem() && event.getAction() != Action.PHYSICAL) {
-            menuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
+            MenuManager.openMenuByItem(event.getPlayer(), event.getItem(), event.getAction());
         }
     }
 
@@ -83,7 +83,7 @@ public class InventoryListener implements Listener {
 
         Long cooldownUntil = antiClickSpam.get(clicker);
         long now = System.currentTimeMillis();
-        int minDelay = Settings.anti_click_spam_delay;
+        int minDelay = Settings.get().anti_click_spam_delay;
 
         if (minDelay > 0) {
             if (cooldownUntil != null && cooldownUntil > now) {
@@ -94,11 +94,12 @@ public class InventoryListener implements Listener {
         }
 
         // Only handle the click AFTER the event has finished
-        Bukkit.getScheduler().runTask(ChestCommands.getPluginInstance(), () -> {
-            ClickResult result = icon.onClick(menuView, clicker);
-
-            if (result == ClickResult.CLOSE) {
-                clicker.closeInventory();
+        Bukkit.getScheduler().runTask(ChestCommands.getInstance(), () -> {
+            try {
+                icon.onClick(menuView, clicker);
+            } catch (Throwable t) {
+                handleIconClickException(clicker, menuView.getMenu(), t);
+                menuView.close();
             }
         });
     }
@@ -124,6 +125,18 @@ public class InventoryListener implements Listener {
         Bukkit.getScheduler().runTaskLater(ChestCommands.getPluginInstance(), () -> {
             menuView.getMenu().open((Player) event.getPlayer());
         }, 1L);
+    }
+    
+    private void handleIconClickException(Player clicker, Menu menu, Throwable throwable) {
+        String menuDescription;
+        if (menu.getPlugin() == ChestCommands.getInstance()) {
+            menuDescription = "the menu \"" + Errors.formatPath(((InternalMenu) menu).getSourceFile()) + "\"";
+        } else {
+            menuDescription = "a menu created by the plugin \"" + menu.getPlugin().getName() + "\"";
+        }
+
+        Log.severe("Encountered an exception while handling a click inside " + menuDescription, throwable);
+        clicker.sendMessage(ChatColor.RED + "An internal error occurred when you clicked on the item.");
     }
 
 }

@@ -5,14 +5,36 @@
  */
 package me.filoghost.chestcommands.parsing.icon;
 
+import me.filoghost.chestcommands.attribute.ActionsAttribute;
+import me.filoghost.chestcommands.attribute.AmountAttribute;
+import me.filoghost.chestcommands.attribute.AttributeErrorHandler;
+import me.filoghost.chestcommands.attribute.BannerColorAttribute;
+import me.filoghost.chestcommands.attribute.BannerPatternsAttribute;
+import me.filoghost.chestcommands.attribute.ClickPermissionAttribute;
+import me.filoghost.chestcommands.attribute.ClickPermissionMessageAttribute;
+import me.filoghost.chestcommands.attribute.DurabilityAttribute;
+import me.filoghost.chestcommands.attribute.EnchantmentsAttribute;
+import me.filoghost.chestcommands.attribute.ExpLevelsAttribute;
+import me.filoghost.chestcommands.attribute.IconAttribute;
+import me.filoghost.chestcommands.attribute.KeepOpenAttribute;
+import me.filoghost.chestcommands.attribute.LeatherColorAttribute;
+import me.filoghost.chestcommands.attribute.LoreAttribute;
+import me.filoghost.chestcommands.attribute.MaterialAttribute;
+import me.filoghost.chestcommands.attribute.NBTDataAttribute;
+import me.filoghost.chestcommands.attribute.NameAttribute;
+import me.filoghost.chestcommands.attribute.PositionAttribute;
+import me.filoghost.chestcommands.attribute.PriceAttribute;
+import me.filoghost.chestcommands.attribute.RequiredItemsAttribute;
+import me.filoghost.chestcommands.attribute.SkullOwnerAttribute;
+import me.filoghost.chestcommands.attribute.ViewPermissionAttribute;
+import me.filoghost.chestcommands.parsing.ParseException;
+import me.filoghost.fcommons.config.ConfigPath;
+import me.filoghost.fcommons.config.ConfigType;
+import me.filoghost.fcommons.config.ConfigValue;
+import me.filoghost.fcommons.config.exception.ConfigValueException;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import me.filoghost.chestcommands.attribute.*;
-import me.filoghost.chestcommands.parsing.ParseException;
-import me.filoghost.fcommons.config.ConfigValue;
-import me.filoghost.fcommons.config.ConfigValueType;
-import me.filoghost.fcommons.config.exception.ConfigValueException;
 
 public enum AttributeType {
 
@@ -42,34 +64,35 @@ public enum AttributeType {
     CUSTOM_MODEL_DATA("CUSTOM-MODEL-DATA", ConfigValueType.INTEGER, CustomModelDataAttribute::new)
     ;
 
-    private static final Map<String, AttributeType> parsersByAttributeName;
+    private static final Map<ConfigPath, AttributeType> attributeTypeByConfigKey;
+    
     static {
-        parsersByAttributeName = new HashMap<>();
+        attributeTypeByConfigKey = new HashMap<>();
         for (AttributeType attributeParser : values()) {
-            parsersByAttributeName.put(attributeParser.getAttributeName(), attributeParser);
+            attributeTypeByConfigKey.put(attributeParser.getConfigKey(), attributeParser);
         }
     }
 
-    private final String attributeName;
+    private final ConfigPath configKey;
     private final AttributeParser attributeParser;
 
-    <V> AttributeType(String attributeName, ConfigValueType<V> configValueType, AttributeFactory<V, ?> attributeFactory) {
-        this.attributeName = attributeName;
+    <V> AttributeType(String configKey, ConfigType<V> configType, AttributeFactory<V, ?> attributeFactory) {
+        this.configKey = ConfigPath.literal(configKey);
         this.attributeParser = (ConfigValue configValue, AttributeErrorHandler errorHandler) -> {
-            return attributeFactory.create(configValue.asRequired(configValueType), errorHandler);
+            return attributeFactory.create(configValue.asRequired(configType), errorHandler);
         };
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public ConfigPath getConfigKey() {
+        return configKey;
     }
 
     public AttributeParser getParser() {
         return attributeParser;
     }
 
-    public static AttributeType fromAttributeName(String attributeName) {
-        return parsersByAttributeName.get(attributeName);
+    public static AttributeType fromConfigKey(ConfigPath configKey) {
+        return attributeTypeByConfigKey.get(configKey);
     }
 
 

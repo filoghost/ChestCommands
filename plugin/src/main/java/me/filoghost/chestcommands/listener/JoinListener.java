@@ -26,7 +26,7 @@ public class JoinListener implements Listener {
                     + " error(s) last time it was loaded. You can see them by doing \"/cc reload\" in the console.");
         }
 
-        if (ChestCommands.hasNewVersion() && Settings.update_notifications && player.hasPermission(Permissions.UPDATE_NOTIFICATIONS)) {
+        if (ChestCommands.hasNewVersion() && Settings.get().update_notifications && player.hasPermission(Permissions.UPDATE_NOTIFICATIONS)) {
             player.sendMessage(ChestCommands.CHAT_PREFIX + "Found an update: " + ChestCommands.getNewVersion() + ". Download:");
             player.sendMessage(ChatColor.DARK_GREEN + ">> " + ChatColor.GREEN + "http://dev.bukkit.org/bukkit-plugins/chest-commands");
         }

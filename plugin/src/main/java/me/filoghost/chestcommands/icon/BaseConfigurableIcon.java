@@ -26,6 +26,8 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,12 +75,12 @@ public abstract class BaseConfigurableIcon implements Icon {
                 || (skullOwner != null && skullOwner.hasDynamicPlaceholders());
     }
 
-    public void setMaterial(Material material) {
+    public void setMaterial(@NotNull Material material) {
         this.material = material;
         cachedRendering = null;
     }
 
-    public Material getMaterial() {
+    public @NotNull Material getMaterial() {
         return material;
     }
 
@@ -115,6 +117,7 @@ public abstract class BaseConfigurableIcon implements Icon {
     }
 
     public void setNBTData(String nbtData) {
+    public void setNBTData(@Nullable String nbtData) {
         if (nbtData != null) {
             try {
                 MojangsonParser.parse(nbtData);
@@ -126,16 +129,16 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
-    public String getNBTData() {
+    public @Nullable String getNBTData() {
         return nbtData;
     }
 
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         this.name = PlaceholderString.of(name);
         cachedRendering = null;
     }
 
-    public String getName() {
+    public @Nullable String getName() {
         if (name != null) {
             return name.getOriginalValue();
         } else {
@@ -143,22 +146,22 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
     }
 
-    public void setLore(String... lore) {
-        if (lore != null) {
-            setLore(Arrays.asList(lore));
-        }
+    public void setLore(@Nullable String... lore) {
+        setLore(lore != null ? Arrays.asList(lore) : null);
     }
 
-    public void setLore(List<String> lore) {
+    public void setLore(@Nullable List<String> lore) {
         if (lore != null) {
-            this.lore = new PlaceholderStringList(CollectionUtils.replaceNulls(lore, ""));
+            this.lore = new PlaceholderStringList(CollectionUtils.toArrayList(lore, element -> {
+                return element != null ? element : "";
+            }));
         } else {
             this.lore = null;
         }
         cachedRendering = null;
     }
 
-    public List<String> getLore() {
+    public @Nullable List<String> getLore() {
         if (lore != null) {
             return new ArrayList<>(lore.getOriginalValue());
         } else {
@@ -166,20 +169,20 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
     }
 
-    public void setEnchantments(Map<Enchantment, Integer> enchantments) {
-        this.enchantments = CollectionUtils.copy(enchantments);
+    public void setEnchantments(@Nullable Map<Enchantment, Integer> enchantments) {
+        this.enchantments = CollectionUtils.newHashMap(enchantments);
         cachedRendering = null;
     }
 
-    public Map<Enchantment, Integer> getEnchantments() {
-        return CollectionUtils.copy(enchantments);
+    public @Nullable Map<Enchantment, Integer> getEnchantments() {
+        return CollectionUtils.newHashMap(enchantments);
     }
 
-    public void addEnchantment(Enchantment enchantment) {
+    public void addEnchantment(@NotNull Enchantment enchantment) {
         addEnchantment(enchantment, 1);
     }
 
-    public void addEnchantment(Enchantment enchantment, Integer level) {
+    public void addEnchantment(@NotNull Enchantment enchantment, int level) {
         if (enchantments == null) {
             enchantments = new HashMap<>();
         }
@@ -187,7 +190,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
-    public void removeEnchantment(Enchantment enchantment) {
+    public void removeEnchantment(@NotNull Enchantment enchantment) {
         if (enchantments == null) {
             return;
         }
@@ -195,16 +198,16 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
-    public Color getLeatherColor() {
+    public @Nullable Color getLeatherColor() {
         return leatherColor;
     }
 
-    public void setLeatherColor(Color leatherColor) {
+    public void setLeatherColor(@Nullable Color leatherColor) {
         this.leatherColor = leatherColor;
         cachedRendering = null;
     }
 
-    public String getSkullOwner() {
+    public @Nullable String getSkullOwner() {
         if (skullOwner != null) {
             return skullOwner.getOriginalValue();
         } else {
@@ -212,27 +215,35 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
     }
 
-    public void setSkullOwner(String skullOwner) {
+    public void setSkullOwner(@Nullable String skullOwner) {
         this.skullOwner = PlaceholderString.of(skullOwner);
         cachedRendering = null;
     }
 
-    public DyeColor getBannerColor() {
+    public @Nullable DyeColor getBannerColor() {
         return bannerColor;
     }
 
-    public void setBannerColor(DyeColor bannerColor) {
+    public void setBannerColor(@Nullable DyeColor bannerColor) {
         this.bannerColor = bannerColor;
         cachedRendering = null;
     }
 
-    public List<Pattern> getBannerPatterns() {
-        return CollectionUtils.copy(bannerPatterns);
+    public @Nullable List<Pattern> getBannerPatterns() {
+        return CollectionUtils.newArrayList(bannerPatterns);
     }
 
-    public void setBannerPatterns(List<Pattern> bannerPatterns) {
-        this.bannerPatterns = CollectionUtils.copy(bannerPatterns);
+    public void setBannerPatterns(@Nullable Pattern... bannerPatterns) {
+        setBannerPatterns(bannerPatterns != null ? Arrays.asList(bannerPatterns) : null);
+    }
+
+    public void setBannerPatterns(@Nullable List<Pattern> bannerPatterns) {
+        this.bannerPatterns = CollectionUtils.newArrayList(bannerPatterns);
         cachedRendering = null;
+    }
+
+    public boolean isPlaceholdersEnabled() {
+        return placeholdersEnabled;
     }
 
     public void setPlaceholdersEnabled(boolean placeholdersEnabled) {
@@ -240,7 +251,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         cachedRendering = null;
     }
 
-    public String renderName(Player viewer) {
+    public @Nullable String renderName(Player viewer) {
         if (name == null) {
             return null;
         }
@@ -258,7 +269,7 @@ public abstract class BaseConfigurableIcon implements Icon {
         }
     }
 
-    public List<String> renderLore(Player viewer) {
+    public @Nullable List<String> renderLore(Player viewer) {
         if (lore == null) {
             return null;
         }
@@ -271,7 +282,7 @@ public abstract class BaseConfigurableIcon implements Icon {
 
     @Override
     @SuppressWarnings("deprecation")
-    public ItemStack render(Player viewer) {
+    public ItemStack render(@NotNull Player viewer) {
         if (shouldCacheRendering() && cachedRendering != null) {
             // Performance: return a cached item
             return cachedRendering;

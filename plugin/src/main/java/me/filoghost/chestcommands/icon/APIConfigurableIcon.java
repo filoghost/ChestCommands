@@ -8,6 +8,7 @@ package me.filoghost.chestcommands.icon;
 import me.filoghost.chestcommands.api.ClickHandler;
 import me.filoghost.chestcommands.api.ConfigurableIcon;
 import org.bukkit.Material;
+import org.jetbrains.annotations.Nullable;
 
 public class APIConfigurableIcon extends BaseConfigurableIcon implements ConfigurableIcon {
 
@@ -18,12 +19,12 @@ public class APIConfigurableIcon extends BaseConfigurableIcon implements Configu
     }
 
     @Override
-    public void setClickHandler(ClickHandler clickHandler) {
+    public void setClickHandler(@Nullable ClickHandler clickHandler) {
         this.clickHandler = clickHandler;
     }
 
     @Override
-    public ClickHandler getClickHandler() {
+    public @Nullable ClickHandler getClickHandler() {
         return clickHandler;
     }
 

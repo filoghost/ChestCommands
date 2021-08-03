@@ -5,39 +5,41 @@
  */
 package me.filoghost.chestcommands.placeholder;
 
-import java.util.ArrayList;
-import java.util.List;
 import me.filoghost.chestcommands.api.PlaceholderReplacer;
 import me.filoghost.chestcommands.hook.PlaceholderAPIHook;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderMatch;
 import me.filoghost.chestcommands.placeholder.scanner.PlaceholderScanner;
 import me.filoghost.fcommons.Preconditions;
+import me.filoghost.fcommons.logging.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlaceholderManager {
 
     private static final List<StaticPlaceholder> staticPlaceholders = new ArrayList<>();
-    private static final PlaceholderRegistry relativePlaceholderRegistry = new PlaceholderRegistry();
+    private static final PlaceholderRegistry dynamicPlaceholderRegistry = new PlaceholderRegistry();
+    private static final PlaceholderCache placeholderCache = new PlaceholderCache();
     static {
         for (DefaultPlaceholder placeholder : DefaultPlaceholder.values()) {
-            relativePlaceholderRegistry.registerInternalPlaceholder(placeholder.getIdentifier(), placeholder.getReplacer());
+            dynamicPlaceholderRegistry.registerInternalPlaceholder(placeholder.getIdentifier(), placeholder.getReplacer());
         }
     }
 
-    private static final PlaceholderCache placeholderCache = new PlaceholderCache();
-
-    public static boolean hasRelativePlaceholders(List<String> list) {
+    public static boolean hasDynamicPlaceholders(List<String> list) {
         for (String element : list) {
-            if (hasRelativePlaceholders(element)) {
+            if (hasDynamicPlaceholders(element)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean hasRelativePlaceholders(String text) {
-        if (new PlaceholderScanner(text).anyMatch(PlaceholderManager::isValidPlaceholder)) {
+    public static boolean hasDynamicPlaceholders(String text) {
+        if (new PlaceholderScanner(text).containsAny()) {
             return true;
         }
 
@@ -48,7 +50,7 @@ public class PlaceholderManager {
         return false;
     }
 
-    public static String replaceRelativePlaceholders(String text, Player player) {
+    public static String replaceDynamicPlaceholders(String text, Player player) {
         text = new PlaceholderScanner(text).replace(match -> getReplacement(match, player));
 
         if (PlaceholderAPIHook.INSTANCE.isEnabled()) {
@@ -58,19 +60,21 @@ public class PlaceholderManager {
         return text;
     }
 
-    private static boolean isValidPlaceholder(PlaceholderMatch placeholderMatch) {
-        return relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch) != null;
-    }
+    private static @Nullable String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
+        Placeholder placeholder = dynamicPlaceholderRegistry.getPlaceholder(placeholderMatch);
 
-    private static String getReplacement(PlaceholderMatch placeholderMatch, Player player) {
-        PlaceholderReplacer placeholderReplacer = relativePlaceholderRegistry.getPlaceholderReplacer(placeholderMatch);
-
-        if (placeholderReplacer == null) {
+        if (placeholder == null) {
             return null; // Placeholder not found
         }
 
         return placeholderCache.computeIfAbsent(placeholderMatch, player, () -> {
-            return placeholderReplacer.getReplacement(player, placeholderMatch.getArgument());
+            try {
+                return placeholder.getReplacer().getReplacement(player, placeholderMatch.getArgument());
+            } catch (Throwable t) {
+                Log.severe("Encountered an exception while replacing the placeholder \"" + placeholderMatch.getIdentifier()
+                        + "\" registered by the plugin \"" + placeholder.getPlugin().getName() + "\"", t);
+                return "[PLACEHOLDER ERROR]";
+            }
         });
     }
 
@@ -106,12 +110,23 @@ public class PlaceholderManager {
 
     public static void registerPluginPlaceholder(Plugin plugin, String identifier, PlaceholderReplacer placeholderReplacer) {
         Preconditions.notNull(plugin, "plugin");
+        checkIdentifierArgument(identifier);
+        Preconditions.notNull(placeholderReplacer, "placeholderReplacer");
+
+        dynamicPlaceholderRegistry.registerExternalPlaceholder(plugin, identifier, placeholderReplacer);
+    }
+
+    public static boolean unregisterPluginPlaceholder(Plugin plugin, String identifier) {
+        Preconditions.notNull(plugin, "plugin");
+        checkIdentifierArgument(identifier);
+
+        return dynamicPlaceholderRegistry.unregisterExternalPlaceholder(plugin, identifier);
+    }
+
+    private static void checkIdentifierArgument(String identifier) {
         Preconditions.notNull(identifier, "identifier");
         Preconditions.checkArgument(1 <= identifier.length() && identifier.length() <= 30, "identifier length must be between 1 and 30");
         Preconditions.checkArgument(identifier.matches("[a-zA-Z0-9_]+"), "identifier must contain only letters, numbers and underscores");
-        Preconditions.notNull(placeholderReplacer, "placeholderReplacer");
-
-        relativePlaceholderRegistry.registerExternalPlaceholder(plugin, identifier, placeholderReplacer);
     }
 
     public static void onTick() {

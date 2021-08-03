@@ -6,10 +6,11 @@
 package me.filoghost.chestcommands.parsing.menu;
 
 import com.google.common.collect.ImmutableList;
-import java.nio.file.Path;
-import java.util.List;
 import me.filoghost.chestcommands.menu.InternalMenu;
 import me.filoghost.fcommons.collection.CollectionUtils;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class LoadedMenu {
 
@@ -21,7 +22,7 @@ public class LoadedMenu {
     public LoadedMenu(InternalMenu menu, Path menuFile, List<String> openCommands, MenuOpenItem openItem) {
         this.menu = menu;
         this.sourceFile = menuFile;
-        this.openCommands = CollectionUtils.immutableCopy(openCommands);
+        this.openCommands = CollectionUtils.newImmutableList(openCommands);
         this.openItem = openItem;
     }
 

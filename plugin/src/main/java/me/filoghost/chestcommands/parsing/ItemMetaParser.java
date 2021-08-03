@@ -7,7 +7,8 @@ package me.filoghost.chestcommands.parsing;
 
 import me.filoghost.chestcommands.logging.Errors;
 import me.filoghost.fcommons.Strings;
-import me.filoghost.fcommons.collection.Registry;
+import me.filoghost.fcommons.collection.EnumLookupRegistry;
+import me.filoghost.fcommons.collection.LookupRegistry;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
@@ -15,14 +16,14 @@ import org.bukkit.block.banner.PatternType;
 
 public final class ItemMetaParser {
 
-    private static final Registry<DyeColor> DYE_COLORS_REGISTRY = Registry.fromEnumValues(DyeColor.class);
-    private static final Registry<PatternType> PATTERN_TYPES_REGISTRY = Registry.fromEnumValues(PatternType.class);
+    private static final LookupRegistry<DyeColor> DYE_COLORS_REGISTRY = EnumLookupRegistry.fromEnumValues(DyeColor.class);
+    private static final LookupRegistry<PatternType> PATTERN_TYPES_REGISTRY = EnumLookupRegistry.fromEnumValues(PatternType.class);
 
     private ItemMetaParser() {}
 
 
     public static Color parseRGBColor(String input) throws ParseException {
-        String[] split = Strings.trimmedSplit(input, ",");
+        String[] split = Strings.splitAndTrim(input, ",");
 
         if (split.length != 3) {
             throw new ParseException(Errors.Parsing.invalidColorFormat);
@@ -52,18 +53,23 @@ public final class ItemMetaParser {
     }
 
     public static DyeColor parseDyeColor(String input) throws ParseException {
-        return DYE_COLORS_REGISTRY.find(input)
-                .orElseThrow(() -> new ParseException(Errors.Parsing.unknownDyeColor(input)));
+        DyeColor dyeColor = DYE_COLORS_REGISTRY.lookup(input);
+        if (dyeColor == null) {
+            throw new ParseException(Errors.Parsing.unknownDyeColor(input));
+        }
+        return dyeColor;
     }
 
     public static Pattern parseBannerPattern(String input) throws ParseException {
-        String[] split = Strings.trimmedSplit(input, ":");
+        String[] split = Strings.splitAndTrim(input, ":");
         if (split.length != 2) {
             throw new ParseException(Errors.Parsing.invalidPatternFormat);
         }
 
-        PatternType patternType = PATTERN_TYPES_REGISTRY.find(split[0])
-                .orElseThrow(() -> new ParseException(Errors.Parsing.unknownPatternType(split[0])));
+        PatternType patternType = PATTERN_TYPES_REGISTRY.lookup(split[0]);
+        if (patternType == null) {
+            throw new ParseException(Errors.Parsing.unknownPatternType(split[0]));
+        }
         DyeColor patternColor = parseDyeColor(split[1]);
 
         return new Pattern(patternColor, patternType);

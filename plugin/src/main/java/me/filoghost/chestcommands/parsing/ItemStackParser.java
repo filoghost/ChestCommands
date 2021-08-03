@@ -27,7 +27,7 @@ public class ItemStackParser {
 
         if (parseAmount) {
             // Read the optional amount
-            String[] splitAmount = Strings.trimmedSplit(input, ",", 2);
+            String[] splitAmount = Strings.splitAndTrim(input, ",", 2);
 
             if (splitAmount.length > 1) {
                 try {
@@ -43,7 +43,7 @@ public class ItemStackParser {
 
 
         // Read the optional durability
-        String[] splitByColons = Strings.trimmedSplit(input, ":", 2);
+        String[] splitByColons = Strings.splitAndTrim(input, ":", 2);
 
         if (splitByColons.length > 1) {
             try {

@@ -5,22 +5,25 @@
  */
 package me.filoghost.chestcommands.hook;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import me.filoghost.chestcommands.ChestCommands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public enum BungeeCordHook implements PluginHook {
 
     INSTANCE;
 
+    public static final String BUNGEE_CORD_CHANNEL = "BungeeCord";
+
     @Override
     public void setup() {
-        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(ChestCommands.getPluginInstance(), "BungeeCord")) {
-            Bukkit.getMessenger().registerOutgoingPluginChannel(ChestCommands.getPluginInstance(), "BungeeCord");
+        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL)) {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL);
         }
     }
 
@@ -47,7 +50,7 @@ public enum BungeeCordHook implements PluginHook {
             throw new AssertionError();
         }
 
-        player.sendPluginMessage(ChestCommands.getPluginInstance(), "BungeeCord", byteArrayOutputStream.toByteArray());
+        player.sendPluginMessage(ChestCommands.getInstance(), BUNGEE_CORD_CHANNEL, byteArrayOutputStream.toByteArray());
     }
 
 }

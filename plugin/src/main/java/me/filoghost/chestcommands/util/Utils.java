@@ -6,17 +6,15 @@
 package me.filoghost.chestcommands.util;
 
 import me.filoghost.fcommons.Strings;
+import org.jetbrains.annotations.NotNull;
 
 public class Utils {
 
-    public static String formatEnum(Enum<?> enumValue) {
+    public static String formatEnum(@NotNull Enum<?> enumValue) {
         return Strings.capitalizeFully(enumValue.name().replace("_", " "));
     }
 
-    public static String addYamlExtension(String fileName) {
-        if (fileName == null) {
-            return null;
-        }
+    public static String addYamlExtension(@NotNull String fileName) {
         if (fileName.toLowerCase().endsWith(".yml")) {
             return fileName;
         } else {

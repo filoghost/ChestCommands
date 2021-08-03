@@ -6,10 +6,8 @@
 package me.filoghost.chestcommands.icon;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
 import me.filoghost.chestcommands.action.Action;
 import me.filoghost.chestcommands.action.OpenMenuAction;
-import me.filoghost.chestcommands.api.ClickResult;
 import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.config.Lang;
 import me.filoghost.chestcommands.icon.requirement.RequiredExpLevel;
@@ -23,6 +21,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class InternalConfigurableIcon extends BaseConfigurableIcon implements RefreshableIcon {
 
@@ -88,12 +90,12 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     public void setClickActions(List<Action> clickActions) {
-        this.clickActions = CollectionUtils.immutableCopy(clickActions);
+        this.clickActions = CollectionUtils.newImmutableList(clickActions);
     }
     
     
     @Override
-    public ItemStack render(Player viewer) {
+    public ItemStack render(@NotNull Player viewer) {
         if (canViewIcon(viewer)) {
             return super.render(viewer);
         } else {
@@ -113,7 +115,14 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public ClickResult onClick(MenuView menuView, Player player) {
+    public void onClick(@NotNull MenuView menuView, @NotNull Player player) {
+        ClickResult clickResult = onClickGetResult(menuView, player);
+        if (clickResult == ClickResult.CLOSE) {
+            menuView.close();
+        }
+    }
+
+    private ClickResult onClickGetResult(@NotNull MenuView menuView, @NotNull Player player) {
         if (!IconPermission.hasPermission(player, viewPermission)) {
             return ClickResult.KEEP_OPEN;
         }
@@ -122,7 +131,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
             if (noClickPermissionMessage != null) {
                 player.sendMessage(noClickPermissionMessage);
             } else {
-                player.sendMessage(Lang.default_no_icon_permission);
+                player.sendMessage(Lang.get().default_no_icon_permission);
             }
             return clickResult;
         }
@@ -139,13 +148,13 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
         if (!takenAllCosts) {
             return clickResult;
         }
-        
+
         boolean hasOpenMenuAction = false;
-        
+
         if (clickActions != null) {
             for (Action action : clickActions) {
                 action.execute(player);
-                
+
                 if (action instanceof OpenMenuAction) {
                     hasOpenMenuAction = true;
                 }
@@ -154,7 +163,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
 
         // Update the menu after taking requirement costs and executing all actions
         menuView.refresh();
-        
+
         // Force menu to stay open if actions open another menu
         if (hasOpenMenuAction) {
             return ClickResult.KEEP_OPEN;
@@ -164,7 +173,7 @@ public class InternalConfigurableIcon extends BaseConfigurableIcon implements Re
     }
 
     @Override
-    public ItemStack updateRendering(Player viewer, ItemStack currentRendering) {
+    public @Nullable ItemStack updateRendering(Player viewer, @Nullable ItemStack currentRendering) {
         if (currentRendering != null && shouldCacheRendering()) {
             // Internal icons do not change, no need to update if the item is already rendered
             return currentRendering;
