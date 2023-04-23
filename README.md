@@ -17,7 +17,7 @@ API Javadoc for developers: https://ci.codemc.io/job/filoghost/job/ChestCommands
 <dependency>
     <groupId>me.filoghost.chestcommands</groupId>
     <artifactId>chestcommands-api</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.4</version>
     <scope>provided</scope>
 </dependency>
 ```
