@@ -9,6 +9,7 @@ import me.filoghost.chestcommands.api.Icon;
 import me.filoghost.chestcommands.api.MenuView;
 import me.filoghost.chestcommands.icon.RefreshableIcon;
 import me.filoghost.chestcommands.menu.BaseMenu;
+import me.filoghost.chestcommands.menu.MenuManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,7 @@ public class DefaultMenuView implements MenuView {
 
     @Override
     public void close() {
-        if (viewer.isOnline()) {
+        if (viewer.isOnline() && MenuManager.getOpenMenuView(viewer) == this) {
             viewer.closeInventory();
         }
     }
